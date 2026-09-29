@@ -26,6 +26,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R17 | continuous ALS surrogate | `tools/als.ts`: Frobenius-error coordinate descent, the gradient source AlphaTensor-style methods rely on. Control found and fixed a real bug: the coordinate update solved for the new absolute value instead of the delta, which zeroed correct coefficients | descent confirmed (rank 27: 26 -> 2.1, ratio 0.08). **But the terminal error is rank-independent** — rank 22 lands at ratio 0.068-0.095, statistically indistinguishable from rank 27's 0.076-0.083. The error floor is a property of coordinate-wise ALS, not evidence about rank, so without an exactification step this branch carries no information about whether rank 22 exists | `R17_control_rank27.json`, `R17_als_rank22.json` |
 | R18 | exact discrete search over F_2 | `tools/f2search.ts`: bitmask factors with Hamming distance to the target. First implementation used 729-bit JS bitmasks and was **invalid** — JS bitwise ops are int32, so all bits above 31 aliased; the control (naive(27) must give mismatch 0) exposed it, rewritten to `Uint8Array(729)` XOR with 9-bit factors | **Control failed, no rank-22 claim made.** The rank-27 control (naive(27) provably exact) only reached 39/729. A sharper diagnostic (`tools/recovery.ts`) seeded from a kicked known solution: 8/40 recovered to 0, so the search works only in a tiny local basin. Caveat on that 20%: the mutation operator zeroes a factor 50% of the time, which deletes a whole term, so most "recoveries" are trivial restorations and the apparent non-monotonicity in kick count is an artifact, not a landscape property | `R18_f2_rank22.json`, `R18_control_rank27.json`, `R18_recovery.json` |
 | R19 | certificate extended to 4 families | ran the R15 orbit sweep + R14 exact test on the three other verified rank-23 schemes, then `tools/crossOrbit.ts` to test whether they are genuinely different orbits | 3 further orbits x 120 members, all **irreducible** (total 480 verified-correct rank-23 schemes). Cross-orbit sampling: 4/4 distinct bases, all 6 pairwise orbit-sample intersections **zero** (151 members each) — evidence the four families lie in different de Groote orbits, though zero observed overlap is not a proof | `R19_orbit_*.json`, `R19_cross_orbit.json` |
+| R20 | beam search over F_2 factor sets | `tools/beamSearch.ts`: keeps hundreds of partial states instead of committing to one greedy path — the cheapest global method that needs no learned policy | **Control failed again; no rank-22 claim made.** At rank 27, where naive(27) provably exists, beam search reached only 20/729 (better than hill climbing's 39, still far from 0). Together with R16 and R18 this is the third independent sampling method to fail the same control. Diagnosis: over F_2 the sum is XOR, so hitting an already-correct position flips it wrong — the mismatch count carries almost no usable gradient, and the rank-22 space is ~594 bits (10^178), beyond any sampling method. This is precisely why the literature needed a learned policy (AlphaTensor) rather than search | `R20_control_rank27.json` |
 
 ## Standing findings
 
@@ -98,6 +99,16 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   still is NOT: a proof that rank 23 is optimal. The scope remains "no
   reduction that keeps the other r-1 (u,v) pairs fixed", and the literature
   lower bound is 19, so rank 22 remains open for everyone including this repo.
+- R20 closes the sampling branch. Three independent methods - exact hill
+  climbing (R16), continuous ALS (R17), F_2 discrete search (R18) and beam
+  search (R20) - were each run against a control where a solution provably
+  exists, and each failed or produced rank-uninformative output. The reason is
+  structural rather than a matter of tuning: over F_2 the decomposition is a
+  XOR, so landing on an already-correct position makes it wrong, and the
+  mismatch count therefore carries almost no gradient, while the rank-22 space
+  is roughly 594 bits. Escaping this needs a learned policy over factor
+  choices, which is the AlphaTensor result this repo deliberately did not
+  attempt because it is a different kind of project.
 
 ## Next hypotheses (queued)
 
