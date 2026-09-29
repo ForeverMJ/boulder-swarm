@@ -9,6 +9,7 @@ const L2Entry = z.object({
   problem: z.string(),
   tests: z.string(),
   milestone: z.string(),
+  success: z.string().optional(),
 })
 const GoalFile = z.object({ L2: z.array(L2Entry) })
 
@@ -17,6 +18,7 @@ export type Task = {
   readonly problem: string
   readonly tests: string
   readonly milestone: string
+  readonly success?: string
 }
 
 export type Assignment = {
@@ -35,6 +37,7 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     problem: t.problem,
     tests: t.tests,
     milestone: t.milestone,
+    ...(t.success === undefined ? {} : { success: t.success }),
   }))
 }
 

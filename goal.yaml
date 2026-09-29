@@ -35,8 +35,8 @@ L2:
   - {id: T08, problem: src/problems/problem08.ts, tests: src/problems/problem08.test.ts, owner: worker, milestone: M4}
   - {id: T09, problem: src/problems/problem09.ts, tests: src/problems/problem09.test.ts, owner: worker, milestone: M4}
   - {id: T10, problem: src/matmul/checker.ts, tests: src/matmul/checker.test.ts, owner: orchestrator, milestone: M5}
-  - {id: T11, problem: src/matmul/attempts/T11.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5}
-  - {id: T12, problem: src/matmul/attempts/T12.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5}
+  - {id: T11, problem: src/matmul/attempts/T11.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
+  - {id: T12, problem: src/matmul/attempts/T12.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker

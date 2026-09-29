@@ -1,8 +1,9 @@
-import { writeFile } from "node:fs/promises"
-import { readFile } from "node:fs/promises"
+import { spawnSync } from "node:child_process"
+import { readFile, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { runTestFile } from "../eval/harness"
+import type { Verdict } from "../eval/harness"
 import { distillFromResults } from "../recording/distill"
 import { saveResults } from "../recording/metrics"
 import { appendEvent } from "../recording/trace"
@@ -42,6 +43,16 @@ function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run:
     if (argv[i] === "--run") run = true
   }
   return { workers, mode, run, tasks }
+}
+
+function scoreAssignment(wt: string, tests: string, success: string | undefined): Verdict {
+  if (success !== undefined && success !== "") {
+    const r = spawnSync("bun", ["src/matmul/scoreboard.ts"], { cwd: wt, encoding: "utf-8", timeout: 120_000 })
+    const m = `${r.stdout ?? ""}`.match(new RegExp(`${success}=(\\S+)`))
+    const hit = m?.[1] !== undefined && m[1] !== "none"
+    return { testFile: "scoreboard", passed: hit ? 1 : 0, total: 1, passRate: hit ? 1 : 0, returncode: 0 }
+  }
+  return runTestFile(wt, tests)
 }
 
 async function taskPrompt(a: { task: { id: string } }, fallback: string): Promise<string> {
@@ -105,7 +116,7 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
         taskId: a.task.id,
         branch: a.branch,
       })
-      const v = runTestFile(wt, a.task.tests)
+      const v = scoreAssignment(wt, a.task.tests, a.task.success)
       const committed = commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`)
       await appendEvent(REPO, "run_latest", {
         type: "live_agent",
@@ -158,7 +169,8 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
         continue
       }
       const verdict = mergeGate(REPO, r.branch, () => {
-        const onMain = runTestFile(REPO, assigns.find((a) => a.task.id === r.task_id)?.task.tests ?? "")
+        const t = assigns.find((a) => a.task.id === r.task_id)?.task
+        const onMain = scoreAssignment(REPO, t?.tests ?? "", t?.success)
         return onMain.passRate >= 1 && onMain.total > 0
       })
       console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
