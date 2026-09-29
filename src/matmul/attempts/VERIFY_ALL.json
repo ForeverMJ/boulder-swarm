@@ -227,6 +227,12 @@
       "note": "consistent"
     },
     {
+      "file": "R32_mod2_irreducible.json",
+      "verdict": "ALL-IRREDUCIBLE-MOD-2",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R3_best.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -320,7 +326,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 44,
+    "artifactCount": 45,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

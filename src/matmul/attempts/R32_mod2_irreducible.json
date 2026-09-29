@@ -1,0 +1,61 @@
+{
+  "question": "are the rank-23 families still irreducible after reduction to characteristic 2?",
+  "why": "R14 tested irreducibility over Q only. Linear dependence is different in characteristic 2, so a rank-deficient m-matrix mod 2 would mean a genuine rank-22 scheme over F_2.",
+  "controls": {
+    "strassen22_reduciblePositionsF2": [],
+    "strassen22_split_reduciblePositionsF2": [
+      0,
+      1
+    ],
+    "note": "the same two-sided control that validated the Q engine, run through the F_2 path"
+  },
+  "rows": [
+    {
+      "family": "T11_solution",
+      "rank": 23,
+      "exactOverF2": true,
+      "mMatrixRankF2": 23,
+      "reduciblePositionsF2": [],
+      "reducibleOverF2": false,
+      "wouldYieldRank": null
+    },
+    {
+      "family": "T12_rank23_variant",
+      "rank": 23,
+      "exactOverF2": true,
+      "mMatrixRankF2": 23,
+      "reduciblePositionsF2": [],
+      "reducibleOverF2": false,
+      "wouldYieldRank": null
+    },
+    {
+      "family": "T12d_fam_A",
+      "rank": 23,
+      "exactOverF2": true,
+      "mMatrixRankF2": 23,
+      "reduciblePositionsF2": [],
+      "reducibleOverF2": false,
+      "wouldYieldRank": null
+    },
+    {
+      "family": "T12d_fam_B",
+      "rank": 23,
+      "exactOverF2": true,
+      "mMatrixRankF2": 23,
+      "reduciblePositionsF2": [],
+      "reducibleOverF2": false,
+      "wouldYieldRank": null
+    },
+    {
+      "family": "T12c_absorb_best",
+      "rank": 22,
+      "exactOverF2": false,
+      "mMatrixRankF2": 22,
+      "reduciblePositionsF2": [],
+      "reducibleOverF2": false,
+      "wouldYieldRank": null
+    }
+  ],
+  "verdict": "ALL-IRREDUCIBLE-MOD-2",
+  "scope": "a rank-deficient m-matrix identifies a reducible position in the restricted ansatz only; any candidate produced must still be re-verified with verifyMod2 and its rank confirmed by the exact checker"
+}
