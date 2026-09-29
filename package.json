@@ -10,6 +10,7 @@
     "dry-run": "bun src/orchestrator/runLoop.ts --workers 12 --dry-run",
     "run": "bun src/orchestrator/runLoop.ts --workers 12 --run",
     "run:codex": "bun src/orchestrator/runLoop.ts --workers 12 --run --mode codex",
+    "run:opencode": "bun src/orchestrator/runLoop.ts --workers 12 --run --mode opencode",
     "smoke:codex": "bun src/orchestrator/runLoop.ts --workers 1 --tasks T02 --run --mode codex",
     "e2e": "bun src/eval/e2eProof.ts"
   },

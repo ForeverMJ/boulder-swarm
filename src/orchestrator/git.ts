@@ -76,6 +76,16 @@ export async function createWorktree(
   await mkdir(worktreesRoot, { recursive: true })
   const path = join(worktreesRoot, `worker_${workerId}`)
   try {
+    git(repoRoot, ["worktree", "remove", "--force", path])
+  } catch (e) {
+    if (!(e instanceof GitError)) throw e
+  }
+  try {
+    git(repoRoot, ["worktree", "prune"])
+  } catch (e) {
+    if (!(e instanceof GitError)) throw e
+  }
+  try {
     await rm(path, { recursive: true, force: true })
   } catch (e) {
     if (e instanceof Error) {
@@ -83,11 +93,6 @@ export async function createWorktree(
     } else {
       throw e
     }
-  }
-  try {
-    git(repoRoot, ["worktree", "remove", "--force", path])
-  } catch (e) {
-    if (!(e instanceof GitError)) throw e
   }
   if (branchExists(repoRoot, branch)) {
     git(repoRoot, ["branch", "-D", branch])
@@ -104,7 +109,7 @@ export function removeWorktree(repoRoot: string, path: string): void {
   }
 }
 
-export type MergeVerdict = "merged" | "blocked"
+export type MergeVerdict = "merged" | "merged-noop" | "blocked"
 
 /**
  * Merge gate: merge branch into main, run verify() on main, revert on failure.
@@ -128,5 +133,5 @@ export function mergeGate(repoRoot: string, branch: string, verify: () => boolea
     git(repoRoot, ["reset", "--hard", headBefore])
     return "blocked"
   }
-  return "merged"
+  return git(repoRoot, ["rev-parse", "HEAD"]) === headBefore ? "merged-noop" : "merged"
 }

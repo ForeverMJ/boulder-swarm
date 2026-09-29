@@ -6,7 +6,8 @@ import { distillFromResults } from "../recording/distill"
 import { saveResults } from "../recording/metrics"
 import { appendEvent } from "../recording/trace"
 import type { WorkerResult } from "../recording/schemas"
-import { buildPrompt, spawnAgent } from "./codexWorker"
+import { buildPrompt as buildCodexPrompt, spawnAgent as spawnCodexAgent } from "./codexWorker"
+import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
 import { createWorktree, initRepo, listBranches, mergeGate } from "./git"
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { replan } from "./replan"
@@ -15,7 +16,7 @@ import { runAssignment } from "./worker"
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = join(HERE, "..", "..")
 
-type Mode = "mock" | "codex"
+type Mode = "mock" | "codex" | "opencode"
 
 function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run: boolean; tasks: string[] } {
   let workers = 12
@@ -29,11 +30,11 @@ function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run:
     }
     if (argv[i] === "--mode") {
       const v = argv[i + 1]
-      mode = v === "codex" ? "codex" : "mock"
+      if (v === "codex" || v === "opencode") mode = v
     }
     if (argv[i] === "--tasks") {
       const v = argv[i + 1]
-      if (v !== undefined) tasks = v.split(",").map((s) => s.trim()).filter((s) => s !== "")
+      if (v !== undefined) tasks = v.split(/[,\s]+/).map((s) => s.trim()).filter((s) => s !== "")
     }
     if (argv[i] === "--run") run = true
   }
@@ -54,27 +55,59 @@ async function runMock(assigns: ReturnType<typeof dispatch>): Promise<WorkerResu
   }))
 }
 
-async function runCodex(assigns: ReturnType<typeof dispatch>): Promise<WorkerResult[]> {
+type AgentDeps = {
+  readonly kind: string
+  readonly buildPrompt: (taskId: string, problem: string, tests: string) => string
+  readonly spawnAgent: (opts: {
+    workdir: string
+    prompt: string
+    taskId: string
+    branch: string
+  }) => Promise<{
+    readonly exitCode: number
+    readonly timedOut: boolean
+    readonly duration_s: number
+    readonly final: string
+  }>
+}
+
+async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): Promise<WorkerResult[]> {
   initRepo(REPO)
   const worktreesRoot = `${REPO}-worktrees`
+  const ready: { wt: string; a: (typeof assigns)[number] }[] = []
+  for (const a of assigns) {
+    const wt = await createWorktree(REPO, worktreesRoot, a.workerId, a.branch)
+    ready.push({ wt, a })
+  }
   const settled = await Promise.all(
-    assigns.map(async (a) => {
-      const wt = await createWorktree(REPO, worktreesRoot, a.workerId, a.branch)
-      const agent = await spawnAgent({
+    ready.map(async ({ wt, a }) => {
+      const agent = await deps.spawnAgent({
         workdir: wt,
-        prompt: buildPrompt(a.task.id, a.task.problem, a.task.tests),
+        prompt: deps.buildPrompt(a.task.id, a.task.problem, a.task.tests),
         taskId: a.task.id,
         branch: a.branch,
       })
       const v = runTestFile(wt, a.task.tests)
       await appendEvent(REPO, "run_latest", {
-        type: "codex_agent",
+        type: "live_agent",
+        agent: deps.kind,
         task_id: a.task.id,
         branch: a.branch,
         exitCode: agent.exitCode,
         timedOut: agent.timedOut,
         final: agent.final,
         harness: v,
+      })
+      await appendEvent(REPO, "run_latest", {
+        type: "worker_result",
+        worker_id: a.workerId,
+        task_id: a.task.id,
+        branch: a.branch,
+        passed: v.passed,
+        total: v.total,
+        pass_rate: v.passRate,
+        duration_s: agent.duration_s,
+        loc: 0,
       })
       return { wt, agent, verdict: v, assignment: a }
     }),
@@ -99,7 +132,7 @@ async function runCodex(assigns: ReturnType<typeof dispatch>): Promise<WorkerRes
       const onMain = runTestFile(REPO, assigns.find((a) => a.task.id === r.task_id)?.task.tests ?? "")
       return onMain.passRate >= 1 && onMain.total > 0
     })
-    console.log(`GATE ${verdict === "merged" ? "merged" : "blocked"} ${r.task_id} (${r.branch})`)
+    console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
   }
   return results
 }
@@ -116,28 +149,35 @@ async function main(): Promise<void> {
       const mine = assigns.filter((a) => a.workerId === wid).map((a) => a.task.id)
       console.log(`  worker_${wid}: ${mine.length > 0 ? mine.join(",") : "idle-standby"}`)
     }
+    if (assigns.length === 0) {
+      console.log("no assignments selected; nothing to do")
+      return
+    }
     if (!run) {
       const plan0 = await replan(selected, REPO)
       console.log(`pending=[${plan0.pending.join(",")}] solved=[${plan0.solved.join(",")}]`)
       return
     }
-    const results: WorkerResult[] = mode === "codex" ? await runCodex(assigns) : await runMock(assigns)
+    const runFile = join(REPO, "trajectories", "run_latest.jsonl")
+    await writeFile(runFile, "", "utf-8")
+    const results: WorkerResult[] =
+      mode === "mock"
+        ? await runMock(assigns)
+        : await runLive(
+            assigns,
+            mode === "opencode"
+              ? { kind: "opencode", buildPrompt: buildOpencodePrompt, spawnAgent: spawnOpencodeAgent }
+              : { kind: "codex", buildPrompt: buildCodexPrompt, spawnAgent: spawnCodexAgent },
+          )
     for (const r of results) {
       console.log(`[${r.task_id}] w${r.worker_id} ${r.passed}/${r.total} rate=${r.pass_rate.toFixed(2)}`)
-    }
-    await writeFile(
-      join(REPO, "trajectories", "run_latest.jsonl"),
-      results.map((r) => JSON.stringify({ type: "worker_result", ...r })).join("\n") + "\n",
-      "utf-8",
-    )
-    for (const r of results) {
       await appendEvent(REPO, "run_latest", { type: "worker_result", ...r })
     }
     await saveResults(REPO, results)
     await distillFromResults(REPO, results)
     const plan = await replan(selected, REPO)
     console.log(`DONE pending=[${plan.pending.join(",")}] solved=[${plan.solved.join(",")}]`)
-    if (mode === "codex") {
+    if (mode !== "mock") {
       console.log(`branches: ${listBranches(REPO).join(" ")}`)
     }
   } catch (e) {
