@@ -47,8 +47,17 @@ describe("FRONTIER.md stays true", () => {
     for (const [, s] of RANK23) expect(reduciblePositionsF2(s)).toEqual([])
   })
 
-  it("states a 45-entry profile shortlist", () => {
-    expect(rank22Profiles()).toHaveLength(45)
+  it("states the corrected profile counts, not the withdrawn 45", () => {
+    expect(rank22Profiles()).toHaveLength(276)
+    expect(rank22Profiles({ saturatedOnly: true })).toHaveLength(45)
+  })
+
+  it("records that the invertibility lemma is conditional on saturation", async () => {
+    const md = await readFile(FRONTIER, "utf-8")
+    expect(md).toContain("sum_t rank A_t = 27")
+    expect(md).toContain("does not apply to it")
+    expect(md).toContain("276")
+    expect(md).not.toContain("45 arithmetically conceivable")
   })
 
   it("cites the field-specific bounds without conflating them", async () => {

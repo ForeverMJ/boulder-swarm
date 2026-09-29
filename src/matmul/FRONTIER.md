@@ -115,10 +115,20 @@ Two routes survive, both research-scale rather than engineering-scale.
 A third possibility is **construction rather than search**: a rank-23 scheme
 whose profile is structurally unlike the four here, ideally with invertible
 first factors, since that is the regime the known F_2 obstruction argument
-constrains. The invertibility lemma from arXiv 2609.18722 is used in R28 to
-enumerate the 45 arithmetically conceivable rank-22 profiles, but that lemma is
-taken as reported and is not verified here, and no search over those profiles
-has been run.
+constrains.
+
+R28 tried to sharpen this into a shortlist and got it wrong; R40 corrected it by
+reading the source. Proposition 5.3 of arXiv 2609.18722 reads, verbatim: "In a
+decomposition of `T_<3,3,3>` with nonzero factors and `sum_t rank A_t = 27`, at
+most one first factor is invertible." The condition is **saturation**, and in
+that paper it is obtained from Proposition 4.4 *under the assumption that a
+minimal 20-term decomposition exists*; its remark about 22 terms concerns
+decompositions "attaining the split-rank bound". A hypothetical 22-term
+decomposition need not be saturated, so the cap `n3 <= 1` does not apply to it
+unconditionally. The unconditional count of rank-22 profiles is therefore 276,
+the number of non-negative triples summing to 22; 45 is the size of the
+saturated subset only, and is reported separately in
+`tools/rank22Profiles.ts`. No search over profiles has been run either way.
 
 ## Reproducing this state
 

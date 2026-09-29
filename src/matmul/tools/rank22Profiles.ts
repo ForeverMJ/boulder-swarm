@@ -9,9 +9,23 @@ const ATT = join(HERE, "..", "attempts")
 
 export type Profile = { n1: number; n2: number; n3: number }
 
-export function rank22Profiles(): Profile[] {
+/**
+ * Profiles of 22 first factors of matrix rank 1, 2 and 3, summing to 22.
+ *
+ * The n3 <= 1 filter that used to be applied here is CONDITIONAL, not general.
+ * Proposition 5.3 of arXiv 2609.18722 reads: "In a decomposition of
+ * T_<3,3,3> with nonzero factors and sum_t rank A_t = 27, at most one first
+ * factor is invertible." The saturation condition sum_t rank A_t = 27 is not
+ * automatic for a hypothetical 22-term decomposition; in the paper it is
+ * obtained from Proposition 4.4 under the assumption that a minimal 20-term
+ * decomposition exists, and the paper's remark about 22 terms concerns
+ * decompositions "attaining the split-rank bound". So restricting to n3 <= 1
+ * silently assumed saturation. Both counts are reported instead.
+ */
+export function rank22Profiles(opts: { saturatedOnly?: boolean } = {}): Profile[] {
   const out: Profile[] = []
-  for (let n3 = 0; n3 <= 1; n3++) {
+  const maxN3 = opts.saturatedOnly === true ? 1 : 22
+  for (let n3 = 0; n3 <= maxN3; n3++) {
     for (let n2 = 0; n2 + n3 <= 22; n2++) {
       const n1 = 22 - n2 - n3
       if (n1 < 0) continue
@@ -59,36 +73,48 @@ function mSpanRank(s: Scheme): number {
 // no-excuse-ok: catch
 async function main(): Promise<void> {
   try {
-    const profiles = rank22Profiles()
+    const all = rank22Profiles()
+    const saturated = rank22Profiles({ saturatedOnly: true })
     const anchor = mSpanRank(t11)
     const payload = {
       question:
         "if a rank-22 scheme exists, which first-factor matrix-rank profiles could it possibly have?",
-      filterUsed: {
+      profileCount: all.length,
+      profiles: all,
+      conditionalSubset: {
+        count: saturated.length,
+        profiles: saturated,
         source:
-          "arXiv 2609.18722 states a product identity for matrix multiplication implies at most one first factor can be invertible; its r=20 contradiction comes from a profile forcing three. Taken as reported, this is a filter on admissible profiles, not an obstruction for zero-invertible profiles.",
-        caveat:
-          "this lemma is taken from the literature as stated; it is NOT independently verified in this repo, and the paper's '(16, 1, 3)' profile string is ambiguous in the source text",
-        constraint: "n3 <= 1",
+          "Proposition 5.3 of arXiv 2609.18722, verbatim: 'In a decomposition of T_<3,3,3> with nonzero factors and sum_t rank A_t = 27, at most one first factor is invertible.'",
+        hypothesis: "sum_t rank A_t = 27, i.e. the decomposition attains the full split-flattening rank",
+        whyItIsNotGeneral:
+          "saturation is not automatic for a 22-term decomposition. In the paper the condition is obtained from Proposition 4.4 under the assumption that a minimal 20-term decomposition exists, and the remark about 22 terms concerns decompositions 'attaining the split-rank bound'. Applying n3 <= 1 unconditionally, as an earlier version of this file did, assumed saturation without warrant.",
+        proofSketchFromThePaper:
+          "an invertible A_t forces B_t and C_t invertible via the diagonal identities; if A_t and A_s were invertible at distinct indices, all four factors of A_t B_s C_t^T A_s would be invertible, so their product could not be zero, contradicting the off-diagonal identity",
+      },
+      correction: {
+        previousClaim: "45 arithmetically conceivable rank-22 profiles",
+        status: "withdrawn as an unconditional statement; 45 is the size of the saturated subset, not of the full space",
+        unconditionalCount: all.length,
+        conditionalCount: saturated.length,
       },
       necessaryConditionNotApplied: {
         note:
           "the u-factors must span the full 9-dimensional first-factor space (flattening rank 9). This is a necessary condition on the chosen vectors, not a restriction on the profile counts alone, so it is reported for context and not used to prune the list.",
         anchorSpanRank: anchor,
       },
-      profileCount: profiles.length,
-      profiles,
       comparison: {
         rank23Family: { n1: 14, n2: 9, n3: 0 },
-        note: "the four verified rank-23 families sit at 14/9/0, which is in this list with 23 terms substituted; a rank-22 candidate need not look like it",
+        note: "the four verified rank-23 families sit at 14/9/0, and naive(27) sits at 27/0/0, so profiles with n3 > 0 certainly occur among valid schemes and no unconditional cap on n3 is justified",
       },
       scope:
-        "a shortlist of arithmetically conceivable profiles, NOT a claim that any of them is realizable; no search over these profiles was performed and none is implied",
+        "a list of arithmetically conceivable profiles, NOT a claim that any of them is realizable; no search over these profiles was performed and none is implied",
     }
     await writeFile(join(ATT, "R28_rank22_profiles.json"), JSON.stringify(payload, null, 2), "utf-8")
-    console.log(`admissible rank-22 profiles (n3<=1): ${profiles.length}`)
+    console.log(`rank-22 profiles, unconditional: ${all.length}`)
+    console.log(`rank-22 profiles, saturated subset only: ${saturated.length}`)
     console.log(`anchor m-span rank: ${anchor}`)
-    console.log(`first 8: ${profiles.slice(0, 8).map((p) => `${p.n1}/${p.n2}/${p.n3}`).join("  ")}`)
+    console.log(`first 8: ${all.slice(0, 8).map((p) => `${p.n1}/${p.n2}/${p.n3}`).join("  ")}`)
     console.log(`-> R28_rank22_profiles.json`)
   } catch (e) {
     console.error("unhandled:", e)
