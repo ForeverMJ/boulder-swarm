@@ -191,6 +191,12 @@
       "note": "consistent"
     },
     {
+      "file": "R28_rank22_profiles.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R2_dropk_repair.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -296,7 +302,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 40,
+    "artifactCount": 41,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
