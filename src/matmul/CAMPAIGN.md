@@ -20,6 +20,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R11 | Z3 orbit structure | `tools/symmetry.ts` finds Aut(T) by brute test = S3 (6 elements, orders {1:1,2:3,3:2}); `tools/zsplit.ts` splits T11 into orbits | **T11 is NOT Z3-invariant**: 23 generic orbits, 0 fixed triples, covered=69 != 23 | `R11_zsplit.json` |
 | R12 | Z3-invariant ansatz search | `tools/z3search.ts`: ansatz = nFixed + 7 orbits, seeded from naive(3) orbit structure, coefficients ±2 | blocked: best mm=6 at rank 22 AND rank 23 (8 restarts each). naive(3) is Z3-invariant (9 orbits, closed) but has **0 fixed triples** — diagonal elementary triples form a 3-orbit, not fixed points, contradicting my prior | `R12_z3search.json` |
 | R13 | drop-3 / add-2 replacement | `tools/tripleSwap.ts`: all 1771 triple drops; two fresh rank-1 terms may cancel each other's garbage off-residual (impossible with a single term) | **NO-RANK22-THIS-FORM**: only 68/1771 drops are structurally feasible (residual ≤ 8 = 2·2·2 max coverage of two supports-≤2 terms); all 68 searched completely, none solvable. Residual median is 30-60 | `R13_triple_swap.json` |
+| R14 | algebraic compression (exact) | `tools/rankTest.ts` + `tools/rational.ts`: exact rational Gaussian elimination (BigInt) on the r × n⁴ matrix of vec(u_r v_r^T) | **IRREDUCIBLE-EXACT** for all four verified rank-23 families: the 23 rank-1 matrices are linearly independent in the 81-dim space M₉, so no reduction exists that keeps the other 22 (u,v) pairs fixed. Scope: restricted ansatz only — a reduction that also changes (u,v) is not covered | `R14_compress_*.json` |
 
 ## Standing findings
 
@@ -45,6 +46,16 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   residual that small (median residual 30-60), and all 68 are unsolvable. The
   "delete k, add k-1" family is therefore closed for k=1,2,3, not merely
   unexplored.
+- R14 replaces numerical exhaustion with exact algebra. Reduction by one term
+  inside the ansatz that freezes the other r-1 (u,v) pairs is possible exactly
+  when vec(u_k v_k^T) is in the span of the rest; that is one rational
+  Gaussian elimination on an r x n^4 matrix. All four rank-23 families come out
+  independent (rank 23 in 81 dims), so that ansatz is closed for every one of
+  them. The positive control matters: a deliberately w-split scheme IS detected
+  and reduces back to a correct Strassen decomposition, so the detector fires
+  when a reduction genuinely exists. What this does NOT establish is that rank
+  23 is optimal for T - a reduction that also rewrites the (u,v) pairs lies
+  outside this test, and the known literature lower bound is still 19.
 
 ## Next hypotheses (queued)
 

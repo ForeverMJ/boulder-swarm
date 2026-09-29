@@ -1,0 +1,11 @@
+{
+  "family": "T12d_fam_A.ts",
+  "rank": 23,
+  "mMatrixRank": 23,
+  "ambientDim": 81,
+  "independent": true,
+  "reduciblePositions": [],
+  "criterion": "restricted ansatz (the other r-1 (u,v) pairs are held fixed and only the w vectors are recombined): reduction by one term is possible exactly when vec(u_k v_k^T) lies in the span of the remaining vec(u_r v_r^T). Independence therefore certifies irreducibility for THIS ansatz only; a reduction that also changes the (u,v) pairs is not covered by this test.",
+  "exactArithmetic": "rational Gaussian elimination over BigInt",
+  "verdict": "IRREDUCIBLE-EXACT"
+}

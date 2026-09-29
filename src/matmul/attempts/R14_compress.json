@@ -1,0 +1,11 @@
+{
+  "family": "T11_solution.ts",
+  "rank": 23,
+  "mMatrixRank": 23,
+  "ambientDim": 81,
+  "independent": true,
+  "reduciblePositions": [],
+  "criterion": "rank reduces by 1 iff vec(u_k v_k^T) lies in span of the other vec(u_r v_r^T)",
+  "exactArithmetic": "rational Gaussian elimination over BigInt",
+  "verdict": "IRREDUCIBLE-EXACT"
+}
