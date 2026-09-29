@@ -14,7 +14,7 @@ async function main(): Promise<void> {
     const dir = join(HERE, "attempts")
     let files: string[] = []
     try {
-      files = (await readdir(dir)).filter((f) => f.endsWith(".ts") && !f.endsWith(".test.ts"))
+      files = (await readdir(dir)).filter((f) => f.endsWith(".ts") && !f.endsWith(".test.ts") && !f.endsWith("_search.ts"))
     } catch (e) {
       if (e instanceof Error) {
         files = []
