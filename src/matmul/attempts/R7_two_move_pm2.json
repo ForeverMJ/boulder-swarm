@@ -1,0 +1,26 @@
+{
+  "family": "T11_solution.ts",
+  "drop": 3,
+  "rank": 22,
+  "lo": -2,
+  "hi": 2,
+  "mmBefore": 1,
+  "l1Before": 1,
+  "focus": [
+    [
+      7,
+      4,
+      7
+    ]
+  ],
+  "coordsTried": 1,
+  "claimed": false,
+  "groundTruth": {
+    "correct": false,
+    "rank": -1,
+    "mismatches": -1
+  },
+  "verdict": "blocked",
+  "moves": [],
+  "elapsedMs": 8
+}
