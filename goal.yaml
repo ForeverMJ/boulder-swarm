@@ -40,6 +40,7 @@ L2:
   - {id: T12b, problem: src/matmul/attempts/T12b.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
   - {id: T12c, problem: src/matmul/attempts/T12c.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
   - {id: T12d, problem: src/matmul/attempts/T12d.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
+  - {id: T12e, problem: src/matmul/attempts/T12e.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
