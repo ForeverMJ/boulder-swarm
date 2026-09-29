@@ -1,0 +1,50 @@
+{
+  "family": "T11_solution.ts",
+  "groupOrderHistogram": {
+    "1": 1,
+    "2": 3,
+    "3": 2
+  },
+  "orbitSizes": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "coveredTriples": 69,
+  "z3Invariant": false,
+  "fixedTriples": 0,
+  "invariant": true,
+  "dropFixedAttempts": [],
+  "best": {
+    "mm": null,
+    "l1": null,
+    "dropFixed": ""
+  },
+  "verdict": "no-invariant-drop-solution",
+  "elapsedMs": 0,
+  "coefficientRange": [
+    -2,
+    2
+  ],
+  "rounds": 400
+}
