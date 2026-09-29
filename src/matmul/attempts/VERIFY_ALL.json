@@ -197,6 +197,12 @@
       "note": "consistent"
     },
     {
+      "file": "R29_tensor_probe.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R2_dropk_repair.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -302,7 +308,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 41,
+    "artifactCount": 42,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

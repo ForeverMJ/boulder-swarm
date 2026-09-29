@@ -1,0 +1,44 @@
+{
+  "what": "the matrix-multiplication tensor as an explicit support, with its mode-1 flattening rank per field",
+  "control": {
+    "claim": "the exact rank of <2,2,2> is 7 over every field (Winograd 1971, Kerr 1971)",
+    "flatteningGives": 4,
+    "check": true
+  },
+  "known": {
+    "2x2x2": 7,
+    "3x3x3": {
+      "overQ": "19..23",
+      "overF2": "21..23"
+    },
+    "4x4x4": "49..56 (F_2 upper 47 via AlphaTensor)"
+  },
+  "rows": [
+    {
+      "n": 2,
+      "dims": 4,
+      "tensorOnes": 8,
+      "naiveRank": 64,
+      "mode1FlattenRankQ": 4,
+      "mode1FlattenRankF2": 4
+    },
+    {
+      "n": 3,
+      "dims": 9,
+      "tensorOnes": 27,
+      "naiveRank": 729,
+      "mode1FlattenRankQ": 9,
+      "mode1FlattenRankF2": 9
+    },
+    {
+      "n": 4,
+      "dims": 16,
+      "tensorOnes": 64,
+      "naiveRank": 4096,
+      "mode1FlattenRankQ": 16,
+      "mode1FlattenRankF2": 16
+    }
+  ],
+  "scope": "the mode-1 flattening of <n,n,n> has rank exactly n^2, so it yields only the weak bound r >= n^2. It is a sanity check on the tensor encoding, NOT a step toward the n^2-type bounds the literature needs.",
+  "note": "for n=3 the flattening rank is 9, matching the flattening rank 9 measured on the repo's rank-23 schemes"
+}
