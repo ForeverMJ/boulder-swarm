@@ -2,7 +2,7 @@ import { spawn } from "node:child_process"
 import { writeFileSync } from "node:fs"
 import { join } from "node:path"
 
-export const DEFAULT_MODEL = "opencode/muse-spark-1.3-contributor-free"
+export const DEFAULT_MODEL = "opencode-go/space-bunny-free"
 
 export type AgentResult = {
   readonly task_id: string

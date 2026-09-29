@@ -45,6 +45,7 @@ L2:
   - {id: R14, problem: src/matmul/attempts/R14_compress.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: ALL-IRREDUCIBLE, note: exact rational compression, restricted ansatz irreducibility}
   - {id: R19, problem: src/matmul/attempts/R19_cross_orbit.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: NO-OVERLAP-OBSERVED, note: certificate extended to 4 families with pairwise disjoint de Groote orbits}
   - {id: R21, problem: src/matmul/attempts/VERIFY_ALL.json, tests: src/matmul/tools/verifyAll.test.ts, owner: orchestrator, milestone: M5, success: ALL-CLAIMS-REPRODUCE, note: one-command hub re-derives every campaign claim, exits non-zero on drift}
+  - {id: V1, problem: src/matmul/verify/profileCount.ts, tests: src/matmul/verify/profileCount.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the rank-22 profile count; the test is the judge and does not import the campaign implementation}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
