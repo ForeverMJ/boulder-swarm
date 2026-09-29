@@ -1,0 +1,17 @@
+{
+  "question": "how strong a lower bound on the number of terms does hyperplane restriction give, using the exactly computable slice rank of the restriction?",
+  "argument": "for a covector alpha on the first factor, the i-th term survives only if alpha(u_i) != 0, so r >= #{i : alpha(u_i) != 0} >= sliceRank(T|alpha). Maximising the computable right-hand side over alpha is the bound.",
+  "maxSliceRankOfRestriction": {
+    "n2": 4,
+    "n3_Q": 9,
+    "n3_F2": 9
+  },
+  "control": {
+    "knownExactRank_2x2x2": 7,
+    "bestObtained_n2": 4,
+    "ok": true,
+    "note": "the n=2 value must not exceed the known exact rank 7"
+  },
+  "resultingLowerBound_n3": 9,
+  "scope": "slice rank of the restriction is a weak surrogate for the restriction's bilinear complexity, so this bound is far below the literature's 19 (Q) and 21 (F_2). It measures how much of the problem the counting argument alone can reach, nothing more."
+}

@@ -233,6 +233,12 @@
       "note": "consistent"
     },
     {
+      "file": "R33_restriction_bound.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R3_best.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -326,7 +332,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 45,
+    "artifactCount": 46,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
