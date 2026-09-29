@@ -1,0 +1,202 @@
+{
+  "what": "matrix-rank profile of the three factors plus the flattening rank, per field",
+  "why": "the current F_2 lower-bound argument constrains first-factor matrix ranks before it can exclude an r-term decomposition, so these profiles are the structural baseline any rank-22 candidate must differ from",
+  "scope": "descriptive only; no lower bound on rank is claimed or refuted here",
+  "rows": [
+    {
+      "family": "T11_solution",
+      "rank": 23,
+      "Q": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9
+      },
+      "F2": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9,
+        "exact": true
+      }
+    },
+    {
+      "family": "T12_rank23_variant",
+      "rank": 23,
+      "Q": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9
+      },
+      "F2": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9,
+        "exact": true
+      }
+    },
+    {
+      "family": "T12d_fam_A",
+      "rank": 23,
+      "Q": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9
+      },
+      "F2": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9,
+        "exact": true
+      }
+    },
+    {
+      "family": "T12d_fam_B",
+      "rank": 23,
+      "Q": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9
+      },
+      "F2": {
+        "factorMatrixRankProfile": {
+          "u": [
+            14,
+            9
+          ],
+          "v": [
+            19,
+            4
+          ],
+          "w": [
+            18,
+            5
+          ]
+        },
+        "flattenRank": 9,
+        "exact": true
+      }
+    },
+    {
+      "family": "T12c_absorb_best",
+      "rank": 22,
+      "Q": {
+        "factorMatrixRankProfile": {
+          "u": [
+            13,
+            9
+          ],
+          "v": [
+            18,
+            4
+          ],
+          "w": [
+            17,
+            5
+          ]
+        },
+        "flattenRank": 9
+      },
+      "F2": {
+        "factorMatrixRankProfile": {
+          "u": [
+            13,
+            9
+          ],
+          "v": [
+            18,
+            4
+          ],
+          "w": [
+            17,
+            5
+          ]
+        },
+        "flattenRank": 9,
+        "exact": false
+      }
+    }
+  ]
+}

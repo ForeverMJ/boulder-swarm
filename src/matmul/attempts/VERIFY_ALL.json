@@ -179,6 +179,12 @@
       "note": "consistent"
     },
     {
+      "file": "R24_factor_profiles.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R2_dropk_repair.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -284,7 +290,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 38,
+    "artifactCount": 39,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
