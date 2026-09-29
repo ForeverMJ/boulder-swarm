@@ -25,7 +25,7 @@ goal.yaml → dispatch (file-ownership) → agents in git worktrees → harness 
 
 ```bash
 bun install
-bun test                    # 49 tests
+bun test                    # 95 tests
 bunx tsc --noEmit && bunx biome check src
 
 # dry run: 12-worker dispatch plan, no agents
@@ -43,6 +43,11 @@ bun src/orchestrator/runLoop.ts --workers 1 --tasks T09 --run --mode opencode
 # proofs
 bun src/eval/e2eProof.ts    # full-chain artifacts
 bun src/eval/gateProof.ts   # gate blocks/lands correctly
+
+# matmul campaign
+bun src/matmul/scoreboard.ts        # reporter: always exits 0, prints the table
+bun src/matmul/goalCheck.ts         # gate: exits 1 until an exact rank<=22 scheme lands
+bun src/matmul/tools/verifyAll.ts   # re-derives every campaign claim, exits 1 on drift
 ```
 
 Modes: `mock` (fast CI) · `opencode` (free, default live) · `codex` (subscription quota).
@@ -55,12 +60,24 @@ Modes: `mock` (fast CI) · `opencode` (free, default live) · `codex` (subscript
   commits through the gate. See `BENCHMARK.md` and `git log`.
 - M5 (open since 1976): 3x3 matrix-multiplication tensor rank. Bounds [19, 23];
   target rank <= 22. Exact integer checker (`src/matmul/checker.ts`), naive-27
-  baseline, scoreboard (`bun src/matmul/scoreboard.ts`). Campaign status:
-  - T11 DONE: repo holds two independently verified rank-23 schemes
-    (`T11_solution.ts`, `T12_rank23_variant.ts`), 0 mismatches each.
-  - T12 OPEN: rank-22 hunt. Best documented attempt: drop-one sweep (best residual
-    1/729), 12k hill-climb + 824k SA iters over wider coefficients, targeted
-    enumeration — all stall at 1 mismatch. Full negative evidence in the attempt file.
+  baseline, scoreboard (`bun src/matmul/scoreboard.ts`). 21 rounds logged in
+  `src/matmul/CAMPAIGN.md`:
+  - T11 DONE: **four** independently verified rank-23 schemes
+    (`T11_solution.ts`, `T12_rank23_variant.ts`, `T12d_fam_A.ts`, `T12d_fam_B.ts`),
+    0 mismatches each.
+  - T12 OPEN: rank-22 hunt, unsolved. Nearest attempt `T12c_absorb_best.ts` is
+    rank 22 with 1/729 mismatches — not exact. Certificates landed along the way:
+    all 23 one-term drops certified 2-move local optimality (R8); drop-2-add-1
+    pair repair complete within its bounded ansatz (R10); exact rational
+    compression shows all four rank-23 families irreducible when the other
+    (u,v) pairs are held fixed (R14, extended to four pairwise-disjoint de Groote
+    orbits in R19).
+  - Search branches closed by their own controls, not by exhaustion: exact
+    descent (R16), continuous ALS (R17, error floor is rank-independent), F_2
+    hill climbing (R18) and F_2 beam search (R20) each failed a control where a
+    solution provably exists, which is why no rank-22 claim is made from them.
+  - `bun src/matmul/goalCheck.ts` is the M5 gate: it exits 1 until an exact
+    rank<=22 scheme lands, so the goal's `done_when` is actually enforced.
 
 ## Limits
 

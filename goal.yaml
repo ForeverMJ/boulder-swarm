@@ -22,7 +22,7 @@ L1:
     done_when: agent从零写出通过解法并经合并门落盘
   - id: M5
     title: 3x3 matmul tensor rank（Laderman 23 开放 50 年，目标 22）
-    verifier: bun src/matmul/scoreboard.ts
+    verifier: bun src/matmul/goalCheck.ts
     done_when: rank<=22 的 exact scheme 经合并门落盘
 L2:
   - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
@@ -35,14 +35,16 @@ L2:
   - {id: T08, problem: src/problems/problem08.ts, tests: src/problems/problem08.test.ts, owner: worker, milestone: M4}
   - {id: T09, problem: src/problems/problem09.ts, tests: src/problems/problem09.test.ts, owner: worker, milestone: M4}
   - {id: T10, problem: src/matmul/checker.ts, tests: src/matmul/checker.test.ts, owner: orchestrator, milestone: M5}
-  - {id: T11, problem: src/matmul/attempts/T11.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
-  - {id: T12, problem: src/matmul/attempts/T12.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
-  - {id: T12b, problem: src/matmul/attempts/T12b.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
-  - {id: T12c, problem: src/matmul/attempts/T12c.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
-  - {id: T12d, problem: src/matmul/attempts/T12d.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
-  - {id: T12e, problem: src/matmul/attempts/T12e.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
-  - {id: T12f, problem: src/matmul/attempts/R5_pair_tables.json, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: PAIRTABLES}
-  - {id: T12g, problem: src/matmul/attempts/R5_wide_absorb.json, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: WIDEABSORB}
+  - {id: T11, problem: src/matmul/attempts/T11_solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
+  - {id: T12, problem: src/matmul/attempts/T12_rank23_variant.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
+  - {id: T12c, problem: src/matmul/attempts/T12c_absorb_best.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22, note: nearest rank-22 attempt, 1/729 mismatches, not exact}
+  - {id: T12d, problem: src/matmul/attempts/T12d_fam_A.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
+  - {id: T12e, problem: src/matmul/attempts/T12d_fam_B.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
+  - {id: R08, problem: src/matmul/attempts/R8_alldrops_2move_pm2.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: CERTIFIED-LOCAL-OPTIMAL-2MOVE, note: all 23 drops certified 2-move local optimality}
+  - {id: R10, problem: src/matmul/attempts/R10_pair_repair.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: PAIRTABLES, note: drop-2-add-1 completeness; 126 feasible all blocked, 127 impossible by support bound}
+  - {id: R14, problem: src/matmul/attempts/R14_compress.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: ALL-IRREDUCIBLE, note: exact rational compression, restricted ansatz irreducibility}
+  - {id: R19, problem: src/matmul/attempts/R19_cross_orbit.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: NO-OVERLAP-OBSERVED, note: certificate extended to 4 families with pairwise disjoint de Groote orbits}
+  - {id: R21, problem: src/matmul/attempts/VERIFY_ALL.json, tests: src/matmul/tools/verifyAll.test.ts, owner: orchestrator, milestone: M5, success: ALL-CLAIMS-REPRODUCE, note: one-command hub re-derives every campaign claim, exits non-zero on drift}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
