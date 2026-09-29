@@ -16,10 +16,17 @@
  */
 export type Profile = { n1: number; n2: number; n3: number }
 
-export function enumerateRank22Profiles(_saturatedOnly?: boolean): Profile[] {
-  throw new Error("not implemented")
+export function enumerateRank22Profiles(saturatedOnly = false): Profile[] {
+  const profiles: Profile[] = []
+  const maxN3 = saturatedOnly ? 1 : 22
+  for (let n3 = 0; n3 <= maxN3; n3++) {
+    for (let n2 = 0; n2 + n3 <= 22; n2++) {
+      profiles.push({ n1: 22 - n2 - n3, n2, n3 })
+    }
+  }
+  return profiles
 }
 
-export function countRank22Profiles(_saturatedOnly?: boolean): number {
-  throw new Error("not implemented")
+export function countRank22Profiles(saturatedOnly = false): number {
+  return enumerateRank22Profiles(saturatedOnly).length
 }
