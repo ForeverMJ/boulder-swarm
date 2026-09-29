@@ -1,0 +1,30 @@
+L0:
+  id: G0
+  title: 算法题组全解与经验沉淀 (TypeScript)
+  frozen: true
+  success_criteria: 6/6 problems bun test pass + trajectories + metrics + wiki落盘
+L1:
+  - id: M1
+    title: 基础数组与字符串
+    verifier: bun test src/problems/problem01.test.ts src/problems/problem02.test.ts
+    done_when: M1内题目全部通过
+  - id: M2
+    title: 栈哈希与区间
+    verifier: bun test src/problems/problem03.test.ts src/problems/problem04.test.ts
+    done_when: M2内题目全部通过
+  - id: M3
+    title: 搜索与滑动窗口
+    verifier: bun test src/problems/problem05.test.ts src/problems/problem06.test.ts
+    done_when: M3内题目全部通过
+L2:
+  - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
+  - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
+  - {id: T03, problem: src/problems/problem03.ts, tests: src/problems/problem03.test.ts, owner: worker, milestone: M2}
+  - {id: T04, problem: src/problems/problem04.ts, tests: src/problems/problem04.test.ts, owner: worker, milestone: M2}
+  - {id: T05, problem: src/problems/problem05.ts, tests: src/problems/problem05.test.ts, owner: worker, milestone: M3}
+  - {id: T06, problem: src/problems/problem06.ts, tests: src/problems/problem06.test.ts, owner: worker, milestone: M3}
+policy:
+  workers: 12
+  file_ownership: one-problem-per-worker
+  merge: best-pass-rate-then-fewer-loc
+  branch_prefix: agent/goal-

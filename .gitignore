@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.branches/
+metrics/
+trajectories/
+agent-last-message.md
+*-worktrees/
+codex-*.log
+.omo/
+.codegraph/

@@ -1,0 +1,25 @@
+{
+  "name": "long-horizon-mas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "dry-run": "bun src/orchestrator/runLoop.ts --workers 12 --dry-run",
+    "run": "bun src/orchestrator/runLoop.ts --workers 12 --run",
+    "run:codex": "bun src/orchestrator/runLoop.ts --workers 12 --run --mode codex",
+    "smoke:codex": "bun src/orchestrator/runLoop.ts --workers 1 --tasks T02 --run --mode codex",
+    "e2e": "bun src/eval/e2eProof.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.6",
+    "zod": "^3.23"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "bun-types": "^1.4.2",
+    "typescript": "^5.6.0"
+  }
+}
