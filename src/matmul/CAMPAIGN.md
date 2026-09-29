@@ -21,6 +21,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R12 | Z3-invariant ansatz search | `tools/z3search.ts`: ansatz = nFixed + 7 orbits, seeded from naive(3) orbit structure, coefficients ±2 | blocked: best mm=6 at rank 22 AND rank 23 (8 restarts each). naive(3) is Z3-invariant (9 orbits, closed) but has **0 fixed triples** — diagonal elementary triples form a 3-orbit, not fixed points, contradicting my prior | `R12_z3search.json` |
 | R13 | drop-3 / add-2 replacement | `tools/tripleSwap.ts`: all 1771 triple drops; two fresh rank-1 terms may cancel each other's garbage off-residual (impossible with a single term) | **NO-RANK22-THIS-FORM**: only 68/1771 drops are structurally feasible (residual ≤ 8 = 2·2·2 max coverage of two supports-≤2 terms); all 68 searched completely, none solvable. Residual median is 30-60 | `R13_triple_swap.json` |
 | R14 | algebraic compression (exact) | `tools/rankTest.ts` + `tools/rational.ts`: exact rational Gaussian elimination (BigInt) on the r × n⁴ matrix of vec(u_r v_r^T) | **IRREDUCIBLE-EXACT** for all four verified rank-23 families: the 23 rank-1 matrices are linearly independent in the 81-dim space M₉, so no reduction exists that keeps the other 22 (u,v) pairs fixed. Scope: restricted ansatz only — a reduction that also changes (u,v) is not covered | `R14_compress_*.json` |
+| R15 | verified group orbit + exact test | after fixing four wrong sandwich formulations, derived the mode action by index counting: mode1 (g,h), mode2 (h⁻¹,k), mode3 (g⁻¹,k⁻¹) — a **Kronecker** action on each index pair, not a matrix product. `tools/equivariant.ts`, 4/4 positive controls | 200/200 distinct automorphic images of T11, all verified correct, **0 reducible** under the restricted ansatz. Extends R14 from one scheme to its whole group orbit | `R15_equivariant.json` |
 
 ## Standing findings
 
@@ -56,6 +57,15 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   when a reduction genuinely exists. What this does NOT establish is that rank
   23 is optimal for T - a reduction that also rewrites the (u,v) pairs lies
   outside this test, and the known literature lower bound is still 19.
+- R15 is the methodological counterweight to that limitation. The de Groote
+  automorphism group, derived from index counting rather than guessed, acts on
+  the whole scheme and produces genuinely inequivalent rank-23 members (200/200
+  distinct, all exactly verified). Running the R14 test across that orbit turns
+  a single-scheme observation into a family-wide certificate: nothing in the
+  orbit is reducible in the restricted ansatz. Four earlier sandwich
+  formulations failed because they applied matrix products where the correct
+  action is a Kronecker product on each index pair - the same class of error as
+  the stale-base scorer in R7, and again caught by positive controls.
 
 ## Next hypotheses (queued)
 

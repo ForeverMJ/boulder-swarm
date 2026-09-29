@@ -1,0 +1,10 @@
+{
+  "family": "T11_solution.ts",
+  "automorphism": "de Groote via Kronecker mode action: mode1 (g,h), mode2 (h^-1,k), mode3 (g^-1,k^-1)",
+  "trials": 200,
+  "distinctSchemes": 200,
+  "incorrectImages": 0,
+  "reducibleHits": 0,
+  "verdict": "ALL-IRREDUCIBLE-IN-RESTRICTED-ANSATZ",
+  "elapsedMs": 98085
+}
