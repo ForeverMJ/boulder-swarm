@@ -91,6 +91,22 @@ Two routes survive, both research-scale rather than engineering-scale.
    and F_2 arithmetic, a known-answer control at `<2,2,2>`, a working tensor
    encoding), but that derivation cannot be honestly asserted here without a
    source to check it against.
+
+   Progress on this route is machine-checked where it could be. The n=3
+   arithmetic of Blaser 2003 is implemented and tested
+   (`tools/blaser2003.ts`): `dim k^{3xm} = 3m`, `dim L^1_{m,3} = 2m`, four
+   output matrices in `W1 + W2`, hence `r >= 5m+4` against the assumed
+   `r* = 5m+3`, which is 19 at m=3. `tools/bilinear.ts` represents bilinear
+   computations and checks the tensor identity exactly, agreeing with the
+   existing checker on every known scheme. The `L^v_{l,n}` spaces are
+   implemented with both properties the paper relies on, `dim = l(n-v)` and
+   `L^n = 0`. Lemma 3's conclusion is implemented but **throws unless the
+   separation hypothesis is explicitly supplied**, because three ingredients
+   are still unavailable: the definition of `Z^v_{l,n}`, the verbatim
+   definition of "separates", and Lemma 7's sandwiching normal form. The
+   article is paywalled and the accessible copies do not render. Those three
+   are guessed at nowhere, and until they are obtained the published 19 is
+   reproduced only in its arithmetic, not in its proof.
 2. **A learned policy / tree search** in the AlphaTensor style. Requires
    training a value function and a policy over factor choices. Under a
    TypeScript-only constraint this means hand-written backprop, and the compute
