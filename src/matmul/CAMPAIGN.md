@@ -19,6 +19,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R10 | pair-drop + ONE fresh rank-1 term | `tools/pairRepair.ts`: 253 pairs, complete support-pattern search (validated by 7 positive/negative control tests) | **NO-RANK22-THIS-FORM** — 126 pairs searched, 127 provably impossible (residual > 27 = max coverage of a 3x3x3-supported rank-1 term) | `R10_pair_repair.json` |
 | R11 | Z3 orbit structure | `tools/symmetry.ts` finds Aut(T) by brute test = S3 (6 elements, orders {1:1,2:3,3:2}); `tools/zsplit.ts` splits T11 into orbits | **T11 is NOT Z3-invariant**: 23 generic orbits, 0 fixed triples, covered=69 != 23 | `R11_zsplit.json` |
 | R12 | Z3-invariant ansatz search | `tools/z3search.ts`: ansatz = nFixed + 7 orbits, seeded from naive(3) orbit structure, coefficients ±2 | blocked: best mm=6 at rank 22 AND rank 23 (8 restarts each). naive(3) is Z3-invariant (9 orbits, closed) but has **0 fixed triples** — diagonal elementary triples form a 3-orbit, not fixed points, contradicting my prior | `R12_z3search.json` |
+| R13 | drop-3 / add-2 replacement | `tools/tripleSwap.ts`: all 1771 triple drops; two fresh rank-1 terms may cancel each other's garbage off-residual (impossible with a single term) | **NO-RANK22-THIS-FORM**: only 68/1771 drops are structurally feasible (residual ≤ 8 = 2·2·2 max coverage of two supports-≤2 terms); all 68 searched completely, none solvable. Residual median is 30-60 | `R13_triple_swap.json` |
 
 ## Standing findings
 
@@ -38,6 +39,12 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   `verify()` before claiming SOLVED, and (b) runs `audit()` to prove the
   incremental counters match a full rescore. Treat any search claim without
   those gates as worthless.
+- R13 adds a hard structural bound: replacing k of T11's 23 triples requires
+  covering the residual with fresh terms, and two rank-1 terms with supports
+  <= 2 touch at most 2*2*2 = 8 cells. Only 68 of 1771 triple-drops even have a
+  residual that small (median residual 30-60), and all 68 are unsolvable. The
+  "delete k, add k-1" family is therefore closed for k=1,2,3, not merely
+  unexplored.
 
 ## Next hypotheses (queued)
 
