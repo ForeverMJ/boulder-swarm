@@ -20,7 +20,7 @@ async function main(): Promise<void> {
     const tasks = await loadTasks(REPO)
     const assigns = dispatch(tasks, 12)
     const workerSet = new Set(assigns.map((a) => a.workerId))
-    checks.push(["dispatch-12-workers", workerSet.size >= 6 && assigns.length === 6])
+    checks.push(["dispatch-12-workers", workerSet.size >= 6 && assigns.length === tasks.length])
     const v = runTestFile(REPO, "src/problems/problem02.test")
     checks.push([`harness-runs(passed=${v.passed}/${v.total})`, v.total === 5])
     await appendEvent(REPO, "run_e2e", { type: "e2e_proof", harness: v })

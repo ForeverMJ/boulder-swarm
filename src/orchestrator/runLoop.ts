@@ -44,6 +44,7 @@ function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run:
 }
 
 async function runMock(assigns: ReturnType<typeof dispatch>): Promise<WorkerResult[]> {
+  const stamp = new Date().toISOString()
   const results = await Promise.all(assigns.map((a) => runAssignment(REPO, a)))
   return results.map((r) => ({
     worker_id: r.worker_id,
@@ -54,11 +55,13 @@ async function runMock(assigns: ReturnType<typeof dispatch>): Promise<WorkerResu
     pass_rate: r.pass_rate,
     duration_s: r.duration_s,
     loc: r.loc,
+    mode: "mock" as const,
+    ts: stamp,
   }))
 }
 
 type AgentDeps = {
-  readonly kind: string
+  readonly kind: "codex" | "opencode"
   readonly buildPrompt: (taskId: string, problem: string, tests: string) => string
   readonly spawnAgent: (opts: {
     workdir: string
@@ -112,6 +115,8 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
         pass_rate: v.passRate,
         duration_s: agent.duration_s,
         loc: 0,
+        mode: deps.kind,
+        ts: new Date().toISOString(),
       })
       return { wt, agent, verdict: v, assignment: a }
     }),
@@ -125,6 +130,8 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
     pass_rate: s.verdict.passRate,
     duration_s: s.agent.duration_s,
     loc: 0,
+    mode: deps.kind,
+    ts: new Date().toISOString(),
   }))
   // Merge gate on main, task order, only fully-passing branches land.
   const wip = gitStatus(REPO) !== ""

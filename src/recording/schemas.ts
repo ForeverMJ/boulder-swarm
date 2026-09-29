@@ -9,6 +9,8 @@ export const WorkerResultSchema = z.object({
   pass_rate: z.number().min(0).max(1),
   duration_s: z.number().min(0),
   loc: z.number().int().min(0),
+  mode: z.enum(["mock", "codex", "opencode"]).optional(),
+  ts: z.string().optional(),
 })
 
 export type WorkerResult = {
@@ -20,6 +22,8 @@ export type WorkerResult = {
   readonly pass_rate: number
   readonly duration_s: number
   readonly loc: number
+  readonly mode?: "mock" | "codex" | "opencode"
+  readonly ts?: string
 }
 
 export function parseResults(raw: unknown): WorkerResult[] {
