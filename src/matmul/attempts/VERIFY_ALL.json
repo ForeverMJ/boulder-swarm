@@ -1,0 +1,297 @@
+{
+  "generatedBy": "tools/verifyAll.ts",
+  "purpose": "regenerate and cross-check every campaign claim from the current code, so artifacts cannot silently drift away from the tools that produced them",
+  "schemes": [
+    {
+      "kind": "scheme",
+      "file": "T11_solution.ts",
+      "claimed": "primary rank-23",
+      "rank": 23,
+      "mismatches": 0,
+      "expected": {
+        "rank": 23,
+        "mismatch": 0
+      },
+      "verdict": "REPRODUCED"
+    },
+    {
+      "kind": "scheme",
+      "file": "T12_rank23_variant.ts",
+      "claimed": "rank-23 variant",
+      "rank": 23,
+      "mismatches": 0,
+      "expected": {
+        "rank": 23,
+        "mismatch": 0
+      },
+      "verdict": "REPRODUCED"
+    },
+    {
+      "kind": "scheme",
+      "file": "T12d_fam_A.ts",
+      "claimed": "family A",
+      "rank": 23,
+      "mismatches": 0,
+      "expected": {
+        "rank": 23,
+        "mismatch": 0
+      },
+      "verdict": "REPRODUCED"
+    },
+    {
+      "kind": "scheme",
+      "file": "T12d_fam_B.ts",
+      "claimed": "family B",
+      "rank": 23,
+      "mismatches": 0,
+      "expected": {
+        "rank": 23,
+        "mismatch": 0
+      },
+      "verdict": "REPRODUCED"
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "R10_pair_repair.json",
+      "verdict": "NO-RANK22-THIS-FORM",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R11_zsplit.json",
+      "verdict": "no-invariant-drop-solution",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R12_z3search.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R13_triple_swap.json",
+      "verdict": "NO-RANK22-THIS-FORM",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R14_compress.json",
+      "verdict": "IRREDUCIBLE-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R14_compress_T11_solution.json",
+      "verdict": "IRREDUCIBLE-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R14_compress_T12_rank23_variant.json",
+      "verdict": "IRREDUCIBLE-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R14_compress_T12d_fam_A.json",
+      "verdict": "IRREDUCIBLE-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R14_compress_T12d_fam_B.json",
+      "verdict": "IRREDUCIBLE-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R15_equivariant.json",
+      "verdict": "ALL-IRREDUCIBLE-IN-RESTRICTED-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R16_control_rank27.json",
+      "verdict": "NO-SOLUTION-FOUND",
+      "selfConsistent": true,
+      "note": "consistent; not recomputable: bestMm (no bestByLevel trajectory to check against)"
+    },
+    {
+      "file": "R17_als_rank22.json",
+      "verdict": "DESCENT-BUT-NO-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R17_control_rank27.json",
+      "verdict": "DESCENT-BUT-NO-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R18_control_rank27.json",
+      "verdict": "NO-SOLUTION-FOUND",
+      "selfConsistent": true,
+      "note": "consistent; not recomputable: bestMismatch (no bestByLevel trajectory to check against)"
+    },
+    {
+      "file": "R18_f2_rank22.json",
+      "verdict": "NO-SOLUTION-FOUND",
+      "selfConsistent": true,
+      "note": "consistent; not recomputable: bestMismatch (no bestByLevel trajectory to check against)"
+    },
+    {
+      "file": "R18_recovery.json",
+      "verdict": "SEARCH-WORKS-LOCALLY",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R19_cross_orbit.json",
+      "verdict": "NO-OVERLAP-OBSERVED",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R19_orbit_T12_rank23_variant.json",
+      "verdict": "ALL-IRREDUCIBLE-IN-RESTRICTED-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R19_orbit_T12d_fam_A.json",
+      "verdict": "ALL-IRREDUCIBLE-IN-RESTRICTED-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R19_orbit_T12d_fam_B.json",
+      "verdict": "ALL-IRREDUCIBLE-IN-RESTRICTED-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R20_control_rank27.json",
+      "verdict": "NO-SOLUTION-FOUND",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R2_dropk_repair.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R2_sa_best.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R3_best.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R4_deGroote_best.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R6_survey_pm2.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R6_survey_pm3.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R7_full_pm2.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R7_full_pm3.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R7_two_move_d14.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R7_two_move_pm2.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R7_two_move_pm3.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R8_alldrops_2move_pm2.json",
+      "verdict": "CERTIFIED-LOCAL-OPTIMAL-2MOVE",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R9_climb_famA.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R9_climb_famB.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R9_climb_pm2_s12.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R9_climb_pm2_s3.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R9_climb_pm3_s12.json",
+      "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    }
+  ],
+  "summary": {
+    "schemeCount": 4,
+    "allSchemesPass": true,
+    "artifactCount": 38,
+    "driftedArtifacts": [],
+    "driftedSchemes": [],
+    "controlsRun": 4,
+    "controlsFailed": [],
+    "bestKnownRank": 23,
+    "bestKnownRank22": null,
+    "frontier": "rank 22 remains open; the best verified scheme in this repo has rank 23 and the campaign's negative results are scoped to specific ansatzes, never to optimality of rank 23"
+  },
+  "verdict": "ALL-CLAIMS-REPRODUCE"
+}

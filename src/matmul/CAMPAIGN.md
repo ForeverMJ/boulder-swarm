@@ -27,6 +27,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R18 | exact discrete search over F_2 | `tools/f2search.ts`: bitmask factors with Hamming distance to the target. First implementation used 729-bit JS bitmasks and was **invalid** — JS bitwise ops are int32, so all bits above 31 aliased; the control (naive(27) must give mismatch 0) exposed it, rewritten to `Uint8Array(729)` XOR with 9-bit factors | **Control failed, no rank-22 claim made.** The rank-27 control (naive(27) provably exact) only reached 39/729. A sharper diagnostic (`tools/recovery.ts`) seeded from a kicked known solution: 8/40 recovered to 0, so the search works only in a tiny local basin. Caveat on that 20%: the mutation operator zeroes a factor 50% of the time, which deletes a whole term, so most "recoveries" are trivial restorations and the apparent non-monotonicity in kick count is an artifact, not a landscape property | `R18_f2_rank22.json`, `R18_control_rank27.json`, `R18_recovery.json` |
 | R19 | certificate extended to 4 families | ran the R15 orbit sweep + R14 exact test on the three other verified rank-23 schemes, then `tools/crossOrbit.ts` to test whether they are genuinely different orbits | 3 further orbits x 120 members, all **irreducible** (total 480 verified-correct rank-23 schemes). Cross-orbit sampling: 4/4 distinct bases, all 6 pairwise orbit-sample intersections **zero** (151 members each) — evidence the four families lie in different de Groote orbits, though zero observed overlap is not a proof | `R19_orbit_*.json`, `R19_cross_orbit.json` |
 | R20 | beam search over F_2 factor sets | `tools/beamSearch.ts`: keeps hundreds of partial states instead of committing to one greedy path — the cheapest global method that needs no learned policy | **Control failed again; no rank-22 claim made.** At rank 27, where naive(27) provably exists, beam search reached only 20/729 (better than hill climbing's 39, still far from 0). Together with R16 and R18 this is the third independent sampling method to fail the same control. Diagnosis: over F_2 the sum is XOR, so hitting an already-correct position flips it wrong — the mismatch count carries almost no usable gradient, and the rank-22 space is ~594 bits (10^178), beyond any sampling method. This is precisely why the literature needed a learned policy (AlphaTensor) rather than search | `R20_control_rank27.json` |
+| R21 | reproducible verification hub | `tools/verifyAll.ts`: re-derives every campaign claim from the current code in one command — re-verifies the 4 rank-23 schemes against the exact checker and re-checks all 38 artifacts for self-consistency, so an artifact cannot silently drift away from the tool that produced it | `ALL-CLAIMS-REPRODUCE`: 4/4 schemes re-verified (rank 23, 0 mismatches), 38 artifacts cross-checked, 0 drift. The hub caught a **false positive in its own first draft** — a generic "is this number present in that array" test wrongly flagged `recoveryRate=0.2` as inconsistent with per-trial rows. Rewritten to *recompute* each aggregate from raw observations (a rate is not a raw observation), with a real inconsistency case and an unrecomputable-field case locked in 5 tests | `VERIFY_ALL.json` |
 
 ## Standing findings
 
@@ -108,7 +109,14 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   mismatch count therefore carries almost no gradient, while the rank-22 space
   is roughly 594 bits. Escaping this needs a learned policy over factor
   choices, which is the AlphaTensor result this repo deliberately did not
-  attempt because it is a different kind of project.
+  attempt because it   is a different kind of project.
+- R21 is the campaign's reproducibility guarantee. Every negative result in
+  this file is a JSON artifact produced at some point in time, and an artifact
+  that is never regenerated is a claim that quietly stops being true as the
+  tools move underneath it. `tools/verifyAll.ts` closes that gap: one command
+  re-verifies all four rank-23 schemes against the exact checker and re-derives
+  every artifact's internal consistency, exiting non-zero on drift. It
+  immediately earned its place by flagging a bug in its own first draft.
 
 ## Next hypotheses (queued)
 
