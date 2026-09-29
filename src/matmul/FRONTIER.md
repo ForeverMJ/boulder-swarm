@@ -12,8 +12,14 @@ For the order-3 tensor of 3x3 matrix multiplication:
 
 | field | lower bound | upper bound | open? |
 |---|---|---|---|
-| Q, R | 19 (Blaser 2003) | 23 (Laderman 1976) | yes, at 22 |
+| Q, R | 19 (Blaser 2003, Inf. Process. Lett.) | 23 (Laderman 1976) | yes, at 22 |
 | F_2 | 21 (arXiv 2609.06725, 2609.18722) | 23 | yes, at 22 |
+
+The Q/R bound of 19 is `R(<n,m,n>) >= 2mn + 2n - m - 2` for `m >= n >= 3`
+(Blaser 2003), equivalently Proposition 8's `R(<3,m,3>) >= 5m + 4`. Both are
+implemented with their hypothesis checks in `tools/publishedBounds.ts`, and the
+hypothesis is load-bearing: outside `m >= n >= 3` the formula returns 8 for
+`<2,2,2>`, whose true rank is 7. Bounded states what is needed to advance.
 
 Bounds do **not** transfer between fields in either direction. An UNSAT proof
 at r=22 over F_2 would tighten the F_2 bound only; it says nothing about the
@@ -75,13 +81,16 @@ exist independently. The published lower bound over Q/R is 19.
 Two routes survive, both research-scale rather than engineering-scale.
 
 1. **Multi-dimensional restriction spaces with recursion**, or the substitution
-   method, for an n^2-type lower bound. R34 rules out the one-covariant case,
-   so the literature's 19 and 21 must come from this or from
-   substitution-style recursion. The prerequisite substrate is built and
-   validated (exact rational and F_2 arithmetic, a known-answer control at
-   `<2,2,2>`, a working tensor encoding), but the recursion itself is a
-   derivation that cannot be honestly asserted here without a source to check
-   it against.
+   method, for an n^2-type lower bound. R34 rules out the one-covariant case
+   and R36 shows larger restriction spaces add nothing, so the literature's 19
+   must come from the quotient or substitution step, not a bigger subspace. The
+   Blaser 2003 proof is a contradiction argument resting on a counting lemma, a
+   separation lemma and a sandwiching normal form over the subspaces
+   `L^v_{n,n}`; the paper itself calls the remaining case analysis technical and
+   elaborate. The prerequisite substrate is built and validated (exact rational
+   and F_2 arithmetic, a known-answer control at `<2,2,2>`, a working tensor
+   encoding), but that derivation cannot be honestly asserted here without a
+   source to check it against.
 2. **A learned policy / tree search** in the AlphaTensor style. Requires
    training a value function and a policy over factor choices. Under a
    TypeScript-only constraint this means hand-written backprop, and the compute

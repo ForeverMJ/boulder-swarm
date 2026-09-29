@@ -245,6 +245,12 @@
       "note": "consistent"
     },
     {
+      "file": "R37_published_bounds.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R3_best.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -338,7 +344,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 47,
+    "artifactCount": 48,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

@@ -1,0 +1,83 @@
+{
+  "sources": {
+    "blaser2003": "Markus Blaser, 'On the complexity of the multiplication of matrices of small formats', Inf. Process. Lett. 2003. States R(<n,m,n>) >= 2mn+2n-m-2 for m >= n >= 3, giving 19 for <3,3,3>, and Proposition 8 R(<3,m,3>) >= 5m+4 for all m >= 3 over any field.",
+    "blaser1999": "Markus Blaser, 'Lower bounds for the multiplicative complexity of matrix multiplication', Comput. Complex. 8(3):203-226, 1999. States R(<n,n,n>) > (5/2)n^2 - 3n.",
+    "hopcroftKerrWinograd": "R(<2,2,2>) = 7 over every field (Winograd 1971, Hopcroft-Kerr 1971)."
+  },
+  "whatThisIs": "the published formulas as a tested implementation, so the target a reproduction would have to hit is pinned down precisely. It is NOT a proof of those bounds: the 2003 proof is a contradiction argument resting on three lemmas (a counting lemma, a separation lemma, and a sandwiching normal form) over specific matrix subspaces L^v_{n,n}, which the paper itself describes as technical and elaborate. None of that is implemented here.",
+  "square": [
+    {
+      "format": "<3,3,3>",
+      "applies": true,
+      "blaser2003": 19,
+      "blaser1999": 14
+    },
+    {
+      "format": "<4,4,4>",
+      "applies": true,
+      "blaser2003": 34,
+      "blaser1999": 29
+    },
+    {
+      "format": "<5,5,5>",
+      "applies": true,
+      "blaser2003": 53,
+      "blaser1999": 48
+    }
+  ],
+  "rectangular_n3": [
+    {
+      "format": "<3,3,3>",
+      "blaser2003": 19,
+      "proposition8": 19,
+      "agree": true
+    },
+    {
+      "format": "<3,4,3>",
+      "blaser2003": 24,
+      "proposition8": 24,
+      "agree": true
+    },
+    {
+      "format": "<3,5,3>",
+      "blaser2003": 29,
+      "proposition8": 29,
+      "agree": true
+    },
+    {
+      "format": "<3,8,3>",
+      "blaser2003": 44,
+      "proposition8": 44,
+      "agree": true
+    }
+  ],
+  "at3x3x3": {
+    "value": 19,
+    "matchesPublished": true
+  },
+  "hypothesisIsLoadBearing": {
+    "note": "applied outside m >= n >= 3 the formula is wrong, not merely inapplicable: at <2,2,2> it returns 8 while the true rank is 7. Any implementation that drops the hypothesis check would 'prove' a false statement, and the true rank of <2,2,2> is a case this repository verifies directly with a rank-7 scheme.",
+    "cases": [
+      {
+        "format": "<2,2,2>",
+        "formulaWouldGive": 8,
+        "trueRank": 7
+      },
+      {
+        "format": "<2,3,2>",
+        "formulaWouldGive": 11,
+        "trueRank": null
+      }
+    ]
+  },
+  "blaser1999At3": {
+    "strict": 13.5,
+    "integerLowerBound": 14
+  },
+  "gapToClose": {
+    "lowerBoundOverQ": 19,
+    "upperBound": 23,
+    "rank22": "open; reproducing the published 19 would confirm the machinery, not advance the bound",
+    "f2Note": "the F_2 lower bound of 21 comes from a different, automated framework (Wang 2026, orbit-DP with verifiable certificates; arXiv 2609.06725 and 2609.18722 for 21) and is not a specialisation of the formula above"
+  }
+}
