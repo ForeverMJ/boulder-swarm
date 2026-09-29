@@ -188,6 +188,94 @@ export class Scorer {
     return { found: false, moves, poolSize: pool.length }
   }
 
+  /** Best single-or-pair coordinate move; MUTATES state by applying it, returns the new score. */
+  bestMove(lo: number, hi: number): { mm: number; l1: number; desc: string | null; found: boolean } {
+    const values: number[] = []
+    for (let v = lo; v <= hi; v++) values.push(v)
+    const coords: [0 | 1 | 2, number, number][] = []
+    for (let t = 0; t < this.triples.length; t++) {
+      for (let p = 0 as 0 | 1 | 2; p < 3; p++) {
+        const arr = p === 0 ? this.triples[t]?.u : p === 1 ? this.triples[t]?.v : this.triples[t]?.w
+        for (let pos = 0; pos < this.N; pos++) {
+          if ((arr?.[pos] ?? 0) !== 0) coords.push([p, t, pos])
+        }
+      }
+    }
+    let best = { mm: this.mm, l1: this.l1 }
+    let bestPlan: [0 | 1 | 2, number, number, number][] | null = null
+    for (const [p1, t1, pos1] of coords) {
+      const o1 = this.valAt(p1, t1, pos1)
+      for (const v1 of values) {
+        if (v1 === o1) continue
+        this.setAt(p1, t1, pos1, v1)
+        const s1 = { mm: this.mm, l1: this.l1 }
+        if (s1.mm < best.mm || (s1.mm === best.mm && s1.l1 < best.l1)) {
+          best = s1
+          bestPlan = [[p1, t1, pos1, v1]]
+        }
+        for (const [p2, t2, pos2] of coords) {
+          if (p2 === p1 && t2 === t1 && pos2 === pos1) continue
+          const o2 = this.valAt(p2, t2, pos2)
+          for (const v2 of values) {
+            if (v2 === o2) continue
+            this.setAt(p2, t2, pos2, v2)
+            const s2 = { mm: this.mm, l1: this.l1 }
+            if (s2.mm < best.mm || (s2.mm === best.mm && s2.l1 < best.l1)) {
+              best = s2
+              bestPlan = [[p1, t1, pos1, v1], [p2, t2, pos2, v2]]
+            }
+            this.setAt(p2, t2, pos2, o2)
+          }
+        }
+        this.setAt(p1, t1, pos1, o1)
+      }
+    }
+    if (bestPlan === null) return { mm: this.mm, l1: this.l1, desc: null, found: false }
+    const desc = bestPlan.map(([p, t, pos, v]) => `f${p}t${t}[${pos}]=${v}`).join("+")
+    for (const [p, t, pos, v] of bestPlan) this.setAt(p, t, pos, v)
+    return { mm: best.mm, l1: best.l1, desc, found: best.mm === 0 }
+  }
+
+  valAt(factor: 0 | 1 | 2, tIdx: number, pos: number): number {
+    const t = this.triples[tIdx]
+    if (t === undefined) return 0
+    const arr = factor === 0 ? t.u : factor === 1 ? t.v : t.w
+    return arr[pos] ?? 0
+  }
+
+  setAt(factor: 0 | 1 | 2, tIdx: number, pos: number, val: number): void {
+    const t = this.triples[tIdx]
+    if (t === undefined) return
+    const arr = factor === 0 ? t.u : factor === 1 ? t.v : t.w
+    arr[pos] = val
+  }
+
+  kick(seed: number, magnitude: number): void {
+    let s = seed
+    const rnd = (): number => {
+      s = (s * 1103515245 + 12345) % 2147483648
+      return s / 2147483648
+    }
+    const n = 1 + Math.floor(rnd() * 4)
+    for (let i = 0; i < n; i++) {
+      const t = Math.floor(rnd() * this.triples.length)
+      const p = Math.floor(rnd() * 3) as 0 | 1 | 2
+      const pos = Math.floor(rnd() * this.N)
+      const v = Math.floor(rnd() * (2 * magnitude + 1)) - magnitude
+      this.setAt(p, t, pos, v)
+    }
+    this.recompute()
+  }
+
+  /** MUTATES via recompute; returns null when incremental bookkeeping matches a full rescore. */
+  audit(): { mm: number; l1: number; recomputedMm: number; recomputedL1: number } | null {
+    const incMm = this.mm
+    const incL1 = this.l1
+    this.recompute()
+    if (this.mm === incMm && this.l1 === incL1) return null
+    return { mm: incMm, l1: incL1, recomputedMm: this.mm, recomputedL1: this.l1 }
+  }
+
   residualEntries(limit: number): [number, number, number][] {
     const N = this.N
     const out: [number, number, number][] = []

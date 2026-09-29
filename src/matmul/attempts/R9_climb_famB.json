@@ -1,0 +1,16 @@
+{
+  "family": "T12d_fam_B.ts",
+  "lo": -2,
+  "hi": 2,
+  "restarts": 6,
+  "globalBest": {
+    "mm": 4,
+    "l1": 6,
+    "drop": 2,
+    "seed": 1
+  },
+  "notable": [],
+  "auditFailures": 0,
+  "verdict": "blocked",
+  "elapsedMs": 1759
+}

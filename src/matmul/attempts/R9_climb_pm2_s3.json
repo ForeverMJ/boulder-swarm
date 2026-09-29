@@ -1,0 +1,61 @@
+{
+  "family": "T11_solution.ts",
+  "lo": -2,
+  "hi": 2,
+  "restarts": 3,
+  "globalBest": {
+    "mm": 1,
+    "l1": 1,
+    "drop": 3,
+    "seed": 1
+  },
+  "notable": [
+    {
+      "drop": 2,
+      "seed": 1,
+      "mm": 2,
+      "l1": 2,
+      "path": [
+        "2:stuck"
+      ]
+    },
+    {
+      "drop": 3,
+      "seed": 1,
+      "mm": 1,
+      "l1": 1,
+      "path": [
+        "1:stuck"
+      ]
+    },
+    {
+      "drop": 14,
+      "seed": 1,
+      "mm": 1,
+      "l1": 1,
+      "path": [
+        "1:stuck"
+      ]
+    },
+    {
+      "drop": 15,
+      "seed": 1,
+      "mm": 1,
+      "l1": 1,
+      "path": [
+        "1:stuck"
+      ]
+    },
+    {
+      "drop": 21,
+      "seed": 1,
+      "mm": 1,
+      "l1": 1,
+      "path": [
+        "1:stuck"
+      ]
+    }
+  ],
+  "verdict": "blocked",
+  "elapsedMs": 470
+}

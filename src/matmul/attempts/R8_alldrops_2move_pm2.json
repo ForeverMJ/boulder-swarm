@@ -1,0 +1,195 @@
+{
+  "family": "T11_solution.ts",
+  "mode": "alldrops-2move",
+  "lo": -2,
+  "hi": 2,
+  "drops": [
+    {
+      "drop": 0,
+      "mm": 60,
+      "l1": 60,
+      "pool": 429,
+      "claimed": false,
+      "improving": 30
+    },
+    {
+      "drop": 1,
+      "mm": 63,
+      "l1": 63,
+      "pool": 430,
+      "claimed": false,
+      "improving": 23
+    },
+    {
+      "drop": 2,
+      "mm": 2,
+      "l1": 2,
+      "pool": 421,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 3,
+      "mm": 1,
+      "l1": 1,
+      "pool": 420,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 4,
+      "mm": 4,
+      "l1": 4,
+      "pool": 423,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 5,
+      "mm": 24,
+      "l1": 24,
+      "pool": 426,
+      "claimed": false,
+      "improving": 9
+    },
+    {
+      "drop": 6,
+      "mm": 5,
+      "l1": 5,
+      "pool": 424,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 7,
+      "mm": 6,
+      "l1": 6,
+      "pool": 425,
+      "claimed": false,
+      "improving": 1
+    },
+    {
+      "drop": 8,
+      "mm": 8,
+      "l1": 8,
+      "pool": 427,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 9,
+      "mm": 48,
+      "l1": 48,
+      "pool": 428,
+      "claimed": false,
+      "improving": 18
+    },
+    {
+      "drop": 10,
+      "mm": 6,
+      "l1": 6,
+      "pool": 425,
+      "claimed": false,
+      "improving": 1
+    },
+    {
+      "drop": 11,
+      "mm": 27,
+      "l1": 27,
+      "pool": 426,
+      "claimed": false,
+      "improving": 8
+    },
+    {
+      "drop": 12,
+      "mm": 4,
+      "l1": 4,
+      "pool": 423,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 13,
+      "mm": 24,
+      "l1": 24,
+      "pool": 427,
+      "claimed": false,
+      "improving": 2
+    },
+    {
+      "drop": 14,
+      "mm": 1,
+      "l1": 1,
+      "pool": 420,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 15,
+      "mm": 1,
+      "l1": 1,
+      "pool": 420,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 16,
+      "mm": 4,
+      "l1": 4,
+      "pool": 423,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 17,
+      "mm": 8,
+      "l1": 8,
+      "pool": 423,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 18,
+      "mm": 80,
+      "l1": 80,
+      "pool": 430,
+      "claimed": false,
+      "improving": 42
+    },
+    {
+      "drop": 19,
+      "mm": 20,
+      "l1": 20,
+      "pool": 426,
+      "claimed": false,
+      "improving": 2
+    },
+    {
+      "drop": 20,
+      "mm": 6,
+      "l1": 6,
+      "pool": 425,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 21,
+      "mm": 1,
+      "l1": 1,
+      "pool": 420,
+      "claimed": false,
+      "improving": 0
+    },
+    {
+      "drop": 22,
+      "mm": 20,
+      "l1": 20,
+      "pool": 427,
+      "claimed": false,
+      "improving": 3
+    }
+  ],
+  "anyClaimed": false,
+  "verdict": "CERTIFIED-LOCAL-OPTIMAL-2MOVE",
+  "elapsedMs": 33639
+}

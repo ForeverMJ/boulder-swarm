@@ -19,6 +19,34 @@ async function main(): Promise<void> {
     const out = args[4] ?? "R7_two_move.json"
     const restrict = args[5] !== "full"
     const mod = (await import(join(ATT, name))) as { scheme: Scheme }
+    if (args[5] === "alldrops") {
+      const lo2 = lo
+      const hi2 = hi
+      const rows: unknown[] = []
+      const t00 = Date.now()
+      for (let d = 0; d < mod.scheme.triples.length; d++) {
+        const keep2 = mod.scheme.triples.filter((_, i) => i !== d)
+        const sc2 = new Scorer(mod.scheme.n, keep2)
+        const f2 = sc2.residualEntries(16)
+        const r2 = sc2.searchMoves(lo2, hi2, f2, false)
+        rows.push({ drop: d, mm: sc2.mm, l1: sc2.l1, pool: r2.poolSize, claimed: r2.found, improving: r2.moves.length })
+        console.log(`drop=${d} mm=${sc2.mm} pool=${r2.poolSize} claimed=${r2.found} improving=${r2.moves.length}`)
+      }
+      const claimedAny = rows.some((x) => (x as { claimed: boolean }).claimed)
+      const payload2 = {
+        family: name,
+        mode: "alldrops-2move",
+        lo: lo2,
+        hi: hi2,
+        drops: rows,
+        anyClaimed: claimedAny,
+        verdict: claimedAny ? "NEEDS-GROUND-TRUTH" : "CERTIFIED-LOCAL-OPTIMAL-2MOVE",
+        elapsedMs: Date.now() - t00,
+      }
+      await writeFile(join(ATT, out), JSON.stringify(payload2, null, 2), "utf-8")
+      console.log(`verdict=${payload2.verdict} anyClaimed=${claimedAny} ${payload2.elapsedMs}ms -> ${out}`)
+      return
+    }
     const keep = mod.scheme.triples.filter((_, i) => i !== drop)
     const sc = new Scorer(mod.scheme.n, keep)
     const focus = sc.residualEntries(16)
