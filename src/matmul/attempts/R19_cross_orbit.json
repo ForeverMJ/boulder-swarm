@@ -1,0 +1,70 @@
+{
+  "question": "do the four verified rank-23 families lie in the same de Groote orbit?",
+  "method": "sample orbit members per family, compare m-matrix signatures",
+  "samplesPerFamily": 150,
+  "distinctBaseSchemes": 4,
+  "pairwise": [
+    {
+      "a": "T11_solution",
+      "b": "T12d_fam_A",
+      "sizeA": 151,
+      "sizeB": 151,
+      "overlap": 0
+    },
+    {
+      "a": "T11_solution",
+      "b": "T12d_fam_B",
+      "sizeA": 151,
+      "sizeB": 151,
+      "overlap": 0
+    },
+    {
+      "a": "T11_solution",
+      "b": "T12_rank23_variant",
+      "sizeA": 151,
+      "sizeB": 151,
+      "overlap": 0
+    },
+    {
+      "a": "T12d_fam_A",
+      "b": "T12d_fam_B",
+      "sizeA": 151,
+      "sizeB": 151,
+      "overlap": 0
+    },
+    {
+      "a": "T12d_fam_A",
+      "b": "T12_rank23_variant",
+      "sizeA": 151,
+      "sizeB": 151,
+      "overlap": 0
+    },
+    {
+      "a": "T12d_fam_B",
+      "b": "T12_rank23_variant",
+      "sizeA": 151,
+      "sizeB": 151,
+      "overlap": 0
+    }
+  ],
+  "verdict": "NO-OVERLAP-OBSERVED",
+  "caveat": "zero observed overlap is evidence of distinct orbits, not a proof; the sampled orbits are tiny slices of an infinite group",
+  "baseSamples": [
+    {
+      "family": "T11_solution",
+      "sig": "0/1,0/1,0/1,1/1,0/1,1/1,1/1,1/1,1/1,0/1,"
+    },
+    {
+      "family": "T12d_fam_A",
+      "sig": "-1/1,0/1,-1/1,-3/1,1/1,-3/1,-1/1,0/1,-1/"
+    },
+    {
+      "family": "T12d_fam_B",
+      "sig": "0/1,0/1,0/1,-1/1,-3/1,-1/1,-1/1,-2/1,-1/"
+    },
+    {
+      "family": "T12_rank23_variant",
+      "sig": "0/1,0/1,0/1,0/1,0/1,0/1,0/1,0/1,0/1,0/1,"
+    }
+  ]
+}

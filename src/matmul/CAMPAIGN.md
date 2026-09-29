@@ -25,6 +25,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R16 | from-scratch rank-22 search | `tools/fromScratch.ts`: randomized descent on 22 arbitrary triples, 594 ternary unknowns vs 729 equations, no anchor to any known scheme | **CONTROL FAILED — route declared non-viable, no rank-22 claim made.** The rank-27 control (naive(27) is sparse and correct, so 0 is reachable) stalled at mm=241 over 15 restarts: from a random start no single- or two-coordinate move improves the score, because the residual is spread over hundreds of cells and one coordinate touches 81 of them. Local descent only works near an already-correct scheme with a tiny structured defect | `R16_control_rank27.json` |
 | R17 | continuous ALS surrogate | `tools/als.ts`: Frobenius-error coordinate descent, the gradient source AlphaTensor-style methods rely on. Control found and fixed a real bug: the coordinate update solved for the new absolute value instead of the delta, which zeroed correct coefficients | descent confirmed (rank 27: 26 -> 2.1, ratio 0.08). **But the terminal error is rank-independent** — rank 22 lands at ratio 0.068-0.095, statistically indistinguishable from rank 27's 0.076-0.083. The error floor is a property of coordinate-wise ALS, not evidence about rank, so without an exactification step this branch carries no information about whether rank 22 exists | `R17_control_rank27.json`, `R17_als_rank22.json` |
 | R18 | exact discrete search over F_2 | `tools/f2search.ts`: bitmask factors with Hamming distance to the target. First implementation used 729-bit JS bitmasks and was **invalid** — JS bitwise ops are int32, so all bits above 31 aliased; the control (naive(27) must give mismatch 0) exposed it, rewritten to `Uint8Array(729)` XOR with 9-bit factors | **Control failed, no rank-22 claim made.** The rank-27 control (naive(27) provably exact) only reached 39/729. A sharper diagnostic (`tools/recovery.ts`) seeded from a kicked known solution: 8/40 recovered to 0, so the search works only in a tiny local basin. Caveat on that 20%: the mutation operator zeroes a factor 50% of the time, which deletes a whole term, so most "recoveries" are trivial restorations and the apparent non-monotonicity in kick count is an artifact, not a landscape property | `R18_f2_rank22.json`, `R18_control_rank27.json`, `R18_recovery.json` |
+| R19 | certificate extended to 4 families | ran the R15 orbit sweep + R14 exact test on the three other verified rank-23 schemes, then `tools/crossOrbit.ts` to test whether they are genuinely different orbits | 3 further orbits x 120 members, all **irreducible** (total 480 verified-correct rank-23 schemes). Cross-orbit sampling: 4/4 distinct bases, all 6 pairwise orbit-sample intersections **zero** (151 members each) — evidence the four families lie in different de Groote orbits, though zero observed overlap is not a proof | `R19_orbit_*.json`, `R19_cross_orbit.json` |
 
 ## Standing findings
 
@@ -90,6 +91,13 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   central limitation: local search is an anchor amplifier, not a constructor.
   Escaping it needs the policy-learned tree search of the literature, which is
   an order of magnitude more machinery than anything here.
+- R19 hardens the campaign's strongest claim. The R14 exact test was originally
+  run on one scheme; it now covers four verified rank-23 families whose de
+  Groote orbits were sampled and found pairwise disjoint, so the
+  irreducibility certificate is not an artifact of a single orbit. What it
+  still is NOT: a proof that rank 23 is optimal. The scope remains "no
+  reduction that keeps the other r-1 (u,v) pairs fixed", and the literature
+  lower bound is 19, so rank 22 remains open for everyone including this repo.
 
 ## Next hypotheses (queued)
 
