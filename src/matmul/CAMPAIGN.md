@@ -22,6 +22,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R13 | drop-3 / add-2 replacement | `tools/tripleSwap.ts`: all 1771 triple drops; two fresh rank-1 terms may cancel each other's garbage off-residual (impossible with a single term) | **NO-RANK22-THIS-FORM**: only 68/1771 drops are structurally feasible (residual ≤ 8 = 2·2·2 max coverage of two supports-≤2 terms); all 68 searched completely, none solvable. Residual median is 30-60 | `R13_triple_swap.json` |
 | R14 | algebraic compression (exact) | `tools/rankTest.ts` + `tools/rational.ts`: exact rational Gaussian elimination (BigInt) on the r × n⁴ matrix of vec(u_r v_r^T) | **IRREDUCIBLE-EXACT** for all four verified rank-23 families: the 23 rank-1 matrices are linearly independent in the 81-dim space M₉, so no reduction exists that keeps the other 22 (u,v) pairs fixed. Scope: restricted ansatz only — a reduction that also changes (u,v) is not covered | `R14_compress_*.json` |
 | R15 | verified group orbit + exact test | after fixing four wrong sandwich formulations, derived the mode action by index counting: mode1 (g,h), mode2 (h⁻¹,k), mode3 (g⁻¹,k⁻¹) — a **Kronecker** action on each index pair, not a matrix product. `tools/equivariant.ts`, 4/4 positive controls | 200/200 distinct automorphic images of T11, all verified correct, **0 reducible** under the restricted ansatz. Extends R14 from one scheme to its whole group orbit | `R15_equivariant.json` |
+| R16 | from-scratch rank-22 search | `tools/fromScratch.ts`: randomized descent on 22 arbitrary triples, 594 ternary unknowns vs 729 equations, no anchor to any known scheme | **CONTROL FAILED — route declared non-viable, no rank-22 claim made.** The rank-27 control (naive(27) is sparse and correct, so 0 is reachable) stalled at mm=241 over 15 restarts: from a random start no single- or two-coordinate move improves the score, because the residual is spread over hundreds of cells and one coordinate touches 81 of them. Local descent only works near an already-correct scheme with a tiny structured defect | `R16_control_rank27.json` |
 
 ## Standing findings
 
@@ -66,6 +67,13 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   formulations failed because they applied matrix products where the correct
   action is a Kronecker product on each index pair - the same class of error as
   the stale-base scorer in R7, and again caught by positive controls.
+- R16 is the structural explanation for the whole campaign. Every positive
+  result in R1-R15 came from perturbing an already-correct rank-23 scheme whose
+  defect was a single cell. The from-scratch variant fails its own rank-27
+  control, so the paradigm does not transfer: with the residual spread over
+  hundreds of cells there is no improving first move. Attacking rank 22 from
+  zero needs a global method (SAT/ILP encoding of the 594-unknown system, or a
+  continuous border-rank method with an exactification step), not descent.
 
 ## Next hypotheses (queued)
 

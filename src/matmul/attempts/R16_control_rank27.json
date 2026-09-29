@@ -1,0 +1,12 @@
+{
+  "approach": "from-scratch randomized descent on 22 arbitrary triples (no anchor to any known rank-23 scheme)",
+  "rank": 27,
+  "restarts": 15,
+  "approximateEvals": 328050,
+  "bestMm": 241,
+  "bestL1": 260,
+  "seed": 12345,
+  "solved": null,
+  "verdict": "NO-SOLUTION-FOUND",
+  "elapsedMs": 62586
+}
