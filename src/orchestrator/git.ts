@@ -57,6 +57,18 @@ export function currentBranch(repoRoot: string): string {
   return git(repoRoot, ["branch", "--show-current"])
 }
 
+export function gitStatus(repoRoot: string): string {
+  return git(repoRoot, ["status", "--porcelain"])
+}
+
+export function gitStashPush(repoRoot: string): void {
+  git(repoRoot, ["stash", "push", "-u", "-m", "runlive-wip"])
+}
+
+export function gitStashPop(repoRoot: string): void {
+  git(repoRoot, ["stash", "pop"])
+}
+
 export function listBranches(repoRoot: string): string[] {
   const out = git(repoRoot, ["branch", "--format=%(refname:short)"])
   return out.split("\n").map((s) => s.trim()).filter((s) => s !== "")

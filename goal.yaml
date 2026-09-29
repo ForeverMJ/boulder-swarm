@@ -16,6 +16,10 @@ L1:
     title: 搜索与滑动窗口
     verifier: bun test src/problems/problem05.test.ts src/problems/problem06.test.ts
     done_when: M3内题目全部通过
+  - id: M4
+    title: 未见新题（真解题验证）
+    verifier: bun test src/problems/problem07.test.ts src/problems/problem08.test.ts
+    done_when: agent从零写出通过解法并经合并门落盘
 L2:
   - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
   - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
@@ -23,6 +27,8 @@ L2:
   - {id: T04, problem: src/problems/problem04.ts, tests: src/problems/problem04.test.ts, owner: worker, milestone: M2}
   - {id: T05, problem: src/problems/problem05.ts, tests: src/problems/problem05.test.ts, owner: worker, milestone: M3}
   - {id: T06, problem: src/problems/problem06.ts, tests: src/problems/problem06.test.ts, owner: worker, milestone: M3}
+  - {id: T07, problem: src/problems/problem07.ts, tests: src/problems/problem07.test.ts, owner: worker, milestone: M4}
+  - {id: T08, problem: src/problems/problem08.ts, tests: src/problems/problem08.test.ts, owner: worker, milestone: M4}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker

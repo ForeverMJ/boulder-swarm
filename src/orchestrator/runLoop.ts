@@ -8,7 +8,7 @@ import { appendEvent } from "../recording/trace"
 import type { WorkerResult } from "../recording/schemas"
 import { buildPrompt as buildCodexPrompt, spawnAgent as spawnCodexAgent } from "./codexWorker"
 import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
-import { commitWorktree, createWorktree, initRepo, listBranches, mergeGate } from "./git"
+import { commitWorktree, createWorktree, gitStashPop, gitStashPush, gitStatus, initRepo, listBranches, mergeGate } from "./git"
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { replan } from "./replan"
 import { runAssignment } from "./worker"
@@ -34,7 +34,9 @@ function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run:
     }
     if (argv[i] === "--tasks") {
       const v = argv[i + 1]
-      if (v !== undefined) tasks = v.split(/[,\s]+/).map((s) => s.trim()).filter((s) => s !== "")
+      if (v !== undefined && !v.startsWith("--")) {
+        tasks.push(...v.split(/[,\s]+/).map((s) => s.trim()).filter((s) => s !== ""))
+      }
     }
     if (argv[i] === "--run") run = true
   }
@@ -125,16 +127,26 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
     loc: 0,
   }))
   // Merge gate on main, task order, only fully-passing branches land.
-  for (const r of [...results].sort((x, y) => x.task_id.localeCompare(y.task_id))) {
-    if (r.pass_rate < 1) {
-      console.log(`GATE skip ${r.task_id} (${r.branch}): pass_rate=${r.pass_rate.toFixed(2)} < 1.0`)
-      continue
+  const wip = gitStatus(REPO) !== ""
+  if (wip) {
+    gitStashPush(REPO)
+  }
+  try {
+    for (const r of [...results].sort((x, y) => x.task_id.localeCompare(y.task_id))) {
+      if (r.pass_rate < 1) {
+        console.log(`GATE skip ${r.task_id} (${r.branch}): pass_rate=${r.pass_rate.toFixed(2)} < 1.0`)
+        continue
+      }
+      const verdict = mergeGate(REPO, r.branch, () => {
+        const onMain = runTestFile(REPO, assigns.find((a) => a.task.id === r.task_id)?.task.tests ?? "")
+        return onMain.passRate >= 1 && onMain.total > 0
+      })
+      console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
     }
-    const verdict = mergeGate(REPO, r.branch, () => {
-      const onMain = runTestFile(REPO, assigns.find((a) => a.task.id === r.task_id)?.task.tests ?? "")
-      return onMain.passRate >= 1 && onMain.total > 0
-    })
-    console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
+  } finally {
+    if (wip) {
+      gitStashPop(REPO)
+    }
   }
   return results
 }
