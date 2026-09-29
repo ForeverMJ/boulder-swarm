@@ -51,13 +51,13 @@ function scoreAssignment(wt: string, tests: string, success: string | undefined)
     const file = success === "PAIRTABLES" ? "R5_pair_tables.json" : "R5_wide_absorb.json"
     const path = join(wt, "src", "matmul", "attempts", file)
     const ok = existsSync(path)
-    return { testFile: file, passed: ok ? 1 : 0, total: 1, passRate: ok ? 1 : 0, returncode: 0 }
+    return { testFile: file, passed: ok ? 1 : 0, total: 1, passRate: ok ? 1 : 0, returncode: 0, parsed: true, outputTail: `checked ${path}` }
   }
   if (success !== undefined && success !== "") {
     const r = spawnSync("bun", ["src/matmul/scoreboard.ts"], { cwd: wt, encoding: "utf-8", timeout: 120_000 })
     const m = `${r.stdout ?? ""}`.match(new RegExp(`${success}=(\\S+)`))
     const hit = m?.[1] !== undefined && m[1] !== "none"
-    return { testFile: "scoreboard", passed: hit ? 1 : 0, total: 1, passRate: hit ? 1 : 0, returncode: 0 }
+    return { testFile: "scoreboard", passed: hit ? 1 : 0, total: 1, passRate: hit ? 1 : 0, returncode: 0, parsed: true, outputTail: `looked for ${success} in scoreboard output` }
   }
   return runTestFile(wt, tests)
 }
@@ -124,6 +124,10 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
         branch: a.branch,
       })
       const v = scoreAssignment(wt, a.task.tests, a.task.success)
+      if (v.parsed === false) {
+        console.log(`HARNESS could not parse a test result for ${a.task.id} (rc=${v.returncode}); tail:`)
+        console.log(v.outputTail)
+      }
       const committed = commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`)
       await appendEvent(REPO, "run_latest", {
         type: "live_agent",
