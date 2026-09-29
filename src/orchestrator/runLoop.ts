@@ -1,4 +1,5 @@
 import { writeFile } from "node:fs/promises"
+import { readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { runTestFile } from "../eval/harness"
@@ -41,6 +42,17 @@ function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run:
     if (argv[i] === "--run") run = true
   }
   return { workers, mode, run, tasks }
+}
+
+async function taskPrompt(a: { task: { id: string } }, fallback: string): Promise<string> {
+  try {
+    return await readFile(join(REPO, "src", "matmul", "prompts", `${a.task.id}.md`), "utf-8")
+  } catch (e) {
+    if (e instanceof Error) {
+      return fallback
+    }
+    throw e
+  }
 }
 
 async function runMock(assigns: ReturnType<typeof dispatch>): Promise<WorkerResult[]> {
@@ -86,9 +98,10 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
   }
   const settled = await Promise.all(
     ready.map(async ({ wt, a }) => {
+      const prompt = await taskPrompt(a, deps.buildPrompt(a.task.id, a.task.problem, a.task.tests))
       const agent = await deps.spawnAgent({
         workdir: wt,
-        prompt: deps.buildPrompt(a.task.id, a.task.problem, a.task.tests),
+        prompt,
         taskId: a.task.id,
         branch: a.branch,
       })

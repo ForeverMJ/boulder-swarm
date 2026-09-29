@@ -18,8 +18,12 @@ L1:
     done_when: M3内题目全部通过
   - id: M4
     title: 未见新题（真解题验证）
-    verifier: bun test src/problems/problem07.test.ts src/problems/problem08.test.ts
+    verifier: bun test src/problems/problem07.test.ts src/problems/problem08.test.ts src/problems/problem09.test.ts
     done_when: agent从零写出通过解法并经合并门落盘
+  - id: M5
+    title: 3x3 matmul tensor rank（Laderman 23 开放 50 年，目标 22）
+    verifier: bun src/matmul/scoreboard.ts
+    done_when: rank<=22 的 exact scheme 经合并门落盘
 L2:
   - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
   - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
@@ -30,6 +34,9 @@ L2:
   - {id: T07, problem: src/problems/problem07.ts, tests: src/problems/problem07.test.ts, owner: worker, milestone: M4}
   - {id: T08, problem: src/problems/problem08.ts, tests: src/problems/problem08.test.ts, owner: worker, milestone: M4}
   - {id: T09, problem: src/problems/problem09.ts, tests: src/problems/problem09.test.ts, owner: worker, milestone: M4}
+  - {id: T10, problem: src/matmul/checker.ts, tests: src/matmul/checker.test.ts, owner: orchestrator, milestone: M5}
+  - {id: T11, problem: src/matmul/attempts/T11.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5}
+  - {id: T12, problem: src/matmul/attempts/T12.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
