@@ -33,7 +33,7 @@ export function isRepo(repoRoot: string): boolean {
   }
 }
 
-function ensureIdentity(repoRoot: string): void {
+export function ensureIdentity(repoRoot: string): void {
   try {
     git(repoRoot, ["config", "--get", "user.name"])
   } catch (e) {
@@ -107,6 +107,16 @@ export function removeWorktree(repoRoot: string, path: string): void {
   } catch (e) {
     if (!(e instanceof GitError)) throw e
   }
+}
+
+/** Commit dirty worktree state onto its branch. True when a commit landed. */
+export function commitWorktree(worktreePath: string, message: string): boolean {
+  ensureIdentity(worktreePath)
+  const dirty = git(worktreePath, ["status", "--porcelain"]) !== ""
+  if (!dirty) return false
+  git(worktreePath, ["add", "-A"])
+  git(worktreePath, ["commit", "-m", message])
+  return true
 }
 
 export type MergeVerdict = "merged" | "merged-noop" | "blocked"

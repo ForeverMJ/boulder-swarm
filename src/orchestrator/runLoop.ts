@@ -8,7 +8,7 @@ import { appendEvent } from "../recording/trace"
 import type { WorkerResult } from "../recording/schemas"
 import { buildPrompt as buildCodexPrompt, spawnAgent as spawnCodexAgent } from "./codexWorker"
 import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
-import { createWorktree, initRepo, listBranches, mergeGate } from "./git"
+import { commitWorktree, createWorktree, initRepo, listBranches, mergeGate } from "./git"
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { replan } from "./replan"
 import { runAssignment } from "./worker"
@@ -88,11 +88,13 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
         branch: a.branch,
       })
       const v = runTestFile(wt, a.task.tests)
+      const committed = commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`)
       await appendEvent(REPO, "run_latest", {
         type: "live_agent",
         agent: deps.kind,
         task_id: a.task.id,
         branch: a.branch,
+        committed,
         exitCode: agent.exitCode,
         timedOut: agent.timedOut,
         final: agent.final,
