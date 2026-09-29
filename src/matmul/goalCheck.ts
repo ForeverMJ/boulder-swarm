@@ -6,7 +6,9 @@ import type { Scheme } from "./types"
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 
-export type GoalEntry = { file: string; correct: boolean; rank: number; mismatches: number }
+export type GoalEntry = { file: string; n: number; correct: boolean; rank: number; mismatches: number }
+
+export const PROBLEM_N = 3
 
 export function attemptFiles(): Promise<string[]> {
   return readdir(join(HERE, "attempts")).then(
@@ -20,25 +22,27 @@ export function attemptFiles(): Promise<string[]> {
 
 export function classify(mod: Record<string, unknown>, file: string): GoalEntry {
   try {
-    const v = verify(mod["scheme"] as Scheme)
-    return { file, correct: v.correct, rank: v.rank, mismatches: v.mismatches }
+    const s = mod["scheme"] as Scheme
+    const v = verify(s)
+    return { file, n: s.n, correct: v.correct, rank: v.rank, mismatches: v.mismatches }
   } catch (e) {
-    if (e instanceof Error) return { file, correct: false, rank: -1, mismatches: -1 }
+    if (e instanceof Error) return { file, n: -1, correct: false, rank: -1, mismatches: -1 }
     throw e
   }
 }
 
+export function isTargetProblem(e: GoalEntry): boolean {
+  return e.n === PROBLEM_N
+}
+
 export function goalSatisfied(entries: readonly GoalEntry[]): GoalEntry | undefined {
-  return entries.find((e) => e.correct && e.rank <= 22)
+  return entries.find((e) => isTargetProblem(e) && e.correct && e.rank <= 22)
 }
 
 export function bestVerified(entries: readonly GoalEntry[]): GoalEntry | undefined {
   return entries
-    .filter((e) => e.correct)
-    .reduce<GoalEntry | undefined>(
-      (acc, e) => (acc === undefined || e.rank < acc.rank ? e : acc),
-      undefined,
-    )
+    .filter((e) => isTargetProblem(e) && e.correct)
+    .reduce<GoalEntry | undefined>((acc, e) => (acc === undefined || e.rank < acc.rank ? e : acc), undefined)
 }
 
 // no-excuse-ok: catch

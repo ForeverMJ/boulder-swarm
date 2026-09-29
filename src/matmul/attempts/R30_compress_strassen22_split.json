@@ -1,0 +1,32 @@
+{
+  "family": "strassen22_split.ts",
+  "rank": 8,
+  "mMatrixRank": 7,
+  "ambientDim": 16,
+  "independent": false,
+  "reduciblePositions": [
+    {
+      "k": 0,
+      "gammaNonZero": 1,
+      "groundTruth": {
+        "correct": true,
+        "rank": 7,
+        "mismatches": 0
+      },
+      "VERDICT": "RANK-REDUCED"
+    },
+    {
+      "k": 1,
+      "gammaNonZero": 1,
+      "groundTruth": {
+        "correct": true,
+        "rank": 7,
+        "mismatches": 0
+      },
+      "VERDICT": "RANK-REDUCED"
+    }
+  ],
+  "criterion": "restricted ansatz (the other r-1 (u,v) pairs are held fixed and only the w vectors are recombined): reduction by one term is possible exactly when vec(u_k v_k^T) lies in the span of the remaining vec(u_r v_r^T). Independence therefore certifies irreducibility for THIS ansatz only; a reduction that also changes the (u,v) pairs is not covered by this test.",
+  "exactArithmetic": "rational Gaussian elimination over BigInt",
+  "verdict": "RANK-REDUCED"
+}

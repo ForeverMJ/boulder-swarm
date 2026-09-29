@@ -215,6 +215,18 @@
       "note": "consistent"
     },
     {
+      "file": "R30_compress_strassen22.json",
+      "verdict": "IRREDUCIBLE-EXACT",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R30_compress_strassen22_split.json",
+      "verdict": "RANK-REDUCED",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R3_best.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -308,7 +320,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 42,
+    "artifactCount": 44,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
