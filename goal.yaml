@@ -46,6 +46,10 @@ L2:
   - {id: R19, problem: src/matmul/attempts/R19_cross_orbit.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: NO-OVERLAP-OBSERVED, note: certificate extended to 4 families with pairwise disjoint de Groote orbits}
   - {id: R21, problem: src/matmul/attempts/VERIFY_ALL.json, tests: src/matmul/tools/verifyAll.test.ts, owner: orchestrator, milestone: M5, success: ALL-CLAIMS-REPRODUCE, note: one-command hub re-derives every campaign claim, exits non-zero on drift}
   - {id: V1, problem: src/matmul/verify/profileCount.ts, tests: src/matmul/verify/profileCount.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the rank-22 profile count; the test is the judge and does not import the campaign implementation}
+  - {id: V2, problem: src/matmul/verify/restrictionCeilingVerify.ts, tests: src/matmul/verify/restrictionCeilingVerify.test.ts, owner: worker, milestone: M5, note: independent re-derivation of rank(T|alpha) = n*rank(alpha) <= n^2, the claim that closed the single-covariant route}
+  - {id: V3, problem: src/matmul/verify/reducibilityCriterion.ts, tests: src/matmul/verify/reducibilityCriterion.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the m-matrix reducibility criterion that underwrites the R14 irreducibility verdicts, with two-sided known-answer fixtures}
+  - {id: V4, problem: src/matmul/verify/blaserArithmetic.ts, tests: src/matmul/verify/blaserArithmetic.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the published Blaser 2003 formula arithmetic and the load-bearing hypotheses}
+  - {id: L1, problem: src/matmul/lit/zlarger.md, tests: src/matmul/verify/literatureProbe.test.ts, owner: worker, milestone: M5, note: obtain the missing definition of Z^v verbatim; the probe fails on any concession of failure, so a not-found result is reported as a failure rather than passing quietly}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
