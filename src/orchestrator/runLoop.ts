@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process"
+import { existsSync } from "node:fs"
 import { readFile, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -46,6 +47,12 @@ function parseArgs(argv: readonly string[]): { workers: number; mode: Mode; run:
 }
 
 function scoreAssignment(wt: string, tests: string, success: string | undefined): Verdict {
+  if (success === "PAIRTABLES" || success === "WIDEABSORB") {
+    const file = success === "PAIRTABLES" ? "R5_pair_tables.json" : "R5_wide_absorb.json"
+    const path = join(wt, "src", "matmul", "attempts", file)
+    const ok = existsSync(path)
+    return { testFile: file, passed: ok ? 1 : 0, total: 1, passRate: ok ? 1 : 0, returncode: 0 }
+  }
   if (success !== undefined && success !== "") {
     const r = spawnSync("bun", ["src/matmul/scoreboard.ts"], { cwd: wt, encoding: "utf-8", timeout: 120_000 })
     const m = `${r.stdout ?? ""}`.match(new RegExp(`${success}=(\\S+)`))

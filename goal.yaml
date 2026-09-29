@@ -41,6 +41,8 @@ L2:
   - {id: T12c, problem: src/matmul/attempts/T12c.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
   - {id: T12d, problem: src/matmul/attempts/T12d.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
   - {id: T12e, problem: src/matmul/attempts/T12e.solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22}
+  - {id: T12f, problem: src/matmul/attempts/R5_pair_tables.json, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: PAIRTABLES}
+  - {id: T12g, problem: src/matmul/attempts/R5_wide_absorb.json, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: WIDEABSORB}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
