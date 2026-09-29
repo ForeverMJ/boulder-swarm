@@ -16,6 +16,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R7 | exhaustive 2-move absorb | `tools/twoMove.ts`, 420 zero-coords, +-2 and +-3 | blocked; caught a scorer false-positive first | `R7_full_pm2.json`, `R7_full_pm3.json` |
 | R8 | 2-move certificate, all 23 drops | 23 x full 2-move sweep, 33.6s | **CERTIFIED-LOCAL-OPTIMAL-2MOVE** — no drop admits a 2-move fix | `R8_alldrops_2move_pm2.json` |
 | R9 | iterated 2-move hill-climb | `tools/climb.ts`, 12 restarts/drop, 12 steps, +-2 and +-3, 0 audit drift | best stays 1/1 (T11), 4/6 (fam_A, fam_B) | `R9_climb_*.json` |
+| R10 | pair-drop + ONE fresh rank-1 term | `tools/pairRepair.ts`: 253 pairs, complete support-pattern search (validated by 7 positive/negative control tests) | **NO-RANK22-THIS-FORM** — 126 pairs searched, 127 provably impossible (residual > 27 = max coverage of a 3x3x3-supported rank-1 term) | `R10_pair_repair.json` |
 
 ## Standing findings
 
