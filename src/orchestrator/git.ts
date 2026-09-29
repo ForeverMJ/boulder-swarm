@@ -140,7 +140,7 @@ export type MergeVerdict = "merged" | "merged-noop" | "blocked"
 export function mergeGate(repoRoot: string, branch: string, verify: () => boolean): MergeVerdict {
   git(repoRoot, ["checkout", "main"])
   const headBefore = git(repoRoot, ["rev-parse", "HEAD"])
-  git(repoRoot, ["merge", "--no-ff", "-m", `merge ${branch} (gate passed merge)`, branch])
+  const mergeOut = git(repoRoot, ["merge", "--no-ff", "-m", `merge ${branch} (gate passed merge)`, branch])
   let ok = false
   try {
     ok = verify()
@@ -155,5 +155,8 @@ export function mergeGate(repoRoot: string, branch: string, verify: () => boolea
     git(repoRoot, ["reset", "--hard", headBefore])
     return "blocked"
   }
-  return git(repoRoot, ["rev-parse", "HEAD"]) === headBefore ? "merged-noop" : "merged"
+  if (mergeOut.includes("Already up to date")) {
+    return "merged-noop"
+  }
+  return "merged"
 }

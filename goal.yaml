@@ -29,6 +29,7 @@ L2:
   - {id: T06, problem: src/problems/problem06.ts, tests: src/problems/problem06.test.ts, owner: worker, milestone: M3}
   - {id: T07, problem: src/problems/problem07.ts, tests: src/problems/problem07.test.ts, owner: worker, milestone: M4}
   - {id: T08, problem: src/problems/problem08.ts, tests: src/problems/problem08.test.ts, owner: worker, milestone: M4}
+  - {id: T09, problem: src/problems/problem09.ts, tests: src/problems/problem09.test.ts, owner: worker, milestone: M4}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
