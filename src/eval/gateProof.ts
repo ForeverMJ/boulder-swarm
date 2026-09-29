@@ -15,6 +15,11 @@ function assert(cond: boolean, name: string): void {
 async function main(): Promise<void> {
   try {
     initRepo(REPO)
+    // Stash uncommitted work first: cleanup does reset --hard, never eat WIP.
+    const dirty = git(REPO, ["status", "--porcelain"]) !== ""
+    if (dirty) {
+      git(REPO, ["stash", "push", "-u", "-m", "gateproof-wip"])
+    }
     const head0 = git(REPO, ["rev-parse", "HEAD"])
     // Blocked path: branch with a real change, verify=false
     git(REPO, ["checkout", "-b", "test/gate-block"])
@@ -35,9 +40,11 @@ async function main(): Promise<void> {
     const v2 = mergeGate(REPO, "test/gate-pass", () => true)
     assert(v2 === "merged", "gate merges passing branch")
     assert(existsSync(join(REPO, "gate-probe-pass.txt")), "merged file present on main")
-    // Cleanup: restore pristine main, drop probe branches
     git(REPO, ["reset", "--hard", head0])
     git(REPO, ["branch", "-D", "test/gate-block", "test/gate-pass"])
+    if (dirty) {
+      git(REPO, ["stash", "pop"])
+    }
     assert(git(REPO, ["rev-parse", "HEAD"]) === head0, "cleanup restores HEAD")
     assert(!listBranches(REPO).some((b) => b.startsWith("test/")), "probe branches removed")
     console.log("GATE PROOF PASS")

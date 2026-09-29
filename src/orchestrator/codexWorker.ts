@@ -91,7 +91,6 @@ export function spawnAgent(opts: {
     opts.workdir,
     "-s",
     "workspace-write",
-    "--full-auto",
     ...(model === undefined ? [] : ["-m", model]),
     "-o",
     outFile,

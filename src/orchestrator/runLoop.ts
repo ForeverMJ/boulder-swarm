@@ -131,7 +131,7 @@ async function main(): Promise<void> {
       "utf-8",
     )
     for (const r of results) {
-      await appendEvent(REPO, "run_summary", { type: "worker_result", ...r })
+      await appendEvent(REPO, "run_latest", { type: "worker_result", ...r })
     }
     await saveResults(REPO, results)
     await distillFromResults(REPO, results)
