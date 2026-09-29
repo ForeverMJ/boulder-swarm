@@ -239,6 +239,12 @@
       "note": "consistent"
     },
     {
+      "file": "R36_multidim_restriction.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R3_best.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -332,7 +338,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 46,
+    "artifactCount": 47,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

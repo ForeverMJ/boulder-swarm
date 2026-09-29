@@ -1,0 +1,33 @@
+{
+  "question": "does a d-dimensional restriction space give headroom above the n^2 = 9 ceiling that killed single covectors?",
+  "method": "for a basis of d covectors on the first factor, stack the d restriction matrices (each n^2 x n^2) and take its F_2 rank; this is the natural multi-dimensional generalisation of the R33/R34 quantity",
+  "byD": {
+    "1": 9,
+    "2": 9,
+    "3": 9,
+    "4": 9,
+    "5": 9,
+    "6": 9,
+    "7": 9,
+    "8": 9,
+    "9": 9
+  },
+  "ceilingAtFullDimension": 9,
+  "headroom": {
+    "1": 6,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0
+  },
+  "control": {
+    "knownExactRank_2x2x2": 7,
+    "note": "the n=2 values obtained by the same code must not exceed 7"
+  },
+  "interpretation": "the counting argument r >= #{i : u_i lies in E} >= complexity(T|E) is capped by min(d, n^2) because only d linearly independent u-factors can lie in a d-dimensional E. Reaching the literature's 19 or 21 therefore requires the quotient/substitution step, not a larger restriction space alone.",
+  "scope": "measurement of one specific generalisation; it does not rule out every restriction-based method"
+}
