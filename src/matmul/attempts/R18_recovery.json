@@ -1,0 +1,290 @@
+{
+  "question": "seeded near a known F_2 solution, can the local search walk back to 0?",
+  "steps": 4000,
+  "trials": 40,
+  "recovered": 8,
+  "recoveryRate": 0.2,
+  "verdict": "SEARCH-WORKS-LOCALLY",
+  "rows": [
+    {
+      "trial": 0,
+      "kicks": 5,
+      "startMm": 7,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 1,
+      "kicks": 1,
+      "startMm": 1,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 2,
+      "kicks": 3,
+      "startMm": 4,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 3,
+      "kicks": 3,
+      "startMm": 6,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 4,
+      "kicks": 2,
+      "startMm": 4,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 5,
+      "kicks": 3,
+      "startMm": 4,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 6,
+      "kicks": 3,
+      "startMm": 5,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 7,
+      "kicks": 6,
+      "startMm": 6,
+      "endMm": 3,
+      "recovered": false
+    },
+    {
+      "trial": 8,
+      "kicks": 5,
+      "startMm": 7,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 9,
+      "kicks": 5,
+      "startMm": 8,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 10,
+      "kicks": 3,
+      "startMm": 4,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 11,
+      "kicks": 6,
+      "startMm": 8,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 12,
+      "kicks": 2,
+      "startMm": 3,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 13,
+      "kicks": 1,
+      "startMm": 2,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 14,
+      "kicks": 1,
+      "startMm": 2,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 15,
+      "kicks": 2,
+      "startMm": 4,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 16,
+      "kicks": 6,
+      "startMm": 8,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 17,
+      "kicks": 2,
+      "startMm": 4,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 18,
+      "kicks": 5,
+      "startMm": 10,
+      "endMm": 3,
+      "recovered": false
+    },
+    {
+      "trial": 19,
+      "kicks": 1,
+      "startMm": 1,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 20,
+      "kicks": 1,
+      "startMm": 1,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 21,
+      "kicks": 6,
+      "startMm": 8,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 22,
+      "kicks": 6,
+      "startMm": 11,
+      "endMm": 4,
+      "recovered": false
+    },
+    {
+      "trial": 23,
+      "kicks": 4,
+      "startMm": 3,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 24,
+      "kicks": 3,
+      "startMm": 2,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 25,
+      "kicks": 6,
+      "startMm": 10,
+      "endMm": 3,
+      "recovered": false
+    },
+    {
+      "trial": 26,
+      "kicks": 2,
+      "startMm": 2,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 27,
+      "kicks": 3,
+      "startMm": 4,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 28,
+      "kicks": 1,
+      "startMm": 2,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 29,
+      "kicks": 1,
+      "startMm": 2,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 30,
+      "kicks": 4,
+      "startMm": 5,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 31,
+      "kicks": 6,
+      "startMm": 11,
+      "endMm": 5,
+      "recovered": false
+    },
+    {
+      "trial": 32,
+      "kicks": 5,
+      "startMm": 7,
+      "endMm": 3,
+      "recovered": false
+    },
+    {
+      "trial": 33,
+      "kicks": 5,
+      "startMm": 6,
+      "endMm": 3,
+      "recovered": false
+    },
+    {
+      "trial": 34,
+      "kicks": 5,
+      "startMm": 8,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 35,
+      "kicks": 4,
+      "startMm": 4,
+      "endMm": 1,
+      "recovered": false
+    },
+    {
+      "trial": 36,
+      "kicks": 6,
+      "startMm": 6,
+      "endMm": 2,
+      "recovered": false
+    },
+    {
+      "trial": 37,
+      "kicks": 4,
+      "startMm": 7,
+      "endMm": 4,
+      "recovered": false
+    },
+    {
+      "trial": 38,
+      "kicks": 1,
+      "startMm": 2,
+      "endMm": 0,
+      "recovered": true
+    },
+    {
+      "trial": 39,
+      "kicks": 4,
+      "startMm": 4,
+      "endMm": 3,
+      "recovered": false
+    }
+  ]
+}
