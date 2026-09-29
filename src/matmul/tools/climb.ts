@@ -7,6 +7,7 @@ import type { Scheme } from "../types"
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ATT = join(HERE, "..", "attempts")
+const FOUND = join(HERE, "..", "found")
 
 // no-excuse-ok: catch
 async function main(): Promise<void> {
@@ -50,7 +51,7 @@ async function main(): Promise<void> {
           const v = verify({ n: mod.scheme.n, triples: sc.triples })
           console.log(`ZERO drop=${d} seed=${seed} groundTruth=${v.correct} rank=${v.rank}`)
           await writeFile(
-            join(ATT, out.replace(".json", "_win.ts")),
+            join(FOUND, out.replace(".json", "_win.ts")),
             `import type { Scheme } from "../types"\n\nexport const scheme: Scheme = {\n  n: ${mod.scheme.n},\n  triples: [\n${sc.triples.map((t) => `    { u: [${t.u.join(",")}], v: [${t.v.join(",")}], w: [${t.w.join(",")}] },`).join("\n")}\n  ],\n}\n`,
             "utf-8",
           )

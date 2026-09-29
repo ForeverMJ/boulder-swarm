@@ -6,6 +6,7 @@ import { Scorer } from "./scorer"
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ATT = join(HERE, "..", "attempts")
+const FOUND = join(HERE, "..", "found")
 
 type Triple = { u: number[]; v: number[]; w: number[] }
 
@@ -113,7 +114,7 @@ async function main(): Promise<void> {
     await writeFile(join(ATT, out), JSON.stringify(payload, null, 2), "utf-8")
     if (solved !== null) {
       await writeFile(
-        join(ATT, "R16_win.ts"),
+        join(FOUND, "R16_win.ts"),
         `import type { Scheme } from "../types"\n\nexport const scheme: Scheme = {\n  n: 3,\n  triples: [\n${solved.scheme.map((t) => `    { u: [${t.u.join(",")}], v: [${t.v.join(",")}], w: [${t.w.join(",")}] },`).join("\n")}\n  ],\n}\n`,
         "utf-8",
       )

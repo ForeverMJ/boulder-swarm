@@ -139,6 +139,7 @@ export function randomUnimodular(rnd: () => number, bound: number, n: number): M
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ATT = join(HERE, "..", "attempts")
+const FOUND = join(HERE, "..", "found")
 
 // no-excuse-ok: catch
 async function main(): Promise<void> {
@@ -190,7 +191,7 @@ async function main(): Promise<void> {
           if (verify(reduced).correct && reduced.triples.length === img.triples.length - 1) {
             reducedOk = true
             await writeFile(
-              join(ATT, "R15_win.ts"),
+              join(FOUND, "R15_win.ts"),
               `import type { Scheme } from "../types"\n\nexport const scheme: Scheme = {\n  n: ${n},\n  triples: [\n${reduced.triples.map((t) => `    { u: [${t.u.join(",")}], v: [${t.v.join(",")}], w: [${t.w.join(",")}] },`).join("\n")}\n  ],\n}\n`,
               "utf-8",
             )

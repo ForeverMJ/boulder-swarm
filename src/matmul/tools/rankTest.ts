@@ -92,6 +92,7 @@ export function buildReduced(scheme: Scheme, k: number, gamma: Fraction[]): Sche
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ATT = join(HERE, "..", "attempts")
+const FOUND = join(HERE, "..", "found")
 
 // no-excuse-ok: catch
 async function main(): Promise<void> {
@@ -118,7 +119,7 @@ async function main(): Promise<void> {
         if (gt.correct && gt.rank <= r - 1) {
           entry["VERDICT"] = "RANK-REDUCED"
           await writeFile(
-            join(ATT, out.replace(".json", "_win.ts")),
+            join(FOUND, out.replace(".json", "_win.ts")),
             `import type { Scheme } from "../types"\n\nexport const scheme: Scheme = {\n  n: ${scheme.n},\n  triples: [\n${reduced.triples.map((t) => `    { u: [${t.u.join(",")}], v: [${t.v.join(",")}], w: [${t.w.join(",")}] },`).join("\n")}\n  ],\n}\n`,
             "utf-8",
           )

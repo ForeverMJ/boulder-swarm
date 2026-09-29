@@ -153,6 +153,7 @@ export function residualOf(triples: readonly Term[]): Need[] {
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ATT = join(HERE, "..", "attempts")
+const FOUND = join(HERE, "..", "found")
 
 // no-excuse-ok: catch
 async function main(): Promise<void> {
@@ -214,7 +215,7 @@ async function main(): Promise<void> {
       payload["verdict"] = gt.correct && gt.rank <= 22 ? "SOLVED" : "SCORER-LIE"
       if (gt.correct && gt.rank <= 22) {
         await writeFile(
-          join(ATT, "R13_win.ts"),
+          join(FOUND, "R13_win.ts"),
           `import type { Scheme } from "../types"\n\nexport const scheme: Scheme = {\n  n: 3,\n  triples: [\n${triples.map((t) => `    { u: [${t.u.join(",")}], v: [${t.v.join(",")}], w: [${t.w.join(",")}] },`).join("\n")}\n  ],\n}\n`,
           "utf-8",
         )

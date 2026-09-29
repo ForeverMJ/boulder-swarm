@@ -7,6 +7,7 @@ import type { Scheme } from "../types"
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ATT = join(HERE, "..", "attempts")
+const FOUND = join(HERE, "..", "found")
 
 type Need = { a: number; b: number; c: number; d: number }
 
@@ -167,7 +168,7 @@ async function main(): Promise<void> {
       payload["verdict"] = gt.correct && gt.rank <= 22 ? "SOLVED" : "SCORER-LIE"
       if (gt.correct && gt.rank <= 22) {
         await writeFile(
-          join(ATT, "R10_win.ts"),
+          join(FOUND, "R10_win.ts"),
           `import type { Scheme } from "../types"\n\nexport const scheme: Scheme = {\n  n: ${mod.scheme.n},\n  triples: [\n${triples.map((t) => `    { u: [${t.u.join(",")}], v: [${t.v.join(",")}], w: [${t.w.join(",")}] },`).join("\n")}\n  ],\n}\n`,
           "utf-8",
         )
