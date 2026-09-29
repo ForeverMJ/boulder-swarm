@@ -23,6 +23,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R14 | algebraic compression (exact) | `tools/rankTest.ts` + `tools/rational.ts`: exact rational Gaussian elimination (BigInt) on the r × n⁴ matrix of vec(u_r v_r^T) | **IRREDUCIBLE-EXACT** for all four verified rank-23 families: the 23 rank-1 matrices are linearly independent in the 81-dim space M₉, so no reduction exists that keeps the other 22 (u,v) pairs fixed. Scope: restricted ansatz only — a reduction that also changes (u,v) is not covered | `R14_compress_*.json` |
 | R15 | verified group orbit + exact test | after fixing four wrong sandwich formulations, derived the mode action by index counting: mode1 (g,h), mode2 (h⁻¹,k), mode3 (g⁻¹,k⁻¹) — a **Kronecker** action on each index pair, not a matrix product. `tools/equivariant.ts`, 4/4 positive controls | 200/200 distinct automorphic images of T11, all verified correct, **0 reducible** under the restricted ansatz. Extends R14 from one scheme to its whole group orbit | `R15_equivariant.json` |
 | R16 | from-scratch rank-22 search | `tools/fromScratch.ts`: randomized descent on 22 arbitrary triples, 594 ternary unknowns vs 729 equations, no anchor to any known scheme | **CONTROL FAILED — route declared non-viable, no rank-22 claim made.** The rank-27 control (naive(27) is sparse and correct, so 0 is reachable) stalled at mm=241 over 15 restarts: from a random start no single- or two-coordinate move improves the score, because the residual is spread over hundreds of cells and one coordinate touches 81 of them. Local descent only works near an already-correct scheme with a tiny structured defect | `R16_control_rank27.json` |
+| R17 | continuous ALS surrogate | `tools/als.ts`: Frobenius-error coordinate descent, the gradient source AlphaTensor-style methods rely on. Control found and fixed a real bug: the coordinate update solved for the new absolute value instead of the delta, which zeroed correct coefficients | descent confirmed (rank 27: 26 -> 2.1, ratio 0.08). **But the terminal error is rank-independent** — rank 22 lands at ratio 0.068-0.095, statistically indistinguishable from rank 27's 0.076-0.083. The error floor is a property of coordinate-wise ALS, not evidence about rank, so without an exactification step this branch carries no information about whether rank 22 exists | `R17_control_rank27.json`, `R17_als_rank22.json` |
 
 ## Standing findings
 
@@ -74,6 +75,13 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   hundreds of cells there is no improving first move. Attacking rank 22 from
   zero needs a global method (SAT/ILP encoding of the 594-unknown system, or a
   continuous border-rank method with an exactification step), not descent.
+- R17 separates the two halves of the literature recipe. The continuous half
+  works: ALS descends 92% from a random start, and its control passes once the
+  coordinate update is corrected to solve for a delta rather than an absolute
+  value. The half that would decide the question is exactification, and R17
+  shows why it cannot be skipped: the ALS error floor is identical at rank 22
+  and rank 27, so a low residual is not evidence that a rank-22 scheme exists.
+  Any claim built on "the residual went down" would be reading noise.
 
 ## Next hypotheses (queued)
 

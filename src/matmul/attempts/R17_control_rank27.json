@@ -1,0 +1,32 @@
+{
+  "approach": "continuous ALS surrogate (Frobenius error) as the gradient source the exact mismatch count lacks",
+  "rank": 27,
+  "sweeps": 40,
+  "restarts": 3,
+  "anyExact": false,
+  "anyDescent": true,
+  "verdict": "DESCENT-BUT-NO-EXACT",
+  "trials": [
+    {
+      "attempt": 0,
+      "start": 25.767557342299497,
+      "end": 2.1423083296634147,
+      "decreaseRatio": 0.08313975210008148,
+      "exact": false
+    },
+    {
+      "attempt": 1,
+      "start": 26.410808619032775,
+      "end": 2.0734679875950515,
+      "decreaseRatio": 0.07850831140780826,
+      "exact": false
+    },
+    {
+      "attempt": 2,
+      "start": 26.41292960320399,
+      "end": 1.9996972555421224,
+      "decreaseRatio": 0.07570902908473853,
+      "exact": false
+    }
+  ]
+}
