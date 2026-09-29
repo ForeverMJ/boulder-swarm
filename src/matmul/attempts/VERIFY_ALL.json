@@ -185,6 +185,12 @@
       "note": "consistent"
     },
     {
+      "file": "R25_profile_invariance.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R2_dropk_repair.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -290,7 +296,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 39,
+    "artifactCount": 40,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
