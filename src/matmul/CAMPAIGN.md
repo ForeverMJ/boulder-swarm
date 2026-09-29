@@ -18,6 +18,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R9 | iterated 2-move hill-climb | `tools/climb.ts`, 12 restarts/drop, 12 steps, +-2 and +-3, 0 audit drift | best stays 1/1 (T11), 4/6 (fam_A, fam_B) | `R9_climb_*.json` |
 | R10 | pair-drop + ONE fresh rank-1 term | `tools/pairRepair.ts`: 253 pairs, complete support-pattern search (validated by 7 positive/negative control tests) | **NO-RANK22-THIS-FORM** — 126 pairs searched, 127 provably impossible (residual > 27 = max coverage of a 3x3x3-supported rank-1 term) | `R10_pair_repair.json` |
 | R11 | Z3 orbit structure | `tools/symmetry.ts` finds Aut(T) by brute test = S3 (6 elements, orders {1:1,2:3,3:2}); `tools/zsplit.ts` splits T11 into orbits | **T11 is NOT Z3-invariant**: 23 generic orbits, 0 fixed triples, covered=69 != 23 | `R11_zsplit.json` |
+| R12 | Z3-invariant ansatz search | `tools/z3search.ts`: ansatz = nFixed + 7 orbits, seeded from naive(3) orbit structure, coefficients ±2 | blocked: best mm=6 at rank 22 AND rank 23 (8 restarts each). naive(3) is Z3-invariant (9 orbits, closed) but has **0 fixed triples** — diagonal elementary triples form a 3-orbit, not fixed points, contradicting my prior | `R12_z3search.json` |
 
 ## Standing findings
 

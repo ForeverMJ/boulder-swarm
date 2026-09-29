@@ -80,6 +80,47 @@ export function orderOf(a: Automorphism): number {
   return 0
 }
 
+export function cyclesOf(s: readonly number[]): number[][] {
+  const seen = new Array<boolean>(s.length).fill(false)
+  const out: number[][] = []
+  for (let i = 0; i < s.length; i++) {
+    if (seen[i] === true) continue
+    const cyc: number[] = []
+    let cur = i
+    while (seen[cur] !== true) {
+      seen[cur] = true
+      cyc.push(cur)
+      cur = s[cur] ?? 0
+    }
+    out.push(cyc)
+  }
+  return out
+}
+
+/** All vectors constant on each cycle of s (the g-invariant subspace basis enumeration). */
+export function invariantVectors(s: readonly number[], values: readonly number[]): number[][] {
+  const cycles = cyclesOf(s)
+  const out: number[][] = []
+  const rec = (ci: number, acc: number[]): void => {
+    if (ci === cycles.length) {
+      if (acc.some((x) => x !== 0)) out.push([...acc])
+      return
+    }
+    for (const v of values) {
+      const next = [...acc]
+      for (const pos of cycles[ci] ?? []) next[pos] = v
+      rec(ci + 1, next)
+    }
+  }
+  rec(0, new Array<number>(s.length).fill(0))
+  return out
+}
+
+/** Exact equality (NOT up to a scalar factor), which is what the ansatz requires. */
+export function isFixedBy(g: Automorphism, t: { u: readonly number[]; v: readonly number[]; w: readonly number[] }): boolean {
+  return tripleKey(applyTriple(g, t)) === tripleKey(t)
+}
+
 export function applyTriple(
   g: Automorphism,
   t: { u: readonly number[]; v: readonly number[]; w: readonly number[] },

@@ -1,0 +1,154 @@
+{
+  "approach": "Z3-invariant ansatz: nFixed + nOrbits*3, seeded from naive(3) orbit structure",
+  "naiveInfo": {
+    "total": 27,
+    "orbits": 9,
+    "fixed": 0,
+    "closed": true,
+    "fixedKeys": []
+  },
+  "rankTargets": {
+    "rank22": "1 fixed + 7 orbits",
+    "rank23": "2 fixed + 7 orbits"
+  },
+  "trials": [
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 0,
+      "mm": 6,
+      "l1": 6,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 1,
+      "mm": 6,
+      "l1": 6,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 2,
+      "mm": 159,
+      "l1": 162,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 3,
+      "mm": 165,
+      "l1": 168,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 4,
+      "mm": 6,
+      "l1": 6,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 5,
+      "mm": 165,
+      "l1": 168,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 6,
+      "mm": 6,
+      "l1": 6,
+      "rank": 22
+    },
+    {
+      "targetRank": 22,
+      "nFixed": 1,
+      "restart": 7,
+      "mm": 6,
+      "l1": 6,
+      "rank": 22
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 0,
+      "mm": 222,
+      "l1": 330,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 1,
+      "mm": 156,
+      "l1": 156,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 2,
+      "mm": 114,
+      "l1": 222,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 3,
+      "mm": 219,
+      "l1": 219,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 4,
+      "mm": 6,
+      "l1": 6,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 5,
+      "mm": 162,
+      "l1": 165,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 6,
+      "mm": 36,
+      "l1": 36,
+      "rank": 23
+    },
+    {
+      "targetRank": 23,
+      "nFixed": 2,
+      "restart": 7,
+      "mm": 249,
+      "l1": 249,
+      "rank": 23
+    }
+  ],
+  "best": {
+    "mm": 6,
+    "rank": 22,
+    "config": "rank22 nFixed=1 r=0"
+  },
+  "verdict": "blocked",
+  "coefficientRange": [
+    -2,
+    2
+  ]
+}
