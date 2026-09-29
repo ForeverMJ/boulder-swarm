@@ -3,20 +3,20 @@
   "baseProfileQ": "1x14,2x9",
   "baseProfileF2": "1x14,2x9",
   "deGrooteIntegerUnimodular": {
-    "trials": 150,
+    "trials": 600,
     "incorrect": 0,
     "distinctProfiles": [
       "1x14,2x9"
     ],
     "counts": {
-      "1x14,2x9": 150
+      "1x14,2x9": 600
     },
     "invariant": true
   },
   "fullGL_F2": {
-    "trials": 150,
+    "trials": 600,
     "correctWithDirectTriple": 0,
-    "correctWithInverseBearingPattern": 1,
+    "correctWithInverseBearingPattern": 3,
     "verdict": "PARTIALLY-VALID",
     "note": "the de Groote action does not extend to GL(n, F_2) by substituting invertible matrices for the unimodular ones; the integer-unimodular restriction is load-bearing",
     "distinctProfiles": [],
