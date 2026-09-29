@@ -31,19 +31,19 @@
  * not literally true, THROW. Do not evaluate the conclusion without it.
  */
 export function blaser2003Applies(_f: { n: number; m: number }): boolean {
-  throw new Error("not implemented")
+  return _f.m >= _f.n && _f.n >= 3
 }
 
 export function blaser2003Bound(_f: { n: number; m: number }): number {
-  throw new Error("not implemented")
+  return 2 * _f.n * _f.m + 2 * _f.n - _f.m - 2
 }
 
 export function proposition8Bound(_m: number): number {
-  throw new Error("not implemented")
+  return 5 * _m + 4
 }
 
 export function blaser1999IntegerLowerBound(_n: number): number {
-  throw new Error("not implemented")
+  return Math.ceil((5 * _n * _n) / 2 - 3 * _n)
 }
 
 export function lemma3Conclusion(_p: {
@@ -53,5 +53,9 @@ export function lemma3Conclusion(_p: {
   wInW1: number
   r: number
 }): { bound: number; satisfied: boolean } {
-  throw new Error("not implemented")
+  if (_p.separates !== true) {
+    throw new Error("Lemma 3 conclusion requires that beta separates (U1, V1, W1)")
+  }
+  const bound = _p.dimU1 + _p.dimV1 + _p.wInW1
+  return { bound, satisfied: _p.r >= bound }
 }
