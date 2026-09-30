@@ -62,9 +62,23 @@ describe("FRONTIER.md stays true", () => {
 
   it("cites the field-specific bounds without conflating them", async () => {
     const md = await readFile(FRONTIER, "utf-8")
-    expect(md).toContain("19 (Blaser 2003, Inf. Process. Lett.)")
+    expect(md).toContain("19 (Blaser 2003, J. Complexity 19(1))")
     expect(md).toContain("21 (arXiv 2609.06725, 2609.18722)")
     expect(md).toContain("do **not** transfer between fields")
+  })
+
+  it("does not repeat the wrong venue for the Blaser 2003 article", async () => {
+    const md = await readFile(FRONTIER, "utf-8")
+    expect(md).not.toContain("Inf. Process")
+    expect(md).not.toContain("Information Processing Letters")
+  })
+
+  it("records that the printed inclusion chain dissolves the earlier paradox", async () => {
+    const md = await readFile(FRONTIER, "utf-8")
+    // The document wraps at 80 columns, so phrases straddle line breaks.
+    const flat = md.replace(/\s+/g, " ").toLowerCase()
+    expect(flat).toContain("strictly larger")
+    expect(flat).toContain("dissolves the paradox recorded in r39")
   })
 
   it("records that the published bound's hypothesis is load-bearing", async () => {

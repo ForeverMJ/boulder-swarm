@@ -12,7 +12,7 @@ For the order-3 tensor of 3x3 matrix multiplication:
 
 | field | lower bound | upper bound | open? |
 |---|---|---|---|
-| Q, R | 19 (Blaser 2003, Inf. Process. Lett.) | 23 (Laderman 1976) | yes, at 22 |
+| Q, R | 19 (Blaser 2003, J. Complexity 19(1)) | 23 (Laderman 1976) | yes, at 22 |
 | F_2 | 21 (arXiv 2609.06725, 2609.18722) | 23 | yes, at 22 |
 
 The Q/R bound of 19 is `R(<n,m,n>) >= 2mn + 2n - m - 2` for `m >= n >= 3`
@@ -101,12 +101,19 @@ Two routes survive, both research-scale rather than engineering-scale.
    existing checker on every known scheme. The `L^v_{l,n}` spaces are
    implemented with both properties the paper relies on, `dim = l(n-v)` and
    `L^n = 0`. Lemma 3's conclusion is implemented but **throws unless the
-   separation hypothesis is explicitly supplied**, because three ingredients
-   are still unavailable: the definition of `Z^v_{l,n}`, the verbatim
-   definition of "separates", and Lemma 7's sandwiching normal form. The
-   article is paywalled and the accessible copies do not render. Those three
-   are guessed at nowhere, and until they are obtained the published 19 is
-   reproduced only in its arithmetic, not in its proof.
+   separation hypothesis is explicitly supplied**. R41 reached the article
+   itself and quotes what it prints: the inclusion chain
+   `L^{e,h}_eta ⊂ Z^{e,h}_eta ⊂ L^{e,h}_{eta-1}`, which makes `Z^v` **strictly
+   larger** than `L^v` and so dissolves the paradox recorded in R39 — a nonzero
+   `W_tau ⊆ Z^tau` disjoint from `L^tau` does exist. The quoted material is in
+   `lit/zlarger.md`. `Z^v` itself is still not implemented: the set
+   description available there is a reconstruction, and an independent count of
+   it contradicts both its dimension and the strictness the article prints, so
+   it is recorded as unverified rather than used. Two ingredients remain
+   genuinely open, the verbatim definition of "separates" and Lemma 7's
+   sandwiching normal form. None of the three is guessed at, and until they are
+   obtained the published 19 is reproduced only in its arithmetic, not in its
+   proof.
 2. **A learned policy / tree search** in the AlphaTensor style. Requires
    training a value function and a policy over factor choices. Under a
    TypeScript-only constraint this means hand-written backprop, and the compute

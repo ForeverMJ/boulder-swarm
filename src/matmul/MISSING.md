@@ -31,12 +31,32 @@ particular `dim L^1_{m,3} = 2m`, the value the n=3 proof uses.
 
 ## Still missing
 
-1. **The definition of `Z^v_{l,n}`.** Attempted and abandoned, deliberately.
+1. **A usable definition of `Z^v_{l,n}`.** The article is now reachable and the
+   quoted material is in `lit/zlarger.md`, but the set description there is a
+   reconstruction and an independent count of it contradicts both the stated
+   dimension and the claimed strictness. The printed display has to be read
+   directly. **Not implemented here, deliberately.**
 2. **The verbatim definition of "beta separates (U1, V1, W1)".** Currently
-   inferred from the Extension Lemma's statement, not quoted.
+   inferred from the Extension Lemma's statement, not quoted. `lit/zlarger.md`
+   does quote Lemma 5 and proof steps 4 and 6, which constrain but do not define
+   the predicate.
 3. **Lemma 7, the sandwiching normal form.** The article notes that it uses "a
    transformation which does not work for larger values of r", so this is the
-   substantive part of the proof, not a formality.
+   substantive part of the proof, not a formality. Still not obtained.
+
+## Why the R39 paradox is withdrawn
+
+`MISSING.md` previously inferred `Z^v ⊆ L^v` from two positional exclusions and
+concluded that Lemma 5 degenerates. That inference was wrong, and the article
+settles it: the inclusions it prints are
+
+> We have the inclusions `L^{e,h}_η ⊂ Z^{e,h}_η ⊂ L^{e,h}_{η−1}` for all `1⩽η⩽h`.
+
+`Z^v` is therefore **strictly larger** than `L^v`, not contained in it, so a
+nonzero `W_τ ⊆ Z^τ` with `W_τ ∩ L^τ = {0}` does exist and Lemma 5 is not
+degenerate. The lesson from R39 stands on its own though: two fragments that
+seem to force a contradiction usually mean one of them has been misread, and the
+cure was to read the source rather than to reason harder about the fragments.
 
 ## Why `Z^v` is not guessed
 
@@ -62,7 +82,9 @@ would produce a Lemma 5 that cannot be true.
 ## Where to look
 
 The article is Bläser, *On the complexity of the multiplication of matrices of
-small formats*, Information Processing Letters 83(2):64-68, 2003. Direct access
+small formats*, **Journal of Complexity 19(1):43–60, 2003**, DOI
+`10.1016/S0885-064X(02)00007-9`. The venue in the previous revision of this file
+was wrong; Crossref confirms the record. Direct access
 returned HTTP 400 and an ECCC mirror served undecoded PDF bytes, so the
 preliminaries above were recovered from indexed excerpts. Lemma 3 and Lemma 5
 were obtained in full; the preliminaries defining `Z^v` and "separates" were
