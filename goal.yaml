@@ -24,6 +24,10 @@ L1:
     title: 3x3 matmul tensor rank（Laderman 23 开放 50 年，目标 22）
     verifier: bun src/matmul/goalCheck.ts
     done_when: rank<=22 的 exact scheme 经合并门落盘
+  - id: M6
+    title: 长驻 supervisor（无人值守连续运行一个月）
+    verifier: bun test src/orchestrator/
+    done_when: 持久状态+进程生命周期+轮次循环均有独立裁判测试并经合并门落盘
 L2:
   - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
   - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
@@ -50,6 +54,8 @@ L2:
   - {id: V3, problem: src/matmul/verify/reducibilityCriterion.ts, tests: src/matmul/verify/reducibilityCriterion.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the m-matrix reducibility criterion that underwrites the R14 irreducibility verdicts, with two-sided known-answer fixtures}
   - {id: V4, problem: src/matmul/verify/blaserArithmetic.ts, tests: src/matmul/verify/blaserArithmetic.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the published Blaser 2003 formula arithmetic and the load-bearing hypotheses}
   - {id: L1, problem: src/matmul/lit/zlarger.md, tests: src/matmul/verify/literatureProbe.test.ts, owner: worker, milestone: M5, note: obtain the missing definition of Z^v verbatim; the probe fails on any concession of failure, so a not-found result is reported as a failure rather than passing quietly}
+  - {id: S1, problem: src/orchestrator/supervisorState.ts, tests: src/orchestrator/supervisorState.test.ts, owner: worker, milestone: M6, note: atomic durable round/budget journal with crash tolerance; loadState must never throw on a corrupt file and staleRounds must expose an interrupted round for requeue, which is the failure that lost the L1 result}
+  - {id: S2, problem: src/orchestrator/agentLifecycle.ts, tests: src/orchestrator/agentLifecycle.test.ts, owner: worker, milestone: M6, note: salvage the worktree while the agent tree is still alive, then kill it, then report zero strays including grandchildren; encodes the round-41 timeout race and the seven orphaned processes}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
