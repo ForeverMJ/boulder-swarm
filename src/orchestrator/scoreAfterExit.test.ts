@@ -58,30 +58,39 @@ describe("S3 scoring after exit, judged independently", () => {
     expect(s.produced).toHaveLength(0)
   })
 
-  it("returns the newest verdict for a task", () => {
+  it("returns the newest verdict for the named task", () => {
     const v: readonly Verdict[] = [
       { taskId: "S1", passRate: 0, passed: 0, total: 0, at: 100 },
       { taskId: "S1", passRate: 1, passed: 12, total: 12, at: 200 },
     ]
-    const r = latestVerdict(v, 0)
+    const r = latestVerdict("S1", v, 0)
     expect(r.latest?.passRate).toBe(1)
     expect(r.superseded).toHaveLength(1)
   })
 
   it("ignores a verdict older than the commit that superseded it", () => {
     const v: readonly Verdict[] = [{ taskId: "S1", passRate: 0, passed: 0, total: 0, at: 100 }]
-    expect(latestVerdict(v, 150).latest).toBeNull()
-    expect(latestVerdict(v, 150).superseded).toHaveLength(1)
-    expect(latestVerdict(v, 100).latest?.passRate).toBe(0)
+    expect(latestVerdict("S1", v, 150).latest).toBeNull()
+    expect(latestVerdict("S1", v, 150).superseded).toHaveLength(1)
+    expect(latestVerdict("S1", v, 100).latest?.passRate).toBe(0)
   })
 
   it("has no latest verdict for an unseen task", () => {
-    const r = latestVerdict([{ taskId: "S2", passRate: 1, passed: 6, total: 6, at: 10 }], 0)
+    const r = latestVerdict("S1", [{ taskId: "S2", passRate: 1, passed: 6, total: 6, at: 10 }], 0)
     expect(r.latest).toBeNull()
   })
 
+  it("keeps another task's newer verdict from being mistaken for this one", () => {
+    const v: readonly Verdict[] = [
+      { taskId: "S1", passRate: 1, passed: 12, total: 12, at: 100 },
+      { taskId: "S2", passRate: 1, passed: 6, total: 6, at: 999 },
+    ]
+    expect(latestVerdict("S1", v, 0).latest?.at).toBe(100)
+    expect(latestVerdict("S2", v, 0).latest?.at).toBe(999)
+  })
+
   it("treats an unparsed 0/0 as not solved rather than as a pass", () => {
-    const r = latestVerdict([{ taskId: "S1", passRate: 1, passed: 0, total: 0, at: 10 }], 0)
+    const r = latestVerdict("S1", [{ taskId: "S1", passRate: 1, passed: 0, total: 0, at: 10 }], 0)
     expect(r.latest?.total).toBe(0)
   })
 })

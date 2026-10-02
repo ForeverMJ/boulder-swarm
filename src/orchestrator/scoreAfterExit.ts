@@ -72,6 +72,6 @@ export async function settleThenScore(input: SettleInput): Promise<Settled> {
   throw new Error("S3 not implemented")
 }
 
-export function latestVerdict(history: readonly Verdict[], since: number): Recency {
+export function latestVerdict(taskId: string, history: readonly Verdict[], since: number): Recency {
   throw new Error("S3 not implemented")
 }
