@@ -50,6 +50,19 @@ export type StopReason = {
   readonly why: "goal" | "budget" | "no-progress" | ""
 }
 
+function fingerprint(outcomes: readonly Outcome[]): string {
+  return outcomes
+    .map((o) => `${o.taskId}|${o.passRate}|${[...o.produced].sort().join(",")}`)
+    .sort()
+    .join("\n")
+}
+
+function producedNothing(outcomes: readonly Outcome[]): boolean {
+  return (
+    outcomes.length > 0 && outcomes.every((o) => o.passRate <= 0 && o.produced.length === 0)
+  )
+}
+
 export function decideStop(input: {
   readonly round: number
   readonly goalReached: boolean
@@ -57,11 +70,21 @@ export function decideStop(input: {
   readonly previous: readonly Outcome[]
   readonly current: readonly Outcome[]
 }): StopReason {
-  throw new Error("S4 not implemented")
+  if (input.goalReached) return { stop: true, why: "goal" }
+  if (input.budgetExhausted) return { stop: true, why: "budget" }
+  if (
+    input.round > 1 &&
+    input.previous.length > 0 &&
+    sameOutcome(input.previous, input.current)
+  ) {
+    return { stop: true, why: "no-progress" }
+  }
+  if (producedNothing(input.current)) return { stop: true, why: "no-progress" }
+  return { stop: false, why: "" }
 }
 
 export function sameOutcome(a: readonly Outcome[], b: readonly Outcome[]): boolean {
-  throw new Error("S4 not implemented")
+  return fingerprint(a) === fingerprint(b)
 }
 
 export type RoundDeps = {
@@ -80,5 +103,51 @@ export type RoundReport = {
 }
 
 export async function runRounds(deps: RoundDeps, maxRounds: number): Promise<RoundReport> {
-  throw new Error("S4 not implemented")
+  const state = await deps.loadState()
+  const survivors = state.history.filter((entry) => entry.status === "running")
+  if (survivors.length > 0) {
+    await deps.markAbandoned(survivors.map((entry) => entry.round))
+  }
+
+  const rounds: Outcome[][] = []
+  const history = [...state.history]
+  let requeued: readonly string[] = survivors.flatMap((entry) => entry.tasks)
+  let previous: readonly Outcome[] = []
+  let stoppedBecause: StopReason["why"] = "budget"
+
+  for (let i = 0; i <= maxRounds; i++) {
+    const goalReached = await deps.goalReached()
+    const budgetExhausted = await deps.budgetExhausted()
+
+    const before = decideStop({
+      round: i + 1,
+      goalReached,
+      budgetExhausted,
+      previous,
+      current: [],
+    })
+    if (before.stop) {
+      stoppedBecause = before.why
+      break
+    }
+    if (i >= maxRounds) break
+
+    const round = state.round + i + 1
+    const current = await deps.runRound(round, requeued)
+    requeued = []
+    rounds.push([...current])
+    const tasks = current.map((o) => o.taskId)
+    const landed = current.every((o) => o.passRate >= 1)
+    history.push({ round, tasks, status: landed ? "landed" : "failed" })
+    await deps.saveState({ round, history })
+
+    const after = decideStop({ round: i + 1, goalReached, budgetExhausted, previous, current })
+    if (after.stop) {
+      stoppedBecause = after.why
+      break
+    }
+    previous = current
+  }
+
+  return { rounds, stoppedBecause }
 }
