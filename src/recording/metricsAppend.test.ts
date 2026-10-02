@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { mkdtemp, readFile, rm } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { replan } from "../orchestrator/replan"
@@ -117,6 +117,50 @@ describe("metrics accumulate instead of being overwritten", () => {
       expect(lines).toHaveLength(3)
       const json = await readRows(repo)
       expect(lines).toHaveLength(json.length + 1)
+    })
+  })
+
+  it("keeps an earlier failure row when an unrelated task passes later", async () => {
+    // The observed loss, verbatim: metrics/results.json held the R52 failure row,
+    // the only evidence that live dispatch produces nothing, and a mock dispatch
+    // of S4 replaced the file. A later success must not be able to do that again.
+    await withRepo(async (repo) => {
+      const { saveResults } = await import("../recording/metrics")
+      await saveResults(repo, [row("R52", 0, "2026-10-02T04:39:00.193Z")] as never)
+      await saveResults(repo, [row("S4", 1, "2026-10-03T00:00:00.000Z")] as never)
+
+      const rows = await readRows(repo)
+      expect(rows.map((r) => `${r.task_id}:${r.pass_rate}`)).toEqual(["R52:0", "S4:1"])
+
+      const plan = await replan([task("S4"), task("R52")], repo)
+      expect(plan.solved).toEqual(["S4"])
+      expect(plan.pending).toEqual(["R52"])
+    })
+  })
+
+  it("quarantines a corrupt ledger instead of destroying it or throwing", async () => {
+    await withRepo(async (repo) => {
+      const dir = join(repo, "metrics")
+      await mkdir(dir, { recursive: true })
+      await writeFile(join(dir, "results.json"), '[{"worker_id":0,', "utf-8")
+
+      const { saveResults } = await import("../recording/metrics")
+      await saveResults(repo, [row("S1", 1, "2026-01-01T00:00:00.000Z")] as never)
+
+      // The run continues on an empty history rather than dying while recording.
+      expect((await readRows(repo)).map((r) => r.task_id)).toEqual(["S1"])
+      // And the bytes nobody can parse are kept, not silently overwritten away.
+      expect(await readFile(join(dir, "results.json.corrupt"), "utf-8")).toBe('[{"worker_id":0,')
+    })
+  })
+
+  it("leaves no scratch file behind in metrics/", async () => {
+    await withRepo(async (repo) => {
+      const { saveResults } = await import("../recording/metrics")
+      await saveResults(repo, [row("S4", 1, "2026-01-01T00:00:00.000Z")] as never)
+      await saveResults(repo, [row("S1", 1, "2026-01-02T00:00:00.000Z")] as never)
+      const files = await readdir(join(repo, "metrics"))
+      expect(files.sort()).toEqual(["results.json", "summary.csv"])
     })
   })
 })
