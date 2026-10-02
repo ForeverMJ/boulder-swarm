@@ -1,4 +1,3 @@
 # Lessons (auto-distilled)
 
-- [S1] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
-- [S2] Hypothesis: standard solution passes; Evidence: 6/6; Rule: keep pattern and reuse.
+- [R52] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/6; Rule: retry with different strategy next round.
