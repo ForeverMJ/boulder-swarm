@@ -1,3 +1,3 @@
 # Lessons (auto-distilled)
 
-- [R52] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/6; Rule: retry with different strategy next round.
+- [D1] Hypothesis: standard solution passes; Evidence: 8/8; Rule: keep pattern and reuse.

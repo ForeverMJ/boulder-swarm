@@ -1,0 +1,2 @@
+{"type":"run_summary","ts":"2026-10-02T09:50:26.209Z","mode":"mock","tasks":["S4"],"assignments":1}
+{"type":"worker_result","worker_id":0,"task_id":"S4","branch":"agent/goal-w0-S4","passed":20,"total":20,"pass_rate":1,"duration_s":0.12,"loc":138,"mode":"mock","ts":"2026-10-02T09:50:26.085Z"}
