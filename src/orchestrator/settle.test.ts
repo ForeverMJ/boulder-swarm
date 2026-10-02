@@ -65,6 +65,54 @@ describe("waiting for a worktree to stop changing", () => {
     expect(res.changed).toBe(false)
   })
 
+  it("survives a probe that throws and keeps waiting instead of aborting", async () => {
+    // The defect this pins: the settle step exists because a detached writer kept
+    // mutating the worktree, and it aborted a live dispatch when its own probe
+    // hit a transient git failure. The worktree being waited on was fine.
+    let t = 0
+    let calls = 0
+    const res = await waitForStable(
+      () => {
+        calls += 1
+        if (calls === 1 || calls === 3) throw new Error("index.lock: transient")
+        return "clean"
+      },
+      {
+        stableForMs: 200,
+        timeoutMs: 5000,
+        pollMs: 100,
+        now: () => t,
+        sleep: async (ms: number): Promise<void> => {
+          t += ms
+        },
+      },
+    )
+    expect(res.stable).toBe(true)
+    expect(res.probeErrors).toBeGreaterThanOrEqual(2)
+    expect(res.polls).toBeGreaterThan(3)
+  })
+
+  it("never reports stable while the probe keeps failing", async () => {
+    let t = 0
+    const res = await waitForStable(
+      () => {
+        throw new Error("git unavailable")
+      },
+      {
+        stableForMs: 100,
+        timeoutMs: 400,
+        pollMs: 100,
+        now: () => t,
+        sleep: async (ms: number): Promise<void> => {
+          t += ms
+        },
+      },
+    )
+    expect(res.stable).toBe(false)
+    expect(res.probeErrors).toBeGreaterThan(0)
+    expect(res.changed).toBe(false)
+  })
+
   it("counts its polls so a caller can see how long it waited", async () => {
     let t = 0
     const res = await waitForStable(() => "x", {

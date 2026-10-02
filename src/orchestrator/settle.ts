@@ -16,6 +16,8 @@ export type SettleResult = {
   /** True when at least one change was observed, so it really was still moving. */
   readonly changed: boolean
   readonly polls: number
+  /** How many polls the probe itself threw on. */
+  readonly probeErrors: number
 }
 
 const realSleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
@@ -50,27 +52,45 @@ export async function waitForStable(
   const started = now()
   let polls = 0
   let changed = false
-  let previous = snapshot()
-  let unchangedSince = now()
+  let probeErrors = 0
+  const probe = (): string | null => {
+    try {
+      return snapshot()
+    } catch (e) {
+      if (!(e instanceof Error)) throw e
+      return null
+    }
+  }
+  let previous = probe()
   polls += 1
+  if (previous === null) probeErrors += 1
+  let unchangedSince = now()
 
   for (;;) {
     await sleep(pollMs)
-    const current = snapshot()
+    const current = probe()
     polls += 1
     const at = now()
-    if (current !== previous) {
-      changed = true
+    if (current === null) {
+      // The probe itself failed, so the state is unknown and nothing may be
+      // believed this round. A polling loop that propagates its own probe's
+      // transient failure aborts the work it was waiting on, which is worse than
+      // waiting: the failure that motivated the settle step would itself kill the
+      // dispatch.
+      probeErrors += 1
+      unchangedSince = at
+    } else if (previous === null || current !== previous) {
+      if (current !== previous) changed = true
       previous = current
       unchangedSince = at
     } else if (at - unchangedSince >= stableForMs) {
-      return { stable: true, changed, polls }
+      return { stable: true, changed, polls, probeErrors }
     }
     // Checked every iteration rather than only after a settled read: a tree that
     // changes on every single poll is exactly the case the timeout exists for,
     // and skipping this while `changed` is the worst case would hang forever.
     if (at - started >= timeoutMs) {
-      return { stable: false, changed, polls }
+      return { stable: false, changed, polls, probeErrors }
     }
   }
 }
