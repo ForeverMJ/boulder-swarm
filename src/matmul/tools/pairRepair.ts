@@ -184,4 +184,9 @@ async function main(): Promise<void> {
   }
 }
 
-await main()
+// Only search when invoked as a script. Running this on import made
+// pairRepair.test.ts rewrite the committed artifact on every test run, so the
+// working tree was never clean and verifyAll's drift check on it was noise.
+if (import.meta.main) {
+  await main()
+}
