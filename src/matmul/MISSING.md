@@ -31,13 +31,13 @@ particular `dim L^1_{m,3} = 2m`, the value the n=3 proof uses.
 
 ## Still missing
 
-**Nothing on the original list of three.** All of it was obtained in round 42 and
-is transcribed, with page and figure references and screenshots of the typeset
-page, in `lit/zlarger2.md`:
+**Nothing on the original list of three.** All of it was obtained in round 42,
+transcribed with page and figure references and screenshots of the typeset page
+into `lit/zlarger2.md`, and then implemented in rounds 43 to 46:
 
-1. **`Z^v_{l,n}` — obtained.** The display on p. 48 gives it cell by cell:
-   `Z^{e,h}_{η'}` is the space of matrices whose columns `1 … η'−1` vanish and
-   whose entry `(1, η')` vanishes, i.e.
+1. **`Z^v_{l,n}` — obtained and implemented.** The display on p. 48 gives it cell
+   by cell: `Z^{e,h}_{η'}` is the space of matrices whose columns `1 … η'−1`
+   vanish and whose entry `(1, η')` vanishes, i.e.
 
    ```
    Z^{e,h}_{η'} = L^{e,h}_{η'} + span{ e_i e_{η'}^T : 2 ⩽ i ⩽ e }
@@ -46,12 +46,19 @@ page, in `lit/zlarger2.md`:
 
    The single cell separating `Z` from `L` is the middle column: in `L^{e,h}_η` it
    is zero in every row, in `Z^{e,h}_{η'}` it is zero in row 1 and free below.
-   **Not implemented yet** — that is now a coding task, not a research blocker.
-2. **"beta separates (U1, V1, W1)" — obtained**, as Definition 2 on p. 46: there
-   must exist disjoint `I, J ⊆ {ρ | w_ρ ∉ W₁}` with
+   Implemented as `subspaceZ` / `dimZ` / `isInZ` in `tools/blaser2003.ts`, with
+   both inclusions pinned as strict by explicit witnesses.
+2. **"beta separates (U1, V1, W1)" — obtained and implemented**, as Definition 2
+   on p. 46: there must exist disjoint `I, J ⊆ {ρ | w_ρ ∉ W₁}` with
    `U₁ ∩ ⋂_{i∈I} ker f_i = {0}` and `V₁ ∩ ⋂_{j∈J} ker g_j = {0}`.
-3. **Lemma 7 — obtained**, p. 51, together with the sandwiching normal form
-   printed below it and equation (3).
+   `betaSeparates` in `tools/separation.ts` decides it, and
+   `lemma3WithSeparation` reports Lemma 3's bound only once separation holds.
+3. **Lemma 7 — obtained and implemented**, p. 51, together with the sandwiching
+   normal form printed below it and equation (3). See `tools/sandwiching.ts`.
+
+What remains is the assembly: the step that chains these into Lemma 5's
+hypotheses and the closing count. Until that is written the published 19 is
+reproduced in its arithmetic but not in its proof.
 
 ## Why my R41 verification of `Z^v` was itself wrong
 

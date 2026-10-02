@@ -100,20 +100,30 @@ Two routes survive, both research-scale rather than engineering-scale.
    computations and checks the tensor identity exactly, agreeing with the
    existing checker on every known scheme. The `L^v_{l,n}` spaces are
    implemented with both properties the paper relies on, `dim = l(n-v)` and
-   `L^n = 0`. Lemma 3's conclusion is implemented but **throws unless the
-   separation hypothesis is explicitly supplied**. R41 reached the article
-   itself and quotes what it prints: the inclusion chain
-   `L^{e,h}_eta ⊂ Z^{e,h}_eta ⊂ L^{e,h}_{eta-1}`, which makes `Z^v` **strictly
-   larger** than `L^v` and so dissolves the paradox recorded in R39 — a nonzero
-   `W_tau ⊆ Z^tau` disjoint from `L^tau` does exist. The quoted material is in
-   `lit/zlarger.md`. `Z^v` itself is still not implemented: the set
-   description available there is a reconstruction, and an independent count of
-   it contradicts both its dimension and the strictness the article prints, so
-   it is recorded as unverified rather than used. Two ingredients remain
-   genuinely open, the verbatim definition of "separates" and Lemma 7's
-   sandwiching normal form. None of the three is guessed at, and until they are
-   obtained the published 19 is reproduced only in its arithmetic, not in its
-   proof.
+   `L^n = 0`. R42 reached the article itself and transcribed the three missing
+   ingredients off the typeset page, with page and figure references and
+   screenshots, into `lit/zlarger2.md`; R41 had already obtained the inclusion
+   chain `L^{e,h}_eta ⊂ Z^{e,h}_eta ⊂ L^{e,h}_{eta-1}` into `lit/zlarger.md`,
+   which makes `Z^v` **strictly larger** than `L^v` and so dissolves the paradox
+   recorded in R39.
+
+   All three ingredients are now implemented, each behind its own tests.
+   `Z^v_{l,n}` is `subspaceZ` with `dim = l(n-v+1) - 1`, and both inclusions are
+   pinned as strict by explicit witnesses, `E_{2,v}` inside `Z^v` but outside
+   `L^v` and `E_{1,v}` inside `L^{v-1}` but outside `Z^v`. "beta separates" is
+   `betaSeparates` in `tools/separation.ts`, deciding Definition 2 rather than
+   taking it on faith, and `lemma3WithSeparation` reports Lemma 3's bound only
+   after separation has actually been established. Lemma 7 is
+   `tools/sandwiching.ts`, together with the normal form it licenses and the
+   reason that replacement is free: `dim(a . k^{m x n}) = n * rk a` for every
+   `a` of that rank, so the argument depends on `a` only through its rank.
+
+   **What is still missing is the assembly.** The published 19 is reproduced in
+   its arithmetic and its three inputs are now sound, but the step that chains
+   them into the contradiction — Lemma 5's hypotheses, the four `W_tau`
+   subspaces, and the counting that closes it — is not written. So the 19 here is
+   still not a proof, and nothing in this repository should be read as claiming
+   otherwise.
 2. **A learned policy / tree search** in the AlphaTensor style. Requires
    training a value function and a policy over factor choices. Under a
    TypeScript-only constraint this means hand-written backprop, and the compute
