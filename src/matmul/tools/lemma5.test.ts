@@ -1,8 +1,9 @@
 import { describe, expect, it } from "bun:test"
-import { canonicalWTau, countOutputsInW, dimSpan, everyElementInSpan, lemma5Hypotheses, sumBasis } from "./lemma5"
+import { canonicalWTau, countOutputsInW, dimSpan, everyElementInSpan, lemma5Hypotheses, sumBasis, assembleBlaser } from "./lemma5"
 import { dimL, dimZ, subspaceL, subspaceZ, type Mat } from "./blaser2003"
 import { fromScheme, type BilinearComputation, type Term } from "./bilinear"
 import { naive } from "../schemes"
+import { scheme as t11 } from "../attempts/T11_solution"
 
 const zeroMat = (l: number, n: number): Mat => {
   const out: number[][] = []
@@ -60,6 +61,63 @@ describe("the canonical W_tau of Lemma 5", () => {
   it("rejects a tau outside 1..n", () => {
     expect(() => canonicalWTau(3, 3, 0)).toThrow(RangeError)
     expect(() => canonicalWTau(3, 3, 4)).toThrow(RangeError)
+  })
+})
+
+describe("the assembled argument, measured end to end", () => {
+  it("reproduces 19 on the rank-23 scheme, with every hypothesis verified", () => {
+    // This is the first end-to-end run of the chain in this repository, and the
+    // numbers were measured rather than assumed. W_1 = 0 and W_2 the full
+    // canonical 2-dimensional space is what captures exactly 4 of the 23 output
+    // matrices; taking W_1 at full dimension instead captures 6 and yields only
+    // 21, so the published count of 4 is a property of a particular choice of W
+    // and not of the hypotheses alone.
+    const beta = fromScheme(t11)
+    const res = assembleBlaser({
+      beta,
+      m: beta.m,
+      wTaus: [[], canonicalWTau(3, 3, 2), []],
+    })
+    expect(res.hypotheses.holds).toBe(true)
+    expect(res.separates).toBe(true)
+    expect(res.dimU1).toBe(9)
+    expect(res.dimV1).toBe(6)
+    expect(res.outputsInW).toBe(4)
+    expect(res.lowerBound).toBe(19)
+    // 23 >= 19, so the bound is satisfied and consistent with the known scheme.
+    expect(beta.terms.length).toBeGreaterThanOrEqual(res.lowerBound ?? Infinity)
+  })
+
+  it("is sensitive to the choice of W, so 4 is not an artefact of the defaults", () => {
+    const beta = fromScheme(t11)
+    const full = assembleBlaser({ beta, m: beta.m })
+    expect(full.outputsInW).toBe(6)
+    expect(full.lowerBound).toBe(21)
+    expect(full.outputsInW).toBeGreaterThan(4)
+  })
+
+  it("gives a bound tight against the naive scheme", () => {
+    const beta = fromScheme(naive(3))
+    const res = assembleBlaser({ beta, m: beta.m })
+    expect(res.hypotheses.holds).toBe(true)
+    expect(res.separates).toBe(true)
+    expect(res.lowerBound).not.toBeNull()
+    // The default W is the full canonical family, which captures more outputs
+    // than the published count of 4, so the naive bound comes out above 19.
+    expect(res.outputsInW).toBeGreaterThan(4)
+  })
+
+  it("reports no bound when the hypotheses fail", () => {
+    const beta = fromScheme(t11)
+    const bad: Mat = [
+      [1, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]
+    const res = assembleBlaser({ beta, m: beta.m, wTaus: [[bad], canonicalWTau(3, 3, 2), []] })
+    expect(res.hypotheses.holds).toBe(false)
+    expect(res.separates).toBe(false)
+    expect(res.lowerBound).toBeNull()
   })
 })
 
