@@ -51,7 +51,41 @@ export function singleCoefficientRepair(
   return { tested, repair: null }
 }
 
-/** Locates every tensor entry where a scheme disagrees with the target. */
+export type Activation = {
+  readonly triple: number
+  /** Which of the three coordinates at (a,b,c) are currently nonzero. */
+  readonly nonzero: readonly ("u" | "v" | "w")[]
+}
+
+/**
+ * Reports, per triple, which of `u[a]`, `v[b]`, `w[c]` are nonzero.
+ *
+ * The tensor entry (a,b,c) is the sum over triples of `u[a] * v[b] * w[c]`, so a
+ * single coefficient edit can only move that entry when the other two factors
+ * are already nonzero. That makes this profile the cheap way to see which
+ * entries a scheme is even capable of editing, and it is how the rank-22 defect
+ * at (7,4,7) is characterised: at most one of the three is nonzero for any
+ * triple, so no single edit reaches it and no pair of edits that both leave it
+ * alone can either.
+ *
+ * The one thing this does NOT license is concluding the entry is unreachable.
+ * Two coordinates of the same triple can be activated together, and then the
+ * entry moves. What that costs is collateral: changing `u[a]` perturbs every
+ * entry `(a, b', c')`, so a joint activation has to be paid for by cancelling
+ * that damage elsewhere. A repair search that filters candidate moves down to
+ * those which already touch the target will therefore discard precisely the moves
+ * that could work, which is a mistake worth recording because it looks like a
+ * mathematical impossibility when it is only a filter.
+ */
+export function entryActivation(base: readonly Triple[], a: number, b: number, c: number): Activation[] {
+  return base.map((t, triple) => {
+    const nonzero: ("u" | "v" | "w")[] = []
+    if ((t.u[a] ?? 0) !== 0) nonzero.push("u")
+    if ((t.v[b] ?? 0) !== 0) nonzero.push("v")
+    if ((t.w[c] ?? 0) !== 0) nonzero.push("w")
+    return { triple, nonzero }
+  })
+}
 export function mismatchSites(base: readonly Triple[]): {
   readonly a: number
   readonly b: number

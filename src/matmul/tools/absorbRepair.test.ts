@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { mismatchSites, mismatches, singleCoefficientRepair } from "./absorbRepair"
+import { mismatchSites, mismatches, singleCoefficientRepair, entryActivation } from "./absorbRepair"
 import { scheme as t12c } from "../attempts/T12c_absorb_best"
 import { scheme as t11 } from "../attempts/T11_solution"
 import { naive } from "../schemes"
@@ -7,6 +7,58 @@ import type { Triple } from "./absorbRepair"
 
 const asTriples = (s: { triples: readonly { u: readonly number[]; v: readonly number[]; w: readonly number[] }[] }): Triple[] =>
   s.triples.map((t) => ({ u: [...t.u], v: [...t.v], w: [...t.w] }))
+
+describe("what the defective entry is structurally capable of", () => {
+  it("shows at most one of the three coordinates nonzero at (7,4,7), for every triple", () => {
+    // This is the fact behind R50: a single coefficient edit can only move the
+    // entry when the other two factors are already nonzero, and here they never
+    // are. So no single edit reaches it, which is why the 3390-candidate sweep
+    // found nothing.
+    const act = entryActivation(asTriples(t12c), 7, 4, 7)
+    expect(act).toHaveLength(22)
+    for (const a of act) expect(a.nonzero.length).toBeLessThanOrEqual(1)
+    expect(Math.max(...act.map((a) => a.nonzero.length))).toBe(1)
+  })
+
+  it("lists the six triples that already have one factor in place", () => {
+    const act = entryActivation(asTriples(t12c), 7, 4, 7).filter((a) => a.nonzero.length === 1)
+    expect(act.map((a) => a.triple).sort((x, y) => x - y)).toEqual([5, 7, 9, 14, 19, 20])
+  })
+
+  it("does NOT license concluding the entry is unreachable", () => {
+    // Two coordinates of one triple can be activated together, and then the entry
+    // moves. A filter that keeps only moves already touching the target discards
+    // exactly these, and the resulting empty search reads as an impossibility
+    // when it is only a filter. The assertion here is that such an activation is
+    // arithmetically possible, which is why the profile is reported instead of a
+    // verdict.
+    const t = asTriples(t12c)
+    const idx = 19
+    const target = t[idx]
+    expect(target).toBeDefined()
+    if (target === undefined) return
+    expect(target.u[7]).toBe(0)
+    expect(target.v[4]).not.toBe(0)
+    expect(target.w[7]).toBe(0)
+    // Activating the two missing coordinates makes the product nonzero.
+    const before = (target.u[7] ?? 0) * (target.v[4] ?? 0) * (target.w[7] ?? 0)
+    target.u[7] = 1
+    target.w[7] = 1
+    const after = (target.u[7] ?? 0) * (target.v[4] ?? 0) * (target.w[7] ?? 0)
+    expect(before).toBe(0)
+    expect(after).not.toBe(0)
+    // And it perturbs other entries, which is the cost that has to be cancelled.
+    expect(mismatches(t)).toBeGreaterThan(1)
+  })
+
+  it("reports all three factors nonzero where the entry is reachable and correct", () => {
+    // In the naive scheme every triple has all three coordinates nonzero at any
+    // entry it supports, so the profile looks completely different there.
+    const act = entryActivation(asTriples(naive(3)), 4, 4, 4)
+    const full = act.filter((a) => a.nonzero.length === 3)
+    expect(full.length).toBeGreaterThan(0)
+  })
+})
 
 describe("locating the single defect in the rank-22 attempt", () => {
   it("confirms T12c is one unit short and nothing else", () => {
