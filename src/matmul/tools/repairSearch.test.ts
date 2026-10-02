@@ -50,6 +50,18 @@ describe("the coordinated repair search", () => {
     if (res.candidatesTried === 0) expect(res.exhaustive).toBe(false)
   })
 
+  it("never claims to be exhaustive when the budget ran out", () => {
+    // The exact bug this pins. The first implementation reported `exhaustive` as
+    // `tried <= budget`, so a search that stopped *because* it hit the budget
+    // reported that it had been exhaustive. On T12c that is the difference between
+    // "I looked at everything in this space" and "I stopped early", and only one
+    // of those is true.
+    for (const budget of [1, 5, 500, 5000, 20000]) {
+      const res = searchRepair(asTriples(t12c), { budget })
+      if (res.candidatesTried >= budget) expect(res.exhaustive).toBe(false)
+    }
+  })
+
   it("separates exhaustive from heuristic reporting", () => {
     const narrow = searchRepair(asTriples(t12c), { budget: 5 })
     expect(narrow.candidatesTried).toBeLessThanOrEqual(5)
