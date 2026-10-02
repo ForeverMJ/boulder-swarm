@@ -65,7 +65,7 @@ Modes: `mock` (fast CI) · `opencode` (free, default live) · `codex` (subscript
   transfer between them. The repo's target is the Q/R question. Exact integer
   checker (`src/matmul/checker.ts`) plus a separate F_2 checker
   (`verifyMod2`), naive-27 baseline, scoreboard (`bun src/matmul/scoreboard.ts`).
-  23 rounds logged in `src/matmul/CAMPAIGN.md`:
+  57 rounds logged in `src/matmul/CAMPAIGN.md`:
   - T11 DONE: **four** independently verified rank-23 schemes
     (`T11_solution.ts`, `T12_rank23_variant.ts`, `T12d_fam_A.ts`, `T12d_fam_B.ts`),
     0 mismatches each, and exact over **both** Q and F_2 (`verifyMod2`), so the
@@ -77,6 +77,15 @@ Modes: `mock` (fast CI) · `opencode` (free, default live) · `codex` (subscript
     compression shows all four rank-23 families irreducible when the other
     (u,v) pairs are held fixed (R14, extended to four pairwise-disjoint de Groote
     orbits in R19).
+  - **`T12c` is closed as a rank-22 candidate** (R50–R56), by five independent
+    structural arguments rather than by exhaustion: no repair within two
+    coordinates of any term (R53), none within three coordinates of one term
+    (R54), no single term can supply entry 610 at all (R54), no two terms can
+    share it (R55), and replacing any one term cannot work because a 2-entry
+    deficit is realisable only when the two entries differ in exactly one
+    coordinate, which none of the three closest pairs does (R56). R57 then left
+    two-added-term repair **unresolved rather than closed**, and said so. This
+    eliminates one candidate; it does not move `R <= 22`.
   - Search branches closed by their own controls, not by exhaustion: exact
     descent (R16), continuous ALS (R17, error floor is rank-independent), F_2
     hill climbing (R18) and F_2 beam search (R20) each failed a control where a
