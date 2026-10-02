@@ -57,6 +57,7 @@ L2:
   - {id: S1, problem: src/orchestrator/supervisorState.ts, tests: src/orchestrator/supervisorState.test.ts, owner: worker, milestone: M6, note: atomic durable round/budget journal with crash tolerance; loadState must never throw on a corrupt file and staleRounds must expose an interrupted round for requeue, which is the failure that lost the L1 result}
   - {id: S2, problem: src/orchestrator/agentLifecycle.ts, tests: src/orchestrator/agentLifecycle.test.ts, owner: worker, milestone: M6, note: salvage the worktree while the agent tree is still alive, then kill it, then report zero strays including grandchildren; encodes the round-41 timeout race and the seven orphaned processes}
   - {id: S3, problem: src/orchestrator/scoreAfterExit.ts, tests: src/orchestrator/scoreAfterExit.test.ts, owner: worker, milestone: M6, note: settle the worktree only after the agent tree exits, then score; record which paths a commit actually produced and treat an empty commit as not-a-success; ignore verdicts older than the commit that superseded them}
+  - {id: S4, problem: src/orchestrator/roundLoop.ts, tests: src/orchestrator/roundLoop.test.ts, owner: worker, milestone: M6, note: the loop that calls S1-S3; requeue crash survivors, persist per round, stop on goal before budget, and halt on a repeated outcome instead of spinning for a month}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
