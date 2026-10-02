@@ -59,8 +59,14 @@ async function main(): Promise<void> {
       console.log(`GOAL MET: ${winner.file} verified rank ${winner.rank}, ${winner.mismatches} mismatches`)
       return
     }
+    // Count only the attempts that are actually competing. The directory also holds
+    // 2x2 schemes, which are exact and would otherwise inflate this number and imply
+    // they had been tried and failed at the 3x3 rank-22 question.
+    const target = entries.filter(isTargetProblem)
+    const other = entries.length - target.length
+    const excluded = other === 0 ? "" : ` (${other} non-3x3 schemes excluded)`
     console.log(
-      `GOAL NOT MET: no exact scheme with rank <= 22 among ${entries.length} attempts.` +
+      `GOAL NOT MET: no exact rank<=22 scheme for n=${PROBLEM_N} among ${target.length} attempts${excluded}.` +
         (best === undefined ? " no verified scheme at all." : ` best verified is ${best.file} at rank ${best.rank}.`),
     )
     process.exit(1)

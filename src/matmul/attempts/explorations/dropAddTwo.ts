@@ -1,6 +1,6 @@
-import { mismatchSites, mismatches } from "../tools/absorbRepair"
-import type { Triple } from "../tools/absorbRepair"
-import { scheme } from "./T12c_absorb_best"
+import { mismatchSites, mismatches } from "../../tools/absorbRepair"
+import type { Triple } from "../../tools/absorbRepair"
+import { scheme } from "../T12c_absorb_best"
 
 const IDX = (a: number, b: number, c: number): number => (a * 9 + b) * 9 + c
 const ABC = (i: number): readonly [number, number, number] => [

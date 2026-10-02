@@ -1,7 +1,7 @@
-import { mismatchSites, mismatches } from "../tools/absorbRepair"
-import type { Triple } from "../tools/absorbRepair"
-import { naive } from "../schemes"
-import { searchRepairWide } from "../tools/repairMit"
+import { mismatchSites, mismatches } from "../../tools/absorbRepair"
+import type { Triple } from "../../tools/absorbRepair"
+import { naive } from "../../schemes"
+import { searchRepairWide } from "../../tools/repairMit"
 
 const VALS = [-2, -1, 1, 2] as const
 const WHICH = ["u", "v", "w"] as const

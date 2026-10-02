@@ -1,6 +1,6 @@
-import { mismatchSites } from "../tools/absorbRepair"
-import type { Triple } from "../tools/absorbRepair"
-import { scheme } from "./T12c_absorb_best"
+import { mismatchSites } from "../../tools/absorbRepair"
+import type { Triple } from "../../tools/absorbRepair"
+import { scheme } from "../T12c_absorb_best"
 
 const ABC = (i: number): readonly [number, number, number] => [
   Math.floor(i / 81),

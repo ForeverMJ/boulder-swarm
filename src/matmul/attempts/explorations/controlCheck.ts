@@ -1,7 +1,7 @@
-import { mismatches, mismatchSites } from "../tools/absorbRepair"
-import type { Triple } from "../tools/absorbRepair"
-import { naive } from "../schemes"
-import { searchThree } from "../tools/repair3"
+import { mismatches, mismatchSites } from "../../tools/absorbRepair"
+import type { Triple } from "../../tools/absorbRepair"
+import { naive } from "../../schemes"
+import { searchThree } from "../../tools/repair3"
 import { firstHardControl } from "./unitDamageSurvey"
 
 const sup = (a: readonly number[]): number[] => {
