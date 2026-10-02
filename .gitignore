@@ -9,3 +9,4 @@ agent-last-message.md
 codex-*.log
 .omo/
 .codegraph/
+  .playwright-mcp/

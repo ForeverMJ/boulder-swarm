@@ -31,18 +31,41 @@ particular `dim L^1_{m,3} = 2m`, the value the n=3 proof uses.
 
 ## Still missing
 
-1. **A usable definition of `Z^v_{l,n}`.** The article is now reachable and the
-   quoted material is in `lit/zlarger.md`, but the set description there is a
-   reconstruction and an independent count of it contradicts both the stated
-   dimension and the claimed strictness. The printed display has to be read
-   directly. **Not implemented here, deliberately.**
-2. **The verbatim definition of "beta separates (U1, V1, W1)".** Currently
-   inferred from the Extension Lemma's statement, not quoted. `lit/zlarger.md`
-   does quote Lemma 5 and proof steps 4 and 6, which constrain but do not define
-   the predicate.
-3. **Lemma 7, the sandwiching normal form.** The article notes that it uses "a
-   transformation which does not work for larger values of r", so this is the
-   substantive part of the proof, not a formality. Still not obtained.
+**Nothing on the original list of three.** All of it was obtained in round 42 and
+is transcribed, with page and figure references and screenshots of the typeset
+page, in `lit/zlarger2.md`:
+
+1. **`Z^v_{l,n}` — obtained.** The display on p. 48 gives it cell by cell:
+   `Z^{e,h}_{η'}` is the space of matrices whose columns `1 … η'−1` vanish and
+   whose entry `(1, η')` vanishes, i.e.
+
+   ```
+   Z^{e,h}_{η'} = L^{e,h}_{η'} + span{ e_i e_{η'}^T : 2 ⩽ i ⩽ e }
+   dim Z^{e,h}_{η'} = e(h − η' + 1) − 1
+   ```
+
+   The single cell separating `Z` from `L` is the middle column: in `L^{e,h}_η` it
+   is zero in every row, in `Z^{e,h}_{η'}` it is zero in row 1 and free below.
+   **Not implemented yet** — that is now a coding task, not a research blocker.
+2. **"beta separates (U1, V1, W1)" — obtained**, as Definition 2 on p. 46: there
+   must exist disjoint `I, J ⊆ {ρ | w_ρ ∉ W₁}` with
+   `U₁ ∩ ⋂_{i∈I} ker f_i = {0}` and `V₁ ∩ ⋂_{j∈J} ker g_j = {0}`.
+3. **Lemma 7 — obtained**, p. 51, together with the sandwiching normal form
+   printed below it and equation (3).
+
+## Why my R41 verification of `Z^v` was itself wrong
+
+Round 41 recorded `Z^v = R^{e,h} ∩ L^{v−1}_{e,h}` as a reconstruction, I counted
+that set entry by entry, got 6 where the dimension formula gave 8, and concluded
+the formula was disproved. The count was right and the conclusion was wrong: at
+`v = 1`, `L^0` is the whole space, so `R ∩ L^0 = R` and my 6 was `dim R^{3,3}`,
+not `dim Z^1_{3,3} = 8`. I had disproved a set that was not `Z^v`, then used that
+to cancel the task. Recounting the transcribed `Z^v` entry by entry now agrees
+with `e(h−v+1) − 1` at every size tried, and the sandwich `L^v ⊊ Z^v ⊊ L^{v−1}`
+is strict at each of them, with `E_{2,v}` and `E_{1,v}` as witnesses.
+
+The failure was mine and it is worth naming: I verified the arithmetic of a claim
+I had not checked the set of. Checking a formula is not checking a definition.
 
 ## Why the R39 paradox is withdrawn
 
@@ -54,39 +77,46 @@ settles it: the inclusions it prints are
 
 `Z^v` is therefore **strictly larger** than `L^v`, not contained in it, so a
 nonzero `W_τ ⊆ Z^τ` with `W_τ ∩ L^τ = {0}` does exist and Lemma 5 is not
-degenerate. The lesson from R39 stands on its own though: two fragments that
-seem to force a contradiction usually mean one of them has been misread, and the
-cure was to read the source rather than to reason harder about the fragments.
+degenerate — `span{e_i e_τ^T : 2 ⩽ i ⩽ e}` is such a space. The lesson from R39
+stands on its own though: two fragments that seem to force a contradiction
+usually mean one of them has been misread, and the cure was to read the source
+rather than to reason harder about the fragments.
 
-## Why `Z^v` is not guessed
+## How the R39 argument went wrong, and what still guards `Z^v`
 
-The available proof fragments constrain `Z^v` in two directions that cannot both
-hold, which is evidence that a fragment has been misread rather than that a
-definition is one step away.
+The fragments above were read as constraining `Z^v` in two directions that cannot
+both hold:
 
-- Step 4 of the Lemma 5 proof obtains a contradiction between a set containing a
-  matrix with a nonzero entry at position `(1, tau+1)` and a right-hand side
-  contained in `Z^{tau+1}_{l,n}`. So `Z^{tau+1}` must exclude `(1, tau+1)`
-  nonzeros.
+- Step 4 of the Lemma 5 proof contrasts a set containing a matrix with a nonzero
+  entry at `(1, tau+1)` against a right-hand side contained in `Z^{tau+1}_{l,n}`,
+  so `Z^{tau+1}` was taken to exclude `(1, tau+1)` nonzeros.
 - Step 6 does the same at `(1, 1)` for `Z^1`.
-- Both exclusions say `Z^v` is contained in the matrices with the first `v`
-  columns zero, which is exactly `L^v`. Combined with the `L^v <= Z^v` needed for
-  Lemma 5's hypothesis `W_tau <= Z^tau`, `W_tau intersect L^tau = {0}` to admit a
-  nonzero `W_tau`, this forces `Z^v = L^v` and the lemma degenerates.
+- Both exclusions were read as `Z^v ⊆ L^v`, and combined with the `L^v ⊆ Z^v` that
+  Lemma 5 needs, forced `Z^v = L^v`.
 
-So at least one of the readings is wrong. `tools/missingIngredients.test.ts`
-checks the two properties that any candidate definition has to reproduce.
-Implementing a `Z^v` that satisfies the exclusion but not the non-degeneracy
-would produce a Lemma 5 that cannot be true.
+The exclusions were correct; the inference from them was not. `Z^v` does exclude
+a nonzero entry at `(1, v)`, but it is *not* contained in `L^v`, because its
+entries at `(i, v)` for `2 ⩽ i ⩽ e` are free. The fragments never said `Z^v ⊆ L^v`;
+that was read into them from the display's shape, which the flattened HTML
+serialisation makes indistinguishable from `L^v`'s.
+
+`tools/missingIngredients.test.ts` still pins the two properties any implementation
+must reproduce — the `(1, v)` exclusion and non-degeneracy. With `Z^v` now
+transcribed, those two properties together single out the definition, so the
+implementation is no longer guesswork.
 
 ## Where to look
 
 The article is Bläser, *On the complexity of the multiplication of matrices of
 small formats*, **Journal of Complexity 19(1):43–60, 2003**, DOI
 `10.1016/S0885-064X(02)00007-9`. The venue in the previous revision of this file
-was wrong; Crossref confirms the record. Direct access
-returned HTTP 400 and an ECCC mirror served undecoded PDF bytes, so the
-preliminaries above were recovered from indexed excerpts. Lemma 3 and Lemma 5
-were obtained in full; the preliminaries defining `Z^v` and "separates" were
-not. Anyone with the article can close items 1 and 2 immediately, and item 3 is
-the remaining proof work.
+was wrong; Crossref confirms the record.
+
+The publisher page is labelled "Open archive" and serves free full text, but
+plain HTTP returns 403 and the `/pdfft` endpoint serves a JavaScript challenge
+page before the bytes. Both are passed by letting the challenge run inside a real
+browser session, which lands on a short-lived signed URL that renders in a PDF
+viewer. That route, and the screenshots taken from it, are recorded in
+`lit/zlarger2.md`. The author's page `cc.cs.uni-saarland.de/mblaeser` carries the
+record but offers no download for this paper, and it has no ECCC report and no
+arXiv preprint, so the publisher is the only route.
