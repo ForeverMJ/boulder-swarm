@@ -69,6 +69,51 @@ export function isInL(m: Mat, v: number): boolean {
   return true
 }
 
+/**
+ * Z^v_{l,n} from Blaser 2003 p.48, read off the typeset display: the space whose
+ * columns 1..v-1 vanish and whose entry (1,v) vanishes. So
+ *
+ *   Z^{e,h}_{v} = L^{e,h}_{v} + span{ e_i e_v^T : 2 <= i <= e }
+ *
+ * The single cell separating it from L is the middle column: L forces it to zero
+ * in every row, Z forces it to zero only in row 1. Everything else agrees.
+ *
+ * The paper prints the inclusions L^v subset Z^v subset L^{v-1} for 1<=v<=h, and
+ * both inclusions are strict: E_{2,v} lies in Z^v but not L^v, and E_{1,v} lies
+ * in L^{v-1} but not Z^v. Strictness is the load-bearing part, because Lemma 5
+ * needs a nonzero W_tau <= Z^tau with W_tau intersect L^tau = {0}, and that
+ * space only exists when Z^v properly contains L^v.
+ */
+export function subspaceZ(l: number, n: number, v: number): Mat[] {
+  if (v < 1 || v > n) throw new RangeError(`v=${v} out of range for 1<=v<=n=${n}`)
+  const unit = (i: number, j: number): number[][] => {
+    const m: number[][] = []
+    for (let r = 0; r < l; r++) {
+      const row: number[] = []
+      for (let c = 0; c < n; c++) row.push(r === i && c === j ? 1 : 0)
+      m.push(row)
+    }
+    return m
+  }
+  const out: number[][][] = []
+  for (let i = 0; i < l; i++) {
+    for (let j = v; j < n; j++) out.push(unit(i, j))
+  }
+  for (let i = 1; i < l; i++) out.push(unit(i, v - 1))
+  return out
+}
+
+export function dimZ(l: number, n: number, v: number): number {
+  return l * (n - v + 1) - 1
+}
+
+export function isInZ(m: Mat, v: number): boolean {
+  const { n } = dims(m)
+  if (v > n) return false
+  if ((m[0]?.[v - 1] ?? 0) !== 0) return false
+  return isInL(m, v - 1)
+}
+
 export function matSub(a: Mat, b: Mat): Mat {
   const { l, n } = dims(a)
   const out: number[][] = []
