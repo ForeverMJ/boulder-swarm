@@ -56,6 +56,17 @@ describe("S4 round loop, judged independently", () => {
     expect(r.stop).toBe(false)
   })
 
+  it("treats an empty current round as no verdict, since the pre-round check also passes one", () => {
+    // decideStop cannot distinguish "no round has run yet" from "a round ran and
+    // produced nothing": both arrive as current === []. runRounds owns the
+    // exhausted-queue rule instead, and these two cases pin that it does not
+    // leak back in here and halt before the first round.
+    expect(decideStop({ round: 1, goalReached: false, budgetExhausted: false, previous: [], current: [] })).toEqual(noop)
+    expect(
+      decideStop({ round: 3, goalReached: false, budgetExhausted: false, previous: [ok("S1")], current: [] }).stop,
+    ).toBe(false)
+  })
+
   it("compares outcomes by identity of task, rate and produced files", () => {
     expect(sameOutcome([ok("S1")], [ok("S1")])).toBe(true)
     expect(sameOutcome([ok("S1")], [ok("S2")])).toBe(false)
@@ -64,9 +75,13 @@ describe("S4 round loop, judged independently", () => {
     expect(sameOutcome([ok("S1")], [{ ...ok("S1"), produced: [] }])).toBe(false)
   })
 
-  it("does not treat an empty first round as no-progress", () => {
-    const r = decideStop({ round: 1, goalReached: false, budgetExhausted: false, previous: [], current: [] })
-    expect(r.stop).toBe(false)
+  it("does not halt before the first round merely because nothing has run yet", () => {
+    // The exhausted-queue rule lives in runRounds, after a round has actually
+    // returned. If it leaks back into decideStop, the pre-round check (which
+    // passes current: [] as a placeholder) halts before doing any work at all.
+    expect(
+      decideStop({ round: 1, goalReached: false, budgetExhausted: false, previous: [], current: [] }).stop,
+    ).toBe(false)
   })
 })
 
@@ -187,5 +202,31 @@ describe("S4 round loop over injected deps", () => {
     const rep = await runRounds(h.deps, 4)
     expect(n).toBeGreaterThan(1)
     expect(["no-progress", "budget"]).toContain(rep.stoppedBecause)
+  })
+
+  it("halts on an empty round instead of dispatching nothing again", async () => {
+    let n = 0
+    const h = harness({
+      runRound: async () => {
+        n += 1
+        return []
+      },
+    })
+    const rep = await runRounds(h.deps, 5)
+    expect(n).toBe(1)
+    expect(rep.stoppedBecause).toBe("no-progress")
+  })
+
+  it("halts when an empty round follows a productive one", async () => {
+    let n = 0
+    const h = harness({
+      runRound: async () => {
+        n += 1
+        return n === 1 ? [ok("S1")] : []
+      },
+    })
+    const rep = await runRounds(h.deps, 5)
+    expect(n).toBe(2)
+    expect(rep.stoppedBecause).toBe("no-progress")
   })
 })

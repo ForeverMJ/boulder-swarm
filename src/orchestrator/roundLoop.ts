@@ -72,11 +72,7 @@ export function decideStop(input: {
 }): StopReason {
   if (input.goalReached) return { stop: true, why: "goal" }
   if (input.budgetExhausted) return { stop: true, why: "budget" }
-  if (
-    input.round > 1 &&
-    input.previous.length > 0 &&
-    sameOutcome(input.previous, input.current)
-  ) {
+  if (input.round > 1 && sameOutcome(input.previous, input.current)) {
     return { stop: true, why: "no-progress" }
   }
   if (producedNothing(input.current)) return { stop: true, why: "no-progress" }
@@ -144,6 +140,13 @@ export async function runRounds(deps: RoundDeps, maxRounds: number): Promise<Rou
     const after = decideStop({ round: i + 1, goalReached, budgetExhausted, previous, current })
     if (after.stop) {
       stoppedBecause = after.why
+      break
+    }
+    // A round that dispatched nothing means the queue is exhausted. This cannot
+    // live in decideStop: its pre-round check also passes an empty `current` as
+    // a placeholder, and a pure function cannot tell those two cases apart.
+    if (current.length === 0) {
+      stoppedBecause = "no-progress"
       break
     }
     previous = current

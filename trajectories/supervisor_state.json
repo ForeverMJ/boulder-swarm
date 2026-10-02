@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "round": 2,
+  "budget": {
+    "maxRounds": 5,
+    "maxWallClockMs": 3600000,
+    "agentMsSpent": 0
+  },
+  "history": [
+    {
+      "round": 1,
+      "tasks": [
+        "S1",
+        "S2"
+      ],
+      "status": "landed"
+    },
+    {
+      "round": 2,
+      "tasks": [],
+      "status": "landed"
+    }
+  ]
+}

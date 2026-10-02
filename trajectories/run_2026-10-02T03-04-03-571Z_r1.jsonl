@@ -1,0 +1,1 @@
+{"type":"round_summary","ts":"2026-10-02T03:04:15.125Z","round":1,"outcomes":[{"taskId":"S1","passRate":1,"passed":12,"total":12,"produced":[]},{"taskId":"S2","passRate":1,"passed":6,"total":6,"produced":[]}]}
