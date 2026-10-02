@@ -1,0 +1,7 @@
+{"type": "e2e_proof", "harness": "Verdict(test_file='tests/test_problem_02.py', passed=0, total=5, pass_rate=0.0, returncode=1)"}
+{"type":"e2e_proof","harness":{"testFile":"src/problems/problem02.test","passed":5,"total":5,"passRate":1,"returncode":0}}
+{"type":"e2e_proof","harness":{"testFile":"src/problems/problem02.test","passed":5,"total":5,"passRate":1,"returncode":0}}
+{"type":"e2e_proof","harness":{"testFile":"src/problems/problem02.test","passed":5,"total":5,"passRate":1,"returncode":0}}
+{"type":"e2e_proof","harness":{"testFile":"src/problems/problem02.test","passed":5,"total":5,"passRate":1,"returncode":0}}
+{"type":"e2e_proof","harness":{"testFile":"src/problems/problem02.test","passed":5,"total":5,"passRate":1,"returncode":0}}
+{"type":"e2e_proof","harness":{"testFile":"src/problems/problem02.test","passed":5,"total":5,"passRate":1,"returncode":0}}

@@ -1,6 +1,6 @@
-import { spawn } from "node:child_process"
-import { writeFileSync } from "node:fs"
+import { readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
+import { countTree, runTree } from "./agentLifecycle"
 
 export const DEFAULT_MODEL = "opencode-go/space-bunny-free"
 
@@ -12,6 +12,7 @@ export type AgentResult = {
   readonly duration_s: number
   readonly final: string
   readonly lastMessagePath: string
+  readonly straysAfter: number
 }
 
 export function resolveOpencodeBin(): string {
@@ -47,81 +48,52 @@ export function spawnAgent(opts: {
   taskId: string
   branch: string
   timeoutMs?: number
+  onSalvage?: () => void
 }): Promise<AgentResult> {
   const timeoutMs = opts.timeoutMs ?? 600_000
   const bin = resolveOpencodeBin()
   const model = resolveModel()
-  // --auto lets the agent edit its worktree and run tests without prompts.
-  // Scope is safe: worktree is disposable and every merge passes the gate.
-  const args = ["run", "--dir", opts.workdir, "-m", model, "--auto", opts.prompt]
-  const start = performance.now()
-  return new Promise<AgentResult>((resolve) => {
+  const outFile = join(opts.workdir, "agent-last-message.md")
+  const started = performance.now()
+  return runTree({
+    command: bin,
+    args: ["run", "--dir", opts.workdir, "-m", model, "--auto", opts.prompt],
+    cwd: opts.workdir,
+    timeoutMs,
+    onSalvage: () => {
+      let partial = "SALVAGED: agent timed out, worktree captured while the tree was still live\n"
+      try {
+        partial += readFileSync(outFile, "utf-8")
+      } catch (e) {
+        if (!(e instanceof Error)) throw e
+      }
+      try {
+        writeFileSync(outFile, partial, "utf-8")
+      } catch (e) {
+        if (!(e instanceof Error)) throw e
+      }
+      opts.onSalvage?.()
+    },
+  }).then((outcome) => {
     let stdout = ""
-    let done = false
-    const finish = (exitCode: number, timedOut: boolean): void => {
-      if (done) return
-      done = true
-      const outFile = join(opts.workdir, "agent-last-message.md")
-      try {
-        writeFileSync(outFile, stdout, "utf-8")
-      } catch (e) {
-        if (e instanceof Error) {
-          // record is best effort
-        } else {
-          throw e
-        }
-      }
-      resolve({
-        task_id: opts.taskId,
-        branch: opts.branch,
-        exitCode,
-        timedOut,
-        duration_s: Math.round(((performance.now() - start) / 1000) * 100) / 100,
-        final: parseFinal(stdout),
-        lastMessagePath: outFile,
-      })
-    }
-    let child: ReturnType<typeof spawn>
     try {
-      child = spawn(bin, args, {
-        cwd: opts.workdir,
-        env: { ...process.env },
-        shell: true,
-        timeout: timeoutMs,
-        stdio: ["ignore", "pipe", "pipe"],
-      })
+      stdout = readFileSync(outFile, "utf-8")
     } catch (e) {
-      if (e instanceof Error) {
-        return finish(1, false)
-      }
-      throw e
+      if (!(e instanceof Error)) throw e
     }
-    child.stdout?.on("data", (d: unknown) => {
-      stdout += String(d)
-    })
-    child.stderr?.on("data", (_d: unknown) => {
-      // stderr carries TUI noise; stdout holds the answer
-    })
-    const timer = setTimeout(() => {
-      try {
-        child.kill()
-      } catch (e) {
-        if (e instanceof Error) {
-          // already exited
-        } else {
-          throw e
-        }
-      }
-      finish(1, true)
-    }, timeoutMs + 15_000)
-    timer.unref?.()
-    child.on("error", () => {
-      clearTimeout(timer)
-      finish(1, false)
-    })
-    child.on("close", (code) => {
-      clearTimeout(timer)
-      finish(code ?? 1, false)
-    })
+    return {
+      task_id: opts.taskId,
+      branch: opts.branch,
+      exitCode: outcome.exitCode,
+      timedOut: outcome.timedOut,
+      duration_s: Math.round(((performance.now() - started) / 1000) * 100) / 100,
+      final: parseFinal(stdout),
+      lastMessagePath: outFile,
+      straysAfter: outcome.straysAfter,
+    }
   })
+}
+
+export function liveDescendants(pid: number): number {
+  return countTree(pid)
 }

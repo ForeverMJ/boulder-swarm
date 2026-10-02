@@ -1,0 +1,3 @@
+{"type":"live_agent","agent":"opencode","task_id":"S4","branch":"agent/goal-w0-S4","committed":true,"exitCode":0,"timedOut":false,"final":"{\"task_id\":\"S4\",\"verdict\":\"PASS\",\"passed\":17,\"total\":17}","harness":{"testFile":"src/orchestrator/roundLoop.test.ts","passed":0,"total":0,"passRate":0,"returncode":1,"parsed":false,"outputTail":""}}
+{"type":"worker_result","worker_id":0,"task_id":"S4","branch":"agent/goal-w0-S4","passed":0,"total":0,"pass_rate":0,"duration_s":307.52,"loc":0,"mode":"opencode","ts":"2026-10-02T02:47:14.290Z"}
+{"type":"worker_result","worker_id":0,"task_id":"S4","branch":"agent/goal-w0-S4","passed":0,"total":0,"pass_rate":0,"duration_s":307.52,"loc":0,"mode":"opencode","ts":"2026-10-02T02:47:14.291Z"}

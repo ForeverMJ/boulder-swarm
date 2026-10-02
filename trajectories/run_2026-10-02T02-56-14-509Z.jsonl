@@ -1,0 +1,3 @@
+{"type":"run_summary","ts":"2026-10-02T02:56:25.780Z","mode":"mock","tasks":["S1","S2"],"assignments":2}
+{"type":"worker_result","worker_id":0,"task_id":"S1","branch":"agent/goal-w0-S1","passed":12,"total":12,"pass_rate":1,"duration_s":11.26,"loc":180,"mode":"mock","ts":"2026-10-02T02:56:14.509Z"}
+{"type":"worker_result","worker_id":1,"task_id":"S2","branch":"agent/goal-w1-S2","passed":6,"total":6,"pass_rate":1,"duration_s":11.27,"loc":217,"mode":"mock","ts":"2026-10-02T02:56:14.509Z"}

@@ -98,15 +98,26 @@ type AgentDeps = {
     prompt: string
     taskId: string
     branch: string
+    onSalvage?: () => void
   }) => Promise<{
     readonly exitCode: number
     readonly timedOut: boolean
     readonly duration_s: number
     readonly final: string
+    readonly straysAfter: number
   }>
 }
 
-async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): Promise<WorkerResult[]> {
+function worktreePaths(wt: string): string[] {
+  const out = spawnSync("git", ["status", "--porcelain"], { cwd: wt, encoding: "utf-8", timeout: 60_000 })
+  return `${out.stdout ?? ""}`
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l !== "")
+    .map((l) => l.slice(3).trim())
+}
+
+async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps, runId: string): Promise<WorkerResult[]> {
   initRepo(REPO)
   const worktreesRoot = `${REPO}-worktrees`
   const ready: { wt: string; a: (typeof assigns)[number] }[] = []
@@ -117,30 +128,40 @@ async function runLive(assigns: ReturnType<typeof dispatch>, deps: AgentDeps): P
   const settled = await Promise.all(
     ready.map(async ({ wt, a }) => {
       const prompt = await taskPrompt(a, deps.buildPrompt(a.task.id, a.task.problem, a.task.tests))
+      let salvaged = false
       const agent = await deps.spawnAgent({
         workdir: wt,
         prompt,
         taskId: a.task.id,
         branch: a.branch,
+        onSalvage: () => {
+          salvaged = true
+        },
       })
+      const produced = worktreePaths(wt)
       const v = scoreAssignment(wt, a.task.tests, a.task.success)
       if (v.parsed === false) {
         console.log(`HARNESS could not parse a test result for ${a.task.id} (rc=${v.returncode}); tail:`)
         console.log(v.outputTail)
       }
       const committed = commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`)
-      await appendEvent(REPO, "run_latest", {
+      await appendEvent(REPO, runId, {
         type: "live_agent",
+        ts: new Date().toISOString(),
         agent: deps.kind,
         task_id: a.task.id,
         branch: a.branch,
         committed,
+        produced,
+        emptyCommit: committed && produced.length === 0,
+        salvaged,
+        straysAfter: agent.straysAfter,
         exitCode: agent.exitCode,
         timedOut: agent.timedOut,
         final: agent.final,
         harness: v,
       })
-      await appendEvent(REPO, "run_latest", {
+      await appendEvent(REPO, runId, {
         type: "worker_result",
         worker_id: a.workerId,
         task_id: a.task.id,
@@ -215,8 +236,10 @@ async function main(): Promise<void> {
       console.log(`pending=[${plan0.pending.join(",")}] solved=[${plan0.solved.join(",")}]`)
       return
     }
-    const runFile = join(REPO, "trajectories", "run_latest.jsonl")
-    await writeFile(runFile, "", "utf-8")
+    // One trajectory file per run, never truncated. Overwriting run_latest on
+    // every dispatch is what made a month's run indistinguishable from its last
+    // minute, and it is why the round-41 L1 event was all that survived.
+    const runId = `run_${new Date().toISOString().replace(/[:.]/g, "-")}`
     const results: WorkerResult[] =
       mode === "mock"
         ? await runMock(assigns)
@@ -225,10 +248,12 @@ async function main(): Promise<void> {
             mode === "opencode"
               ? { kind: "opencode", buildPrompt: buildOpencodePrompt, spawnAgent: spawnOpencodeAgent }
               : { kind: "codex", buildPrompt: buildCodexPrompt, spawnAgent: spawnCodexAgent },
+            runId,
           )
+    await appendEvent(REPO, runId, { type: "run_summary", ts: new Date().toISOString(), mode, tasks: selected.map((t) => t.id), assignments: assigns.length })
     for (const r of results) {
       console.log(`[${r.task_id}] w${r.worker_id} ${r.passed}/${r.total} rate=${r.pass_rate.toFixed(2)}`)
-      await appendEvent(REPO, "run_latest", { type: "worker_result", ...r })
+      await appendEvent(REPO, runId, { type: "worker_result", ...r })
     }
     await saveResults(REPO, results)
     await distillFromResults(REPO, results)

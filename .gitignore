@@ -3,7 +3,7 @@ dist/
 *.tsbuildinfo
 .branches/
 metrics/
-trajectories/
+# Trajectories are the only durable record of what an unattended run did.
 agent-last-message.md
 *-worktrees/
 codex-*.log

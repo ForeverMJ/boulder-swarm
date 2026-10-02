@@ -11,6 +11,7 @@ export type AgentResult = {
   readonly duration_s: number
   readonly final: string
   readonly lastMessagePath: string
+  readonly straysAfter: number
 }
 
 export function resolveCodexBin(): string {
@@ -78,6 +79,7 @@ export function spawnAgent(opts: {
   taskId: string
   branch: string
   timeoutMs?: number
+  onSalvage?: () => void
 }): Promise<AgentResult> {
   const timeoutMs = opts.timeoutMs ?? 600_000
   const bin = resolveCodexBin()
@@ -112,6 +114,7 @@ export function spawnAgent(opts: {
         duration_s: Math.round(((performance.now() - start) / 1000) * 100) / 100,
         final: parseFinal(`${stdout}\n${readLastMessage(outFile)}`),
         lastMessagePath: outFile,
+        straysAfter: 0,
       })
     }
     let child: ReturnType<typeof spawn>
@@ -140,6 +143,7 @@ export function spawnAgent(opts: {
           throw e
         }
       }
+      opts.onSalvage?.()
       finish(1, true)
     }, timeoutMs + 15_000)
     timer.unref?.()

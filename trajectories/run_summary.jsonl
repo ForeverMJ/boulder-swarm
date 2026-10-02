@@ -1,0 +1,7 @@
+{"type":"worker_result","worker_id":0,"task_id":"T02","branch":"agent/goal-w0-T02","passed":5,"total":5,"pass_rate":1,"duration_s":0.14,"loc":0}
+{"type":"worker_result","worker_id":0,"task_id":"T01","branch":"agent/goal-w0-T01","passed":5,"total":5,"pass_rate":1,"duration_s":0.68,"loc":12}
+{"type":"worker_result","worker_id":1,"task_id":"T02","branch":"agent/goal-w1-T02","passed":5,"total":5,"pass_rate":1,"duration_s":0.68,"loc":3}
+{"type":"worker_result","worker_id":2,"task_id":"T03","branch":"agent/goal-w2-T03","passed":5,"total":5,"pass_rate":1,"duration_s":0.68,"loc":14}
+{"type":"worker_result","worker_id":3,"task_id":"T04","branch":"agent/goal-w3-T04","passed":5,"total":5,"pass_rate":1,"duration_s":0.68,"loc":19}
+{"type":"worker_result","worker_id":4,"task_id":"T05","branch":"agent/goal-w4-T05","passed":5,"total":5,"pass_rate":1,"duration_s":0.68,"loc":13}
+{"type":"worker_result","worker_id":5,"task_id":"T06","branch":"agent/goal-w5-T06","passed":5,"total":5,"pass_rate":1,"duration_s":0.68,"loc":15}
