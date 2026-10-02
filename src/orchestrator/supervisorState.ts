@@ -26,8 +26,7 @@
  * Exact interface:
  */
 
-import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
-import { dirname, join } from "node:path"
+import { readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
 
 export type RoundStatus = "running" | "landed" | "failed" | "abandoned"
 
@@ -55,42 +54,43 @@ export type SupervisorState = {
 
 export type Exhaustion = { readonly exhausted: boolean; readonly reason: string }
 
-export function freshState(budget: Budget): SupervisorState {
-  return {
-    version: 1,
-    round: 0,
-    budget: {
-      maxRounds: budget.maxRounds,
-      maxWallClockMs: budget.maxWallClockMs,
-      agentMsSpent: budget.agentMsSpent,
-    },
-    history: [],
-  }
-}
+const ROUND_STATUSES: readonly string[] = ["running", "landed", "failed", "abandoned"]
 
-function isNumber(value: unknown): value is number {
+function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value)
 }
 
-function asStringArray(value: unknown): readonly string[] {
-  return Array.isArray(value) ? value.filter((t): t is string => typeof t === "string") : []
+function isIndex(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
 }
 
-function asRecord(value: unknown): RoundRecord | null {
-  if (typeof value !== "object" || value === null) return null
-  const raw = value as Record<string, unknown>
-  if (!isNumber(raw.round) || !isNumber(raw.startedAt)) return null
-  const status = raw.status
-  if (status !== "running" && status !== "landed" && status !== "failed" && status !== "abandoned")
-    return null
-  return {
-    round: raw.round,
-    startedAt: raw.startedAt,
-    finishedAt: isNumber(raw.finishedAt) ? raw.finishedAt : null,
-    status,
-    tasks: asStringArray(raw.tasks),
-    note: typeof raw.note === "string" ? raw.note : "",
-  }
+function asList(value: unknown): readonly unknown[] | null {
+  return Array.isArray(value) ? (value as readonly unknown[]) : null
+}
+
+function isRoundRecord(value: unknown): value is RoundRecord {
+  if (!isIndex(value)) return false
+  const { round, startedAt, finishedAt, status, tasks, note } = value
+  const list = asList(tasks)
+  if (!Number.isInteger(round) || !isFiniteNumber(round) || round < 0) return false
+  if (!isFiniteNumber(startedAt)) return false
+  if (finishedAt !== null && !isFiniteNumber(finishedAt)) return false
+  if (typeof status !== "string" || !ROUND_STATUSES.includes(status)) return false
+  if (list === null || !list.every((t) => typeof t === "string")) return false
+  return typeof note === "string"
+}
+
+function readBudget(value: unknown, fallback: Budget): Budget {
+  if (!isIndex(value)) return { ...fallback }
+  const { maxRounds, maxWallClockMs, agentMsSpent } = value
+  if (!isFiniteNumber(maxRounds)) return { ...fallback }
+  if (!isFiniteNumber(maxWallClockMs)) return { ...fallback }
+  if (!isFiniteNumber(agentMsSpent)) return { ...fallback }
+  return { maxRounds, maxWallClockMs, agentMsSpent }
+}
+
+export function freshState(budget: Budget): SupervisorState {
+  return { version: 1, round: 0, budget: { ...budget }, history: [] }
 }
 
 export function loadState(path: string, budget: Budget): SupervisorState {
@@ -100,7 +100,6 @@ export function loadState(path: string, budget: Budget): SupervisorState {
   } catch {
     return freshState(budget)
   }
-  if (text.trim() === "") return freshState(budget)
 
   let parsed: unknown
   try {
@@ -108,41 +107,30 @@ export function loadState(path: string, budget: Budget): SupervisorState {
   } catch {
     return freshState(budget)
   }
-  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed))
-    return freshState(budget)
 
-  const raw = parsed as Record<string, unknown>
-  if (raw.version !== 1 || !isNumber(raw.round)) return freshState(budget)
+  if (!isIndex(parsed)) return freshState(budget)
+  const { version, round, history, budget: stored } = parsed
+  if (version !== 1) return freshState(budget)
+  if (!Number.isInteger(round) || !isFiniteNumber(round) || round < 0) return freshState(budget)
 
-  const rawBudget =
-    typeof raw.budget === "object" && raw.budget !== null && !Array.isArray(raw.budget)
-      ? (raw.budget as Record<string, unknown>)
-      : null
-  const loadedBudget: Budget = {
-    maxRounds: rawBudget && isNumber(rawBudget.maxRounds) ? rawBudget.maxRounds : budget.maxRounds,
-    maxWallClockMs:
-      rawBudget && isNumber(rawBudget.maxWallClockMs) ? rawBudget.maxWallClockMs : budget.maxWallClockMs,
-    agentMsSpent: rawBudget && isNumber(rawBudget.agentMsSpent) ? rawBudget.agentMsSpent : 0,
+  const list = asList(history)
+  if (list === null) return freshState(budget)
+  const records: RoundRecord[] = []
+  for (const entry of list) {
+    if (!isRoundRecord(entry)) return freshState(budget)
+    records.push(entry)
   }
 
-  const history = Array.isArray(raw.history)
-    ? raw.history.map(asRecord).filter((r): r is RoundRecord => r !== null)
-    : []
-
-  return { version: 1, round: raw.round, budget: loadedBudget, history }
+  return { version: 1, round, budget: readBudget(stored, budget), history: records }
 }
 
 export function saveState(path: string, state: SupervisorState): void {
-  const tmp = join(dirname(path), `.tmp-s1-${process.pid}-${Date.now()}.json`)
+  const scratch = `${path}.${process.pid}.partial`
   try {
-    writeFileSync(tmp, `${JSON.stringify(state, null, 2)}\n`, "utf-8")
-    renameSync(tmp, path)
+    writeFileSync(scratch, `${JSON.stringify(state, null, 2)}\n`, "utf-8")
+    renameSync(scratch, path)
   } catch (err) {
-    try {
-      if (existsSync(tmp)) rmSync(tmp, { force: true })
-    } catch {
-      /* temp cleanup is best effort */
-    }
+    rmSync(scratch, { force: true })
     throw err
   }
 }
@@ -171,33 +159,46 @@ export function finishRound(
   note: string,
   now: number,
 ): SupervisorState {
-  let done = false
-  const history = state.history.map((r) => {
-    if (done || r.round !== round) return r
-    done = true
-    return { ...r, status, note, finishedAt: now }
+  let matched = false
+  const history = state.history.map((record) => {
+    if (record.round !== round) return record
+    matched = true
+    const finished: RoundRecord = { ...record, status, note, finishedAt: now }
+    return finished
   })
+  if (!matched) return state
   return { ...state, history }
 }
 
 export function staleRounds(state: SupervisorState): readonly RoundRecord[] {
-  return state.history.filter((r) => r.status === "running")
+  return state.history.filter((record) => record.status === "running")
 }
 
-export function budgetExhausted(state: SupervisorState, now: number, startedAt: number): Exhaustion {
-  if (state.round >= state.budget.maxRounds) {
+export function budgetExhausted(
+  state: SupervisorState,
+  now: number,
+  startedAt: number,
+): Exhaustion {
+  const { maxRounds, maxWallClockMs } = state.budget
+  if (state.round >= maxRounds) {
     return {
       exhausted: true,
-      reason: `round budget reached: ${state.round}/${state.budget.maxRounds}`,
+      reason: `round budget exhausted: ${state.round}/${maxRounds} rounds used`,
     }
   }
-  const wall = now - startedAt
-  if (wall >= state.budget.maxWallClockMs) {
-    return { exhausted: true, reason: `wall clock budget reached: ${wall}/${state.budget.maxWallClockMs} ms` }
+  const elapsedMs = now - startedAt
+  if (elapsedMs >= maxWallClockMs) {
+    return {
+      exhausted: true,
+      reason: `wall-clock budget exhausted: ${elapsedMs}ms of ${maxWallClockMs}ms`,
+    }
   }
   return { exhausted: false, reason: "" }
 }
 
 export function chargeAgentMs(state: SupervisorState, deltaMs: number): SupervisorState {
-  return { ...state, budget: { ...state.budget, agentMsSpent: state.budget.agentMsSpent + deltaMs } }
+  return {
+    ...state,
+    budget: { ...state.budget, agentMsSpent: state.budget.agentMsSpent + deltaMs },
+  }
 }
