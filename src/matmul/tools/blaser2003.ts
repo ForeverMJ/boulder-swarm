@@ -170,11 +170,13 @@ export function rankOfMat(rows: readonly (readonly number[])[], mod: 2 | 0 = 0):
  * and W1 <= W be subspaces such that beta separates (U1, V1, W1). Then
  * r >= dim U1 + dim V1 + #{rho | w_rho in W1}."
  *
- * IMPORTANT: the hypothesis "beta separates (U1, V1, W1)" is taken as given
- * from the paper. The verbatim definition of "separates" was not obtainable
- * (the article is paywalled), so this function does NOT attempt to decide
- * whether separation holds. It only evaluates the conclusion given the
- * hypothesis, which is the part that can be checked numerically.
+ * IMPORTANT: this function takes the hypothesis as given and only evaluates the
+ * conclusion, which is the part that is pure arithmetic. It cannot decide the
+ * hypothesis itself. That decision is `betaSeparates` in ./separation.ts, which
+ * implements Definition 2 verbatim (Blaser 2003 p.46); the article was obtained in
+ * round 42, so the predicate is now computable rather than guessed, and
+ * `lemma3WithSeparation` there evaluates the conclusion only once separation has
+ * actually been established. Use that in preference to asserting `separates`.
  */
 export function lemma3LowerBound(params: {
   separates: true

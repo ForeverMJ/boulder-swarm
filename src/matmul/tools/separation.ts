@@ -143,3 +143,27 @@ export function betaSeparates(input: SeparationInput): boolean {
   }
   return disjointBasesExist(a, b, k1, k2, mod, 2_000_000)
 }
+
+/**
+ * Lemma 3 with its hypothesis decided rather than asserted. Lemma 3 says
+ *
+ *   r >= dim U_1 + dim V_1 + #{rho | w_rho in W_1}
+ *
+ * whenever beta separates (U_1, V_1, W_1). The bound is only reported once
+ * separation has actually been established; when it has not, this throws rather
+ * than returning a number, because a bound resting on a hypothesis that does not
+ * hold is worse than no bound at all.
+ */
+export function lemma3WithSeparation(input: SeparationInput): {
+  separates: true
+  bound: number
+  satisfied: boolean
+} {
+  const mod = input.mod ?? 0
+  if (!betaSeparates(input)) {
+    throw new RangeError("Lemma 3 needs beta to separate (U1, V1, W1), and it does not")
+  }
+  const wInW1 = input.beta.terms.filter((t) => inSpan(t.w, input.w1, mod)).length
+  const bound = input.u1.length + input.v1.length + wInW1
+  return { separates: true, bound, satisfied: input.beta.terms.length >= bound }
+}

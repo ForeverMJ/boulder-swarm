@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { betaSeparates } from "./separation"
+import { betaSeparates, lemma3WithSeparation } from "./separation"
 import { fromScheme } from "./bilinear"
 import type { BilinearComputation, Term } from "./bilinear"
 import type { Mat } from "./blaser2003"
@@ -116,5 +116,107 @@ describe("beta separates, Blaser 2003 Definition 2", () => {
     const beta = fromScheme(naive(3))
     expect(betaSeparates({ beta, u1: [], v1: fullBasis(3, 3), w1: [zero(3, 3)] })).toBe(true)
     expect(betaSeparates({ beta, u1: fullBasis(3, 3), v1: [], w1: [zero(3, 3)] })).toBe(true)
+  })
+})
+
+describe("Lemma 3 with its hypothesis decided, not asserted", () => {
+  it("reports 18 for naive(3) against its 27 terms", () => {
+    const beta = fromScheme(naive(3))
+    const res = lemma3WithSeparation({ beta, u1: fullBasis(3, 3), v1: fullBasis(3, 3), w1: [zero(3, 3)] })
+    expect(res.separates).toBe(true)
+    expect(res.bound).toBe(18)
+    expect(res.satisfied).toBe(true)
+  })
+
+  it("reports 18 for the rank-23 scheme, which is far above it", () => {
+    const beta = fromScheme(t11)
+    const res = lemma3WithSeparation({ beta, u1: fullBasis(3, 3), v1: fullBasis(3, 3), w1: [zero(3, 3)] })
+    expect(res.bound).toBe(18)
+    expect(res.satisfied).toBe(true)
+  })
+
+  it("counts w in W_1 toward the bound", () => {
+    // n = 2 so the w-space has dimension 2. That matters: over a field, [1], [2]
+    // and [4] are all multiples of one another, so in a 1-dimensional w-space
+    // every nonzero w lies in the span of any single one of them and W_1 cannot
+    // select a strict subset. Here W_1 spans only (1,0), so exactly one term has
+    // its w inside it, the bound is dim U_1 + dim V_1 + 1 = 4, and the three
+    // surviving indices are exactly what the two sides need.
+    const terms: Term[] = [
+      { f: [1], g: [1, 0], w: [[1, 0]] },
+      { f: [1], g: [1, 0], w: [[0, 1]] },
+      { f: [2], g: [0, 1], w: [[1, 1]] },
+      { f: [3], g: [1, 1], w: [[2, 1]] },
+    ]
+    const beta: BilinearComputation = { l: 1, m: 1, n: 2, terms }
+    const res = lemma3WithSeparation({ beta, u1: fullBasis(1, 1), v1: fullBasis(1, 2), w1: [[[1, 0]]] })
+    expect(res.bound).toBe(4)
+    expect(res.satisfied).toBe(true)
+  })
+
+  it("selects no usable index when every w is a multiple of the W_1 generator", () => {
+    // The 1-dimensional case that the previous test deliberately avoids. All
+    // three w-vectors lie in span{(1)}, so the index set is empty, separation is
+    // impossible, and no bound may be reported.
+    const terms: Term[] = [
+      { f: [1], g: [1], w: [[1]] },
+      { f: [1], g: [2], w: [[2]] },
+      { f: [2], g: [1], w: [[4]] },
+    ]
+    const beta: BilinearComputation = { l: 1, m: 1, n: 1, terms }
+    expect(() => lemma3WithSeparation({ beta, u1: fullBasis(1, 1), v1: fullBasis(1, 1), w1: [[[1]]] })).toThrow()
+  })
+
+  it("reports no bound when W_1 removes too many indices to separate", () => {
+    // A genuine negative, and the reason it is genuine is worth recording.
+    // naive(3) has w = e_{3a+c}, so W_1 = span{e_0, e_1, e_2} does not contain
+    // three w-vectors: it contains all nine terms with a = 0, since each of
+    // e_0, e_1, e_2 is hit by three choices of b. The surviving eighteen terms
+    // then carry only six distinct u-vectors, e_3 through e_8, so no nine-element
+    // u-independent set exists and separation is impossible. The count is a
+    // function of the span, not of how many generators were listed.
+    const beta = fromScheme(naive(3))
+    const w1 = [beta.terms[0]?.w ?? zero(3, 3), beta.terms[1]?.w ?? zero(3, 3), beta.terms[2]?.w ?? zero(3, 3)]
+    expect(() => lemma3WithSeparation({ beta, u1: fullBasis(3, 3), v1: fullBasis(3, 3), w1 })).toThrow()
+  })
+
+  it("refuses to report a bound when separation fails", () => {
+    // Strassen at n=2 has 7 terms but needs 4 + 4 disjoint indices.
+    const beta = fromScheme(s22)
+    expect(() => lemma3WithSeparation({ beta, u1: fullBasis(2, 2), v1: fullBasis(2, 2), w1: [zero(2, 2)] })).toThrow()
+  })
+
+  it("throws instead of returning a number when U_1* cannot be spanned", () => {
+    const terms: Term[] = [
+      { f: [1, -1], g: [1], w: [[1]] },
+      { f: [2, -2], g: [1], w: [[1]] },
+    ]
+    const beta: BilinearComputation = { l: 1, m: 2, n: 1, terms }
+    expect(() => lemma3WithSeparation({ beta, u1: [[[1, 1]]], v1: fullBasis(1, 1), w1: [zero(1, 1)] })).toThrow()
+  })
+
+  it("reports bound 2 and satisfied for a separating two-term computation", () => {
+    // One term would fall short of the bound 2, but the index set has two
+    // elements and two are needed, so separation does hold here: I = {0},
+    // J = {1}, both single indices and disjoint. The bound is therefore exactly
+    // met, which is the boundary case worth pinning.
+    const terms: Term[] = [
+      { f: [1], g: [1], w: [[1]] },
+      { f: [1], g: [2], w: [[3]] },
+    ]
+    const beta: BilinearComputation = { l: 1, m: 1, n: 1, terms }
+    const res = lemma3WithSeparation({ beta, u1: fullBasis(1, 1), v1: fullBasis(1, 1), w1: [zero(1, 1)] })
+    expect(res.bound).toBe(2)
+    expect(res.satisfied).toBe(true)
+  })
+
+  it("is not satisfied when r is exactly one short of the bound", () => {
+    // A single term cannot separate: the index set holds one element and the two
+    // subspaces each need one, and they must be disjoint. So instead of
+    // reporting an unmet bound this must throw, which is the guarantee that an
+    // unestablished hypothesis never yields a number.
+    const terms: Term[] = [{ f: [1], g: [1], w: [[1]] }]
+    const beta: BilinearComputation = { l: 1, m: 1, n: 1, terms }
+    expect(() => lemma3WithSeparation({ beta, u1: fullBasis(1, 1), v1: fullBasis(1, 1), w1: [zero(1, 1)] })).toThrow()
   })
 })
