@@ -222,9 +222,121 @@ export function searchThree(base: readonly Triple[]): Report {
     scope:
       `three coordinate edits, each combination applied to the scheme and checked ` +
       `against the verifier, with no delta decomposition; the ${n} candidates are the ` +
-      `edits that change at least one of the ${targets.length} wrong entries. Edits ` +
-      `that touch no wrong entry are excluded, so this does not cover a repair whose ` +
-      `only purpose is to cancel collateral from an edit that is itself excluded, and ` +
-      `it does not cover four or more edits.`,
+`edits that change at least one of the ${targets.length} wrong entries. Edits `
+      + `that touch no wrong entry are excluded, so this does not cover a repair whose `
+      + `only purpose is to cancel collateral from an edit that is itself excluded, and `
+      + `it does not cover four or more edits.`,
+  }
+}
+
+// searchDirect settles one triple at a time and finds nothing, which means any repair
+// of a single-defect scheme has to be shared between triples. This covers that: each
+// triple's contribution to the target entry is just u[a]*v[b]*w[c], contributions from
+// different triples add with no cross term because the triples are independent, so the
+// combinations worth trying can be found by grouping on contribution value instead of
+// enumerating pairs blind.
+//
+// Only the three coordinates feeding the target entry are edited. Collateral is left
+// to the verifier, which is what decides whether a combination is real.
+export function searchFeed(base: readonly Triple[]): Report {
+  const sites = mismatchSites(base)
+  if (sites.length !== 1) {
+    return {
+      repair: null,
+      candidateEdits: 0,
+      combosTried: 0,
+      targetEntries: sites.length,
+      scope: `needs exactly one wrong entry, found ${sites.length}`,
+    }
+  }
+  const site = sites[0] as { a: number; b: number; c: number; got: number; want: number }
+  const needed = site.want - site.got
+
+  type Assignment = { readonly triple: number; readonly edits: readonly Edit[]; readonly contribution: number }
+  const groups = new Map<number, Assignment[]>()
+  const zeros = [0, ...VALS]
+
+  for (let t = 0; t < base.length; t += 1) {
+    const triple = base[t] as Triple
+    const cu = triple.u[site.a] as number
+    const cv = triple.v[site.b] as number
+    const cw = triple.w[site.c] as number
+    for (const nu of zeros) {
+      for (const nv of zeros) {
+        for (const nw of zeros) {
+          const edits: Edit[] = []
+          if (nu !== cu) edits.push({ triple: t, which: "u", pos: site.a, value: nu })
+          if (nv !== cv) edits.push({ triple: t, which: "v", pos: site.b, value: nv })
+          if (nw !== cw) edits.push({ triple: t, which: "w", pos: site.c, value: nw })
+          // The delta, not the new absolute contribution. These differ whenever a
+          // triple already sits on the target entry, and grouping on the absolute
+          // value silently drops those triples: the positive control needs a shift of
+          // +9 on a triple already contributing -8, while no single triple can reach
+          // an absolute 9 at all since 2*2*2 caps at 8.
+          const contribution = nu * nv * nw - cu * cv * cw
+          const list = groups.get(contribution)
+          const record: Assignment = { triple: t, edits, contribution }
+          if (list === undefined) groups.set(contribution, [record])
+          else list.push(record)
+        }
+      }
+    }
+  }
+
+  let combosTried = 0
+  const attempt = (picked: readonly Assignment[]): readonly Edit[] | null => {
+    combosTried += 1
+    const byTriple = new Map<number, Edit[]>()
+    for (const p of picked) {
+      const list = byTriple.get(p.triple)
+      if (list === undefined) byTriple.set(p.triple, [...p.edits])
+      else list.push(...p.edits)
+    }
+    const patched = base.map((tr, i) => {
+      const group = byTriple.get(i)
+      return group === undefined ? tr : withEdits(tr, group)
+    })
+    return mismatches(patched) === 0 ? picked.flatMap((p) => [...p.edits]) : null
+  }
+
+  for (const one of groups.get(needed) ?? []) {
+    const found = attempt([one])
+    if (found !== null) return report(found, combosTried, sites.length, needed)
+  }
+
+  for (const [value, list] of groups) {
+    const partners = groups.get(needed - value)
+    if (partners === undefined) continue
+    for (const left of list) {
+      for (const right of partners) {
+        if (left.triple === right.triple) continue
+        const found = attempt([left, right])
+        if (found !== null) return report(found, combosTried, sites.length, needed)
+      }
+    }
+  }
+
+  return report(null, combosTried, sites.length, needed)
+}
+
+function report(
+  repair: readonly Edit[] | null,
+  combosTried: number,
+  targetEntries: number,
+  needed: number,
+): Report {
+  const shape =
+    `one or two triples jointly supplying ${needed} at the wrong entry through ` +
+    `u[a]*v[b]*w[c] only, every combination checked against the verifier`
+  return {
+    repair,
+    candidateEdits: combosTried,
+    combosTried,
+    targetEntries,
+    scope:
+      `${repair === null ? "no repair found. " : "repair found, which proves it verifies. "}` +
+      `Scope: ${shape}. Edits to coordinates that do not feed the target entry are ` +
+      `excluded, so a repair that also needs them to cancel collateral is not covered, ` +
+      `as is any split across three or more triples.`,
   }
 }

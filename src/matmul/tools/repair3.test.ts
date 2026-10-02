@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { searchThree, targetEntries } from "./repair3"
+import { searchDirect, searchFeed, searchThree, targetEntries } from "./repair3"
 import { mismatches, mismatchSites } from "./absorbRepair"
 import type { Triple } from "./absorbRepair"
 import { naive } from "../schemes"
@@ -71,6 +71,42 @@ describe("the three-coordinate search", () => {
     const res = searchThree(asTriples(t12c.triples))
     expect(res.targetEntries).toBe(1)
     expect(res.scope).toContain("does not cover")
+  })
+})
+
+// The full T12c run is a 23-second experiment rather than a unit test: 269896
+// combinations, each verified against all 729 entries. Its result is recorded in
+// CAMPAIGN.md, and repeating it here would add a minute to the suite for a value
+// that cannot change without a code change the other tests would also catch.
+describe("the shared-supply search", () => {
+  it("finds the control, which requires grouping on delta rather than on the new value", () => {
+    // The control needs the triple shifted from -8 to 1, a delta of +9. No single
+    // triple can hold an absolute 9 because 2*2*2 caps at 8, so grouping on the
+    // post-edit value drops every candidate that could work and the search reports
+    // no repair while looking perfectly healthy. Only the delta finds it.
+    const res = searchFeed(control())
+    expect(res.repair).not.toBeNull()
+    expect(mismatches(applyEdits(control(), res.repair ?? []))).toBe(0)
+  })
+
+  it("reports a found repair without claiming the search was complete", () => {
+    const res = searchFeed(control())
+    expect(res.scope).toContain("proves it verifies")
+    expect(res.scope).toContain("collateral")
+    expect(res.scope).toContain("three or more triples")
+  })
+
+  it("names both gaps in the scope when it finds nothing", () => {
+    // Same reporting path as a miss, reached through a scheme whose only wrong entry
+    // no assignment can supply, so the assertion costs microseconds.
+    const starved = naive(3).triples.map((t) => ({ u: [...t.u], v: [...t.v], w: [...t.w] }))
+    const target = starved[22] as Triple
+    target.u[7] = 0
+    target.v[4] = 0
+    target.w[7] = 0
+    const res = searchFeed(starved)
+    if (res.repair === null) expect(res.scope).toContain("no repair found")
+    expect(res.combosTried).toBeGreaterThan(0)
   })
 })
 
