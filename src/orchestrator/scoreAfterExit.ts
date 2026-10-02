@@ -69,9 +69,27 @@ export type Recency = {
 }
 
 export async function settleThenScore(input: SettleInput): Promise<Settled> {
-  throw new Error("S3 not implemented")
+  try {
+    await input.waitForExit()
+  } catch {
+    return { waitedForExit: false, committed: false, produced: [], emptyCommit: false }
+  }
+  const produced = input.commitProduced()
+  return {
+    waitedForExit: true,
+    committed: true,
+    produced,
+    emptyCommit: produced.length === 0,
+  }
 }
 
 export function latestVerdict(taskId: string, history: readonly Verdict[], since: number): Recency {
-  throw new Error("S3 not implemented")
+  const candidates = history.filter((v) => v.taskId === taskId)
+  let latest: Verdict | null = null
+  for (const v of candidates) {
+    if (v.at >= since && (latest === null || v.at >= latest.at)) {
+      latest = v
+    }
+  }
+  return { latest, superseded: candidates.filter((v) => v !== latest) }
 }
