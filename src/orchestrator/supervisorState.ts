@@ -26,6 +26,8 @@
  * Exact interface:
  */
 
+import { readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
+
 export type RoundStatus = "running" | "landed" | "failed" | "abandoned"
 
 export type RoundRecord = {
@@ -52,16 +54,85 @@ export type SupervisorState = {
 
 export type Exhaustion = { readonly exhausted: boolean; readonly reason: string }
 
+const ROUND_STATUSES: readonly string[] = ["running", "landed", "failed", "abandoned"]
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value)
+}
+
+function isIndex(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function asList(value: unknown): readonly unknown[] | null {
+  return Array.isArray(value) ? (value as readonly unknown[]) : null
+}
+
+function isRoundRecord(value: unknown): value is RoundRecord {
+  if (!isIndex(value)) return false
+  const { round, startedAt, finishedAt, status, tasks, note } = value
+  const list = asList(tasks)
+  if (!Number.isInteger(round) || !isFiniteNumber(round) || round < 0) return false
+  if (!isFiniteNumber(startedAt)) return false
+  if (finishedAt !== null && !isFiniteNumber(finishedAt)) return false
+  if (typeof status !== "string" || !ROUND_STATUSES.includes(status)) return false
+  if (list === null || !list.every((t) => typeof t === "string")) return false
+  return typeof note === "string"
+}
+
+function readBudget(value: unknown, fallback: Budget): Budget {
+  if (!isIndex(value)) return { ...fallback }
+  const { maxRounds, maxWallClockMs, agentMsSpent } = value
+  if (!isFiniteNumber(maxRounds)) return { ...fallback }
+  if (!isFiniteNumber(maxWallClockMs)) return { ...fallback }
+  if (!isFiniteNumber(agentMsSpent)) return { ...fallback }
+  return { maxRounds, maxWallClockMs, agentMsSpent }
+}
+
 export function freshState(budget: Budget): SupervisorState {
-  throw new Error("S1 not implemented")
+  return { version: 1, round: 0, budget: { ...budget }, history: [] }
 }
 
 export function loadState(path: string, budget: Budget): SupervisorState {
-  throw new Error("S1 not implemented")
+  let text: string
+  try {
+    text = readFileSync(path, "utf-8")
+  } catch {
+    return freshState(budget)
+  }
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(text)
+  } catch {
+    return freshState(budget)
+  }
+
+  if (!isIndex(parsed)) return freshState(budget)
+  const { version, round, history, budget: stored } = parsed
+  if (version !== 1) return freshState(budget)
+  if (!Number.isInteger(round) || !isFiniteNumber(round) || round < 0) return freshState(budget)
+
+  const list = asList(history)
+  if (list === null) return freshState(budget)
+  const records: RoundRecord[] = []
+  for (const entry of list) {
+    if (!isRoundRecord(entry)) return freshState(budget)
+    records.push(entry)
+  }
+
+  return { version: 1, round, budget: readBudget(stored, budget), history: records }
 }
 
 export function saveState(path: string, state: SupervisorState): void {
-  throw new Error("S1 not implemented")
+  const scratch = `${path}.${process.pid}.partial`
+  try {
+    writeFileSync(scratch, `${JSON.stringify(state, null, 2)}\n`, "utf-8")
+    renameSync(scratch, path)
+  } catch (err) {
+    rmSync(scratch, { force: true })
+    throw err
+  }
 }
 
 export function beginRound(
@@ -69,7 +140,16 @@ export function beginRound(
   tasks: readonly string[],
   now: number,
 ): { readonly record: RoundRecord; readonly state: SupervisorState } {
-  throw new Error("S1 not implemented")
+  const round = state.round + 1
+  const record: RoundRecord = {
+    round,
+    startedAt: now,
+    finishedAt: null,
+    status: "running",
+    tasks: [...tasks],
+    note: "",
+  }
+  return { record, state: { ...state, round, history: [...state.history, record] } }
 }
 
 export function finishRound(
@@ -79,17 +159,46 @@ export function finishRound(
   note: string,
   now: number,
 ): SupervisorState {
-  throw new Error("S1 not implemented")
+  let matched = false
+  const history = state.history.map((record) => {
+    if (record.round !== round) return record
+    matched = true
+    const finished: RoundRecord = { ...record, status, note, finishedAt: now }
+    return finished
+  })
+  if (!matched) return state
+  return { ...state, history }
 }
 
 export function staleRounds(state: SupervisorState): readonly RoundRecord[] {
-  throw new Error("S1 not implemented")
+  return state.history.filter((record) => record.status === "running")
 }
 
-export function budgetExhausted(state: SupervisorState, now: number, startedAt: number): Exhaustion {
-  throw new Error("S1 not implemented")
+export function budgetExhausted(
+  state: SupervisorState,
+  now: number,
+  startedAt: number,
+): Exhaustion {
+  const { maxRounds, maxWallClockMs } = state.budget
+  if (state.round >= maxRounds) {
+    return {
+      exhausted: true,
+      reason: `round budget exhausted: ${state.round}/${maxRounds} rounds used`,
+    }
+  }
+  const elapsedMs = now - startedAt
+  if (elapsedMs >= maxWallClockMs) {
+    return {
+      exhausted: true,
+      reason: `wall-clock budget exhausted: ${elapsedMs}ms of ${maxWallClockMs}ms`,
+    }
+  }
+  return { exhausted: false, reason: "" }
 }
 
 export function chargeAgentMs(state: SupervisorState, deltaMs: number): SupervisorState {
-  throw new Error("S1 not implemented")
+  return {
+    ...state,
+    budget: { ...state.budget, agentMsSpent: state.budget.agentMsSpent + deltaMs },
+  }
 }
