@@ -15,6 +15,7 @@ import { commitWorktree, createWorktree, gitStashPop, gitStashPush, gitStatus, i
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { replan } from "./replan"
 import { runRounds, type Outcome, type RoundDeps } from "./roundLoop"
+import { waitForStable } from "./settle"
 import {
   beginRound,
   budgetExhausted as stateBudgetExhausted,
@@ -185,6 +186,10 @@ async function runLive(
           salvaged = true
         },
       })
+      const settled = await waitForStable(() => gitStatus(wt))
+      if (!settled.stable) {
+        console.log(`SETTLE ${a.task.id}: worktree still moving after ${settled.polls} polls; committing anyway`)
+      }
       const produced = worktreePaths(wt)
       const v = scoreAssignment(wt, a.task.tests, a.task.success)
       if (v.parsed === false) {
