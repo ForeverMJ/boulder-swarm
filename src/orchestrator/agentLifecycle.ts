@@ -32,6 +32,8 @@
  * Exact interface:
  */
 
+import { spawn, spawnSync } from "node:child_process"
+
 export type SalvageContext = { readonly pid: number }
 
 export type RunTreeOpts = {
@@ -51,14 +53,191 @@ export type TreeOutcome = {
   readonly straysAfter: number
 }
 
-export function countTree(pid: number): number {
-  throw new Error("S2 not implemented")
+const PS_TABLE =
+  "Get-CimInstance -Query 'SELECT ProcessId,ParentProcessId FROM Win32_Process' | ForEach-Object { Write-Output ($_.ProcessId.ToString() + ' ' + $_.ParentProcessId.ToString()) }"
+
+const SPAWN_TIMEOUT_MS = 20_000
+
+function readProcessTable(): Map<number, number> {
+  const table = new Map<number, number>()
+  let out = ""
+  try {
+    const res = spawnSync("powershell", ["-NoProfile", "-NonInteractive", "-Command", PS_TABLE], {
+      encoding: "utf-8",
+      windowsHide: true,
+      maxBuffer: 16 * 1024 * 1024,
+      timeout: SPAWN_TIMEOUT_MS,
+    })
+    out = typeof res.stdout === "string" ? res.stdout : ""
+  } catch {
+    return table
+  }
+  for (const raw of out.split("\n")) {
+    const line = raw.trim()
+    const sep = line.indexOf(" ")
+    if (sep < 1) continue
+    const child = Number(line.slice(0, sep))
+    const parent = Number(line.slice(sep + 1))
+    if (Number.isInteger(child) && Number.isInteger(parent)) table.set(child, parent)
+  }
+  return table
 }
 
-export function killTree(pid: number, graceMs?: number): Promise<number> {
-  throw new Error("S2 not implemented")
+function collectTree(pid: number): number[] {
+  const table = readProcessTable()
+  if (!table.has(pid)) return []
+  const children = new Map<number, number[]>()
+  for (const [child, parent] of table) {
+    const siblings = children.get(parent)
+    if (siblings === undefined) children.set(parent, [child])
+    else siblings.push(child)
+  }
+  const found: number[] = []
+  const seen = new Set<number>()
+  const stack: number[] = [pid]
+  while (stack.length > 0) {
+    const current = stack.pop() as number
+    if (seen.has(current)) continue
+    seen.add(current)
+    found.push(current)
+    const kids = children.get(current)
+    if (kids !== undefined) stack.push(...kids)
+  }
+  return found
+}
+
+export function countTree(pid: number): number {
+  if (!Number.isInteger(pid) || pid <= 0) return 0
+  return collectTree(pid).length
+}
+
+function isAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch {
+    return false
+  }
+}
+
+function survivors(pids: readonly number[]): number[] {
+  return pids.filter((p) => isAlive(p))
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function taskkill(pid: number, tree: boolean): void {
+  const args = tree ? ["/PID", String(pid), "/T", "/F"] : ["/PID", String(pid), "/F"]
+  try {
+    spawnSync("taskkill", args, { windowsHide: true, timeout: SPAWN_TIMEOUT_MS })
+  } catch {
+    return
+  }
+}
+
+type KillReport = { readonly signalled: number; readonly remaining: number }
+
+async function settle(victims: readonly number[], graceMs: number): Promise<number[]> {
+  const deadline = Date.now() + Math.max(graceMs, 0)
+  let left = survivors(victims)
+  while (left.length > 0 && Date.now() < deadline) {
+    await sleep(20)
+    left = survivors(victims)
+  }
+  return left
+}
+
+async function terminateTree(pid: number, graceMs: number): Promise<KillReport> {
+  if (!Number.isInteger(pid) || pid <= 0) return { signalled: 0, remaining: 0 }
+  const victims = collectTree(pid)
+  if (victims.length === 0) return { signalled: 0, remaining: 0 }
+  taskkill(pid, true)
+  let left = await settle(victims, graceMs)
+  if (left.length > 0) {
+    for (const victim of left) taskkill(victim, false)
+    left = await settle(victims, 750)
+  }
+  return { signalled: victims.length, remaining: left.length }
+}
+
+export function killTree(pid: number, graceMs = 1_000): Promise<number> {
+  return terminateTree(pid, graceMs).then((report) => report.signalled)
 }
 
 export function runTree(opts: RunTreeOpts): Promise<TreeOutcome> {
-  throw new Error("S2 not implemented")
+  const startedAt = Date.now()
+  return new Promise<TreeOutcome>((resolve) => {
+    let stdout = ""
+    let timedOut = false
+    let salvaged = false
+    let settled = false
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let markClosed: (() => void) | undefined
+
+    const child = spawn(opts.command, [...opts.args], {
+      cwd: opts.cwd,
+      env: { ...process.env, ...opts.env },
+      stdio: ["ignore", "pipe", "ignore"],
+      windowsHide: true,
+    })
+
+    const pid = child.pid ?? -1
+    const closed = new Promise<void>((resolveClosed) => {
+      markClosed = resolveClosed
+    })
+
+    child.stdout?.setEncoding("utf-8")
+    child.stdout?.on("data", (chunk: string) => {
+      stdout += chunk
+    })
+
+    const salvage = (): void => {
+      if (salvaged) return
+      salvaged = true
+      const hook = opts.onSalvage
+      if (hook === undefined) return
+      try {
+        hook({ pid })
+      } catch (error) {
+        stdout += `\n[onSalvage threw: ${String(error)}]`
+      }
+    }
+
+    const finish = (exitCode: number, straysAfter: number): void => {
+      if (settled) return
+      settled = true
+      if (timer !== undefined) clearTimeout(timer)
+      resolve({
+        exitCode,
+        timedOut,
+        durationMs: Date.now() - startedAt,
+        stdout,
+        straysAfter,
+      })
+    }
+
+    child.on("error", () => {
+      markClosed?.()
+      finish(-1, 0)
+    })
+
+    child.on("close", (code) => {
+      markClosed?.()
+      if (timedOut) return
+      finish(code ?? -1, 0)
+    })
+
+    timer = setTimeout(() => {
+      timedOut = true
+      salvage()
+      void Promise.all([
+        terminateTree(pid, 4_000),
+        Promise.race([closed, sleep(1_500)]),
+      ]).then(([report]) => {
+        finish(-1, report.remaining)
+      })
+    }, Math.max(opts.timeoutMs, 0))
+  })
 }
