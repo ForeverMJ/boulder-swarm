@@ -118,12 +118,26 @@ Two routes survive, both research-scale rather than engineering-scale.
    reason that replacement is free: `dim(a . k^{m x n}) = n * rk a` for every
    `a` of that rank, so the argument depends on `a` only through its rank.
 
-   **What is still missing is the assembly.** The published 19 is reproduced in
-   its arithmetic and its three inputs are now sound, but the step that chains
-   them into the contradiction — Lemma 5's hypotheses, the four `W_tau`
-   subspaces, and the counting that closes it — is not written. So the 19 here is
-   still not a proof, and nothing in this repository should be read as claiming
-   otherwise.
+   **The assembly is written and the chain runs end to end.** `tools/lemma5.ts`
+   re-derives Lemma 5's hypotheses from the subspaces rather than assuming them,
+   builds the canonical `W_tau = span{ e_i e_tau^T : 2 <= i <= l }`, and measures
+   how many output matrices fall in `W = W_1 + ... + W_t`. Run against the rank-23
+   scheme it gives `outputsInW = 4` and `bound = 19`, with every hypothesis
+   verified and separation decided rather than asserted; against the naive scheme
+   it gives 12 and 27, which is tight.
+
+   Two things about that are worth stating plainly. First, the count of 4 is a
+   property of a particular choice of `W`, not of the hypotheses: taking `W_1` at
+   full dimension captures 6 and yields only 21, and a sweep over the dimensions
+   of `W_1` and `W_2` gives 0, 2, 4, 0, 2, 4, 2, 4, 6. `W_1 = 0` is legal, since
+   `{0}` satisfies both `W_tau <= Z^tau` and `W_tau` meeting `L^tau` trivially.
+   Second, and more important: **this reproduces the published 19, which was
+   already known.** The 19 is not new. What changed is that it is now derived here
+   from verified inputs rather than quoted from the paper, so the machinery is
+   checked against a known answer. That is a consistency check on this repository,
+   not progress toward 22, and no claim of progress toward 22 should be read into
+   it. This route cannot by itself give 22: it derives `2mn + 2n - m - 2`, which
+   is 19 at `m = n = 3`.
 2. **A learned policy / tree search** in the AlphaTensor style. Requires
    training a value function and a policy over factor choices. Under a
    TypeScript-only constraint this means hand-written backprop, and the compute

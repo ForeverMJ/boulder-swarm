@@ -56,9 +56,16 @@ into `lit/zlarger2.md`, and then implemented in rounds 43 to 46:
 3. **Lemma 7 — obtained and implemented**, p. 51, together with the sandwiching
    normal form printed below it and equation (3). See `tools/sandwiching.ts`.
 
-What remains is the assembly: the step that chains these into Lemma 5's
-hypotheses and the closing count. Until that is written the published 19 is
-reproduced in its arithmetic but not in its proof.
+**Nothing is missing from the list, and the assembly is written.** `tools/lemma5.ts`
+re-derives Lemma 5's hypotheses from the subspaces, builds the canonical
+`W_tau = span{ e_i e_tau^T : 2 <= i <= l }`, and measures how many output matrices
+land in `W`. Against the rank-23 scheme it measures 4 and derives 19, with every
+hypothesis verified and separation decided rather than asserted.
+
+So the published 19 is now derived here rather than quoted. That is a
+consistency check on this repository, not progress: the 19 was already known, and
+this route derives `2mn + 2n - m - 2`, which is 19 at `m = n = 3` and cannot give
+22 by itself.
 
 ## Why my R41 verification of `Z^v` was itself wrong
 
