@@ -1,0 +1,14 @@
+[
+  {
+    "worker_id": 0,
+    "task_id": "R52",
+    "branch": "agent/goal-w0-R52",
+    "passed": 0,
+    "total": 6,
+    "pass_rate": 0,
+    "duration_s": 601.57,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-02T04:39:00.193Z"
+  }
+]

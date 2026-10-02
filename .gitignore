@@ -2,8 +2,10 @@ node_modules/
 dist/
 *.tsbuildinfo
 .branches/
-metrics/
-# Trajectories are the only durable record of what an unattended run did.
+# Trajectories and metrics are both durable records of what an unattended run did,
+# and replan.ts reads metrics/results.json. Ignoring metrics left the scoring state
+# that drives replanning with no version-control copy, so a cleaned workspace would
+# silently lose it.
 agent-last-message.md
 *-worktrees/
 codex-*.log
