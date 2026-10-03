@@ -1,0 +1,160 @@
+{
+  "round": "R61",
+  "route": "flattening screen: complete refutation of drop-k / add-j repairs (replaces R60's bounded VALS enumeration)",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "proposition": "If D = sum_{t=1..j} u_t (x) v_t (x) w_t then for each axis the flattening F_c whose column c is the c-slice of D satisfies F_c = sum_t (u_t (x) v_t) w_t[c]^T, hence dim col(F_c) <= j. Therefore fdim(D) := max over the three axes of dim col(F_axis(D)) is a lower bound on the tensor rank of D, and fdim(D) > j refutes D being a sum of j rank-1 tensors over Q.",
+  "whyStrongerThanR60": [
+    "any rational coefficients admitted, not just VALS = {-2,-1,1,2}",
+    "added terms may place values anywhere, including outside the deficit support, as long as they cancel",
+    "no work budget: the screen is one exact linear-algebra step per drop set, so it covers 100% of the drop sets"
+  ],
+  "honestLimits": [
+    "fdim <= j is necessary, not sufficient: each column of the resulting coefficient matrix X must also reshape to a matrix of rank <= 1, which the screen does not test",
+    "refutation covers repairs that drop up to maxDrop terms of the named base and add rank-1 terms drawn from Q; a scheme that changes the surviving terms, uses non-rank-1 new factors, or starts from a different base is NOT covered",
+    "the Q/R field is the one claimed; the elimination being over Q, the refutations also hold over Z and F_p"
+  ],
+  "maxDrop": 2,
+  "controls": [
+    {
+      "name": "planted-1",
+      "expected": "dim == 1",
+      "got": 1,
+      "passed": true,
+      "detail": "dropped [2] from T11, |supp D|=2, dim=1"
+    },
+    {
+      "name": "planted-2",
+      "expected": "dim == 2",
+      "got": 2,
+      "passed": true,
+      "detail": "dropped [2,3] from T11, |supp D|=3, dim=2"
+    },
+    {
+      "name": "planted-3",
+      "expected": "dim == 3",
+      "got": 3,
+      "passed": true,
+      "detail": "dropped [2,3,4] from T11, |supp D|=7, dim=3"
+    },
+    {
+      "name": "dense-generic",
+      "expected": "dim == 9",
+      "got": 9,
+      "passed": true,
+      "detail": "pseudo-random dense tensor, |supp|=6528, dim=9"
+    }
+  ],
+  "exhaustive": true,
+  "subsetsPerFamily": 231,
+  "families": [
+    {
+      "base": "T12c_absorb_best.ts",
+      "baseTerms": 22,
+      "baseRank": 22,
+      "note": "T12c itself is 1/729 wrong, so every D here is nonzero; reaching rank <= 22 needs j <= k",
+      "dropSets": 253,
+      "dimHistogram": [
+        [
+          2,
+          22
+        ],
+        [
+          3,
+          231
+        ]
+      ],
+      "refutedByDropSize": [
+        [
+          1,
+          {
+            "total": 22,
+            "refuted": 22
+          }
+        ],
+        [
+          2,
+          {
+            "total": 231,
+            "refuted": 231
+          }
+        ]
+      ],
+      "minDim": 2,
+      "survivors": [],
+      "verdict": "ALL 253 drop sets of size 1..2 are refuted for every j <= k: no repair that drops up to 2 terms of T12c and adds rank-1 terms over Q can reach rank <= 22"
+    },
+    {
+      "base": "T11_solution.ts",
+      "baseTerms": 23,
+      "note": "exact rank-23 anchor; reaching rank <= 22 needs j <= k-1, strictly narrower than T12c's j <= k",
+      "dropSets": 276,
+      "dimHistogram": [
+        [
+          1,
+          23
+        ],
+        [
+          2,
+          253
+        ]
+      ],
+      "refutedByDropSize": [
+        [
+          1,
+          {
+            "total": 23,
+            "refuted": 23
+          }
+        ],
+        [
+          2,
+          {
+            "total": 253,
+            "refuted": 253
+          }
+        ]
+      ],
+      "minDim": 1,
+      "survivors": []
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "baseTerms": 23,
+      "note": "second exact rank-23 anchor, in a pairwise-disjoint de Groote orbit from T11 (R19)",
+      "dropSets": 276,
+      "dimHistogram": [
+        [
+          1,
+          23
+        ],
+        [
+          2,
+          253
+        ]
+      ],
+      "refutedByDropSize": [
+        [
+          1,
+          {
+            "total": 23,
+            "refuted": 23
+          }
+        ],
+        [
+          2,
+          {
+            "total": 253,
+            "refuted": 253
+          }
+        ]
+      ],
+      "minDim": 1,
+      "survivors": []
+    }
+  ],
+  "r57Status": "the drop-2-add-2 band R57 left UNRESOLVED is now CLOSED: all 231 two-drop sets of T12c have fdim = 3 > 2, so no pair of rank-1 tensors over Q can supply the deficit, which is strictly wider than the VALS/support ansatz R60 was enumerating",
+  "exactArithmetic": "rational Gaussian elimination over BigInt via tools/rational.rref; no float equality anywhere",
+  "elapsedMs": 617,
+  "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+  "verdictMeaning": "a refutation, not a bounded null: every drop-k/add-j repair of T12c with k <= 2 and j <= k is impossible over Q. This says NOTHING about rank-22 schemes that are not of that shape, and does not move the published bounds R >= 19 or R <= 23."
+}
