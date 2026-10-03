@@ -93,6 +93,26 @@ function branchExists(repoRoot: string, branch: string): boolean {
   return listBranches(repoRoot).includes(branch)
 }
 
+/**
+ * Round alternation used to force-delete the per-assignment branch, destroying
+ * every un-merged commit a red round had produced (observed live on T12: the
+ * bounded-search artifacts of round 4 vanished when round 5 recreated the
+ * branch). Archival keeps the same-name contract of createWorktree while the
+ * knowledge survives as a first-class branch; a flat branch is untouched since
+ * createWorktree's recreate-from-main is exactly what it is for.
+ */
+export async function archiveBranchIfExists(repoRoot: string, branch: string): Promise<void> {
+  if (branch === "main" || !branchExists(repoRoot, branch)) return
+  const unique = git(repoRoot, ["rev-list", "--count", `main..${branch}`])
+  if (/^0+$/.test(unique)) return
+  const tip = git(repoRoot, ["rev-parse", "--short", branch])
+  try {
+    git(repoRoot, ["branch", "-m", branch, `${branch}@${tip}`])
+  } catch (e) {
+    if (!(e instanceof GitError)) throw e
+  }
+}
+
 /** Per-worker isolated checkout. Returns the worktree path. */
 export async function createWorktree(
   repoRoot: string,
@@ -100,6 +120,7 @@ export async function createWorktree(
   workerId: number,
   branch: string,
 ): Promise<string> {
+  await archiveBranchIfExists(repoRoot, branch)
   await mkdir(worktreesRoot, { recursive: true })
   const path = join(worktreesRoot, `worker_${workerId}`)
   try {
