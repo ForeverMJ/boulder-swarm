@@ -44,7 +44,7 @@ L2:
   - {id: T09, problem: src/problems/problem09.ts, tests: src/problems/problem09.test.ts, owner: worker, milestone: M4}
   - {id: T10, problem: src/matmul/checker.ts, tests: src/matmul/checker.test.ts, owner: orchestrator, milestone: M5}
   - {id: T11, problem: src/matmul/attempts/T11_solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
-  - {id: T12, problem: src/matmul/attempts/T12_rank23_variant.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
+  - {id: T12, problem: src/matmul/attempts/T12_rank23_variant.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22, note: best candidate T12c is rank 22 with 1/729 mismatches - not exact; goal is exact rank<=22, verified by scoreboard marker BEST22}
   - {id: T12c, problem: src/matmul/attempts/T12c_absorb_best.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22, note: nearest rank-22 attempt, 1/729 mismatches, not exact}
   - {id: T12d, problem: src/matmul/attempts/T12d_fam_A.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
   - {id: T12e, problem: src/matmul/attempts/T12d_fam_B.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
