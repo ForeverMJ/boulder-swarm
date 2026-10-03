@@ -1,0 +1,4694 @@
+{
+  "round": "R62",
+  "route": "second necessary condition on R61's residual: support box-cover, the column-reshape constraint made decidable",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "proposition": "If D = sum_{t=1..j} u_t (x) v_t (x) w_t then supp(D) = union_t supp(u_t) x supp(v_t) x supp(w_t), so the minimum number of boxes contained in supp(D) whose union is supp(D) is at most j. This is coefficient-free and field-free, so it admits arbitrary rational values and arbitrary supports and is strictly wider than any VALS/support ansatz.",
+  "relationToR61": "R61 left necessary-but-not-sufficient flatDim survivors and named the missing condition as the coefficient columns having to reshape to rank <= 1. This round attacks the support-level shadow of that condition, which is decided exactly. flatDim(M)=9 while boxCover(M)=27 on the target itself, so the two screens do not bound each other and a flatDim survivor can still be refuted here.",
+  "maxDrop": 4,
+  "controls": [
+    {
+      "name": "planted-box-1",
+      "passed": true,
+      "detail": "dropped [2] from T11, |supp|=2, minBoxes=1 <= 1"
+    },
+    {
+      "name": "planted-box-2",
+      "passed": true,
+      "detail": "dropped [2,3] from T11, |supp|=3, minBoxes=2 <= 2"
+    },
+    {
+      "name": "planted-box-3",
+      "passed": true,
+      "detail": "dropped [2,3,4] from T11, |supp|=7, minBoxes=3 <= 3"
+    },
+    {
+      "name": "target-transversal",
+      "passed": true,
+      "detail": "boxCover(M)=27, expected 27 (support is one point per (i,j,k))"
+    },
+    {
+      "name": "independence-flatDim-vs-boxCover",
+      "passed": true,
+      "detail": "flatDim(M)=9, boxCover(M)=27; neither screen bounds the other"
+    }
+  ],
+  "exhaustive": true,
+  "exhaustiveMeaning": "the R61 drop-set enumeration ran over 100% of subsets of size 1..maxDrop for all three bases, and the cover search is branch and bound with no coefficient ansatz, so minBoxes is a proven minimum",
+  "survivorsIn": {
+    "T12c_absorb_best.ts": 95,
+    "T11_solution.ts": 3,
+    "T12d_fam_B.ts": 3
+  },
+  "refutedByBoxCover": 101,
+  "stillUnresolved": 0,
+  "strongestRankFloor": 26,
+  "closureStatement": "R61 refuted every drop set whose flatDim exceeded j; R62 refuted every one of the 101 survivors R61 left, because each needs more than j boxes. Together, for k <= 4 and every coefficient choice over any field: no repair that drops up to 4 terms of T12c_absorb_best.ts, T11_solution.ts or T12d_fam_B.ts and adds j <= k-(r-22) rank-1 terms can reach rank <= 22. This is a refutation of that neighbourhood, NOT a bound on rank 22.",
+  "rows": [
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        2,
+        3,
+        19
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 59,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 10,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          488,
+          9
+        ],
+        [
+          36,
+          488,
+          11
+        ],
+        [
+          1,
+          299,
+          2
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          2,
+          16,
+          2
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        3,
+        8,
+        19
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 49,
+      "minBoxes": 7,
+      "refuted": true,
+      "minFinalRank": 25,
+      "nodes": 22,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          193,
+          9
+        ],
+        [
+          37,
+          297,
+          32
+        ],
+        [
+          2,
+          488,
+          9
+        ],
+        [
+          36,
+          193,
+          11
+        ],
+        [
+          1,
+          2,
+          2
+        ],
+        [
+          2,
+          16,
+          2
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        3,
+        16,
+        19
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 57,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 51,
+      "budgetHit": false,
+      "cover": [
+        [
+          1,
+          299,
+          2
+        ],
+        [
+          3,
+          488,
+          9
+        ],
+        [
+          2,
+          16,
+          2
+        ],
+        [
+          36,
+          425,
+          3
+        ],
+        [
+          39,
+          488,
+          8
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        8,
+        14,
+        19
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 52,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 18,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          193,
+          11
+        ],
+        [
+          37,
+          297,
+          32
+        ],
+        [
+          2,
+          488,
+          9
+        ],
+        [
+          2,
+          16,
+          2
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        8,
+        19,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 53,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 13,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          193,
+          11
+        ],
+        [
+          2,
+          488,
+          9
+        ],
+        [
+          18,
+          45,
+          32
+        ],
+        [
+          37,
+          260,
+          32
+        ],
+        [
+          2,
+          16,
+          2
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        8,
+        20,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 58,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 14,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          193,
+          11
+        ],
+        [
+          2,
+          488,
+          11
+        ],
+        [
+          18,
+          45,
+          32
+        ],
+        [
+          37,
+          260,
+          32
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        9,
+        11,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 87,
+      "minBoxes": 7,
+      "refuted": true,
+      "minFinalRank": 25,
+      "nodes": 50,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          480,
+          294
+        ],
+        [
+          256,
+          352,
+          301
+        ],
+        [
+          39,
+          8,
+          11
+        ],
+        [
+          32,
+          360,
+          11
+        ],
+        [
+          32,
+          128,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        10,
+        11,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 87,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          448,
+          303
+        ],
+        [
+          39,
+          360,
+          11
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          32,
+          128,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        11,
+        20,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 80,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 19,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          360,
+          11
+        ],
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          7,
+          488,
+          11
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          32,
+          128,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        12,
+        13,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 87,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          488,
+          11
+        ],
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 67,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          488,
+          11
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        13,
+        20,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 83,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          488,
+          11
+        ],
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        14,
+        15,
+        19
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 62,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          488,
+          11
+        ],
+        [
+          39,
+          488,
+          9
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          2,
+          16,
+          2
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 67,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          488,
+          11
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        0,
+        14,
+        20,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 83,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          39,
+          488,
+          11
+        ],
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        12,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 35,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          32
+        ],
+        [
+          127,
+          8,
+          40
+        ],
+        [
+          64,
+          5,
+          104
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        12,
+        18
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 22,
+      "minBoxes": 8,
+      "refuted": true,
+      "minFinalRank": 26,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          4,
+          32
+        ],
+        [
+          45,
+          1,
+          8
+        ],
+        [
+          18,
+          13,
+          32
+        ],
+        [
+          18,
+          8,
+          40
+        ],
+        [
+          64,
+          5,
+          64
+        ],
+        [
+          64,
+          4,
+          104
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        12,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 24,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          8,
+          8
+        ],
+        [
+          72,
+          13,
+          32
+        ],
+        [
+          55,
+          32,
+          32
+        ],
+        [
+          64,
+          5,
+          104
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        13,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 60,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          40
+        ],
+        [
+          127,
+          5,
+          104
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        13,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 60,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          40
+        ],
+        [
+          127,
+          5,
+          104
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        14,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 60,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          40
+        ],
+        [
+          127,
+          5,
+          104
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        15,
+        18
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 36,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 17,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          4,
+          104
+        ],
+        [
+          18,
+          13,
+          40
+        ],
+        [
+          127,
+          1,
+          64
+        ],
+        [
+          64,
+          4,
+          256
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        7,
+        18,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 39,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          4,
+          104
+        ],
+        [
+          18,
+          13,
+          40
+        ],
+        [
+          127,
+          5,
+          64
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          8,
+          64
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        12,
+        13,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 42,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          32
+        ],
+        [
+          127,
+          8,
+          104
+        ],
+        [
+          64,
+          13,
+          104
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        12,
+        14,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 42,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          32
+        ],
+        [
+          127,
+          8,
+          104
+        ],
+        [
+          64,
+          13,
+          104
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 64,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          13,
+          104
+        ],
+        [
+          127,
+          9,
+          104
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          64,
+          4,
+          256
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        13,
+        14,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 56,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          13,
+          72
+        ],
+        [
+          72,
+          13,
+          104
+        ],
+        [
+          55,
+          32,
+          32
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        14,
+        15,
+        18
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 43,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 13,
+      "budgetHit": false,
+      "cover": [
+        [
+          127,
+          9,
+          64
+        ],
+        [
+          63,
+          4,
+          104
+        ],
+        [
+          18,
+          13,
+          104
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          64,
+          4,
+          256
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        1,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 64,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          13,
+          104
+        ],
+        [
+          127,
+          9,
+          104
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          64,
+          4,
+          256
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        2,
+        3,
+        13,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 9,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          1,
+          195,
+          2
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        2,
+        3,
+        13,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 9,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          1,
+          195,
+          2
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        2,
+        3,
+        14,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 9,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          1,
+          195,
+          2
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        2,
+        3,
+        19,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 14,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          2,
+          504,
+          2
+        ],
+        [
+          1,
+          195,
+          2
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        2,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 9,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        2,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 9,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          1,
+          260,
+          4
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        3,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 11,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          1,
+          195,
+          2
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        3,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 11,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          1,
+          195,
+          2
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        4,
+        5,
+        10,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 35,
+      "minBoxes": 8,
+      "refuted": true,
+      "minFinalRank": 26,
+      "nodes": 13,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          192,
+          9
+        ],
+        [
+          256,
+          192,
+          301
+        ],
+        [
+          5,
+          256,
+          36
+        ],
+        [
+          2,
+          480,
+          9
+        ],
+        [
+          2,
+          32,
+          45
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ],
+        [
+          256,
+          448,
+          256
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        4,
+        5,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 55,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          192,
+          301
+        ],
+        [
+          2,
+          480,
+          45
+        ],
+        [
+          263,
+          448,
+          256
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        4,
+        6,
+        9,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 49,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          192,
+          301
+        ],
+        [
+          2,
+          480,
+          301
+        ],
+        [
+          263,
+          288,
+          256
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          64
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        4,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 31,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          261,
+          288,
+          45
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        4,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 31,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          261,
+          288,
+          45
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        9,
+        10,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 47,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 36,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          32,
+          45
+        ],
+        [
+          7,
+          480,
+          9
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ],
+        [
+          256,
+          320,
+          301
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        9,
+        11,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 78,
+      "minBoxes": 7,
+      "refuted": true,
+      "minFinalRank": 25,
+      "nodes": 50,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          352,
+          45
+        ],
+        [
+          7,
+          448,
+          301
+        ],
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          263,
+          320,
+          301
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        9,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 75,
+      "minBoxes": 7,
+      "refuted": true,
+      "minFinalRank": 25,
+      "nodes": 27,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          352,
+          45
+        ],
+        [
+          7,
+          448,
+          301
+        ],
+        [
+          263,
+          320,
+          301
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        10,
+        14,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 52,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          480,
+          9
+        ],
+        [
+          256,
+          448,
+          301
+        ],
+        [
+          263,
+          32,
+          45
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 12,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          391,
+          32,
+          256
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        13,
+        14,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 80,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          480,
+          45
+        ],
+        [
+          263,
+          448,
+          301
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        13,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 80,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          480,
+          45
+        ],
+        [
+          263,
+          448,
+          301
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 12,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          391,
+          32,
+          256
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        5,
+        14,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 80,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          480,
+          45
+        ],
+        [
+          263,
+          448,
+          301
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          128,
+          32,
+          256
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        7,
+        9,
+        11
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 25,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 15,
+      "budgetHit": false,
+      "cover": [
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          256,
+          128,
+          429
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        7,
+        9,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 22,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          256,
+          128,
+          429
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        9,
+        11,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 18,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 16,
+      "budgetHit": false,
+      "cover": [
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          256,
+          128,
+          429
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        9,
+        11,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 77,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 18,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          480,
+          301
+        ],
+        [
+          263,
+          288,
+          301
+        ],
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          64
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        9,
+        13,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          256,
+          128,
+          429
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        9,
+        13,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          256,
+          128,
+          429
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        9,
+        14,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 9,
+      "budgetHit": false,
+      "cover": [
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          256,
+          128,
+          429
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        9,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 74,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 11,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          480,
+          301
+        ],
+        [
+          263,
+          288,
+          301
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          64,
+          64
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 13,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        6,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 13,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          256,
+          64,
+          365
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        7,
+        12,
+        13,
+        14
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 35,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        7,
+        12,
+        14,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 35,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        7,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        7,
+        13,
+        14,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 31,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 8,
+      "budgetHit": false,
+      "cover": [
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        7,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          255,
+          8,
+          64
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        8,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 55,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          297,
+          43
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        8,
+        13,
+        14,
+        18
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 47,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          297,
+          3
+        ],
+        [
+          37,
+          288,
+          43
+        ],
+        [
+          72,
+          9,
+          40
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        8,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 55,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          37,
+          297,
+          43
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        9,
+        10,
+        11,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 54,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 52,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          32,
+          301
+        ],
+        [
+          7,
+          480,
+          9
+        ],
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          352,
+          301
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        9,
+        10,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 51,
+      "minBoxes": 6,
+      "refuted": true,
+      "minFinalRank": 24,
+      "nodes": 28,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          32,
+          301
+        ],
+        [
+          7,
+          480,
+          9
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ],
+        [
+          256,
+          352,
+          301
+        ],
+        [
+          256,
+          128,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        9,
+        11,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 16,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 7,
+      "budgetHit": false,
+      "cover": [
+        [
+          256,
+          128,
+          429
+        ],
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        9,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 13,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          256,
+          128,
+          429
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        9,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 13,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          256,
+          128,
+          429
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        10,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 34,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          448,
+          292
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        10,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 34,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          7,
+          448,
+          292
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        11,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 11,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        11,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 11,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          32,
+          128,
+          27
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 31,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        12,
+        13,
+        14,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 47,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 15,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        12,
+        13,
+        20,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 47,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 15,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        12,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 31,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          63,
+          5,
+          72
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 7,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 3,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          36,
+          65,
+          3
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15,
+        17
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 87,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          480,
+          301
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15,
+        18
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 27,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          109,
+          9,
+          40
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15,
+        19
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 13,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          2,
+          504,
+          2
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 8,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 4,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        13,
+        14,
+        15,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 27,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        14,
+        15,
+        16,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 15,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          36,
+          65,
+          3
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        14,
+        15,
+        17,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 87,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          263,
+          480,
+          301
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        14,
+        15,
+        18,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 27,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 6,
+      "budgetHit": false,
+      "cover": [
+        [
+          109,
+          9,
+          40
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        14,
+        15,
+        19,
+        20
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 13,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          2,
+          504,
+          2
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        14,
+        15,
+        20
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 7,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 3,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12c_absorb_best.ts",
+      "dropped": [
+        14,
+        15,
+        20,
+        21
+      ],
+      "j": 4,
+      "flatDim": 4,
+      "support": 27,
+      "minBoxes": 5,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 5,
+      "budgetHit": false,
+      "cover": [
+        [
+          55,
+          45,
+          32
+        ],
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T11_solution.ts",
+      "dropped": [
+        3,
+        14,
+        15,
+        16
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 7,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 3,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T11_solution.ts",
+      "dropped": [
+        3,
+        15,
+        16,
+        21
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 7,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 3,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ],
+        [
+          128,
+          16,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T11_solution.ts",
+      "dropped": [
+        14,
+        15,
+        16,
+        21
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 7,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 3,
+      "budgetHit": false,
+      "cover": [
+        [
+          64,
+          4,
+          360
+        ],
+        [
+          8,
+          2,
+          16
+        ],
+        [
+          16,
+          16,
+          16
+        ],
+        [
+          64,
+          2,
+          128
+        ]
+      ]
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        3,
+        14,
+        15,
+        16
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 40,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 7,
+      "budgetHit": false,
+      "cover": [
+        [
+          72,
+          54,
+          360
+        ],
+        [
+          288,
+          128,
+          384
+        ],
+        [
+          8,
+          18,
+          376
+        ],
+        [
+          64,
+          18,
+          488
+        ]
+      ]
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        3,
+        15,
+        16,
+        21
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 40,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 7,
+      "budgetHit": false,
+      "cover": [
+        [
+          72,
+          54,
+          360
+        ],
+        [
+          72,
+          18,
+          488
+        ],
+        [
+          32,
+          128,
+          48
+        ],
+        [
+          256,
+          128,
+          384
+        ]
+      ]
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        14,
+        15,
+        16,
+        21
+      ],
+      "j": 3,
+      "flatDim": 3,
+      "support": 40,
+      "minBoxes": 4,
+      "refuted": true,
+      "minFinalRank": 23,
+      "nodes": 7,
+      "budgetHit": false,
+      "cover": [
+        [
+          72,
+          54,
+          360
+        ],
+        [
+          32,
+          128,
+          432
+        ],
+        [
+          8,
+          18,
+          376
+        ],
+        [
+          64,
+          18,
+          488
+        ]
+      ]
+    }
+  ],
+  "r57Status": "R57's band was closed by R61 (all 231 two-drop sets have flatDim 3 > 2). Of the 95 survivors that remain, boxCover refutes 95 completely and leaves 0 UNRESOLVED",
+  "honestLimits": [
+    "boxCover > j is a complete refutation of D being a sum of j rank-1 tensors; it is NOT a statement about rank 22 itself, only about the drop-k/add-j neighbourhood of the named bases",
+    "boxCover <= j is support feasibility only, NOT a witness: the coefficient solve is a separate bilinear problem and is not attempted in this round, so no scheme is claimed and none is exported",
+    "the screen does not cover repairs that change the surviving terms, add non-rank-1 factors, or start from a base other than T12c / T11 / T12d_fam_B",
+    "the Q/R field is the one claimed; the box condition is field-free, so these refutations also hold over Z and over every F_p"
+  ],
+  "witnessAttemptsWithFeasibleCover": 0,
+  "witnessAttemptsCertified": 0,
+  "exactArithmetic": "box cover is integer index arithmetic over 9-bit masks (no float equality anywhere); flatDim is R61's exact rational Gaussian elimination over BigInt via tools/rational.rref, re-run here",
+  "elapsedMs": 39221,
+  "checkerConsistency": "verify(T11) exact=true verify(T12c) mismatches=1",
+  "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+  "verdictMeaning": "a refutation, not a bounded null: every flatDim survivor is killed by the box-cover bound, so no drop-k/add-j repair of these bases within the screened range can reach rank <= 22 over any field"
+}

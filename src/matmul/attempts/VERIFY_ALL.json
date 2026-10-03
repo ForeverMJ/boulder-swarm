@@ -263,6 +263,18 @@
       "note": "consistent"
     },
     {
+      "file": "R61_colspace_screen_k4.json",
+      "verdict": "BOUNDED-INCOMPLETE",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R62_boxcover_screen_k4.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R6_survey_pm2.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -344,7 +356,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 50,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
