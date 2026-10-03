@@ -1,0 +1,66 @@
+{
+  "round": "R65",
+  "route": "extend the R61 -> R62 -> R64 refutation chain one band further: the exact k = 6 drop-k/add-j band",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "status": "PARTIAL - the band is NOT closed. This artifact records exactly what completed inside the round's work window and nothing else.",
+  "whatWasNeeded": "R61 refuted every drop set with flatDim > j; R62 closed the residual at k <= 4 with the support box-cover bound; R64 closed the exact 1986-survivor k = 5 band. Drop sets of size 1..5 therefore need no new work, so this round targets subsets of size EXACTLY 6 only. segreSpan was recorded SUBSUMED by flatDim at R64 and was deliberately not rebuilt.",
+  "controlsPassed": true,
+  "controls": [
+    { "name": "planted-1", "passed": true, "detail": "dropped [2] from T11, |supp D|=2, dim=1" },
+    { "name": "planted-2", "passed": true, "detail": "dropped [2,3] from T11, |supp D|=3, dim=2" },
+    { "name": "planted-3", "passed": true, "detail": "dropped [2,3,4] from T11, |supp D|=7, dim=3" },
+    { "name": "dense-generic", "passed": true, "detail": "pseudo-random dense tensor, |supp|=6528, dim=9" },
+    { "name": "planted-box-1", "passed": true, "detail": "dropped [2] from T11, |supp|=2, minBoxes=1 <= 1" },
+    { "name": "planted-box-2", "passed": true, "detail": "dropped [2,3] from T11, |supp|=3, minBoxes=2 <= 2" },
+    { "name": "planted-box-3", "passed": true, "detail": "dropped [2,3,4] from T11, |supp|=7, minBoxes=3 <= 3" },
+    { "name": "target-transversal", "passed": true, "detail": "boxCover(M)=27, expected 27 (support is one point per (i,j,k))" },
+    { "name": "independence-flatDim-vs-boxCover", "passed": true, "detail": "flatDim(M)=9, boxCover(M)=27; neither screen bounds the other" },
+    { "name": "tier1-bound-is-a-lower-bound", "passed": true, "detail": "ceil(|supp|/maxBoxSize)=27 <= minBoxes=27" }
+  ],
+  "reproductionOfR61": {
+    "note": "re-ran the k=2 band before trusting anything, and reproduced R61's published per-size counts exactly, which is what licenses reading the k=6 numbers the same way",
+    "k2": {
+      "T12c_absorb_best.ts": { "dropSets": 231, "flatDimRefuted": 231, "survivors": 0 },
+      "T11_solution.ts": { "dropSets": 253, "flatDimRefuted": 253, "survivors": 0 },
+      "T12d_fam_B.ts": { "dropSets": 253, "flatDimRefuted": 253, "survivors": 0 }
+    },
+    "matchesCampaignR61Row": true,
+    "elapsedMs": 513
+  },
+  "flatCensus": {
+    "T12c_absorb_best.ts": {
+      "baseTerms": 22,
+      "k": 6,
+      "jMax": 6,
+      "dropSets": 74613,
+      "flatDimRefuted": 61656,
+      "survivors": 12957,
+      "enumerationComplete": true,
+      "elapsedMs": 70458
+    },
+    "T11_solution.ts": { "baseTerms": 23, "k": 6, "jMax": 5, "dropSets": 100947, "flatDimRefuted": null, "survivors": null, "enumerationComplete": false, "reason": "not reached inside the round's work window" },
+    "T12d_fam_B.ts": { "baseTerms": 23, "k": 6, "jMax": 5, "dropSets": 100947, "flatDimRefuted": null, "survivors": null, "enumerationComplete": false, "reason": "not reached inside the round's work window" }
+  },
+  "refutedByBoxCover": null,
+  "stillUnresolved": null,
+  "unresolvedSize6T12cCount": 12957,
+  "strongestRankFloor": null,
+  "closureStatement": "NONE. The k = 6 band is NOT closed by this round. What is closed is the flatDim half of it for T12c_absorb_best.ts: of the 74613 size-6 drop sets, 61656 are refuted outright because their deficit's axis-slice dimensions exceed the largest j that still lands at rank <= 22 (j <= k - (r-22) = 6 for a 22-term base). The remaining 12957 size-6 T12c drop sets survive the flattening screen and were NOT reached by the box-cover screen, so they are UNRESOLVED - not refuted, and not to be read as refuted. The k=6 bands of T11_solution.ts and T12d_fam_B.ts were not enumerated at all.",
+  "whyItStalled": "The flatDim half is cheap (0.94 ms per drop set, 70s for all 74613). The box-cover half is not: R64 needed more than one full round window for 1986 covers, and the size-6 survivor fraction is 17.4% (12957 of 74613) against 5.7% at k=5, so the exact branch and bound cannot be the right tool at this k without first adding a cheap PROVEN lower bound. tools/boxCover.ts's tier-1 capacity bound ceil(|supp| / maxBoxSize) costs about 2.6e5 mask pairs per survivor, which is itself the bottleneck at this survivor count. The concrete next step, not taken here, is an incompatibility-clique bound: two support points share a valid box if and only if the de-duplicated product box through them lies inside supp (validity is downward closed), so a set of pairwise non-boxable points each needs its own box, and a greedy clique in that incompatibility graph is a proven lower bound costing O(|supp|^2) set lookups instead of a search.",
+  "exactArithmetic": "box cover is integer index arithmetic over 9-bit masks with no float equality anywhere; flatDim is R61's exact rational Gaussian elimination over BigInt via tools/rational.rref, re-imported and re-run here rather than trusted from JSON",
+  "claimDiscipline": "Only `provenLower > j` refutes. provenLower is ceil(|supp| / maxBoxSize), a proven per-box capacity bound needing no search, or the exact branch-and-bound minimum. `upper <= j` is never claimed as a witness. No coefficient solve was attempted at any k, so no scheme is claimed and none is exported.",
+  "honestLimits": [
+    "nothing here is a bound on rank 22 itself; R stays in [19, 23] over Q/R whatever this round reports",
+    "the 12957 surviving size-6 T12c drop sets are UNRESOLVED, not refuted, and no partial reading of them is licensed",
+    "the k=6 bands of T11_solution.ts and T12d_fam_B.ts were not run; R64's k=5 closure of them is untouched and still stands",
+    "boxCover <= j is support feasibility only, NOT a witness: the coefficient solve is a separate bilinear problem",
+    "the screen does not cover repairs that change the surviving terms, add non-rank-1 factors, or start from a base other than T12c / T11 / T12d_fam_B",
+    "the Q/R field is the one claimed; the box condition is field-free, so box-cover refutations also hold over Z and every F_p"
+  ],
+  "noWitnessExported": true,
+  "witnessAttemptsCertified": 0,
+  "scoreboardBefore": "BEST23=T12d_fam_B.ts BEST22=none",
+  "scoreboardAfter": "BEST23=T12d_fam_B.ts BEST22=none",
+  "verdict": "BOUNDED-INCOMPLETE",
+  "verdictMeaning": "an honest bounded result, not an impossibility: one screen (flatDim) was extended to the exact k=6 band for one of three bases and refuted 61656 of 74613 size-6 drop sets, the second screen (box cover) did not reach the 12957 that survive it, and the other two bases were not enumerated. The k=6 band remains open."
+}
