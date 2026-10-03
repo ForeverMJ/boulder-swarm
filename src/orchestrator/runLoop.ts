@@ -216,6 +216,7 @@ type AgentDeps = {
     prompt: string
     taskId: string
     branch: string
+    timeoutMs?: number
     onSalvage?: () => void
   }) => Promise<{
     readonly exitCode: number
@@ -257,6 +258,7 @@ async function runLive(
         prompt,
         taskId: a.task.id,
         branch: a.branch,
+        ...(a.task.timeoutMs === undefined ? {} : { timeoutMs: a.task.timeoutMs }),
         onSalvage: () => {
           salvaged = true
         },
