@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process"
-import { existsSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { readFile, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -84,13 +84,75 @@ function parseArgs(argv: readonly string[]): Args {
   return { workers, mode, run, supervise, maxRounds, budgetHours, tasks }
 }
 
+const CAMPAIGN_EVIDENCE = "CAMPAIGN:"
+
+// A row earns its keep only if it records the label *and* real content. An id alone
+// says a round was numbered, not that anything was found, so a stub like `| R8 |`
+// must not pass as a certificate - otherwise an empty row marks work done.
+const MIN_EVIDENCE_CELLS = 3
+
+function substantiveRow(text: string, label: string): boolean {
+  for (const line of text.split("\n")) {
+    const trimmed = line.trim()
+    if (!trimmed.startsWith("|")) continue
+    const parts = trimmed.split("|")
+    const cells = (trimmed.endsWith("|") ? parts.slice(1, -1) : parts.slice(1)).map((c) => c.trim())
+    if (cells[0] === label && cells.filter((c) => c !== "").length >= MIN_EVIDENCE_CELLS) return true
+  }
+  return false
+}
+
+// D2: research tasks need an explicit completion-evidence field. R08, R14 and R19 are
+// certificate tasks whose completion lives in a CAMPAIGN.md row, yet they point at
+// goalCheck.ts, which exits 1 while rank-22 is unsolved, so they scored 0 forever and
+// replan re-dispatched finished work every round. Their `success` markers were no help:
+// they are matched against scoreboard output, where they never appear.
+//
+// Evidence means *recorded*, not *proved* - proving lives in the artifacts and in
+// verifyAll. What replan needs is to stop redoing finished work, and a substantive row
+// is the honest signal for that. Nothing here may throw: an unreadable or absent file
+// is "not yet recorded", which is a legitimate 0, not a crash in the scoring path.
+function evidenceVerdict(wt: string, evidence: string): Verdict {
+  const result = (hit: boolean, why: string): Verdict => ({
+    testFile: "CAMPAIGN.md",
+    passed: hit ? 1 : 0,
+    total: 1,
+    passRate: hit ? 1 : 0,
+    returncode: 0,
+    parsed: true,
+    outputTail: why,
+  })
+  if (!evidence.startsWith(CAMPAIGN_EVIDENCE)) {
+    return result(false, `unrecognised evidence "${evidence}"; only ${CAMPAIGN_EVIDENCE}<label> is implemented`)
+  }
+  const label = evidence.slice(CAMPAIGN_EVIDENCE.length).trim()
+  const path = join(wt, "src", "matmul", "CAMPAIGN.md")
+  let text = ""
+  try {
+    text = readFileSync(path, "utf-8")
+  } catch (e) {
+    if (e instanceof Error) {
+      return result(false, `evidence "${evidence}": cannot read ${path}`)
+    }
+    throw e
+  }
+  if (label === "") {
+    return result(false, `evidence "${evidence}" names no CAMPAIGN row`)
+  }
+  return substantiveRow(text, label)
+    ? result(true, `evidence "${evidence}": substantive CAMPAIGN row for ${label} in ${path}`)
+    : result(false, `evidence "${evidence}": no substantive CAMPAIGN row for ${label} in ${path}`)
+}
+
 export function scoreAssignment(
   wt: string,
   tests: string,
   success: string | undefined,
   evidence?: string,
 ): Verdict {
-  void evidence
+  if (evidence !== undefined && evidence !== "") {
+    return evidenceVerdict(wt, evidence)
+  }
   if (success === "PAIRTABLES" || success === "WIDEABSORB") {
     const file = success === "PAIRTABLES" ? "R5_pair_tables.json" : "R5_wide_absorb.json"
     const path = join(wt, "src", "matmul", "attempts", file)
@@ -197,7 +259,7 @@ async function runLive(
         console.log(`SETTLE ${a.task.id}: worktree still moving after ${settled.polls} polls; committing anyway`)
       }
       const produced = worktreePaths(wt)
-      const v = scoreAssignment(wt, a.task.tests, a.task.success)
+      const v = scoreAssignment(wt, a.task.tests, a.task.success, a.task.evidence)
       if (v.parsed === false) {
         console.log(`HARNESS could not parse a test result for ${a.task.id} (rc=${v.returncode}); tail:`)
         console.log(v.outputTail)
@@ -260,7 +322,7 @@ async function runLive(
       }
       const verdict = mergeGate(REPO, r.branch, () => {
         const t = assigns.find((a) => a.task.id === r.task_id)?.task
-        const onMain = scoreAssignment(REPO, t?.tests ?? "", t?.success)
+        const onMain = scoreAssignment(REPO, t?.tests ?? "", t?.success, t?.evidence)
         return onMain.passRate >= 1 && onMain.total > 0
       })
       console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)

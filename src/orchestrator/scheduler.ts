@@ -10,6 +10,7 @@ const L2Entry = z.object({
   tests: z.string(),
   milestone: z.string(),
   success: z.string().optional(),
+  evidence: z.string().optional(),
 })
 const GoalFile = z.object({ L2: z.array(L2Entry) })
 
@@ -19,6 +20,9 @@ export type Task = {
   readonly tests: string
   readonly milestone: string
   readonly success?: string
+  // Consulted by scoreAssignment before `success` and before the tests: the only
+  // thing that lets a certificate task, whose completion no test can show, score 1.
+  readonly evidence?: string
 }
 
 export type Assignment = {
@@ -38,6 +42,7 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     tests: t.tests,
     milestone: t.milestone,
     ...(t.success === undefined ? {} : { success: t.success }),
+    ...(t.evidence === undefined ? {} : { evidence: t.evidence }),
   }))
 }
 
