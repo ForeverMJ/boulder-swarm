@@ -70,7 +70,7 @@ function factorize(value: bigint, primes: readonly number[]): Array<[bigint, num
     for (const p of primes) {
       const q = BigInt(p)
       if (q * q > rest) {
-        if (rest > 1n) out.push([rest, 1n])
+        if (rest > 1n) out.push([rest, 1])
         return out
       }
       lastPrime = p
@@ -96,7 +96,7 @@ function factorize(value: bigint, primes: readonly number[]): Array<[bigint, num
     }
     out.push([c, e])
   }
-  if (rest > 1n) out.push([rest, 1n])
+  if (rest > 1n) out.push([rest, 1])
   return out
 }
 

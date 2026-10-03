@@ -13,6 +13,7 @@ import { buildPrompt as buildCodexPrompt, spawnAgent as spawnCodexAgent } from "
 import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
 import { commitWorktree, createWorktree, gitStashPop, gitStashPush, gitStatus, initRepo, listBranches, mergeGate } from "./git"
 import { dispatch, loadTasks, workerIds } from "./scheduler"
+import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
 import { runRounds, type Outcome, type RoundDeps } from "./roundLoop"
 import { waitForStable } from "./settle"
@@ -323,7 +324,9 @@ async function runLive(
       const verdict = mergeGate(REPO, r.branch, () => {
         const t = assigns.find((a) => a.task.id === r.task_id)?.task
         const onMain = scoreAssignment(REPO, t?.tests ?? "", t?.success, t?.evidence)
-        return onMain.passRate >= 1 && onMain.total > 0
+        // Full verification contract, not just the harness: a merge that is green
+        // on tests but type/lint dirty must not land (observed on E1).
+        return onMain.passRate >= 1 && onMain.total > 0 && repoContractPasses(REPO)
       })
       console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
     }
@@ -360,7 +363,10 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
   }
 
   const runId = `run_${new Date().toISOString().replace(/[:.]/g, "-")}`
-  const solved = new Set<string>()
+  // In-memory solved died with the old process; rebuild from the authorities replan
+  // already trusts (metrics last-wins + gate-merged history) or a restart re-runs
+  // landed tasks and burns live quota for nothing.
+  const solved = new Set<string>((await replan(selected, REPO)).solved)
   let agentMs = 0
 
   const deps: RoundDeps = {
