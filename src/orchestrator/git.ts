@@ -74,6 +74,21 @@ export function listBranches(repoRoot: string): string[] {
   return out.split("\n").map((s) => s.trim()).filter((s) => s !== "")
 }
 
+/**
+ * Porcelain v1 rows: the first two columns are the XY status, column 3 is a
+ * separator space, and trimming BEFORE the slice is what dropped the first
+ * character of space-prefixed rows locally (" M src" -> "M src" -> "rc/...").
+ * The status columns are positional, so they must be cut from the raw line;
+ * only the path itself may be trimmed.
+ */
+export function parsePorcelainPaths(raw: string): string[] {
+  return raw
+    .split("\n")
+    .filter((line) => line.trim() !== "")
+    .map((line) => line.slice(3).trim())
+    .filter((path) => path !== "")
+}
+
 function branchExists(repoRoot: string, branch: string): boolean {
   return listBranches(repoRoot).includes(branch)
 }

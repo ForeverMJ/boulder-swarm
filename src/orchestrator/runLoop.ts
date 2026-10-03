@@ -11,7 +11,17 @@ import { appendEvent } from "../recording/trace"
 import type { WorkerResult } from "../recording/schemas"
 import { buildPrompt as buildCodexPrompt, spawnAgent as spawnCodexAgent } from "./codexWorker"
 import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
-import { commitWorktree, createWorktree, gitStashPop, gitStashPush, gitStatus, initRepo, listBranches, mergeGate } from "./git"
+import {
+  commitWorktree,
+  createWorktree,
+  gitStashPop,
+  gitStashPush,
+  gitStatus,
+  initRepo,
+  listBranches,
+  mergeGate,
+  parsePorcelainPaths,
+} from "./git"
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
@@ -218,11 +228,7 @@ type AgentDeps = {
 
 function worktreePaths(wt: string): string[] {
   const out = spawnSync("git", ["status", "--porcelain"], { cwd: wt, encoding: "utf-8", timeout: 60_000 })
-  return `${out.stdout ?? ""}`
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l !== "")
-    .map((l) => l.slice(3).trim())
+  return parsePorcelainPaths(`${out.stdout ?? ""}`)
 }
 
 type LiveRun = {
