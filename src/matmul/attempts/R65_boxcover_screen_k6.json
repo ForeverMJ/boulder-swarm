@@ -1,0 +1,90 @@
+{
+  "round": "R65",
+  "route": "Lane A: extend the R61->R62->R64 refutation ladder one band past its top (k=5 -> k=6)",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "proposition": "For a drop set K of size k of a rank-r base, reaching rank <= 22 needs the deficit D = M - sum(surviving) to be a sum of j <= k-(r-22) rank-1 tensors. flatDim(D) > j refutes it (exact rank over Q). Otherwise minBoxCover(supp D) > j refutes it, because supp(D) = union_t supp(u_t) x supp(v_t) x supp(w_t) makes the minimum in-support box cover a lower bound on the number of rank-1 terms. Both screens are coefficient-free and field-free.",
+  "relationToR64": "R61 refuted every drop set with flatDim > j and R62/R64 refuted all 1986 of its survivors via the box-cover bound, closing k <= 5 for T12c, T11 and T12d_fam_B. k=6 is the band those screens never reached; R63 named it the open target and r12/r13 produced no k=6 rows. T12d_fam_A is added here because it was never a screen base.",
+  "refutationRule": "refuted iff flatDim(D) > j, or minBoxCover's ALWAYS-PROVEN `lower` > j. minBoxCover's `lower` is proven in both its exact and its budget-limited branch, so a row killed by `lower` is refuted even when budgetHit=true. `upper` is the size of an actual greedy cover and is NEVER used to claim a witness. budgetHit with lower <= j is recorded UNRESOLVED, never as a partial refutation.",
+  "k": 6,
+  "maxNodesPerCover": 400000,
+  "controls": [
+    {
+      "name": "planted-box-1",
+      "passed": true,
+      "detail": "dropped [2] from T11: flatDim=1 <= 1, minBoxes=null <= 1 (must NOT be refuted)"
+    },
+    {
+      "name": "planted-box-2",
+      "passed": true,
+      "detail": "dropped [2,3] from T11: flatDim=2 <= 2, minBoxes=null <= 2 (must NOT be refuted)"
+    },
+    {
+      "name": "planted-box-3",
+      "passed": true,
+      "detail": "dropped [2,3,4] from T11: flatDim=3 <= 3, minBoxes=null <= 3 (must NOT be refuted)"
+    },
+    {
+      "name": "target-transversal",
+      "passed": true,
+      "detail": "boxCover lower bound on M = 27, expected 27 (support is one point per (i,j,k))"
+    },
+    {
+      "name": "independence-flatDim-vs-boxCover",
+      "passed": true,
+      "detail": "flatDim(M)=9, boxCover(M)=27; neither screen bounds the other"
+    },
+    {
+      "name": "R63-exact-reproduction",
+      "passed": true,
+      "detail": "12/12 of R63's cheapest refuted rows re-screened at maxNodes=400000: identical j and identical proven minimum"
+    },
+    {
+      "name": "budget-limited-row-never-refuted",
+      "passed": true,
+      "detail": "6/6 of R63's most expensive rows (6/6 actually hit the budget at maxNodes=2000) came back UNRESOLVED with minBoxes=null, so a cut-off search cannot be read as a refutation"
+    }
+  ],
+  "exhaustive": false,
+  "exhaustiveMeaning": "every drop set of size exactly k of each named base was screened, and each cover search is branch and bound with no coefficient ansatz, so a refutation is a proof and not a bounded null",
+  "coverage": {
+    "expectedTotal": 377454,
+    "covered": 31,
+    "complete": false,
+    "stoppedBy": "time budget 210000ms reached during T12c_absorb_best.ts",
+    "timeBudgetMs": 210000,
+    "perBasePlanned": {
+      "T12c_absorb_best.ts": 74613,
+      "T11_solution.ts": 100947,
+      "T12d_fam_A.ts": 100947,
+      "T12d_fam_B.ts": 100947
+    }
+  },
+  "perBase": {
+    "T12c_absorb_best.ts": {
+      "done": 31,
+      "refuted": 31,
+      "unresolved": 0
+    }
+  },
+  "refuted": 31,
+  "unresolved": 0,
+  "unresolvedRows": [],
+  "refutedByRule": {
+    "flatDim": 28,
+    "boxCoverExact": 3,
+    "boxCoverLowerUnderBudget": 0
+  },
+  "strongestRankFloor": 27,
+  "honestLimits": [
+    "a refutation of the drop-k/add-j neighbourhood of the NAMED bases, never a bound on rank 22: 19 <= R <= 23 over Q/R is untouched by this round",
+    "k=6 only. k <= 5 is closed by R61/R62/R64 for T12c/T11/T12d_fam_B; nothing here re-opens it",
+    "UNRESOLVED means support-feasible or budget-limited. It is not a witness and not a refutation",
+    "the screen does not cover repairs that change the surviving terms, add non-rank-1 factors, or start from a base other than the ones named in perBase",
+    "over Q/R is the field claimed; both screens are field-free, so the refutations also hold over Z and every F_p"
+  ],
+  "exactArithmetic": "flatDim is exact rational Gaussian elimination over BigInt via tools/rational.rref; the box cover is integer 9-bit mask arithmetic. No float is compared for equality anywhere.",
+  "elapsedMs": 261419,
+  "checkerConsistency": "verify(T11) exact=true verify(T12c) mismatches=1",
+  "verdict": "BOUNDED-INCOMPLETE",
+  "verdictMeaning": "31 of 31 screened drop sets are refuted completely; 0 are UNRESOLVED and the band is NOT closed. Unexamined drop sets are unknown, not refuted."
+}
