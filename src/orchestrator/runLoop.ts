@@ -25,11 +25,10 @@ import {
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
-import { runRounds, type Outcome, type RoundDeps } from "./roundLoop"
+import { superviseBudgetExhausted, runRounds, type Outcome, type RoundDeps } from "./roundLoop"
 import { waitForStable } from "./settle"
 import {
   beginRound,
-  budgetExhausted as stateBudgetExhausted,
   chargeAgentMs,
   finishRound,
   freshState,
@@ -376,6 +375,7 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
   // landed tasks and burns live quota for nothing.
   const solved = new Set<string>((await replan(selected, REPO)).solved)
   let agentMs = 0
+  let roundsRunThisRun = 0
 
   const deps: RoundDeps = {
     loadState: async () => {
@@ -390,7 +390,13 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
       const partial = raw as { readonly round: number; readonly history: SupervisorState["history"] }
       writeState({ ...readState(), round: partial.round, history: partial.history })
     },
-    budgetExhausted: async () => stateBudgetExhausted(readState(), Date.now(), startedAt).exhausted,
+    budgetExhausted: async () =>
+      superviseBudgetExhausted({
+        roundsRun: roundsRunThisRun,
+        maxRounds: a.maxRounds,
+        elapsedMs: Date.now() - startedAt,
+        maxWallClockMs: a.budgetHours * 3_600_000,
+      }),
     goalReached: async () => goalReached(),
     markAbandoned: async (rounds) => {
       let s = readState()
@@ -429,6 +435,7 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
       let s = finishRound(readState(), round, outcomes.some((o) => o.passRate >= 1) ? "landed" : "failed", `round ${round}: ${outcomes.length} tasks`, Date.now())
       s = chargeAgentMs(s, agentMs)
       writeState(s)
+      roundsRunThisRun += 1
       await saveResults(REPO, live.results)
       await appendEvent(REPO, `${runId}_r${round}`, { type: "round_summary", ts: new Date().toISOString(), round, outcomes })
       return outcomes

@@ -83,6 +83,22 @@ export function sameOutcome(a: readonly Outcome[], b: readonly Outcome[]): boole
   return fingerprint(a) === fingerprint(b)
 }
 
+/**
+ * Per-invocation budget for the long-running supervisor. The persisted journal's
+ * round counter is lifetime state; comparing it against a per-run maxRounds made
+ * every restart after N total rounds stop before rounding once (observed live in
+ * the T12 campaign). Only what THIS invocation ran and wall-clock can expire it.
+ */
+export function superviseBudgetExhausted(input: {
+  readonly roundsRun: number
+  readonly maxRounds: number
+  readonly elapsedMs: number
+  readonly maxWallClockMs: number
+}): boolean {
+  if (input.roundsRun >= input.maxRounds) return true
+  return input.elapsedMs >= Math.max(input.maxWallClockMs, 0)
+}
+
 export type RoundDeps = {
   readonly loadState: () => Promise<{ readonly round: number; readonly history: readonly { readonly round: number; readonly tasks: readonly string[]; readonly status: string }[] }>
   readonly saveState: (state: unknown) => Promise<void>

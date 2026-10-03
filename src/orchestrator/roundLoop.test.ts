@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { decideStop, runRounds, sameOutcome, type Outcome, type RoundDeps } from "./roundLoop"
+import { decideStop, runRounds, sameOutcome, superviseBudgetExhausted, type Outcome, type RoundDeps } from "./roundLoop"
 
 const ok = (taskId: string, rate = 1): Outcome => ({
   taskId,
@@ -244,5 +244,24 @@ describe("S4 round loop over injected deps", () => {
     const rep = await runRounds(h.deps, 5)
     expect(n).toBe(2)
     expect(rep.stoppedBecause).toBe("no-progress")
+  })
+})
+
+describe("per-run supervise budget, judged independently", () => {
+  // Observed live in the T12 campaign: the persisted lifetime round counter (3)
+  // collided with the stored maxRounds (3) and every supervisor restart after N
+  // total rounds stopped before running anything. The per-run ceiling must count
+  // rounds THIS invocation ran, not lifetime journal state.
+  it("a lifetime counter never exhausts the per-run budget", () => {
+    expect(superviseBudgetExhausted({ roundsRun: 0, maxRounds: 2, elapsedMs: 0, maxWallClockMs: 3_600_000 })).toBe(false)
+    expect(superviseBudgetExhausted({ roundsRun: 1, maxRounds: 2, elapsedMs: 90_000, maxWallClockMs: 3_600_000 })).toBe(false)
+  })
+
+  it("stops at the per-run round ceiling", () => {
+    expect(superviseBudgetExhausted({ roundsRun: 2, maxRounds: 2, elapsedMs: 0, maxWallClockMs: 3_600_000 })).toBe(true)
+  })
+
+  it("stops on the per-run wall clock", () => {
+    expect(superviseBudgetExhausted({ roundsRun: 0, maxRounds: 2, elapsedMs: 3_600_001, maxWallClockMs: 3_600_000 })).toBe(true)
   })
 })
