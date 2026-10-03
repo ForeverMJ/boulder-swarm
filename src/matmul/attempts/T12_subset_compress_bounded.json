@@ -1,0 +1,298 @@
+{
+  "question": "can a subset of the terms of a rank-23 family be re-expressed with fewer rank-1 terms?",
+  "ansatz": "for a subset S of m terms take a mode flattening of the sum, let d be its rank, and check the d residual 9x9 blocks all have matrix rank <= 1; if so S becomes d terms and the rank drops by m-d",
+  "whyNotR14": "R14's m-matrix rows vec(u_r v_r^T) ignore w and are not a flattening of the tensor; the flattening of the sum is a different matrix with a different rank, and it drops below the subset size on these families even though the m-matrix rows are independent",
+  "control": {
+    "scheme": "T11_solution, one term split into two sharing u and v",
+    "expectation": "compressing the pair returns exactly one term equal to the original",
+    "observed": "terms=1 flatRank=1 rank=23 correct=true",
+    "passed": true
+  },
+  "families": [
+    {
+      "family": "T11_solution.ts",
+      "rank": 23,
+      "cells": [
+        {
+          "size": 2,
+          "which": "u",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "v",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "w",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "u",
+          "subsets": 1771,
+          "flatteningBelowSize": 76,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "v",
+          "subsets": 1771,
+          "flatteningBelowSize": 72,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "w",
+          "subsets": 1771,
+          "flatteningBelowSize": 74,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "u",
+          "subsets": 8855,
+          "flatteningBelowSize": 906,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "v",
+          "subsets": 8855,
+          "flatteningBelowSize": 830,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "w",
+          "subsets": 8855,
+          "flatteningBelowSize": 866,
+          "blocksAllRank1": 0
+        }
+      ],
+      "rankReduced": []
+    },
+    {
+      "family": "T12_rank23_variant.ts",
+      "rank": 23,
+      "cells": [
+        {
+          "size": 2,
+          "which": "u",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "v",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "w",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "u",
+          "subsets": 1771,
+          "flatteningBelowSize": 76,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "v",
+          "subsets": 1771,
+          "flatteningBelowSize": 72,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "w",
+          "subsets": 1771,
+          "flatteningBelowSize": 74,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "u",
+          "subsets": 8855,
+          "flatteningBelowSize": 906,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "v",
+          "subsets": 8855,
+          "flatteningBelowSize": 830,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "w",
+          "subsets": 8855,
+          "flatteningBelowSize": 866,
+          "blocksAllRank1": 0
+        }
+      ],
+      "rankReduced": []
+    },
+    {
+      "family": "T12d_fam_A.ts",
+      "rank": 23,
+      "cells": [
+        {
+          "size": 2,
+          "which": "u",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "v",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "w",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "u",
+          "subsets": 1771,
+          "flatteningBelowSize": 76,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "v",
+          "subsets": 1771,
+          "flatteningBelowSize": 72,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "w",
+          "subsets": 1771,
+          "flatteningBelowSize": 74,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "u",
+          "subsets": 8855,
+          "flatteningBelowSize": 906,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "v",
+          "subsets": 8855,
+          "flatteningBelowSize": 830,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "w",
+          "subsets": 8855,
+          "flatteningBelowSize": 866,
+          "blocksAllRank1": 0
+        }
+      ],
+      "rankReduced": []
+    },
+    {
+      "family": "T12d_fam_B.ts",
+      "rank": 23,
+      "cells": [
+        {
+          "size": 2,
+          "which": "u",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "v",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 2,
+          "which": "w",
+          "subsets": 253,
+          "flatteningBelowSize": 3,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "u",
+          "subsets": 1771,
+          "flatteningBelowSize": 76,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "v",
+          "subsets": 1771,
+          "flatteningBelowSize": 72,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 3,
+          "which": "w",
+          "subsets": 1771,
+          "flatteningBelowSize": 74,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "u",
+          "subsets": 8855,
+          "flatteningBelowSize": 906,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "v",
+          "subsets": 8855,
+          "flatteningBelowSize": 830,
+          "blocksAllRank1": 0
+        },
+        {
+          "size": 4,
+          "which": "w",
+          "subsets": 8855,
+          "flatteningBelowSize": 866,
+          "blocksAllRank1": 0
+        }
+      ],
+      "rankReduced": []
+    }
+  ],
+  "rankReducedCandidates": [],
+  "verdict": "BOUNDED-NULL-SUBSET-COMPRESSION-CLOSED",
+  "bound": "Bounded null. It decides the subset-compression ansatz exactly for all four families at all subset sizes 2..4 and all three flattener positions, and it says only that this ansatz cannot produce rank<=22. It is NOT a proof that no rank-22 scheme exists, and it says nothing about ansatzes that modify two or three factors of a term at once.",
+  "exactArithmetic": "rational Gaussian elimination over BigInt; no float in any equality decision",
+  "elapsedMs": 52188
+}

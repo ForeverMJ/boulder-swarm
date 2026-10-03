@@ -1,0 +1,2375 @@
+{
+  "question": "does any rank-22 exact scheme for n=3 arise by one-mode recombination of a rank-23 family?",
+  "ansatz": "keep every triple but one with two of its three factors exactly as given and choose the third factor's 9 entries freely, over Q; the resulting system is linear and is decided exactly",
+  "extends": "R14 decided the w-mode of this ansatz only and recorded the other two modes as untested",
+  "control": {
+    "positive": {
+      "scheme": "T11_solution rank 23, one w-vector split at two nonzero positions => exact rank 24",
+      "drop": 23,
+      "mode": "w",
+      "expect": "feasible, exact, rank 23 — recovers a scheme the repo already holds",
+      "got": {
+        "feasible": true,
+        "correct": true,
+        "rank": 23,
+        "mismatches": 0
+      }
+    },
+    "identity": {
+      "note": "drop=-1 keeps every triple, so recombination must return the scheme itself",
+      "T11": {
+        "feasible": true,
+        "correct": true,
+        "rank": 23
+      },
+      "naive3": {
+        "feasible": true,
+        "correct": true,
+        "rank": 27
+      }
+    },
+    "passed": true
+  },
+  "families": [
+    {
+      "family": "T11_solution.ts",
+      "rank": 23,
+      "mMatrixRank": 23,
+      "mMatrixIndependent": true,
+      "subsetFlatteningDropsBelowSize": true,
+      "subsetSample": [
+        {
+          "size": 2,
+          "checked": 253,
+          "minFlatRank": 1,
+          "violations": 3
+        },
+        {
+          "size": 3,
+          "checked": 400,
+          "minFlatRank": 2,
+          "violations": 11
+        },
+        {
+          "size": 4,
+          "checked": 400,
+          "minFlatRank": 3,
+          "violations": 35
+        }
+      ],
+      "cells": [
+        {
+          "drop": 0,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        }
+      ],
+      "feasibleCells": [],
+      "bestRank": 23,
+      "bestMismatches": -1
+    },
+    {
+      "family": "T12_rank23_variant.ts",
+      "rank": 23,
+      "mMatrixRank": 23,
+      "mMatrixIndependent": true,
+      "subsetFlatteningDropsBelowSize": true,
+      "subsetSample": [
+        {
+          "size": 2,
+          "checked": 253,
+          "minFlatRank": 1,
+          "violations": 3
+        },
+        {
+          "size": 3,
+          "checked": 400,
+          "minFlatRank": 2,
+          "violations": 27
+        },
+        {
+          "size": 4,
+          "checked": 400,
+          "minFlatRank": 2,
+          "violations": 81
+        }
+      ],
+      "cells": [
+        {
+          "drop": 0,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        }
+      ],
+      "feasibleCells": [],
+      "bestRank": 23,
+      "bestMismatches": -1
+    },
+    {
+      "family": "T12d_fam_A.ts",
+      "rank": 23,
+      "mMatrixRank": 23,
+      "mMatrixIndependent": true,
+      "subsetFlatteningDropsBelowSize": true,
+      "subsetSample": [
+        {
+          "size": 2,
+          "checked": 253,
+          "minFlatRank": 1,
+          "violations": 3
+        },
+        {
+          "size": 3,
+          "checked": 400,
+          "minFlatRank": 2,
+          "violations": 11
+        },
+        {
+          "size": 4,
+          "checked": 400,
+          "minFlatRank": 3,
+          "violations": 35
+        }
+      ],
+      "cells": [
+        {
+          "drop": 0,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        }
+      ],
+      "feasibleCells": [],
+      "bestRank": 23,
+      "bestMismatches": -1
+    },
+    {
+      "family": "T12d_fam_B.ts",
+      "rank": 23,
+      "mMatrixRank": 23,
+      "mMatrixIndependent": true,
+      "subsetFlatteningDropsBelowSize": true,
+      "subsetSample": [
+        {
+          "size": 2,
+          "checked": 253,
+          "minFlatRank": 1,
+          "violations": 3
+        },
+        {
+          "size": 3,
+          "checked": 400,
+          "minFlatRank": 2,
+          "violations": 11
+        },
+        {
+          "size": 4,
+          "checked": 400,
+          "minFlatRank": 3,
+          "violations": 35
+        }
+      ],
+      "cells": [
+        {
+          "drop": 0,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 0,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 1,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 2,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 3,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 4,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 5,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 6,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 7,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 8,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 9,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 10,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 11,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 12,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 13,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 14,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 15,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 16,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 17,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 18,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 19,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 20,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 21,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "u",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "v",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        },
+        {
+          "drop": 22,
+          "mode": "w",
+          "feasible": false,
+          "correct": false,
+          "rank": -1,
+          "mismatches": -1
+        }
+      ],
+      "feasibleCells": [],
+      "bestRank": 23,
+      "bestMismatches": -1
+    }
+  ],
+  "verdict": "BOUNDED-NULL-ONE-MODE-RECOMBINATION-CLOSED",
+  "bound": "Bounded null. It decides the stated ansatz completely for all four families at all drop positions, and it says only that these ansatzes cannot produce rank<=22. It is NOT a proof that no rank-22 scheme exists, and it says nothing about ansatzes that change two or three factors of a term at once.",
+  "subsetNote": "CORRECTION, and the reason this harness was rewritten. An earlier draft claimed that independence of the m-matrix rows implies every subset has mode-1 flattening rank m. That is FALSE, and the numbers here refute it: 3 pairs have mode-1 flattening rank 1, and larger subsets have flattening rank below their size. The m-matrix rows vec(u_r v_r^T) pair u with v and ignore w, so they are not a flattening of the tensor at all, and independence of that object constrains nothing about tensor-rank compressibility. T12_subset_compress_search.ts follows the true flattening instead. What R14's independence does still certify is the w-recombination ansatz, which the u/v/w cell counts above independently confirm: 0 feasible cells in every mode.",
+  "exactArithmetic": "rational Gaussian elimination over BigInt; no float in any equality decision"
+}
