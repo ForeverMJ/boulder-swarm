@@ -22,5 +22,143 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-03T06:56:34.072Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "E1",
+    "branch": "agent/goal-w0-E1",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 577.42,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T09:34:41.941Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "E1",
+    "branch": "agent/goal-w0-E1",
+    "passed": 4,
+    "total": 4,
+    "pass_rate": 1,
+    "duration_s": 575.15,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T09:45:32.211Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "T02",
+    "branch": "agent/goal-w1-T02",
+    "passed": 5,
+    "total": 5,
+    "pass_rate": 1,
+    "duration_s": 0.1,
+    "loc": 3
+  },
+  {
+    "worker_id": 0,
+    "task_id": "E2",
+    "branch": "agent/goal-w0-E2",
+    "passed": 3,
+    "total": 3,
+    "pass_rate": 1,
+    "duration_s": 428.25,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T10:08:59.307Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "E3",
+    "branch": "agent/goal-w1-E3",
+    "passed": 0,
+    "total": 2,
+    "pass_rate": 0,
+    "duration_s": 575.03,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T10:08:59.307Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "E3",
+    "branch": "agent/goal-w0-E3",
+    "passed": 2,
+    "total": 2,
+    "pass_rate": 1,
+    "duration_s": 572.98,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T10:21:42.590Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "T02",
+    "branch": "agent/goal-w1-T02",
+    "passed": 5,
+    "total": 5,
+    "pass_rate": 1,
+    "duration_s": 0.1,
+    "loc": 3
+  },
+  {
+    "worker_id": 0,
+    "task_id": "E4",
+    "branch": "agent/goal-w0-E4",
+    "passed": 2,
+    "total": 2,
+    "pass_rate": 1,
+    "duration_s": 567.55,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T11:46:33.048Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "T02",
+    "branch": "agent/goal-w1-T02",
+    "passed": 5,
+    "total": 5,
+    "pass_rate": 1,
+    "duration_s": 0.1,
+    "loc": 3
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 597.6,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T12:54:40.865Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 1614.69,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T13:29:51.501Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 829.38,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T13:43:43.392Z"
   }
 ]
