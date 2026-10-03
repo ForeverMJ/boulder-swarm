@@ -73,6 +73,29 @@ describe("S2 agent process lifecycle, judged independently", () => {
     expect(out.timedOut).toBe(false)
   })
 
+  it("captures stderr for post-mortem while stdout semantics stay intact", async () => {
+    const out = await runTree({
+      command: process.execPath,
+      args: ["-e", "console.log('out-ok'); console.error('err-trace'); process.exit(2)"],
+      cwd: dir,
+      timeoutMs: 20_000,
+    })
+    expect(out.exitCode).toBe(2)
+    expect(out.stdout).toContain("out-ok")
+    expect(out.stderr).toContain("err-trace")
+  })
+
+  it("does not report a spawn failure as a timeout", async () => {
+    const out = await runTree({
+      command: "definitely-not-a-real-binary-s2",
+      args: ["whatever"],
+      cwd: dir,
+      timeoutMs: 5_000,
+    })
+    expect(out.timedOut).toBe(false)
+    expect(out.exitCode).toBe(-1)
+  })
+
   it("salvages while the tree is still alive, exactly once, on timeout", async () => {
     const calls: SalvageContext[] = []
     let aliveAtSalvage = -1

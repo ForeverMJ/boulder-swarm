@@ -2,6 +2,7 @@ import { spawn, spawnSync } from "node:child_process"
 import { existsSync, readFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { join } from "node:path"
+import { countTree, killTree, type SalvageContext } from "./agentLifecycle"
 
 export type AgentResult = {
   readonly task_id: string
@@ -12,21 +13,24 @@ export type AgentResult = {
   readonly final: string
   readonly lastMessagePath: string
   readonly straysAfter: number
+  readonly stderr: string
+}
+
+/** Platform name only; discovery lives in resolveCodexBin so the judge stays independent. */
+export function resolveCodexBinFor(platform: string): string {
+  return platform === "win32" ? "codex.cmd" : "codex"
 }
 
 export function resolveCodexBin(): string {
+  const finder = process.platform === "win32" ? "where" : "which"
   try {
-    const r = spawnSync("where", ["codex"], { encoding: "utf-8", timeout: 15_000, shell: true })
+    const r = spawnSync(finder, ["codex"], { encoding: "utf-8", timeout: 15_000, shell: true })
     const first = `${r.stdout ?? ""}`.split("\n").map((s) => s.trim()).find((s) => s !== "")
     if (first !== undefined) return first
   } catch (e) {
-    if (e instanceof Error) {
-      // fall through to PATH lookup
-    } else {
-      throw e
-    }
+    if (!(e instanceof Error)) throw e
   }
-  return "codex"
+  return resolveCodexBinFor(process.platform)
 }
 
 /** True when ChatGPT-OAuth tokens exist, so agents can run on subscription quota. */
@@ -79,13 +83,19 @@ export function spawnAgent(opts: {
   taskId: string
   branch: string
   timeoutMs?: number
-  onSalvage?: () => void
+  onSalvage?: (ctx: SalvageContext) => void
+  /** Judge seam: defaults to resolveCodexBin(). */
+  bin?: string
+  /** Judge seam: replaces the codex CLI argument list when provided. */
+  binArgs?: readonly string[]
+  /** Judge seam: extra child env (PIDFILE-style fixtures). */
+  env?: NodeJS.ProcessEnv
 }): Promise<AgentResult> {
   const timeoutMs = opts.timeoutMs ?? 600_000
-  const bin = resolveCodexBin()
+  const bin = opts.bin ?? resolveCodexBin()
   const model = resolveModel()
   const outFile = join(opts.workdir, "agent-last-message.md")
-  const args = [
+  const args = opts.binArgs ?? [
     "exec",
     "--ephemeral",
     "--skip-git-repo-check",
@@ -101,9 +111,9 @@ export function spawnAgent(opts: {
   const start = performance.now()
   return new Promise<AgentResult>((resolve) => {
     let stdout = ""
-    let stderr = ""
+    let stderrTail = ""
     let done = false
-    const finish = (exitCode: number, timedOut: boolean): void => {
+    const finish = (exitCode: number, timedOut: boolean, straysAfter: number): void => {
       if (done) return
       done = true
       resolve({
@@ -114,46 +124,62 @@ export function spawnAgent(opts: {
         duration_s: Math.round(((performance.now() - start) / 1000) * 100) / 100,
         final: parseFinal(`${stdout}\n${readLastMessage(outFile)}`),
         lastMessagePath: outFile,
-        straysAfter: 0,
+        straysAfter,
+        stderr: stderrTail,
       })
     }
     let child: ReturnType<typeof spawn>
     try {
-      child = spawn(bin, args, { cwd: opts.workdir, env: agentEnv(), shell: true, timeout: timeoutMs })
+      // shell:true only for the win32 .cmd shim; on POSIX it would let /bin/sh re-split
+      // args whose values contain spaces (prompts do), mangling them silently.
+      child = spawn(bin, [...args], {
+        cwd: opts.workdir,
+        env: { ...agentEnv(), ...opts.env },
+        shell: process.platform === "win32",
+      })
     } catch (e) {
       if (e instanceof Error) {
-        return finish(1, false)
+        return finish(1, false, 0)
       }
       throw e
+    }
+    const pid = child.pid ?? -1
+    let salvaged = false
+    const salvage = (): void => {
+      if (salvaged) return
+      salvaged = true
+      if (opts.onSalvage === undefined) return
+      try {
+        opts.onSalvage({ pid })
+      } catch (e) {
+        if (e instanceof Error) {
+          stderrTail += `\n[onSalvage threw: ${String(e)}]`
+        } else {
+          throw e
+        }
+      }
     }
     child.stdout?.on("data", (d: unknown) => {
       stdout += String(d)
     })
     child.stderr?.on("data", (d: unknown) => {
-      stderr += String(d)
-      void stderr
+      // Kept bounded: last 8KB enough for post-mortem; full stream would balloon memory on long runs.
+      stderrTail = (stderrTail + String(d)).slice(-8_192)
     })
-    const timer = setTimeout(() => {
-      try {
-        child.kill()
-      } catch (e) {
-        if (e instanceof Error) {
-          // already exited
-        } else {
-          throw e
-        }
-      }
-      opts.onSalvage?.()
-      finish(1, true)
-    }, timeoutMs + 15_000)
-    timer.unref?.()
+    setTimeout(() => {
+      salvage()
+      void killTree(pid, 4_000).then(() => {
+        finish(1, true, countTree(pid))
+      })
+    }, Math.max(timeoutMs, 0)).unref?.()
     child.on("error", () => {
-      clearTimeout(timer)
-      finish(1, false)
+      // salvage set => teardown path already owns the outcome; a close/error of the kill itself must not race it
+      if (salvaged) return
+      finish(1, false, 0)
     })
     child.on("close", (code) => {
-      clearTimeout(timer)
-      finish(code ?? 1, false)
+      if (salvaged) return
+      finish(code ?? 1, false, 0)
     })
   })
 }

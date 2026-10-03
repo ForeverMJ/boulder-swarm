@@ -33,6 +33,8 @@
  */
 
 import { spawn, spawnSync } from "node:child_process"
+import { readdirSync, readFileSync } from "node:fs"
+import { join } from "node:path"
 
 export type SalvageContext = { readonly pid: number }
 
@@ -50,6 +52,7 @@ export type TreeOutcome = {
   readonly timedOut: boolean
   readonly durationMs: number
   readonly stdout: string
+  readonly stderr: string
   readonly straysAfter: number
 }
 
@@ -58,7 +61,9 @@ const PS_TABLE =
 
 const SPAWN_TIMEOUT_MS = 20_000
 
-function readProcessTable(): Map<number, number> {
+const IS_WINDOWS = process.platform === "win32"
+
+function readWindowsProcessTable(): Map<number, number> {
   const table = new Map<number, number>()
   let out = ""
   try {
@@ -81,6 +86,59 @@ function readProcessTable(): Map<number, number> {
     if (Number.isInteger(child) && Number.isInteger(parent)) table.set(child, parent)
   }
   return table
+}
+
+/** POSIX process table: linux /proc, darwin ps. Same child => parent contract as the Windows table. */
+function readPosixProcessTable(): Map<number, number> {
+  const table = new Map<number, number>()
+  if (process.platform === "linux") {
+    try {
+      const entries = readdirSync("/proc", { withFileTypes: true })
+      for (const entry of entries) {
+        if (!entry.isDirectory() || !/^\d+$/.test(entry.name)) continue
+        const child = Number(entry.name)
+        try {
+          const stat = readFileSync(join("/proc", entry.name, "stat"), "utf-8")
+          // Ppid is field 4, but comm (field 2) may contain spaces wrapped in parens;
+          // cut everything after the closing paren before splitting.
+          const close = stat.lastIndexOf(")")
+          if (close < 0) continue
+          const fields = stat.slice(close + 2).split(" ")
+          const parent = Number(fields[1])
+          if (Number.isInteger(parent)) table.set(child, parent)
+        } catch {
+          // process vanished between readdir and stat; skip
+        }
+      }
+    } catch {
+      return table
+    }
+    return table
+  }
+  try {
+    const res = spawnSync("ps", ["-axo", "pid=,ppid="], {
+      encoding: "utf-8",
+      maxBuffer: 16 * 1024 * 1024,
+      timeout: SPAWN_TIMEOUT_MS,
+    })
+    const out = typeof res.stdout === "string" ? res.stdout : ""
+    for (const raw of out.split("\n")) {
+      const line = raw.trim()
+      if (line === "") continue
+      const sep = line.indexOf(" ")
+      if (sep < 1) continue
+      const child = Number(line.slice(0, sep))
+      const parent = Number(line.slice(sep + 1).trim())
+      if (Number.isInteger(child) && Number.isInteger(parent)) table.set(child, parent)
+    }
+  } catch {
+    return table
+  }
+  return table
+}
+
+function readProcessTable(): Map<number, number> {
+  return IS_WINDOWS ? readWindowsProcessTable() : readPosixProcessTable()
 }
 
 function collectTree(pid: number): number[] {
@@ -128,6 +186,19 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+/** Fire-and-forget best-effort kill of one pid; strength comes from loop + settle checks. */
+function killOnePosix(pid: number): void {
+  try {
+    process.kill(pid, "SIGKILL")
+  } catch {
+    // best effort: pid gone or permission denied; settle() verifies for us
+  }
+}
+
+function killAllPosix(pids: readonly number[]): void {
+  for (const pid of pids) killOnePosix(pid)
+}
+
 function taskkill(pid: number, tree: boolean): void {
   const args = tree ? ["/PID", String(pid), "/T", "/F"] : ["/PID", String(pid), "/F"]
   try {
@@ -153,10 +224,18 @@ async function terminateTree(pid: number, graceMs: number): Promise<KillReport> 
   if (!Number.isInteger(pid) || pid <= 0) return { signalled: 0, remaining: 0 }
   const victims = collectTree(pid)
   if (victims.length === 0) return { signalled: 0, remaining: 0 }
-  taskkill(pid, true)
+  if (IS_WINDOWS) {
+    taskkill(pid, true)
+  } else {
+    killAllPosix(victims)
+  }
   let left = await settle(victims, graceMs)
   if (left.length > 0) {
-    for (const victim of left) taskkill(victim, false)
+    if (IS_WINDOWS) {
+      for (const victim of left) taskkill(victim, false)
+    } else {
+      killAllPosix(left)
+    }
     left = await settle(victims, 750)
   }
   return { signalled: victims.length, remaining: left.length }
@@ -170,6 +249,7 @@ export function runTree(opts: RunTreeOpts): Promise<TreeOutcome> {
   const startedAt = Date.now()
   return new Promise<TreeOutcome>((resolve) => {
     let stdout = ""
+    let stderr = ""
     let timedOut = false
     let salvaged = false
     let settled = false
@@ -179,7 +259,7 @@ export function runTree(opts: RunTreeOpts): Promise<TreeOutcome> {
     const child = spawn(opts.command, [...opts.args], {
       cwd: opts.cwd,
       env: { ...process.env, ...opts.env },
-      stdio: ["ignore", "pipe", "ignore"],
+      stdio: ["ignore", "pipe", "pipe"],
       windowsHide: true,
     })
 
@@ -191,6 +271,11 @@ export function runTree(opts: RunTreeOpts): Promise<TreeOutcome> {
     child.stdout?.setEncoding("utf-8")
     child.stdout?.on("data", (chunk: string) => {
       stdout += chunk
+    })
+    child.stderr?.setEncoding("utf-8")
+    child.stderr?.on("data", (chunk: string) => {
+      // bounded: agent failure streams can be large; the tail is the post-mortem evidence
+      stderr = (stderr + chunk).slice(-16_384)
     })
 
     const salvage = (): void => {
@@ -214,6 +299,7 @@ export function runTree(opts: RunTreeOpts): Promise<TreeOutcome> {
         timedOut,
         durationMs: Date.now() - startedAt,
         stdout,
+        stderr,
         straysAfter,
       })
     }

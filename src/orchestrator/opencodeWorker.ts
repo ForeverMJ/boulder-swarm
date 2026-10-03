@@ -15,10 +15,18 @@ export type AgentResult = {
   readonly straysAfter: number
 }
 
+/**
+ * Windows needs the .cmd shim; invoking bare `opencode` there fails to resolve the
+ * npm-style binary. POSIX resolves `opencode` directly and has no .cmd.
+ */
+export function resolveOpencodeBinFor(platform: string): string {
+  return platform === "win32" ? "opencode.cmd" : "opencode"
+}
+
 export function resolveOpencodeBin(): string {
   const override = process.env["OPENCODE_BIN"]?.trim()
   if (override !== undefined && override !== "") return override
-  return "opencode.cmd"
+  return resolveOpencodeBinFor(process.platform)
 }
 
 export function resolveModel(): string {
