@@ -68,16 +68,33 @@ function asList(value: unknown): readonly unknown[] | null {
   return Array.isArray(value) ? (value as readonly unknown[]) : null
 }
 
-function isRoundRecord(value: unknown): value is RoundRecord {
-  if (!isIndex(value)) return false
+/**
+ * A record is loadable when its load-bearing fields (round, status, tasks) are
+ * valid; the metadata (startedAt/finishedAt/note) is informational. The
+ * roundLoop writer persists metadata-lean entries ({round, tasks, status}), so a
+ * reader that demanded metadata would silently wipe the whole journal on the
+ * next restart — which is exactly what the E2/E3 campaign observed live. Tolerate
+ * the absence, normalize with neutral defaults, and keep the strictness for
+ * anything that could make staleness or requeue semantics lie.
+ */
+function asRoundRecord(value: unknown): RoundRecord | null {
+  if (!isIndex(value)) return null
   const { round, startedAt, finishedAt, status, tasks, note } = value
   const list = asList(tasks)
-  if (!Number.isInteger(round) || !isFiniteNumber(round) || round < 0) return false
-  if (!isFiniteNumber(startedAt)) return false
-  if (finishedAt !== null && !isFiniteNumber(finishedAt)) return false
-  if (typeof status !== "string" || !ROUND_STATUSES.includes(status)) return false
-  if (list === null || !list.every((t) => typeof t === "string")) return false
-  return typeof note === "string"
+  if (!Number.isInteger(round) || !isFiniteNumber(round) || round < 0) return null
+  if (startedAt !== undefined && !isFiniteNumber(startedAt)) return null
+  if (finishedAt !== undefined && finishedAt !== null && !isFiniteNumber(finishedAt)) return null
+  if (typeof status !== "string" || !ROUND_STATUSES.includes(status)) return null
+  if (list === null || !list.every((t) => typeof t === "string")) return null
+  if (note !== undefined && typeof note !== "string") return null
+  return {
+    round,
+    startedAt: typeof startedAt === "number" ? startedAt : 0,
+    finishedAt: typeof finishedAt === "number" ? finishedAt : null,
+    status: status as RoundStatus,
+    tasks: [...list],
+    note: typeof note === "string" ? note : "",
+  }
 }
 
 function readBudget(value: unknown, fallback: Budget): Budget {
@@ -117,8 +134,9 @@ export function loadState(path: string, budget: Budget): SupervisorState {
   if (list === null) return freshState(budget)
   const records: RoundRecord[] = []
   for (const entry of list) {
-    if (!isRoundRecord(entry)) return freshState(budget)
-    records.push(entry)
+    const record = asRoundRecord(entry)
+    if (record === null) return freshState(budget)
+    records.push(record)
   }
 
   return { version: 1, round, budget: readBudget(stored, budget), history: records }

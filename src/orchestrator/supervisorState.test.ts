@@ -132,4 +132,62 @@ it("leaves no temp file behind after a save", () => {
     expect(parsed.version).toBe(1)
     expect(parsed.round).toBe(1)
   })
+
+  // Observed live in the E2/E3 campaign: runRounds persists history entries as
+  // {round, tasks, status} without metadata, and the loader's strict record
+  // check then reset the WHOLE journal to fresh on the next restart, silently
+  // dropping every round. The loader must tolerate metadata-lean entries so a
+  // restart never loses rounds it previously recorded.
+  it("keeps metadata-lean history entries instead of wiping the journal", () => {
+    writeFileSync(
+      path,
+      JSON.stringify({
+        version: 1,
+        round: 2,
+        budget: BUDGET,
+        history: [
+          { round: 1, tasks: ["E3"], status: "abandoned" },
+          { round: 2, tasks: ["E4"], status: "running" },
+        ],
+      }),
+      "utf-8",
+    )
+    const back = loadState(path, BUDGET)
+    expect(back.round).toBe(2)
+    expect(back.history).toHaveLength(2)
+    expect(back.history[0]?.status).toBe("abandoned")
+    expect(back.history[1]?.status).toBe("running")
+    expect(back.history[1]?.finishedAt).toBeNull()
+  })
+
+  it("still sees a metadata-lean interrupt as stale so recovery can requeue it", () => {
+    writeFileSync(
+      path,
+      JSON.stringify({
+        version: 1,
+        round: 1,
+        budget: BUDGET,
+        history: [{ round: 1, tasks: ["E4"], status: "running" }],
+      }),
+      "utf-8",
+    )
+    const stale = staleRounds(loadState(path, BUDGET))
+    expect(stale).toHaveLength(1)
+    expect(stale[0]?.round).toBe(1)
+  })
+
+  it("still reject a metadata-lean entry whose round/status/tasks are invalid", () => {
+    writeFileSync(
+      path,
+      JSON.stringify({
+        version: 1,
+        round: 2,
+        budget: BUDGET,
+        history: [{ round: -1, tasks: ["X"], status: "not-a-status" }],
+      }),
+      "utf-8",
+    )
+    expect(loadState(path, BUDGET).round).toBe(0)
+    expect(loadState(path, BUDGET).history).toEqual([])
+  })
 })
