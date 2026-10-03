@@ -101,12 +101,18 @@ export type RoundReport = {
 export async function runRounds(deps: RoundDeps, maxRounds: number): Promise<RoundReport> {
   const state = await deps.loadState()
   const survivors = state.history.filter((entry) => entry.status === "running")
+  const survivorRounds = survivors.map((entry) => entry.round)
   if (survivors.length > 0) {
-    await deps.markAbandoned(survivors.map((entry) => entry.round))
+    await deps.markAbandoned(survivorRounds)
   }
 
   const rounds: Outcome[][] = []
-  const history = [...state.history]
+  // The local history must already carry the abandonment: it was captured before
+  // markAbandoned persisted the recovery, and re-persisting the stale array
+  // resurrected "running" over the marker (observed live in the E2/E3 campaign).
+  const history = state.history.map((entry) =>
+    survivorRounds.includes(entry.round) ? { ...entry, status: "abandoned" } : entry,
+  )
   let requeued: readonly string[] = survivors.flatMap((entry) => entry.tasks)
   let previous: readonly Outcome[] = []
   let stoppedBecause: StopReason["why"] = "budget"

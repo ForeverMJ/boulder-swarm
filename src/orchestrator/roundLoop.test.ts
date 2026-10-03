@@ -159,6 +159,22 @@ describe("S4 round loop over injected deps", () => {
     expect(marked).toEqual([7])
   })
 
+  it("an abandoned round stays abandoned in every later persisted history (no resurrection)", async () => {
+    const h = harness({
+      loadState: async () => ({ round: 7, history: [{ round: 7, tasks: ["L2"], status: "running" }] }),
+      runRound: async () => [ok("L2")],
+    })
+    await runRounds(h.deps, 3)
+    const entries = h.saved
+      .map((s) => (s as { history?: { round: number; tasks: readonly string[]; status: string }[] }).history ?? [])
+      .flat()
+      .filter((entry) => entry.round === 7)
+    expect(entries.length).toBeGreaterThan(0)
+    for (const entry of entries) {
+      expect(entry.status).toBe("abandoned")
+    }
+  })
+
   it("does not requeue rounds that were already finished", async () => {
     const seen: (readonly string[])[] = []
     const h = harness({
