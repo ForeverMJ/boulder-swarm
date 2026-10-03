@@ -28,6 +28,10 @@ L1:
     title: 长驻 supervisor（无人值守连续运行一个月）
     verifier: bun test src/orchestrator/
     done_when: 持久状态+进程生命周期+轮次循环均有独立裁判测试并经合并门落盘
+  - id: M7
+    title: Erdős–Straus 4/n = 1/x+1/y+1/z 有限验证管线（用户明确任务，coordinator 注入）
+    verifier: bun test src/es4/es4Search.test.ts
+    done_when: E1 从零解出并经合并门落盘（n∈[2..10^4] 全覆盖 + 首漏报告语义正确）
 L2:
   - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
   - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
@@ -62,6 +66,7 @@ L2:
   - {id: S4, problem: src/orchestrator/roundLoop.ts, tests: src/orchestrator/roundLoop.test.ts, owner: worker, milestone: M6, note: the loop that calls S1-S3; requeue crash survivors, persist per round, stop on goal before budget, and halt on a repeated outcome instead of spinning for a month}
   - {id: D1, problem: src/recording/metrics.ts, tests: src/recording/metricsAppend.test.ts, owner: worker, milestone: M6, note: "saveResults must ACCUMULATE, not overwrite. It currently calls writeFile with only the current run's rows, so metrics/results.json holds exactly one run and replan, which reads that file, has a one-round-deep memory of what is solved. Already observed: a mock dispatch of S4 destroyed the R52 failure row, which was the only evidence that live dispatch produces nothing. Rows are append-only and replan's last-wins Map then gives correct latest-state semantics; the CSV must stay in step with the JSON"}
   - {id: D2, problem: src/orchestrator/runLoop.ts, tests: src/orchestrator/taskEvidence.test.ts, owner: worker, milestone: M6, note: "research tasks need an explicit completion-evidence field so replan can recognise them. R08, R14 and R19 point at goalCheck.ts, which exits 1 because rank-22 is unsolved, so they score passRate 0 forever and replan wants to redo finished work each round. Their success markers (CERTIFIED-LOCAL-OPTIMAL-2MOVE, ALL-IRREDUCIBLE, NO-OVERLAP-OBSERVED) are looked for in scoreboard output where they never appear, so the markers are dead. Add evidence?: string to the Task schema and thread it through loadTasks and both scoreAssignment call sites; when evidence names CAMPAIGN:<label>, a substantive row for that label in the worktree's CAMPAIGN.md scores 1, anything else scores 0 without throwing; tasks without evidence must score exactly as before. Then set evidence CAMPAIGN:R8 on R08, CAMPAIGN:R14 on R14 and CAMPAIGN:R19 on R19. Do NOT touch R10 (works through PAIRTABLES) or T12c (correctly pending through BEST22=none)."}
+  - {id: E1, problem: src/es4/es4Search.ts, tests: src/es4/es4Search.test.ts, owner: worker, milestone: M7, note: "Erdos-Straus 4/n = 1/x+1/y+1/z finite verification, n in [2..10^4]; stub starts red, agent solves from zero; file-ownership src/es4/es4Search.ts only; exact BigInt rationals, no floats; prompt at src/matmul/prompts/E1.md"}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
