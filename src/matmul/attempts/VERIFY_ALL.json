@@ -263,6 +263,12 @@
       "note": "consistent"
     },
     {
+      "file": "R61_dropk_addk_refuted_k8.json",
+      "verdict": "PARTIAL-REFUTATION-WITH-UNDECIDED-SUBSETS",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R6_survey_pm2.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -344,7 +350,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 49,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

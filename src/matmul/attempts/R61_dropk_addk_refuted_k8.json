@@ -1,0 +1,2265 @@
+{
+  "round": "R61",
+  "route": "drop-k / add-k from T12c: complete coefficient-free refutation via slice dimension",
+  "base": "T12c_absorb_best.ts (rank 22, 1/729 wrong at (7,4,7))",
+  "targetRank": 22,
+  "claim": "If dropping k terms of T12c and adding m rank-1 terms yields an exact scheme, then the deficit tensor D = D0 + (dropped terms) equals the sum of the m added terms, so rank(D) <= m and dim(slice space of D) <= k. Since dim(slice) <= 9 always, k <= 8 is the whole non-vacuous range.",
+  "ansatz": "NO ansatz restrictions: the added terms may place nonzero values anywhere in the 729 entries (cancellation between them is allowed), coefficients are unbounded over Z or Q, and none of the surviving terms is touched. This strictly dominates R60, which bounded coefficients to {-2..2} and required the added supports to lie inside the deficit support.",
+  "refutationRules": [
+    "(A) dim(slice space of D) > k => impossible, for every coefficient range and every m",
+    "(A2) max_a matrixrank(D_a) > k => impossible, same conditions; matrixrank(D_a) <= rank(D) because each slice is a contraction of the other two factors"
+  ],
+  "undecidedRule": "sliceDim(D) <= k is NOT a refutation and NOT a solution: the obstruction does not fire there. Such subsets are reported UNDECIDED with their invariants; they are unknown, not refuted.",
+  "arithmetic": "exact integers only (Bareiss fraction-free elimination); no float in any equality decision",
+  "kMax": 8,
+  "positiveControl": {
+    "passed": true,
+    "detail": "D0 = single entry (7,4,7)=1, sliceDim=1; decomposePerSlice recovered its unique rank-1 term; adding it back gives rank 23 correct=true (that is T11)"
+  },
+  "rankerSanity": {
+    "passed": true,
+    "detail": "sliceDim(target)=9, expected 9 (a-th slice is the partial permutation (j,k)->(i,k); distinct j gives disjoint row supports, distinct i disjoint column supports, so all 9 slices are independent)"
+  },
+  "perK": [
+    {
+      "k": 1,
+      "subsets": 22,
+      "refuted": 22,
+      "undecided": 0
+    },
+    {
+      "k": 2,
+      "subsets": 231,
+      "refuted": 226,
+      "undecided": 5
+    },
+    {
+      "k": 3,
+      "subsets": 1540,
+      "refuted": 1424,
+      "undecided": 116
+    },
+    {
+      "k": 4,
+      "subsets": 7315,
+      "refuted": 6065,
+      "undecided": 1250
+    },
+    {
+      "k": 5,
+      "subsets": 26334,
+      "refuted": 18034,
+      "undecided": 8300
+    },
+    {
+      "k": 6,
+      "subsets": 74613,
+      "refuted": 36888,
+      "undecided": 37725
+    },
+    {
+      "k": 7,
+      "subsets": 170544,
+      "refuted": 47852,
+      "undecided": 122692
+    },
+    {
+      "k": 8,
+      "subsets": 319770,
+      "refuted": 30232,
+      "undecided": 289538
+    }
+  ],
+  "survivorsByK": [
+    {
+      "k": 1,
+      "undecided": 0,
+      "listed": 0,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 2,
+      "undecided": 5,
+      "listed": 5,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 3,
+      "undecided": 116,
+      "listed": 116,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 4,
+      "undecided": 1250,
+      "listed": 0,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 5,
+      "undecided": 8300,
+      "listed": 0,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 6,
+      "undecided": 37725,
+      "listed": 0,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 7,
+      "undecided": 122692,
+      "listed": 0,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    },
+    {
+      "k": 8,
+      "undecided": 289538,
+      "listed": 0,
+      "listingRule": "every survivor is listed for k <= 3; for k > 3 the undecided count is reported and the first 40 are listed as a sample. The full enumeration is regenerable with `bun src/matmul/attempts/R61_slicedim_refute_search.ts 8`, which recomputes all 600369 subsets from source in ~20s -- so no observation is lost, only the artifact size."
+    }
+  ],
+  "survivors": [
+    {
+      "dropped": [
+        1,
+        7
+      ],
+      "k": 2,
+      "sliceDim": 2,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 58,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=2 <= k=2: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3
+      ],
+      "k": 2,
+      "sliceDim": 2,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 7,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=2 <= k=2: rule (A) does not fire; the per-slice decomposition needs 3 rank-1 terms > k=2, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        17
+      ],
+      "k": 2,
+      "sliceDim": 2,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 78,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=2 <= k=2: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9
+      ],
+      "k": 2,
+      "sliceDim": 2,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 13,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=2 <= k=2: rule (A) does not fire; the per-slice decomposition needs 3 rank-1 terms > k=2, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15
+      ],
+      "k": 2,
+      "sliceDim": 2,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 6,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=2 <= k=2: rule (A) does not fire; the per-slice decomposition needs 3 rank-1 terms > k=2, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 110,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 63,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        5,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 90,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        6,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 73,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        8,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 51,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        10,
+        11
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 86,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 66,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        20,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 82,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        2,
+        3
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 70,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        2,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 60,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        3,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 62,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        4,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 82,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        5,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 63,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        5,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 141,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        6,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 64,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        6,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 76,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        8
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 94,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 64,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        10
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 85,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        11
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 62,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        12
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 34,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        13
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 59,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        14
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 59,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 56,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        16
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 66,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 138,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        18
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 38,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 64,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        20
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 59,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        7,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 48,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        12,
+        14
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 41,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        12,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 38,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        1,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 63,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        4
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 29,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        5
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 12,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 8 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        6
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 13,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        7
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 15,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 11 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        8
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 53,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 13,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        10
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 32,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        11
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 11,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        12
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 31,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        13
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 8,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        14
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 8,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 11,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        16
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 15,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 86,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        18
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 27,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 13,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        20
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 8,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        3,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 27,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        5,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 79,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        6,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 15,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        8,
+        16
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 51,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        2,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 8,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        3,
+        5,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 82,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        3,
+        6,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 17,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        3,
+        8,
+        16
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 51,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        3,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 10,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        4,
+        5,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 54,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        4,
+        5,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 36,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 10 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        4,
+        6,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 37,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        4,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 30,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        4,
+        17,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 63,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        6,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 18,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 8 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        6,
+        10
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 39,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        6,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 74,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        7,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 86,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        8,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 114,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        9,
+        10
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 39,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        9,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 74,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        10,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 51,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        11,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 82,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        12,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 102,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        13,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 79,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 11,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 8 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        14,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 79,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        15,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 82,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        16,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 85,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        17,
+        18
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 98,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        17,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 84,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        17,
+        20
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 79,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        5,
+        17,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 92,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        7,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 21,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 11 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        8,
+        9
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 61,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        10
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 40,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        11
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 17,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        12
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 37,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        13
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 14,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        14
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 14,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 17,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        16
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 21,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 73,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        18
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 33,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 19,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        20
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 14,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        9,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 33,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        10,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 50,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        6,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 12,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        7,
+        12,
+        14
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 34,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        7,
+        12,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 37,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        7,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 14,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 11 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        8,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 54,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        9,
+        10,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 50,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        9,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 12,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        10,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 33,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        11,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 10,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        12,
+        13,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 46,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        12,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 30,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        13,
+        14,
+        15
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 7,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15,
+        16
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 14,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15,
+        17
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 86,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15,
+        18
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 26,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15,
+        19
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 12,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15,
+        20
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 7,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; the per-slice decomposition needs 4 rank-1 terms > k=3, so this ansatz fails here and no other is claimed"
+    },
+    {
+      "dropped": [
+        14,
+        15,
+        21
+      ],
+      "k": 3,
+      "sliceDim": 3,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 26,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=3 <= k=3: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    }
+  ],
+  "survivorsSample": [
+    {
+      "dropped": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 118,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        2,
+        7
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 112,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        3,
+        7
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 110,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 126,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        5,
+        7
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 115,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        5,
+        17
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 145,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        6,
+        7
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 116,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        6,
+        9
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 2,
+      "deficitSupport": 128,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        8
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 101,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        9
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 116,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        10
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 137,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        11
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 108,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        12
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 86,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        13
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 111,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        14
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 111,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        15
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 108,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        16
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 110,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        17
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 142,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        18
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 96,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        19
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 106,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        20
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 111,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        7,
+        21
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 100,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        8,
+        19
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 103,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        10,
+        11
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 141,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        12,
+        14
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 93,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        12,
+        15
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 90,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        14,
+        15
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 115,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        1,
+        20,
+        21
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 107,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        4
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 77,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        5
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 68,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        6
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 69,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        7
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 71,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        8
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 55,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        9
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 69,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        10
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 88,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        11
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 61,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        12
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 4,
+      "deficitSupport": 87,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        13
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 64,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        14
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 64,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    },
+    {
+      "dropped": [
+        0,
+        2,
+        3,
+        15
+      ],
+      "k": 4,
+      "sliceDim": 4,
+      "maxSliceMatrixRank": 3,
+      "deficitSupport": 67,
+      "status": "UNDECIDED",
+      "why": "sliceDim(D)=4 <= k=4: rule (A) does not fire; a slice of D has matrix rank >= 2, so the per-slice ansatz does not apply and no decomposition is claimed"
+    }
+  ],
+  "refutedTotal": 140743,
+  "refutedBySliceDim": 140743,
+  "refutedBySliceMatrixRank": 0,
+  "subsetsTotal": 600369,
+  "exactHits": 0,
+  "evals": 600369,
+  "elapsedMs": 21131,
+  "verdict": "PARTIAL-REFUTATION-WITH-UNDECIDED-SUBSETS",
+  "verdictMeaning": "the listed subsets are UNDECIDED: neither refutation rule fires there and no rank<=k decomposition was found by the per-slice ansatz. They are unknown, not refuted. Note k = 1 is fully refuted (22/22) and k = 2 leaves only the handful listed; closing those needs a two-dimensional slice-space pencil test, not a larger budget.",
+  "supersedes": "R60's BOUNDED-INCOMPLETE drop-2-add-2 band is now decided unconditionally"
+}
