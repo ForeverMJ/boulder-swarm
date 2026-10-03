@@ -84,7 +84,13 @@ function parseArgs(argv: readonly string[]): Args {
   return { workers, mode, run, supervise, maxRounds, budgetHours, tasks }
 }
 
-function scoreAssignment(wt: string, tests: string, success: string | undefined): Verdict {
+export function scoreAssignment(
+  wt: string,
+  tests: string,
+  success: string | undefined,
+  evidence?: string,
+): Verdict {
+  void evidence
   if (success === "PAIRTABLES" || success === "WIDEABSORB") {
     const file = success === "PAIRTABLES" ? "R5_pair_tables.json" : "R5_wide_absorb.json"
     const path = join(wt, "src", "matmul", "attempts", file)
