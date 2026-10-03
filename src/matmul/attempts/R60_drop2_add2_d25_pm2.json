@@ -1,0 +1,1418 @@
+{
+  "round": "R60",
+  "route": "drop-2-add-2 from T12c (R57 left this UNRESOLVED)",
+  "base": "T12c_absorb_best.ts (rank 22, 1/729 wrong at (7,4,7))",
+  "targetRank": 22,
+  "rank": "drop 2 of 22 terms, add 2 rank-1 terms => 20 + 2 = 22",
+  "ansatz": "both added terms have support entirely inside the deficit support S; every coefficient in VALS; the 20 surviving terms are untouched. R57 was asymmetric (its second term had CONSTANT v and w); this search is symmetric, all three factors of both terms vary, and u is solved as a linear system.",
+  "vals": [
+    -2,
+    -1,
+    1,
+    2
+  ],
+  "maxDeficit": 25,
+  "workBudget": 60000000,
+  "perPairBudget": 7500000,
+  "positiveControl": {
+    "passed": true,
+    "detail": "term 2 |supp|=2 split-along=v halves=1+1 splits=368 evals=100400"
+  },
+  "deficitHistogram": [
+    [
+      3,
+      3
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      6,
+      9
+    ],
+    [
+      7,
+      6
+    ],
+    [
+      8,
+      10
+    ],
+    [
+      9,
+      6
+    ],
+    [
+      10,
+      9
+    ],
+    [
+      11,
+      11
+    ],
+    [
+      12,
+      3
+    ],
+    [
+      13,
+      9
+    ],
+    [
+      14,
+      2
+    ],
+    [
+      15,
+      6
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      22,
+      6
+    ],
+    [
+      23,
+      2
+    ],
+    [
+      25,
+      7
+    ],
+    [
+      26,
+      8
+    ],
+    [
+      27,
+      7
+    ],
+    [
+      28,
+      1
+    ],
+    [
+      29,
+      13
+    ],
+    [
+      30,
+      2
+    ],
+    [
+      31,
+      6
+    ],
+    [
+      32,
+      3
+    ],
+    [
+      33,
+      5
+    ],
+    [
+      34,
+      3
+    ],
+    [
+      35,
+      1
+    ],
+    [
+      36,
+      2
+    ],
+    [
+      40,
+      1
+    ],
+    [
+      41,
+      1
+    ],
+    [
+      43,
+      1
+    ],
+    [
+      44,
+      1
+    ],
+    [
+      45,
+      3
+    ],
+    [
+      48,
+      3
+    ],
+    [
+      49,
+      3
+    ],
+    [
+      50,
+      3
+    ],
+    [
+      51,
+      3
+    ],
+    [
+      52,
+      1
+    ],
+    [
+      53,
+      2
+    ],
+    [
+      54,
+      3
+    ],
+    [
+      55,
+      4
+    ],
+    [
+      57,
+      3
+    ],
+    [
+      58,
+      1
+    ],
+    [
+      59,
+      1
+    ],
+    [
+      61,
+      2
+    ],
+    [
+      62,
+      4
+    ],
+    [
+      63,
+      1
+    ],
+    [
+      65,
+      4
+    ],
+    [
+      66,
+      2
+    ],
+    [
+      67,
+      3
+    ],
+    [
+      68,
+      2
+    ],
+    [
+      69,
+      2
+    ],
+    [
+      70,
+      3
+    ],
+    [
+      72,
+      2
+    ],
+    [
+      77,
+      3
+    ],
+    [
+      78,
+      2
+    ],
+    [
+      81,
+      1
+    ],
+    [
+      82,
+      4
+    ],
+    [
+      85,
+      4
+    ],
+    [
+      87,
+      1
+    ],
+    [
+      88,
+      3
+    ],
+    [
+      89,
+      1
+    ],
+    [
+      91,
+      1
+    ],
+    [
+      93,
+      1
+    ],
+    [
+      95,
+      1
+    ],
+    [
+      100,
+      1
+    ],
+    [
+      101,
+      1
+    ],
+    [
+      105,
+      1
+    ],
+    [
+      116,
+      1
+    ],
+    [
+      117,
+      1
+    ],
+    [
+      144,
+      1
+    ]
+  ],
+  "pairsTotal": 231,
+  "pairsEligible": 93,
+  "exhaustedByDeficit": [
+    {
+      "deficit": 3,
+      "exhausted": 3,
+      "seen": 3
+    },
+    {
+      "deficit": 4,
+      "exhausted": 3,
+      "seen": 3
+    },
+    {
+      "deficit": 6,
+      "exhausted": 9,
+      "seen": 9
+    },
+    {
+      "deficit": 7,
+      "exhausted": 6,
+      "seen": 6
+    },
+    {
+      "deficit": 8,
+      "exhausted": 10,
+      "seen": 10
+    },
+    {
+      "deficit": 9,
+      "exhausted": 6,
+      "seen": 6
+    },
+    {
+      "deficit": 10,
+      "exhausted": 9,
+      "seen": 9
+    },
+    {
+      "deficit": 11,
+      "exhausted": 11,
+      "seen": 11
+    },
+    {
+      "deficit": 12,
+      "exhausted": 3,
+      "seen": 3
+    },
+    {
+      "deficit": 13,
+      "exhausted": 8,
+      "seen": 9
+    },
+    {
+      "deficit": 14,
+      "exhausted": 2,
+      "seen": 2
+    },
+    {
+      "deficit": 15,
+      "exhausted": 6,
+      "seen": 6
+    },
+    {
+      "deficit": 17,
+      "exhausted": 1,
+      "seen": 1
+    },
+    {
+      "deficit": 22,
+      "exhausted": 6,
+      "seen": 6
+    },
+    {
+      "deficit": 23,
+      "exhausted": 2,
+      "seen": 2
+    },
+    {
+      "deficit": 25,
+      "exhausted": 7,
+      "seen": 7
+    }
+  ],
+  "rows": [
+    {
+      "dropped": [
+        2,
+        3
+      ],
+      "deficit": 7,
+      "rects": 19,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        4
+      ],
+      "deficit": 25,
+      "rects": 254,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        5
+      ],
+      "deficit": 8,
+      "rects": 35,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        6
+      ],
+      "deficit": 9,
+      "rects": 67,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        7
+      ],
+      "deficit": 11,
+      "rects": 259,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        9
+      ],
+      "deficit": 9,
+      "rects": 67,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        11
+      ],
+      "deficit": 7,
+      "rects": 19,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        13
+      ],
+      "deficit": 4,
+      "rects": 5,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        14
+      ],
+      "deficit": 4,
+      "rects": 5,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        15
+      ],
+      "deficit": 7,
+      "rects": 19,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        16
+      ],
+      "deficit": 11,
+      "rects": 31,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        18
+      ],
+      "deficit": 23,
+      "rects": 283,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        19
+      ],
+      "deficit": 9,
+      "rects": 67,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        20
+      ],
+      "deficit": 4,
+      "rects": 5,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        2,
+        21
+      ],
+      "deficit": 23,
+      "rects": 470,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        5
+      ],
+      "deficit": 10,
+      "rects": 47,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        6
+      ],
+      "deficit": 11,
+      "rects": 79,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        7
+      ],
+      "deficit": 13,
+      "rects": 271,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        9
+      ],
+      "deficit": 11,
+      "rects": 79,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        11
+      ],
+      "deficit": 9,
+      "rects": 32,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        13
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        14
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 16384
+    },
+    {
+      "dropped": [
+        3,
+        15
+      ],
+      "deficit": 9,
+      "rects": 31,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        16
+      ],
+      "deficit": 13,
+      "rects": 52,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        18
+      ],
+      "deficit": 25,
+      "rects": 298,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        19
+      ],
+      "deficit": 11,
+      "rects": 82,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        20
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        3,
+        21
+      ],
+      "deficit": 25,
+      "rects": 482,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        6
+      ],
+      "deficit": 12,
+      "rects": 96,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        7
+      ],
+      "deficit": 14,
+      "rects": 287,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        9
+      ],
+      "deficit": 12,
+      "rects": 96,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        11
+      ],
+      "deficit": 10,
+      "rects": 47,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        13
+      ],
+      "deficit": 7,
+      "rects": 33,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        14
+      ],
+      "deficit": 7,
+      "rects": 33,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        15
+      ],
+      "deficit": 10,
+      "rects": 47,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        16
+      ],
+      "deficit": 14,
+      "rects": 59,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        19
+      ],
+      "deficit": 12,
+      "rects": 96,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        5,
+        20
+      ],
+      "deficit": 7,
+      "rects": 33,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        7
+      ],
+      "deficit": 15,
+      "rects": 319,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        9
+      ],
+      "deficit": 13,
+      "rects": 158,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        11
+      ],
+      "deficit": 11,
+      "rects": 79,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        13
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        14
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        15
+      ],
+      "deficit": 11,
+      "rects": 79,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        16
+      ],
+      "deficit": 15,
+      "rects": 94,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        19
+      ],
+      "deficit": 13,
+      "rects": 127,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        6,
+        20
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        9
+      ],
+      "deficit": 15,
+      "rects": 319,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        11
+      ],
+      "deficit": 13,
+      "rects": 271,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        13
+      ],
+      "deficit": 10,
+      "rects": 257,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        14
+      ],
+      "deficit": 10,
+      "rects": 257,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        15
+      ],
+      "deficit": 13,
+      "rects": 272,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        16
+      ],
+      "deficit": 17,
+      "rects": 283,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        19
+      ],
+      "deficit": 15,
+      "rects": 320,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        7,
+        20
+      ],
+      "deficit": 10,
+      "rects": 257,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        9,
+        11
+      ],
+      "deficit": 11,
+      "rects": 82,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        9,
+        13
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        9,
+        14
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        9,
+        15
+      ],
+      "deficit": 11,
+      "rects": 79,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        9,
+        16
+      ],
+      "deficit": 15,
+      "rects": 91,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        9,
+        19
+      ],
+      "deficit": 13,
+      "rects": 127,
+      "splits": 0,
+      "exhausted": false,
+      "evals": 7500000
+    },
+    {
+      "dropped": [
+        9,
+        20
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 262144
+    },
+    {
+      "dropped": [
+        11,
+        13
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        11,
+        14
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        11,
+        15
+      ],
+      "deficit": 9,
+      "rects": 31,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        11,
+        16
+      ],
+      "deficit": 13,
+      "rects": 52,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        11,
+        18
+      ],
+      "deficit": 25,
+      "rects": 298,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        11,
+        19
+      ],
+      "deficit": 11,
+      "rects": 80,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        11,
+        20
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 16384
+    },
+    {
+      "dropped": [
+        11,
+        21
+      ],
+      "deficit": 25,
+      "rects": 481,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        13,
+        14
+      ],
+      "deficit": 3,
+      "rects": 3,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 256
+    },
+    {
+      "dropped": [
+        13,
+        15
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        13,
+        16
+      ],
+      "deficit": 10,
+      "rects": 29,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        13,
+        18
+      ],
+      "deficit": 22,
+      "rects": 281,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        13,
+        19
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        13,
+        20
+      ],
+      "deficit": 3,
+      "rects": 3,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 256
+    },
+    {
+      "dropped": [
+        13,
+        21
+      ],
+      "deficit": 22,
+      "rects": 467,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        14,
+        15
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        14,
+        16
+      ],
+      "deficit": 10,
+      "rects": 29,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        14,
+        18
+      ],
+      "deficit": 22,
+      "rects": 281,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        14,
+        19
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 262144
+    },
+    {
+      "dropped": [
+        14,
+        20
+      ],
+      "deficit": 3,
+      "rects": 3,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 256
+    },
+    {
+      "dropped": [
+        14,
+        21
+      ],
+      "deficit": 22,
+      "rects": 467,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        15,
+        16
+      ],
+      "deficit": 13,
+      "rects": 43,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        15,
+        18
+      ],
+      "deficit": 25,
+      "rects": 304,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        15,
+        19
+      ],
+      "deficit": 11,
+      "rects": 79,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        15,
+        20
+      ],
+      "deficit": 6,
+      "rects": 17,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        15,
+        21
+      ],
+      "deficit": 25,
+      "rects": 512,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        16,
+        19
+      ],
+      "deficit": 15,
+      "rects": 94,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        16,
+        20
+      ],
+      "deficit": 10,
+      "rects": 29,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        18,
+        20
+      ],
+      "deficit": 22,
+      "rects": 281,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        19,
+        20
+      ],
+      "deficit": 8,
+      "rects": 65,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    },
+    {
+      "dropped": [
+        20,
+        21
+      ],
+      "deficit": 22,
+      "rects": 467,
+      "splits": 0,
+      "exhausted": true,
+      "evals": 0
+    }
+  ],
+  "exactHits": 0,
+  "evals": 8057824,
+  "allEligibleExhausted": false,
+  "verdict": "BOUNDED-INCOMPLETE",
+  "verdictMeaning": "the work budget stopped the scan, so the unexhausted drop pairs are unknown, not refuted",
+  "elapsedMs": 8755
+}

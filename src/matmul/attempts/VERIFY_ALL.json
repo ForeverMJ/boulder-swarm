@@ -263,6 +263,24 @@
       "note": "consistent"
     },
     {
+      "file": "R60_drop2_add2_d12_pm2.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R60_drop2_add2_d12_wide.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R60_drop2_add2_d25_pm2.json",
+      "verdict": "BOUNDED-INCOMPLETE",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R6_survey_pm2.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -344,7 +362,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 51,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
