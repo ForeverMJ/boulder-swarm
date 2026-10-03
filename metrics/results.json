@@ -10,5 +10,17 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-02T04:39:00.193Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "D2",
+    "branch": "agent/goal-w0-D2",
+    "passed": 5,
+    "total": 5,
+    "pass_rate": 1,
+    "duration_s": 269.15,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-03T06:56:34.072Z"
   }
 ]
