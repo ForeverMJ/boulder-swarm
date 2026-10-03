@@ -1,0 +1,207 @@
+{
+  "round": "R63",
+  "route": "the coefficient-reshape second condition itself (tools/segreSpan.ts), plus an audit of the regime where it can decide",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "proposition": "If D = sum_{t=1..j} u_t (x) v_t (x) w_t then for each axis a the column space S_a of the axis slices is contained in col(X) with X = [u_t (x) v_t], so dim S_a <= j; and when dim S_a == j the span is forced to equal col(X), whose every generator is a 9x9 outer product, i.e. has rank 1. So if S_a contains no dim S_a linearly independent rank-1 members, D is not a sum of j rank-1 tensors over Q, hence not over Z nor over any F_p.",
+  "admissibility": "A refutation requires an axis with dim S_a == j EXACTLY and j <= 2. dim < j leaves col(X) a larger unknown space and forces nothing; j >= 3 needs either a finiteness proof for the Segre intersection (it can be a positive-dimensional curve in P^2) or a Groebner basis, so segreSpan reports complete:false and licenses no negative.",
+  "finding": "NaN of the NaN drop sets that flatDim left alone are refuted by segreSpan, i.e. genuinely new refutations that R61's flattening bound could not reach (a real rank-1 vector can still be absent from a span whose dimension is small enough)",
+  "notAClaimAbout": "rank 22 itself, or the rank of the 3x3 multiplication tensor. This bounds one repair shape (drop up to 5 terms of a named base, add j <= k-(r-22) rank-1 terms over Q) and nothing else. It does not move the published bounds 19 <= R <= 23 over Q/R, and it transfers to no other field by argument.",
+  "controls": [
+    {
+      "name": "planted-1",
+      "expected": "dim == 1",
+      "got": 1,
+      "passed": true,
+      "detail": "dropped [2] from T11, |supp D|=2, dim=1"
+    },
+    {
+      "name": "planted-2",
+      "expected": "dim == 2",
+      "got": 2,
+      "passed": true,
+      "detail": "dropped [2,3] from T11, |supp D|=3, dim=2"
+    },
+    {
+      "name": "planted-3",
+      "expected": "dim == 3",
+      "got": 3,
+      "passed": true,
+      "detail": "dropped [2,3,4] from T11, |supp D|=7, dim=3"
+    },
+    {
+      "name": "dense-generic",
+      "expected": "dim == 9",
+      "got": 9,
+      "passed": true,
+      "detail": "pseudo-random dense tensor, |supp|=6528, dim=9"
+    }
+  ],
+  "maxDrop": 5,
+  "exhaustive": true,
+  "exhaustiveMeaning": "the drop-set enumeration ran over 100% of subsets of size 1..5 for all three bases, with no work budget and no coefficient ansatz",
+  "rows": [
+    {
+      "base": "T12c_absorb_best.ts",
+      "baseTerms": 22,
+      "byDropSize": [
+        {
+          "k": 1,
+          "dropSets": 22,
+          "minFdim": 2,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 2,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 2,
+          "dropSets": 231,
+          "minFdim": 3,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 49,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 3,
+          "dropSets": 1540,
+          "minFdim": 3,
+          "flatDimSurvivors": 2,
+          "segreRefutable": 5,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 4,
+          "dropSets": 7315,
+          "minFdim": 4,
+          "flatDimSurvivors": 93,
+          "segreRefutable": 0,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 5,
+          "dropSets": 26334,
+          "minFdim": 5,
+          "flatDimSurvivors": 1493,
+          "segreRefutable": 0,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        }
+      ]
+    },
+    {
+      "base": "T11_solution.ts",
+      "baseTerms": 23,
+      "byDropSize": [
+        {
+          "k": 1,
+          "dropSets": 23,
+          "minFdim": 1,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 0,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 2,
+          "dropSets": 253,
+          "minFdim": 2,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 9,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 3,
+          "dropSets": 1771,
+          "minFdim": 3,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 214,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 4,
+          "dropSets": 8855,
+          "minFdim": 3,
+          "flatDimSurvivors": 3,
+          "segreRefutable": 14,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 5,
+          "dropSets": 33649,
+          "minFdim": 4,
+          "flatDimSurvivors": 196,
+          "segreRefutable": 0,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        }
+      ]
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "baseTerms": 23,
+      "byDropSize": [
+        {
+          "k": 1,
+          "dropSets": 23,
+          "minFdim": 1,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 0,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 2,
+          "dropSets": 253,
+          "minFdim": 2,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 9,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 3,
+          "dropSets": 1771,
+          "minFdim": 3,
+          "flatDimSurvivors": 0,
+          "segreRefutable": 214,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 4,
+          "dropSets": 8855,
+          "minFdim": 3,
+          "flatDimSurvivors": 3,
+          "segreRefutable": 14,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        },
+        {
+          "k": 5,
+          "dropSets": 33649,
+          "minFdim": 4,
+          "flatDimSurvivors": 196,
+          "segreRefutable": 0,
+          "segreRefutableNotFlatDim": 0,
+          "refutationsBeyondFlatDim": 0
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "segreAdmissible": null,
+    "segreAdmissibleNotFlatDim": null,
+    "refutedBeyondFlatDim": null
+  },
+  "exactArithmetic": "deficits are integer tensors; axis spans come from exact rational Gaussian elimination over BigInt via tools/rational.rref, cross-checked against R61's independently built matrix; the Segre condition is exact rational arithmetic with BigInt integer square roots. No float is compared for equality anywhere.",
+  "openDirection": "segreSpan at dim == 3 would decide the k = 5 band of the rank-23 anchors (j <= 4 is out of reach, but a tight j = 3 case is not), and it is the only screen here that can produce WITNESSES: a spanning set of rank-1 vectors plus the forced Gram solve reconstructs a candidate scheme for checker.verify to certify. That is the constructive use of the tool and it is not attempted in this round.",
+  "elapsedMs": 144235,
+  "verdict": "BOUNDED-INCOMPLETE",
+  "verdictMeaning": "no new refutation: segreSpan is subsumed by flatDim wherever it is complete, so this round closes nothing and refutes nothing. Reported as a bounded null, not as impossibility."
+}

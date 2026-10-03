@@ -1,0 +1,1439 @@
+{
+  "round": "R61",
+  "route": "flattening screen: complete refutation of drop-k / add-j repairs (replaces R60's bounded VALS enumeration)",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "proposition": "If D = sum_{t=1..j} u_t (x) v_t (x) w_t then for each axis the flattening F_c whose column c is the c-slice of D satisfies F_c = sum_t (u_t (x) v_t) w_t[c]^T, hence dim col(F_c) <= j. Therefore fdim(D) := max over the three axes of dim col(F_axis(D)) is a lower bound on the tensor rank of D, and fdim(D) > j refutes D being a sum of j rank-1 tensors over Q.",
+  "whyStrongerThanR60": [
+    "any rational coefficients admitted, not just VALS = {-2,-1,1,2}",
+    "added terms may place values anywhere, including outside the deficit support, as long as they cancel",
+    "no work budget: the screen is one exact linear-algebra step per drop set, so it covers 100% of the drop sets"
+  ],
+  "honestLimits": [
+    "fdim <= j is necessary, not sufficient: each column of the resulting coefficient matrix X must also reshape to a matrix of rank <= 1, which the screen does not test",
+    "refutation covers repairs that drop up to maxDrop terms of the named base and add rank-1 terms drawn from Q; a scheme that changes the surviving terms, uses non-rank-1 new factors, or starts from a different base is NOT covered",
+    "the Q/R field is the one claimed; the elimination being over Q, the refutations also hold over Z and F_p"
+  ],
+  "maxDrop": 4,
+  "controls": [
+    {
+      "name": "planted-1",
+      "expected": "dim == 1",
+      "got": 1,
+      "passed": true,
+      "detail": "dropped [2] from T11, |supp D|=2, dim=1"
+    },
+    {
+      "name": "planted-2",
+      "expected": "dim == 2",
+      "got": 2,
+      "passed": true,
+      "detail": "dropped [2,3] from T11, |supp D|=3, dim=2"
+    },
+    {
+      "name": "planted-3",
+      "expected": "dim == 3",
+      "got": 3,
+      "passed": true,
+      "detail": "dropped [2,3,4] from T11, |supp D|=7, dim=3"
+    },
+    {
+      "name": "dense-generic",
+      "expected": "dim == 9",
+      "got": 9,
+      "passed": true,
+      "detail": "pseudo-random dense tensor, |supp|=6528, dim=9"
+    }
+  ],
+  "exhaustive": true,
+  "subsetsPerFamily": 7315,
+  "families": [
+    {
+      "base": "T12c_absorb_best.ts",
+      "baseTerms": 22,
+      "baseRank": 22,
+      "note": "T12c itself is 1/729 wrong, so every D here is nonzero; reaching rank <= 22 needs j <= k",
+      "dropSets": 9108,
+      "dimHistogram": [
+        [
+          2,
+          22
+        ],
+        [
+          3,
+          233
+        ],
+        [
+          4,
+          1631
+        ],
+        [
+          5,
+          7222
+        ]
+      ],
+      "refutedByDropSize": [
+        [
+          1,
+          {
+            "total": 22,
+            "refuted": 22
+          }
+        ],
+        [
+          2,
+          {
+            "total": 231,
+            "refuted": 231
+          }
+        ],
+        [
+          3,
+          {
+            "total": 1540,
+            "refuted": 1538
+          }
+        ],
+        [
+          4,
+          {
+            "total": 7315,
+            "refuted": 7222
+          }
+        ]
+      ],
+      "minDim": 2,
+      "survivors": [
+        {
+          "dropped": [
+            0,
+            2,
+            3,
+            19
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 59
+        },
+        {
+          "dropped": [
+            0,
+            3,
+            8,
+            19
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 49
+        },
+        {
+          "dropped": [
+            0,
+            3,
+            16,
+            19
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 57
+        },
+        {
+          "dropped": [
+            0,
+            8,
+            14,
+            19
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 52
+        },
+        {
+          "dropped": [
+            0,
+            8,
+            19,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 53
+        },
+        {
+          "dropped": [
+            0,
+            8,
+            20,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 58
+        },
+        {
+          "dropped": [
+            0,
+            9,
+            11,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 87
+        },
+        {
+          "dropped": [
+            0,
+            10,
+            11,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 87
+        },
+        {
+          "dropped": [
+            0,
+            11,
+            20,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 80
+        },
+        {
+          "dropped": [
+            0,
+            12,
+            13,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 87
+        },
+        {
+          "dropped": [
+            0,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 67
+        },
+        {
+          "dropped": [
+            0,
+            13,
+            20,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 83
+        },
+        {
+          "dropped": [
+            0,
+            14,
+            15,
+            19
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 62
+        },
+        {
+          "dropped": [
+            0,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 67
+        },
+        {
+          "dropped": [
+            0,
+            14,
+            20,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 83
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            12,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 35
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            12,
+            18
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 22
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            12,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 24
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            13,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 60
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            13,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 60
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            14,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 60
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            15,
+            18
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 36
+        },
+        {
+          "dropped": [
+            1,
+            7,
+            18,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 39
+        },
+        {
+          "dropped": [
+            1,
+            12,
+            13,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 42
+        },
+        {
+          "dropped": [
+            1,
+            12,
+            14,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 42
+        },
+        {
+          "dropped": [
+            1,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 64
+        },
+        {
+          "dropped": [
+            1,
+            13,
+            14,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 56
+        },
+        {
+          "dropped": [
+            1,
+            14,
+            15,
+            18
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 43
+        },
+        {
+          "dropped": [
+            1,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 64
+        },
+        {
+          "dropped": [
+            2,
+            3,
+            13,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 9
+        },
+        {
+          "dropped": [
+            2,
+            3,
+            13,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 9
+        },
+        {
+          "dropped": [
+            2,
+            3,
+            14,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 9
+        },
+        {
+          "dropped": [
+            2,
+            3,
+            19,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 14
+        },
+        {
+          "dropped": [
+            2,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 9
+        },
+        {
+          "dropped": [
+            2,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 9
+        },
+        {
+          "dropped": [
+            3,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 11
+        },
+        {
+          "dropped": [
+            3,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 11
+        },
+        {
+          "dropped": [
+            4,
+            5,
+            10,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 35
+        },
+        {
+          "dropped": [
+            4,
+            5,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 55
+        },
+        {
+          "dropped": [
+            4,
+            6,
+            9,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 49
+        },
+        {
+          "dropped": [
+            4,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 31
+        },
+        {
+          "dropped": [
+            4,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 31
+        },
+        {
+          "dropped": [
+            5,
+            9,
+            10,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 47
+        },
+        {
+          "dropped": [
+            5,
+            9,
+            11,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 78
+        },
+        {
+          "dropped": [
+            5,
+            9,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 75
+        },
+        {
+          "dropped": [
+            5,
+            10,
+            14,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 52
+        },
+        {
+          "dropped": [
+            5,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 12
+        },
+        {
+          "dropped": [
+            5,
+            13,
+            14,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 80
+        },
+        {
+          "dropped": [
+            5,
+            13,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 80
+        },
+        {
+          "dropped": [
+            5,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 12
+        },
+        {
+          "dropped": [
+            5,
+            14,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 80
+        },
+        {
+          "dropped": [
+            6,
+            7,
+            9,
+            11
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 25
+        },
+        {
+          "dropped": [
+            6,
+            7,
+            9,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 22
+        },
+        {
+          "dropped": [
+            6,
+            9,
+            11,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 18
+        },
+        {
+          "dropped": [
+            6,
+            9,
+            11,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 77
+        },
+        {
+          "dropped": [
+            6,
+            9,
+            13,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            6,
+            9,
+            13,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            6,
+            9,
+            14,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            6,
+            9,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 74
+        },
+        {
+          "dropped": [
+            6,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 13
+        },
+        {
+          "dropped": [
+            6,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 13
+        },
+        {
+          "dropped": [
+            7,
+            12,
+            13,
+            14
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 35
+        },
+        {
+          "dropped": [
+            7,
+            12,
+            14,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 35
+        },
+        {
+          "dropped": [
+            7,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            7,
+            13,
+            14,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 31
+        },
+        {
+          "dropped": [
+            7,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            8,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 55
+        },
+        {
+          "dropped": [
+            8,
+            13,
+            14,
+            18
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 47
+        },
+        {
+          "dropped": [
+            8,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 55
+        },
+        {
+          "dropped": [
+            9,
+            10,
+            11,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 54
+        },
+        {
+          "dropped": [
+            9,
+            10,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 51
+        },
+        {
+          "dropped": [
+            9,
+            11,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 16
+        },
+        {
+          "dropped": [
+            9,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 13
+        },
+        {
+          "dropped": [
+            9,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 13
+        },
+        {
+          "dropped": [
+            10,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 34
+        },
+        {
+          "dropped": [
+            10,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 34
+        },
+        {
+          "dropped": [
+            11,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 11
+        },
+        {
+          "dropped": [
+            11,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 11
+        },
+        {
+          "dropped": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 31
+        },
+        {
+          "dropped": [
+            12,
+            13,
+            14,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 47
+        },
+        {
+          "dropped": [
+            12,
+            13,
+            20,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 47
+        },
+        {
+          "dropped": [
+            12,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 31
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 7
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15,
+            16
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15,
+            17
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 87
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15,
+            18
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 27
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15,
+            19
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 13
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 8
+        },
+        {
+          "dropped": [
+            13,
+            14,
+            15,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 27
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            16,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 15
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            17,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 87
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            18,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 27
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            19,
+            20
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 13
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            20
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 7
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            20,
+            21
+          ],
+          "finalRank": 18,
+          "dim": 4,
+          "minAdded": 4,
+          "support": 27
+        }
+      ],
+      "verdict": "95 drop sets survive the screen and are UNRESOLVED"
+    },
+    {
+      "base": "T11_solution.ts",
+      "baseTerms": 23,
+      "note": "exact rank-23 anchor; reaching rank <= 22 needs j <= k-1, strictly narrower than T12c's j <= k",
+      "dropSets": 10902,
+      "dimHistogram": [
+        [
+          1,
+          23
+        ],
+        [
+          2,
+          253
+        ],
+        [
+          3,
+          1774
+        ],
+        [
+          4,
+          8852
+        ]
+      ],
+      "refutedByDropSize": [
+        [
+          1,
+          {
+            "total": 23,
+            "refuted": 23
+          }
+        ],
+        [
+          2,
+          {
+            "total": 253,
+            "refuted": 253
+          }
+        ],
+        [
+          3,
+          {
+            "total": 1771,
+            "refuted": 1771
+          }
+        ],
+        [
+          4,
+          {
+            "total": 8855,
+            "refuted": 8852
+          }
+        ]
+      ],
+      "minDim": 1,
+      "survivors": [
+        {
+          "dropped": [
+            3,
+            14,
+            15,
+            16
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 7
+        },
+        {
+          "dropped": [
+            3,
+            15,
+            16,
+            21
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 7
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            16,
+            21
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "baseTerms": 23,
+      "note": "second exact rank-23 anchor, in a pairwise-disjoint de Groote orbit from T11 (R19)",
+      "dropSets": 10902,
+      "dimHistogram": [
+        [
+          1,
+          23
+        ],
+        [
+          2,
+          253
+        ],
+        [
+          3,
+          1774
+        ],
+        [
+          4,
+          8852
+        ]
+      ],
+      "refutedByDropSize": [
+        [
+          1,
+          {
+            "total": 23,
+            "refuted": 23
+          }
+        ],
+        [
+          2,
+          {
+            "total": 253,
+            "refuted": 253
+          }
+        ],
+        [
+          3,
+          {
+            "total": 1771,
+            "refuted": 1771
+          }
+        ],
+        [
+          4,
+          {
+            "total": 8855,
+            "refuted": 8852
+          }
+        ]
+      ],
+      "minDim": 1,
+      "survivors": [
+        {
+          "dropped": [
+            3,
+            14,
+            15,
+            16
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 40
+        },
+        {
+          "dropped": [
+            3,
+            15,
+            16,
+            21
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 40
+        },
+        {
+          "dropped": [
+            14,
+            15,
+            16,
+            21
+          ],
+          "finalRank": 19,
+          "dim": 3,
+          "minAdded": 3,
+          "support": 40
+        }
+      ]
+    }
+  ],
+  "r57Status": "the drop-2-add-2 band remains UNRESOLVED and is listed under survivors",
+  "exactArithmetic": "rational Gaussian elimination over BigInt via tools/rational.rref; no float equality anywhere",
+  "elapsedMs": 29515,
+  "verdict": "BOUNDED-INCOMPLETE",
+  "verdictMeaning": "some drop sets survive; they are listed with their exact dim and remain UNRESOLVED"
+}
