@@ -1,0 +1,244 @@
+{
+  "round": "R73",
+  "title": "ceiling of the linear rank screen on the k=7 survivors",
+  "base": "T12d_fam_A",
+  "dropPattern": "{0,1,2,3,4,x,20}",
+  "j": 6,
+  "exactArithmetic": "BigInt rationals, no floats",
+  "theorem": {
+    "statement": "For T in V1 (x) V2 (x) V3 and every linear phi: V_i^* -> F^m, rank((phi (x) id (x) id)(T)) <= min(m, flat_i(T)). Sub-body restrictions have flat_i <= flat_i(T). A two-mode contraction of an order-3 tensor leaves a vector and certifies at most rank(T) >= 1.",
+    "correction": "An earlier draft of this round claimed the supremum over the one-mode family EQUALS flat_i(T). The attainment control refuted it on row x=15: a d-dimensional subspace of matrices need not contain an invertible one, so the supremum is the maximum rank in the mode-i slice span, which can be strictly below flat_i. The upper bound stands; the equality claim was withdrawn.",
+    "consequence": "The linear screen is exhausted at max_i flat_i(T). No cheaper or cleverer one-mode linear instrumentation can push a surviving k=7 row further, so R71's named requirement (a cheap PROVEN bound above the cover) is not satisfiable inside the linear family."
+  },
+  "controls": {
+    "base-T12d_fam_A-exact-rank23": true,
+    "base-equals-target-exactly": true,
+    "naive27-control-exact": true,
+    "naive27-ceiling-below-true-rank": true,
+    "twoByTwo-ceiling-below-rank-7": true,
+    "two-mode-contraction-is-trivial": true,
+    "subbody-does-not-beat-ceiling": true,
+    "row-6-deficit-reconstructs-base": true,
+    "row-6-one-mode-never-exceeds-ceiling": true,
+    "row-7-deficit-reconstructs-base": true,
+    "row-7-one-mode-never-exceeds-ceiling": true,
+    "row-8-deficit-reconstructs-base": true,
+    "row-8-one-mode-never-exceeds-ceiling": true,
+    "row-11-deficit-reconstructs-base": true,
+    "row-11-one-mode-never-exceeds-ceiling": true,
+    "row-15-deficit-reconstructs-base": true,
+    "row-15-one-mode-never-exceeds-ceiling": true
+  },
+  "allControlsPass": true,
+  "rows": [
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        20
+      ],
+      "x": 6,
+      "j": 6,
+      "deficitSupport": 305,
+      "flatRanks": [
+        6,
+        6,
+        6
+      ],
+      "linearCeiling": 6,
+      "subBodyMax": 6,
+      "twoModeRank": 1,
+      "bestOneModeObserved": 6,
+      "oneModeAttainsCeiling": true,
+      "attainingCovector": [
+        3,
+        -1,
+        -6,
+        6,
+        -6,
+        -10,
+        -5,
+        -9,
+        -4
+      ],
+      "upperBoundFromTerms": 7,
+      "refutedByLinearScreen": false,
+      "note": "NOT REFUTED: the entire linear screen tops out at 6 <= 6, and rank(D) <= 7, so rank(D) is 6..7. Deciding it needs an instrument outside the one-mode linear family."
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        20
+      ],
+      "x": 7,
+      "j": 6,
+      "deficitSupport": 306,
+      "flatRanks": [
+        6,
+        6,
+        6
+      ],
+      "linearCeiling": 6,
+      "subBodyMax": 6,
+      "twoModeRank": 1,
+      "bestOneModeObserved": 6,
+      "oneModeAttainsCeiling": true,
+      "attainingCovector": [
+        -9,
+        9,
+        -4,
+        -8,
+        -5,
+        -6,
+        -3,
+        2,
+        6
+      ],
+      "upperBoundFromTerms": 7,
+      "refutedByLinearScreen": false,
+      "note": "NOT REFUTED: the entire linear screen tops out at 6 <= 6, and rank(D) <= 7, so rank(D) is 6..7. Deciding it needs an instrument outside the one-mode linear family."
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        20
+      ],
+      "x": 8,
+      "j": 6,
+      "deficitSupport": 295,
+      "flatRanks": [
+        5,
+        6,
+        6
+      ],
+      "linearCeiling": 6,
+      "subBodyMax": 6,
+      "twoModeRank": 1,
+      "bestOneModeObserved": 6,
+      "oneModeAttainsCeiling": true,
+      "attainingCovector": [
+        -9,
+        9,
+        10,
+        9,
+        3,
+        -9,
+        8,
+        7,
+        -3
+      ],
+      "upperBoundFromTerms": 7,
+      "refutedByLinearScreen": false,
+      "note": "NOT REFUTED: the entire linear screen tops out at 6 <= 6, and rank(D) <= 7, so rank(D) is 6..7. Deciding it needs an instrument outside the one-mode linear family."
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        11,
+        20
+      ],
+      "x": 11,
+      "j": 6,
+      "deficitSupport": 354,
+      "flatRanks": [
+        6,
+        6,
+        6
+      ],
+      "linearCeiling": 6,
+      "subBodyMax": 6,
+      "twoModeRank": 1,
+      "bestOneModeObserved": 6,
+      "oneModeAttainsCeiling": true,
+      "attainingCovector": [
+        -9,
+        -9,
+        -5,
+        -7,
+        -4,
+        -8,
+        1,
+        7,
+        -1
+      ],
+      "upperBoundFromTerms": 7,
+      "refutedByLinearScreen": false,
+      "note": "NOT REFUTED: the entire linear screen tops out at 6 <= 6, and rank(D) <= 7, so rank(D) is 6..7. Deciding it needs an instrument outside the one-mode linear family."
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        15,
+        20
+      ],
+      "x": 15,
+      "j": 6,
+      "deficitSupport": 296,
+      "flatRanks": [
+        6,
+        6,
+        5
+      ],
+      "linearCeiling": 6,
+      "subBodyMax": 6,
+      "twoModeRank": 1,
+      "bestOneModeObserved": 5,
+      "oneModeAttainsCeiling": false,
+      "attainingCovector": [
+        6,
+        6,
+        6,
+        7,
+        5,
+        -5,
+        -7,
+        4,
+        3
+      ],
+      "upperBoundFromTerms": 7,
+      "refutedByLinearScreen": false,
+      "note": "NOT REFUTED: the entire linear screen tops out at 6 <= 6, and rank(D) <= 7, so rank(D) is 6..7. Deciding it needs an instrument outside the one-mode linear family."
+    }
+  ],
+  "summary": {
+    "rows": 5,
+    "refutedByLinearScreen": 0,
+    "surviving": 5,
+    "linearCeilings": [
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "anyRefuted": false
+  },
+  "honesty": {
+    "witness": "none",
+    "schemeExported": false,
+    "boundMoved": "none: 19 <= R <= 23 over Q/R is untouched",
+    "statement": "Every number here is a LOWER BOUND on rank(D) or the trivial upper bound from the given terms. Nothing here constructs a scheme and nothing here proves rank(D) > 7. A row reported as NOT REFUTED is unresolved, never a witness."
+  }
+}
