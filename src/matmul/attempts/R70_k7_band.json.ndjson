@@ -1,0 +1,3 @@
+{"kind":"chunk","base":"T12c_absorb_best.ts","k":7,"from":0,"to":20000,"rows":20000,"byStage":{"modp":203,"flatDim":10991,"clique":8806,"boxLower":0,"boxExact":0,"unres":0},"unresolvedTotal":0,"maxRankFloor":23,"ms":27678}
+{"kind":"chunk","base":"T11_solution.ts","k":7,"from":0,"to":20000,"rows":20000,"byStage":{"modp":6007,"flatDim":11110,"clique":2883,"boxLower":0,"boxExact":0,"unres":0},"unresolvedTotal":0,"maxRankFloor":23,"ms":19900}
+{"kind":"chunk","base":"T12d_fam_A.ts","k":7,"from":0,"to":136,"rows":136,"byStage":{"modp":96,"flatDim":20,"clique":11,"boxLower":0,"boxExact":4,"unres":5},"unresolvedTotal":5,"maxRankFloor":26,"ms":148518}

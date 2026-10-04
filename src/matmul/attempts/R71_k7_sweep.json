@@ -1,0 +1,53 @@
+{
+  "round": "R71",
+  "k": 7,
+  "shards": 26,
+  "screenedByR70": 40136,
+  "screenedByR71": 103991,
+  "screenedTotal": 144127,
+  "band": 906015,
+  "unscreened": 761888,
+  "unresolvedCollected": 2,
+  "bases": [
+    {
+      "base": "T12c_absorb_best.ts",
+      "j": 7,
+      "band": 170544,
+      "r70screened": 20000,
+      "r71sweptTo": 123991,
+      "unscreened": 46553
+    },
+    {
+      "base": "T11_solution.ts",
+      "j": 6,
+      "band": 245157,
+      "r70screened": 20000,
+      "r71sweptTo": 20000,
+      "unscreened": 225157
+    },
+    {
+      "base": "T12d_fam_A.ts",
+      "j": 6,
+      "band": 245157,
+      "r70screened": 136,
+      "r71sweptTo": 136,
+      "unscreened": 245021
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "j": 6,
+      "band": 245157,
+      "r70screened": 0,
+      "r71sweptTo": 0,
+      "unscreened": 245157
+    }
+  ],
+  "verdict": "k=7 band NOT closed: 761888 UNSCREENED row(s) remain; 2 row(s) collected UNRESOLVED for phase 2",
+  "honestLimits": [
+    "Screening only the drop-k/add-j neighbourhood of the four named bases; nothing about rank 22 itself.",
+    "unscreened>0 means UNSCREENED, never refuted: this is a bounded sweep and a bounded null result.",
+    "A row surviving every bound is UNRESOLVED, never a witness.",
+    "Wall-clock stalled on rows that reach minBoxCover (1.2-20 s each), so the remaining rows were not reached in this window.",
+    "19 <= R <= 23 over Q/R is untouched."
+  ]
+}
