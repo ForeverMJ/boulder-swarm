@@ -1,0 +1,18 @@
+{
+  "round": "R76",
+  "band": "k=4 (j=2) at split-refined rank-24 anchors",
+  "instrument": "complete exact decision for rank(D) <= 2 (slice-span + pencil test)",
+  "shard": 21,
+  "shards": 28,
+  "anchorsBuilt": 4230,
+  "anchorsInBand": 4230,
+  "anchorsScreenedByThisShard": 151,
+  "rows": 1604526,
+  "stageAMod2Refuted": 1604526,
+  "stageBExactRefuted": 0,
+  "refuted": 1604526,
+  "admitted": 0,
+  "admittedVerified": 0,
+  "sampleStageBRefutations": [],
+  "winners": []
+}

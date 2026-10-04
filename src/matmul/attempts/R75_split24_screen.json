@@ -1,0 +1,118 @@
+{
+  "round": "R75",
+  "lane": "A \u2014 split-refined rank-24 anchors, supports not subsets of any landed rank-23 support",
+  "controls": [
+    {
+      "name": "base-exact-T11",
+      "expected": "rank 23, 0 mismatches",
+      "got": "rank 23, 0 mismatches",
+      "passed": true
+    },
+    {
+      "name": "base-exact-T12r23",
+      "expected": "rank 23, 0 mismatches",
+      "got": "rank 23, 0 mismatches",
+      "passed": true
+    },
+    {
+      "name": "base-exact-T12dA",
+      "expected": "rank 23, 0 mismatches",
+      "got": "rank 23, 0 mismatches",
+      "passed": true
+    },
+    {
+      "name": "base-exact-T12dB",
+      "expected": "rank 23, 0 mismatches",
+      "got": "rank 23, 0 mismatches",
+      "passed": true
+    },
+    {
+      "name": "rank1-accepted",
+      "expected": "rank <= 1",
+      "got": "true (exact rank-1)",
+      "passed": true
+    },
+    {
+      "name": "rank2-rejected",
+      "expected": "rank > 1",
+      "got": "false (outer-product identity fails on supp)",
+      "passed": true
+    },
+    {
+      "name": "clique-on-box-is-1",
+      "expected": "bound == 1",
+      "got": "1",
+      "passed": true
+    },
+    {
+      "name": "clique-on-two-boxes-is-2",
+      "expected": "bound == 2",
+      "got": "2",
+      "passed": true
+    },
+    {
+      "name": "flatDim-rank1",
+      "expected": "1",
+      "got": "1",
+      "passed": true
+    },
+    {
+      "name": "flatDim-rank2",
+      "expected": "2",
+      "got": "2",
+      "passed": true
+    },
+    {
+      "name": "rank1-real-T11-term",
+      "expected": "rank <= 1",
+      "got": "true (exact rank-1)",
+      "passed": true
+    },
+    {
+      "name": "two-term-remainder-not-rank1",
+      "expected": "rank > 1",
+      "got": "false (supp is not a full box (48 != 9*9*9))",
+      "passed": true
+    },
+    {
+      "name": "flatDim-target",
+      "expected": "9 (the 9 mode-1 slices have pairwise disjoint supports: b mod 3 = j, c mod 3 = i)",
+      "got": "9",
+      "passed": true
+    }
+  ],
+  "controlsPassed": true,
+  "anchorsEnumerated": 4230,
+  "anchorsFailedExactnessGuard": 0,
+  "anchorsScreened": 4230,
+  "k3": {
+    "j": 1,
+    "decision": "exact (rank(D) <= 1 decided with integer arithmetic, no budget)",
+    "anchors": 4000,
+    "rows": 8096000,
+    "refuted": 8096000,
+    "survivors": 0,
+    "survivorDetail": []
+  },
+  "k4": {
+    "j": 2,
+    "decision": "bounded (sound lower bounds only; a survivor is a bounded null)",
+    "anchors": 40,
+    "rows": 425040,
+    "refuted": 425040,
+    "survivors": 0,
+    "cliqueRefuted": 425040,
+    "flatDimRefuted": 0,
+    "sampleSurvivors": []
+  },
+  "rank22CandidatesBuilt": 0,
+  "rank22CandidatesExact": 0,
+  "exactWinner": null,
+  "scope": "Bounded: the class closed is indexed by the split-refined anchors enumerated above, not by arbitrary rank-22 schemes. A k=3 closure is exact; a k=4 survivor is a bounded null. No rank-22 scheme is claimed unless exactWinner is non-null.",
+  "claim": "For every one of the 4000 split-refined exact rank-24 anchors F' built by bipartitioning a factor support of a term of one of the four landed rank-23 families, and for every 3-subset K of its 24 terms, rank(A - sum_K) >= 2. Hence NO rank-22 scheme contains 21 of the 24 terms of any of those anchors. Decided exactly, no budget, no float.",
+  "scope_limits": [
+    "Indexed by the 4000 anchors enumerated (out of 4230 built; the cap is the script MAXANCHORS constant), NOT all bipartitions.",
+    "Says nothing about rank-22 schemes that use at most 20 terms of each anchor.",
+    "k=4 uses sound lower bounds only; all 425040 rows were refuted by the clique bound, so no bounded null remains in the screened 40 anchors. The other 4190 anchors at k=4 were NOT screened."
+  ]
+}
