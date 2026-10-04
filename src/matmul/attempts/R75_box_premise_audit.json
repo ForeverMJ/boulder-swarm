@@ -1,0 +1,92 @@
+{
+  "round": "R75",
+  "question": "is the forward half of tools/boxCover.ts's proof sound as a NECESSARY condition for a decomposition of T_<3,3,3>?",
+  "thePremise": "if u_t[a] != 0 and v_t[b] != 0 and w_t[c] != 0 then D[a][b][c] is nonzero, hence supp(u_t) x supp(v_t) x supp(w_t) is contained in supp(D)",
+  "verdict": "PREMISE REFUTED",
+  "refutedBy": "the four schemes that src/matmul/checker.ts verifies with 0 mismatches",
+  "argument": "supp(T) is a transversal: 27 points, one per (i,j,k), and any box contained in supp(T) holds at most one of them, so the minimum box cover of supp(T) is 27. If the premise held for a 23-term decomposition of T, its 23 boxes would cover supp(T) with 23 boxes, contradicting the minimum of 27. CONTROL 1 re-derives the transversal claim from scratch over all C(27,2)=351 pairs using downward-closed validity, sharing no code with tools/boxCover.ts.",
+  "theDefect": "the proof reads 'D[a][b][c] contains the nonzero product u_t[a] v_t[b] w_t[c], so it is nonzero'. That ignores every other term evaluated at the same point. The backward half (supp(D) subset union of boxes) is sound; the forward half is not, over any field, whenever two terms are nonzero at one point with opposite sign. It is not a corner case: cancellation is pervasive in the known schemes.",
+  "measurements": [
+    {
+      "file": "T11_solution.ts",
+      "rank": 23,
+      "exact": true,
+      "mismatches": 0,
+      "termsViolatingPremise": 19,
+      "termsTotal": 23,
+      "cancellationRequiredPoints": 390,
+      "maxTargetPointsPerBox": 4,
+      "targetPointsCoveredTotal": 33,
+      "soundRankFloor": 7
+    },
+    {
+      "file": "T12_rank23_variant.ts",
+      "rank": 23,
+      "exact": true,
+      "mismatches": 0,
+      "termsViolatingPremise": 19,
+      "termsTotal": 23,
+      "cancellationRequiredPoints": 390,
+      "maxTargetPointsPerBox": 4,
+      "targetPointsCoveredTotal": 33,
+      "soundRankFloor": 7
+    },
+    {
+      "file": "T12d_fam_A.ts",
+      "rank": 23,
+      "exact": true,
+      "mismatches": 0,
+      "termsViolatingPremise": 23,
+      "termsTotal": 23,
+      "cancellationRequiredPoints": 1333,
+      "maxTargetPointsPerBox": 13,
+      "targetPointsCoveredTotal": 73,
+      "soundRankFloor": 3
+    },
+    {
+      "file": "T12d_fam_B.ts",
+      "rank": 23,
+      "exact": true,
+      "mismatches": 0,
+      "termsViolatingPremise": 23,
+      "termsTotal": 23,
+      "cancellationRequiredPoints": 1305,
+      "maxTargetPointsPerBox": 7,
+      "targetPointsCoveredTotal": 58,
+      "soundRankFloor": 4
+    },
+    {
+      "file": "T12c_absorb_best.ts",
+      "rank": 22,
+      "exact": false,
+      "mismatches": 1,
+      "termsViolatingPremise": 19,
+      "termsTotal": 22,
+      "cancellationRequiredPoints": 390,
+      "maxTargetPointsPerBox": 4,
+      "targetPointsCoveredTotal": 32,
+      "soundRankFloor": 7
+    }
+  ],
+  "consequence1": "boxCover(supp D) <= j is not a necessary condition on the number of terms of a general decomposition. Every scheme is 'refuted' by it, including the four exact rank-23 ones and, were one to exist, a rank-22 one. So the refutations produced by the box-cover stage are refutations under the stronger hypothesis that the j replacement terms do not cancel among themselves, which is not implied by the ansatz.",
+  "consequence2": "the sound support-level condition is instead: every box must cover at least the target points it is responsible for, and supp(T) subset union of boxes. Measured on the landed supports it yields rank >= 7 (T11, T12_rank23_variant, T12c), >= 3 (T12d_fam_A), >= 4 (T12d_fam_B) — far weaker than the 24-to-26 floors R62/R64 recorded for the same supports.",
+  "whichPriorClaimsFall": "the box-cover stage only. R62's 'forcing rank >= 24 (up to 26)', R64's 'the k=5 band is CLOSED by refutation', R68's 'the row is REFUTED by proof ... minBoxCover(supp D) = 7 > 6', R70's stage split and the R74 closure all rest on this premise for the box-cover share of their kills, and are therefore conditional rather than unconditional. The flatDim and modp stages rest on flattening rank, which does not use the forward half.",
+  "whatIsNotTouched": [
+    "the four landed schemes remain exact at rank 23 (CONTROL 2)",
+    "the sound half supp(T) subset union of boxes holds for all of them (CONTROL 3)",
+    "no rank<=22 scheme is produced or refuted; T12c is unchanged at 22 with 1/729 mismatches",
+    "19 <= R <= 23 over Q/R is untouched; no bound moves"
+  ],
+  "bounds": {
+    "soundRankFloorT11": 7,
+    "soundRankFloorFamA": 3,
+    "soundRankFloorFamB": 4,
+    "note": "weak, and reported as such. The real construction constraint is that the 27 target points must receive products summing to exactly 1 while the 702 non-target points sum to 0."
+  },
+  "controls": {
+    "control1": "supp(T) transversal: every box inside supp(T) covers at most 1 target point. Re-derived over all 351 target-point pairs via minimal-box-through-pair, independent of tools/boxCover.ts. PASS",
+    "control2": "all four landed families verify exactly at rank 23 with 0 mismatches via checker.verify. PASS",
+    "control3": "supp(T) subset union of the schemes' own term boxes (the sound half), checked per scheme. PASS"
+  },
+  "arithmetic": "exact integer comparison of coefficient arrays; no float is compared for equality anywhere"
+}
