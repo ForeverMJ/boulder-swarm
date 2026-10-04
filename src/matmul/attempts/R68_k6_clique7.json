@@ -1,0 +1,76 @@
+{
+  "controls": [
+    {
+      "name": "matmul-support-graph-is-K27",
+      "expected": "27 vertices, all degrees 26",
+      "got": "27 vertices, degrees 26",
+      "passed": true,
+      "detail": "|supp M| = 27. The support is a transversal, so every pair must be incompatible and the graph must be complete. This is the control that a clique search must also pass."
+    },
+    {
+      "name": "random-union-omega-vs-cover",
+      "expected": "omega <= boxes and omega <= minBoxCover",
+      "got": "holds on 6 seeds",
+      "passed": true,
+      "detail": "[seed 1 boxes 3 |supp| 30 clique 3 cover 3] [seed 2 boxes 4 |supp| 64 clique 4 cover 4] [seed 3 boxes 5 |supp| 42 clique 5 cover 5] [seed 4 boxes 2 |supp| 32 clique 2 cover 2] [seed 5 boxes 3 |supp| 30 clique 3 cover 3] [seed 6 boxes 4 |supp| 56 clique 4 cover 4] "
+    },
+    {
+      "name": "live-deficit-omega-vs-exact-cover",
+      "expected": "omega <= minBoxCover on every finished live deficit",
+      "got": "0 violations in 12 deficits",
+      "passed": true,
+      "detail": "[drop {0,1} cover 5 clique 5] [drop {0,2} cover 3 clique 3] [drop {0,3} cover 4 clique 4] [drop {0,4} cover 3 clique 3]  Exact cover search finished on 12 live T12c drop-2 deficits."
+    }
+  ],
+  "verdict": {
+    "base": "T12c_absorb_best.ts",
+    "dropped": [
+      0,
+      7,
+      12,
+      15,
+      18,
+      21
+    ],
+    "j": 6,
+    "supportSize": 124,
+    "flatDim": 6,
+    "greedyClique": 7,
+    "clique": [
+      273,
+      327,
+      356,
+      432,
+      512,
+      600,
+      610
+    ],
+    "minBoxes": null,
+    "coverBoxes": [],
+    "refuted": true,
+    "reason": "an incompatibility clique of size 7 exists in supp D, certified pair-by-pair through tools/boxCover.ts (21 pairs, 0 shareable), so minBoxCover(supp D) >= 7 > j = 6: D is not a sum of 6 rank-1 tensors over any field",
+    "elapsedMs": 128986
+  },
+  "rankMath": {
+    "baseTerms": 22,
+    "survivingAfterDrop": 16,
+    "addedTerms": 6,
+    "resultingRank": 22,
+    "rankTarget": 22
+  },
+  "certification": {
+    "pairs": 21,
+    "shareable": 0,
+    "passed": true
+  },
+  "bandConclusion": {
+    "k": 6,
+    "base": "T12c_absorb_best.ts",
+    "rowsSweptByR67": 67000,
+    "rowsRefutedByR67": 66999,
+    "thisRow": "dropped [0,7,12,15,18,21], j=6",
+    "thisRowOutcome": "REFUTED by a certified 7-clique",
+    "bandClosed": true,
+    "scope": "The whole k=6 drop band of T12c is refuted: R67's 66,999 rows by flatDim/clique/tree facts, and this one by a clique of size 7 > j = 6. Both instruments are coefficient-free and field-free, so no drop-6/add-6 repair of T12c reaches rank <= 22 over any field, with any rational, real or finite-field coefficients. This closes a repair BAND, not the rank-22 question: it says nothing about schemes outside the drop-k/add-j ansatz."
+  }
+}

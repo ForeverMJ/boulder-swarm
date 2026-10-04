@@ -263,6 +263,12 @@
       "note": "consistent"
     },
     {
+      "file": "R68_k6_clique7.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R6_survey_pm2.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -344,7 +350,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 49,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
