@@ -1,0 +1,162 @@
+{
+  "round": "R70",
+  "k": 7,
+  "primes": [
+    65521,
+    262147,
+    1000003,
+    15485863
+  ],
+  "bases": [
+    {
+      "base": "T12c_absorb_best.ts",
+      "baseTerms": 22,
+      "j": 7,
+      "band": 170544,
+      "screened": 20000,
+      "refuted": 20000,
+      "unresolved": [],
+      "unscreenedFrom": 20000,
+      "maxRankFloor": 23
+    },
+    {
+      "base": "T11_solution.ts",
+      "baseTerms": 23,
+      "j": 6,
+      "band": 245157,
+      "screened": 20000,
+      "refuted": 20000,
+      "unresolved": [],
+      "unscreenedFrom": 20000,
+      "maxRankFloor": 23
+    },
+    {
+      "base": "T12d_fam_A.ts",
+      "baseTerms": 23,
+      "j": 6,
+      "band": 245157,
+      "screened": 136,
+      "refuted": 131,
+      "unresolved": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          20
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7,
+          20
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          8,
+          20
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          11,
+          20
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          15,
+          20
+        ]
+      ],
+      "unscreenedFrom": 136,
+      "maxRankFloor": 26
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "baseTerms": 23,
+      "j": 6,
+      "band": 245157,
+      "screened": 0,
+      "refuted": 0,
+      "unresolved": [],
+      "unscreenedFrom": 0,
+      "maxRankFloor": 0
+    }
+  ],
+  "totals": {
+    "band": 906015,
+    "screened": 40136,
+    "refuted": 40131,
+    "unresolved": 5,
+    "unscreened": 865879,
+    "byStage": {
+      "modp": 6306,
+      "flatDim": 22121,
+      "clique": 11700,
+      "boxLower": 0,
+      "boxExact": 4,
+      "unres": 5
+    }
+  },
+  "controls": [
+    {
+      "name": "R67-recorded-flatDim-6",
+      "passed": true,
+      "detail": "exact flatDim = 6 (R67 recorded 6), modp = 5 <= 6"
+    },
+    {
+      "name": "planted-1-rank1",
+      "passed": true,
+      "detail": "1 planted terms, modp = 1 <= 1"
+    },
+    {
+      "name": "planted-3-rank1",
+      "passed": true,
+      "detail": "3 planted terms, modp = 3 <= 3"
+    },
+    {
+      "name": "planted-5-rank1",
+      "passed": true,
+      "detail": "5 planted terms, modp = 5 <= 5"
+    },
+    {
+      "name": "bases-match-their-claims",
+      "passed": true,
+      "detail": "rank23 dirty=none; T12c residual support=[610] value=1 (expect [610]=1)"
+    },
+    {
+      "name": "k=7-prefilter-throughput",
+      "passed": false,
+      "detail": "modp alone killed 660/2000 sampled k=7 rows at j=6"
+    },
+    {
+      "name": "R67-stall-row-runs",
+      "passed": true,
+      "detail": "refuted=false by=null flatDim=6 modp=5 clique=6 ms=9802"
+    }
+  ],
+  "honestLimits": [
+    "Modular prefilter: rank over F_p <= rank over Q, so a kill is exact and a survivor is never promoted.",
+    "Screens only the drop-k/add-j neighbourhood of the four named bases; no claim about rank 22 itself.",
+    "A row that survives all four stages is UNRESOLVED, not a witness; a band with any UNRESOLVED or UNSCREENED row is NOT closed.",
+    "All four screens are field-free: the refutations hold over Z and every F_p as well as over Q/R.",
+    "19 <= R <= 23 over Q/R is untouched by this round."
+  ],
+  "verdict": "k=7 band NOT closed: 5 UNRESOLVED row(s) and 865879 UNSCREENED row(s) remain, named in this artifact"
+}
