@@ -376,5 +376,17 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-04T04:13:29.510Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 1067.87,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-04T04:36:33.161Z"
   }
 ]
