@@ -1,0 +1,175 @@
+{
+  "round": "R69",
+  "task_id": "T12",
+  "lane": "A — exact coefficient solve on fixed term supports",
+  "claim": "For every k-term sub-support of each landed rank-23 scheme (k = 20..22 for the four 23-term families, k = 19..22 for T12c), the exact linear systems for 'at most one factor per term free over Q' have no solution over Q. Coefficients were unrestricted in Q, not bounded integers.",
+  "field": "Q (rationals); exact BigInt rational elimination, no floats in any equality decision",
+  "maxDrop": 3,
+  "cases": 39928,
+  "hits": 0,
+  "modes": {
+    "lambda": {
+      "total": 9982,
+      "refuted": 9982,
+      "witnessed": 0
+    },
+    "freea": {
+      "total": 9982,
+      "refuted": 9982,
+      "witnessed": 9982
+    },
+    "freeb": {
+      "total": 9982,
+      "refuted": 9982,
+      "witnessed": 9982
+    },
+    "freec": {
+      "total": 9982,
+      "refuted": 9982,
+      "witnessed": 9982
+    }
+  },
+  "control": "intact rank-23 T11 (23 terms) is CONSISTENT in all four modes, so the refutations are not an artifact of the reduction",
+  "t12c_headline": {
+    "verdict": "INCONSISTENT",
+    "detail": "INCONSISTENT at slice 7 of factor w: 0 = 1/1 (dual witness certified)",
+    "dual_witness_pairing_with_target": "1/1",
+    "dual_witness_nonzero_count": 1,
+    "dual_witness": [
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "1/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1",
+      "0/1"
+    ],
+    "decoded": {
+      "entries": [
+        "(7,4,7) mu=1/1"
+      ],
+      "pairing": "1/1"
+    }
+  },
+  "t12c_all_modes": [
+    {
+      "mode": "lambda",
+      "verdict": "INCONSISTENT",
+      "detail": "INCONSISTENT: 0 = 1/1",
+      "decoded": null
+    },
+    {
+      "mode": "freea",
+      "verdict": "INCONSISTENT",
+      "detail": "INCONSISTENT at slice 7 of factor u: 0 = 1/1 (dual witness certified)",
+      "decoded": {
+        "entries": [
+          "(7,4,7) mu=1/1"
+        ],
+        "pairing": "1/1"
+      }
+    },
+    {
+      "mode": "freeb",
+      "verdict": "INCONSISTENT",
+      "detail": "INCONSISTENT at slice 4 of factor v: 0 = 1/1 (dual witness certified)",
+      "decoded": {
+        "entries": [
+          "(7,4,7) mu=1/1"
+        ],
+        "pairing": "1/1"
+      }
+    },
+    {
+      "mode": "freec",
+      "verdict": "INCONSISTENT",
+      "detail": "INCONSISTENT at slice 7 of factor w: 0 = 1/1 (dual witness certified)",
+      "decoded": {
+        "entries": [
+          "(7,4,7) mu=1/1"
+        ],
+        "pairing": "1/1"
+      }
+    }
+  ],
+  "honest_limits": [
+    "The genuinely free-coefficient problem on a fixed support (two or three factors moving per term) is a degree-3 polynomial system, not linear, so it is NOT decided here. What is decided is every ansatz in which at most ONE factor per term moves, which contains the whole rescaling family and T12c's own coefficients.",
+    "Term supports are restricted to subsets of the four landed rank-23 supports; a rank-22 scheme outside those supports remains untouched.",
+    "A refutation here is exact linear algebra over Q, not a bounded search, so it is a complete refutation of the stated ansatz (no sampling, no coefficient bound)."
+  ],
+  "reproduction": "bun src/matmul/attempts/R69_coeffSolve_search.ts 3"
+}
