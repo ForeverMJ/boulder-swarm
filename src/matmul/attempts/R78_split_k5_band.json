@@ -1,0 +1,72 @@
+{
+  "round": "R78",
+  "lane": "Lane A — screens over supports that are not subsets of landed rank-23 supports",
+  "band": {
+    "anchors": 24,
+    "k": 5,
+    "j": 3,
+    "rowsPerAnchor": 42504
+  },
+  "verdict": "BOUNDED-INCOMPLETE",
+  "verdictMeaning": "the sweep stopped on TIME_BUDGET_MS/MAXANCHORS, so anchors beyond the screened ones are UNSCREENED and nothing here refutes them",
+  "controls": [
+    {
+      "name": "every-split-anchor-is-exact-rank-24",
+      "ok": true,
+      "detail": "40/40 anchors verify correct at rank 24"
+    },
+    {
+      "name": "non-vacuity-synthetic-rank3-not-refuted-at-j3",
+      "ok": true,
+      "detail": "3 unit terms at j=3 must survive the screen"
+    },
+    {
+      "name": "threshold-synthetic-rank4-refuted-at-j3",
+      "ok": true,
+      "detail": "4 terms of the same family at j=3 must be refuted"
+    },
+    {
+      "name": "real-data-non-vacuity-3-terms-at-j19-not-refuted",
+      "ok": true,
+      "detail": "a deficit that is literally a 3-term sum must not be refuted at j=19"
+    }
+  ],
+  "anchorsIndexed": 591,
+  "anchorsScreened": 590,
+  "anchorsTotalAvailable": 1932,
+  "exhausted": false,
+  "totals": {
+    "rows": 25077360,
+    "refuted": 25077360,
+    "unresolved": 0,
+    "zeroHits": 0
+  },
+  "perBase": {
+    "T11_solution": {
+      "rows": 11306064,
+      "refuted": 11306064,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 266
+    },
+    "T12_rank23_variant": {
+      "rows": 11306064,
+      "refuted": 11306064,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 266
+    },
+    "T12d_fam_A": {
+      "rows": 2465232,
+      "refuted": 2465232,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 58
+    }
+  },
+  "perAnchorRows": 42504,
+  "survivors": [],
+  "witness": null,
+  "scoreboardNote": "no scheme exported; BEST22=none stands; goalCheck exits 1; 19 <= R <= 23 over Q/R untouched",
+  "elapsedMs": 150470
+}
