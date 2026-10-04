@@ -1,0 +1,130 @@
+{
+  "round": "R68",
+  "route": "Lane A: adjudicate the ONE drop set R67 left open, at a node budget it can finish",
+  "target": "exact rank <= 22 for 3x3 matrix multiplication over Q/R",
+  "proposition": "For a drop set K of size k of a rank-r base, reaching rank <= 22 forces D = M - sum(surviving) to be a sum of j = k-(r-22) rank-1 tensors, so supp(D) is covered by j valid boxes. flatDim(D) > j, a clique bound > j, or minBoxCover(supp D) > j each refutes K. All three are coefficient-free and field-free.",
+  "lever": "R67's residual was a BUDGET HIT, and its cost was a constant factor rather than a search space: boxCover.improve recomputed maximalBoxesThrough (up to 256*256 mask pairs plus an O(|found|^2) maximality filter) at every expanded node, giving 3.6 k nodes/s. tools/boxCoverCached builds those per-point tables once and changes no branch, prune, or proof, so the same row becomes decidable.",
+  "theRow": {
+    "base": "T12c_absorb_best.ts",
+    "dropped": [
+      0,
+      7,
+      12,
+      15,
+      18,
+      21
+    ],
+    "k": 6,
+    "jFromR67": 6,
+    "flatDimFromR67": 6,
+    "cliqueFromR67": 6,
+    "supportFromR67": 124,
+    "lowerFromR67": 3,
+    "upperFromR67": 7,
+    "nodesFromR67": 400001,
+    "maxNodesFromR67": 400000,
+    "msFromR67": 112138,
+    "scheme": "T12c_absorb_best.ts, 22 triples, imported not edited"
+  },
+  "refutationRule": "refuted iff flatDim(D) > j, or the proven clique bound > j, or minBoxCover's always-proven `lower` > j. A bound <= j proves nothing and is never read as a witness. `upper` is the size of an actual cover and is never used to claim one either. budgetHit with lower <= j is UNRESOLVED, not a partial refutation.",
+  "row": {
+    "base": "T12c_absorb_best.ts",
+    "k": 6,
+    "dropped": [
+      0,
+      7,
+      12,
+      15,
+      18,
+      21
+    ],
+    "j": 6,
+    "support": 124,
+    "flatDim": 6,
+    "clique": 7,
+    "cliqueRestarts": 64,
+    "cliqueExhausted": false,
+    "minBoxes": null,
+    "lower": 7,
+    "upper": 0,
+    "nodes": 0,
+    "states": 0,
+    "budgetHit": false,
+    "refuted": true,
+    "by": "clique",
+    "rankFloor": 23,
+    "ms": 5
+  },
+  "audit": {
+    "cliqueSize": 7,
+    "pairs": 21,
+    "violations": [],
+    "coverMinBoxes": 7,
+    "coverBudgetHit": false,
+    "coverNodes": 64932,
+    "coverMs": 1183,
+    "flatDim": 6,
+    "support": 124,
+    "j": 6
+  },
+  "auditAgrees": true,
+  "controls": [
+    {
+      "name": "cached-equals-original-exact-cover",
+      "passed": true,
+      "detail": "30 live T11 drop-2 deficits: cached and original agreed on minBoxes on all; original 3310 ms for 3310 ms vs cached 3023 ms"
+    },
+    {
+      "name": "planted-box-exact-count",
+      "passed": true,
+      "detail": "5 deficits known to be sums of exactly want rank-1 terms; each must have minBoxes = want"
+    },
+    {
+      "name": "target-transversal",
+      "passed": true,
+      "detail": "clique(supp M)=27, minBoxCover(supp M)=27, expected 27/27"
+    },
+    {
+      "name": "clique-never-exceeds-exact-cover",
+      "passed": true,
+      "detail": "25 live T11 drop-2 deficits finished; clique exceeded the exact minimum on 0"
+    },
+    {
+      "name": "bound-at-or-below-j-is-not-a-refutation",
+      "passed": true,
+      "detail": "drop[2] of T11: clique=1 reached=false at stopAt=2, so a bound below j can never be read as a kill"
+    },
+    {
+      "name": "empty-survivor-deficit-is-the-target",
+      "passed": true,
+      "detail": "deficitOf([]) has 27 points and targetTensor() has 27; verify(T11).correct=true, verify(T12c).mismatches=1"
+    }
+  ],
+  "elapsedMs": 5,
+  "verdict": "ROW-REFUTED",
+  "verdictMeaning": "PROOF for THIS row, not a bounded null and not a band closure: a clique of 7 pairwise non-boxable support points was found, every one of its 21 pairs re-checked by exhaustive (I, J) enumeration with 0 violations, and minBoxCover is therefore >= 7 > j = 6, so this deficit is not a sum of 6 rank-1 tensors and no drop-6 repair of T12c at drop=[0,7,12,15,18,21] can reach rank <= 22. The rank floor for this neighbourhood is 23.",
+  "bandStatus": {
+    "claim": "the k=6 band is NOT closed by this round, and the prompt's premise that closing this row would close the band is arithmetically wrong",
+    "evidence": "R67's ndjson holds 67000 rows and every one of them is T12c_absorb_best.ts. C(22,6) = 74613 drop-6 sets exist for T12c alone, so 7613 T12c rows were never screened, and T11 (C(23,6) = 100947), T12d_fam_A and T12d_fam_B received ZERO rows: R67 stopped on its time budget partway through the first base.",
+    "coveredByR67PlusThis": "67001 rows decided of 377454 planned across the four bases",
+    "stillOpen": "7613 T12c drop-6 rows plus the entire T11/T12d_fam_A/T12d_fam_B k=6 bands. Unexamined rows are unknown, not refuted, and closing this row changed nothing about them."
+  },
+  "costFinding": {
+    "finding": "R67 spent 112138 ms and 400001 nodes to leave this row a budget hit, and the prompt's proposed remedy was to raise the node budget to >= 4e6. The budget was the wrong lever: this row needs only 64932 nodes, which R67 could not reach in 112138 ms.",
+    "cacheLever": "R67 expanded nodes at about 3.6 k/s because boxCover.improve recomputes maximalBoxesThrough (up to 256*256 mask pairs plus an O(|found|^2) maximality filter) at every expanded node. tools/boxCoverCached hoists that per-point table out of the loop and decided the row in 1183 ms for 64932 nodes, about 54888 nodes/s. The two instruments differ in constant factors only, and control 1 confirms they return the same exact answer.",
+    "cacheLeverCaveat": "the cache is NOT a uniform speedup: control 1 shows it costs the SAME as the original on live drop-2 deficits, where the support is small and building the per-point table is not amortised. It pays off on large supports like this 124-point one, which is exactly the regime the k=6 band lives in.",
+    "cliqueLever": "R67 used restarts=4 and got clique=6 = j, which kills nothing. restarts=64 finds clique=7 > j in 5 ms. More restarts can only raise a LOWER bound, so this lever cannot refute falsely, and it costs O(|supp|^2) pair tests per restart rather than a search.",
+    "independence": "the two levers are separate instruments and they agree: the clique bound says minBoxCover >= 7 and the clique-free exact search returns minBoxes = 7. Either alone decides the row."
+  },
+  "honestLimits": [
+    "none of this is a claim about rank 22: 19 <= R <= 23 over Q/R is untouched",
+    "a box cover is a bound on the SUPPORT of a putative decomposition. minBoxCover(supp D) <= j is necessary, never sufficient, and this round searches no coefficients",
+    "the screens cover the drop-k/add-j neighbourhood of the NAMED bases only; repairs that modify surviving terms, add non-rank-1 factors, or start from another base are untouched",
+    "k=6 only, and only ONE row of it. k <= 5 is already closed by R61/R62/R64 and nothing here re-opens it",
+    "the k=6 band is NOT closed: 7613 T12c rows and all three other bases were never screened. This round decides one row, not a band.",
+    "a clique is a LOWER bound and a greedy clique is a lower bound on the maximum clique, so it can under-refute; it can never over-refute",
+    "cachedTables changes constant factors only; the agreement control is what makes its answers usable"
+  ],
+  "exactArithmetic": "flatDim is exact rational Gaussian elimination over BigInt via tools/rational.rref; clique tables, cached box tables and the cover are integer 9-bit mask arithmetic. No float is compared for equality anywhere.",
+  "checkerConsistency": "verify(T11) exact=true, verify(T12c) mismatches=1"
+}
