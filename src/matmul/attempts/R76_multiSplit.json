@@ -1,0 +1,128 @@
+{
+  "round": "R76",
+  "question": "can a multi-split anchor (rank 24, 25 or 26) lose k = m+2 terms whose collapsed sum is a single rank-1 tensor, i.e. can a rank-22 scheme share 21 of its terms with the anchor?",
+  "instrument": {
+    "test": "isRankAtMostOne, exact integer O(729): a pivot identity on all 512 non-trivial three-axis entries plus a 2x2-minor test on the pivot slice",
+    "crossCheck": "unfoldingRankAtMostOne, an independent Segre-identity formulation, compared row by row in control oracle-agreement",
+    "budget": "none inside the test - no branch and bound, no truncation, no floating point; only the anchor enumeration is time-boxed and its unscreened part is reported",
+    "field": "integer arithmetic, so a refutation holds over Q, Z and every F_p alike; it says nothing about R <= 22 in general"
+  },
+  "relation": "at R = 23 + m terms, dropping k = m + 2 leaves 21 kept and needs j = 22 - 21 = 1 extra term",
+  "controls": [
+    {
+      "name": "base-exact",
+      "pass": true,
+      "detail": "all three base families verify exact at rank 23, 0 mismatches"
+    },
+    {
+      "name": "refinements-nonempty",
+      "pass": true,
+      "detail": "refinement counts 984/3034/3458"
+    },
+    {
+      "name": "anchor-exactness",
+      "pass": true,
+      "detail": "36 anchors exact, 0 bad, up to 26 terms"
+    },
+    {
+      "name": "j1-accepts-single-term",
+      "pass": true,
+      "detail": "69/69 single-term drop sums accepted as rank<=1 (planted positive)"
+    },
+    {
+      "name": "planted-rank1-and-rank2",
+      "pass": true,
+      "detail": "200/200 seeds: rank-1 accepted, rank-2 rejected"
+    },
+    {
+      "name": "oracle-agreement",
+      "pass": true,
+      "detail": "3000/3000 deficits agree with the independent unfolding-rank oracle"
+    },
+    {
+      "name": "layer-relation",
+      "pass": true,
+      "detail": "(R - k) + j = (23 + m) - (m + 2) + 1 = 22 for m = 1,2,3"
+    }
+  ],
+  "slotsPerBase": [
+    {
+      "refinements": 984,
+      "slots": 38
+    },
+    {
+      "refinements": 3034,
+      "slots": 59
+    },
+    {
+      "refinements": 3458,
+      "slots": 55
+    }
+  ],
+  "layers": [
+    {
+      "m": 1,
+      "anchorTerms": 24,
+      "dropSize": 3,
+      "keptTerms": 21,
+      "j": 1,
+      "anchorsPlanned": 7200,
+      "anchorsScreened": 7200,
+      "anchorsUnscreened": 0,
+      "rowsPlanned": 14572800,
+      "rowsScreened": 14572800,
+      "rowsRefuted": 14572800,
+      "rowsSurvivor": 0,
+      "rowsUnscreened": 0,
+      "anchorSpaceUpperBound": 152,
+      "anchorSampling": "every refinement of every factor of every term of the three bases, capped at 2400 per base by a fixed stride",
+      "seconds": 18.5,
+      "verdict": "CLOSED-EXACTLY over this anchor set"
+    },
+    {
+      "m": 2,
+      "anchorTerms": 25,
+      "dropSize": 4,
+      "keptTerms": 21,
+      "j": 1,
+      "anchorsPlanned": 3600,
+      "anchorsScreened": 3600,
+      "anchorsUnscreened": 0,
+      "rowsPlanned": 45540000,
+      "rowsScreened": 45540000,
+      "rowsRefuted": 45540000,
+      "rowsSurvivor": 0,
+      "rowsUnscreened": 0,
+      "anchorSpaceUpperBound": 11476,
+      "anchorSampling": "a deterministic strided sample of 1200 anchors per base from the 11476-slot space; the space is NOT covered exhaustively and the gap is UNSCREENED, never refuted",
+      "seconds": 51,
+      "verdict": "CLOSED-EXACTLY over this anchor set"
+    },
+    {
+      "m": 3,
+      "anchorTerms": 26,
+      "dropSize": 5,
+      "keptTerms": 21,
+      "j": 1,
+      "anchorsPlanned": 1200,
+      "anchorsScreened": 1200,
+      "anchorsUnscreened": 0,
+      "rowsPlanned": 78936000,
+      "rowsScreened": 78936000,
+      "rowsRefuted": 78936000,
+      "rowsSurvivor": 0,
+      "rowsUnscreened": 0,
+      "anchorSpaceUpperBound": 573800,
+      "anchorSampling": "a deterministic strided sample of 400 anchors per base from the 573800-slot space; the space is NOT covered exhaustively and the gap is UNSCREENED, never refuted",
+      "seconds": 94.7,
+      "verdict": "CLOSED-EXACTLY over this anchor set"
+    }
+  ],
+  "survivors": [],
+  "scope": [
+    "this screens only rank-22 schemes that share 21 terms with an enumerated multi-split anchor; it does not bound rank 22",
+    "an UNSCREENED anchor layer is never a refutation and is reported as unscreened",
+    "no bound moves: 19 <= R <= 23 over Q/R stands untouched"
+  ],
+  "verdictMeaning": "rank(D) <= 1 is decided exactly per row, so refuted rows are refutations; a survivor row is carried to checker.verify() and only an exact 22-term scheme would be a witness"
+}
