@@ -1,0 +1,74 @@
+{
+  "round": 67,
+  "route": "Lane A",
+  "exactArithmetic": true,
+  "stage1": {
+    "stage": "k=5 against R63 ground truth (COMPLETE, no search)",
+    "rows": 1986,
+    "cliqueBoundRefuted": 1986,
+    "cliqueBoundUnresolved": 0,
+    "r63ExactMinimaChecked": 1985,
+    "cliqueEqualsExactMinimum": 1967,
+    "cliqueRefutesAtSameRateAsSearch": 1967,
+    "violationsOfBoundNeverExceedsExact": 0,
+    "conclusion": "the cheap bound alone refutes every row the search refuted, so it licenses the k=6 screen"
+  },
+  "stage2": {
+    "band": "k=6",
+    "plannedDropSets": 276507,
+    "screened": 268509,
+    "refutedByFlatDim": 248649,
+    "refutedByClique": 19853,
+    "unresolved": 7,
+    "budgetMs": 400000,
+    "elapsedMs": 401943,
+    "msPerDropSet": 1.497,
+    "r65ComparisonMsPerDropSet": 6800,
+    "perBase": [
+      {
+        "base": "T12c_absorb_best.ts",
+        "terms": 22,
+        "jMax": 6,
+        "planned": 74613,
+        "done": 74613,
+        "flatDim": 61656,
+        "clique": 12957,
+        "unresolved": 0,
+        "stopped": false,
+        "ms": 89070
+      },
+      {
+        "base": "T11_solution.ts",
+        "terms": 23,
+        "jMax": 5,
+        "planned": 100947,
+        "done": 100947,
+        "flatDim": 97372,
+        "clique": 3575,
+        "unresolved": 0,
+        "stopped": false,
+        "ms": 189270
+      },
+      {
+        "base": "T12d_fam_B.ts",
+        "terms": 23,
+        "jMax": 5,
+        "planned": 92949,
+        "done": 92949,
+        "flatDim": 89621,
+        "clique": 3321,
+        "unresolved": 7,
+        "stopped": true,
+        "ms": 400001
+      }
+    ],
+    "honestLimits": [
+      "coverage is bounded by the wall-clock budget; drop sets never reached are UNRESOLVED, not refuted",
+      "cliqueBound <= j proves nothing and is never a witness; no coefficient solve was attempted",
+      "a refutation is of the drop-6/add-j neighbourhood of three named bases, NOT a bound on rank 22",
+      "R stays in [19, 23] over Q/R whatever this prints"
+    ]
+  },
+  "witnessExported": false,
+  "best22": "none"
+}

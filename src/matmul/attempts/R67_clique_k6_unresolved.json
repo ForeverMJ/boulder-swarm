@@ -1,0 +1,129 @@
+{
+  "round": 67,
+  "what": "the k=6 rows that survive BOTH flatDim and the clique bound, so neither cheap screen refutes them",
+  "status": "UNRESOLVED - not refuted, not a witness; each needs the exact box cover",
+  "count": 7,
+  "rows": [
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        3,
+        11,
+        12,
+        21,
+        22
+      ],
+      "jMax": 5,
+      "support": 264,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        3,
+        11,
+        14,
+        21,
+        22
+      ],
+      "jMax": 5,
+      "support": 264,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        3,
+        11,
+        15,
+        21,
+        22
+      ],
+      "jMax": 5,
+      "support": 266,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        11,
+        12,
+        13,
+        14,
+        22
+      ],
+      "jMax": 5,
+      "support": 304,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        11,
+        12,
+        13,
+        21,
+        22
+      ],
+      "jMax": 5,
+      "support": 304,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        11,
+        13,
+        14,
+        21,
+        22
+      ],
+      "jMax": 5,
+      "support": 304,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "dropped": [
+        0,
+        11,
+        14,
+        15,
+        21,
+        22
+      ],
+      "jMax": 5,
+      "support": 264,
+      "flatDim": 5,
+      "cliqueBound": 5,
+      "refutedBy": null,
+      "minFinalRank": 22
+    }
+  ],
+  "neverReached": 7998,
+  "neverReachedMeaning": "T12d_fam_B drop-6 sets past the wall-clock budget; UNRESOLVED, not refuted"
+}

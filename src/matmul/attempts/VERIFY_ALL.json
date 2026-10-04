@@ -263,6 +263,30 @@
       "note": "consistent"
     },
     {
+      "file": "R63_boxcover_screen_k5.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R65_boxcover_screen_k6.json",
+      "verdict": "BOUNDED-INCOMPLETE",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R67_clique_k6_unresolved.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R67_clique_screen_k6.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R6_survey_pm2.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -344,7 +368,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 52,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
