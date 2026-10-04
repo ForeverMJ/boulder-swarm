@@ -275,6 +275,18 @@
       "note": "consistent"
     },
     {
+      "file": "R77_newanchor_band.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R77_patch_route.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R7_full_pm2.json",
       "verdict": "blocked",
       "selfConsistent": true,
@@ -344,7 +356,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 50,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

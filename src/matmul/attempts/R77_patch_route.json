@@ -1,0 +1,39 @@
+{
+  "round": "R77",
+  "claim": "REFUTED BY ITSELF: patching T12c's single residual entry with a unit term does NOT yield a new rank-23 anchor.",
+  "constructionAttempted": {
+    "base": "T12c_absorb_best.ts (rank 22, 1 of 729 entries wrong)",
+    "residual": "(7,4,7): got 0, want 1",
+    "reading": "under idx(3,i,j) = 3i+j the triple (7,4,7) is a=(2,1), b=(1,1), c=(2,1), i.e. exactly the naive term of (i,j,k)=(2,1,1)",
+    "patch": "append the unit term e_7 (x) e_4 (x) e_7",
+    "resultBeforeCheck": "reported by checker.verify() as correct=true, rank=23, mismatches=0, and also correct over F_2",
+    "resultAfterCheck": "the resulting 23-term scheme is T11_solution re-sorted; it is NOT a new anchor"
+  },
+  "refutation": {
+    "method": "canonical triple keys (u,v,w) joined, compared as SETS",
+    "termsInT11": 23,
+    "termsInPatchedScheme": 23,
+    "inPatchedNotInT11": 0,
+    "inT11NotInPatched": 0,
+    "T12cIsSubsetOfT11": true,
+    "conclusion": "the patch term e_7 (x) e_4 (x) e_7 is ALREADY one of T11's 23 terms, so T12c's residual is precisely one of T11's own terms and adding it back returns T11 itself"
+  },
+  "whyTheErrorWasAlmostMissed": {
+    "symptom": "the band screen returned digit-identical refutation counts for the patched scheme and for T11 at k = 2,3,4,5 (253/253, 1767+4, 8503+349, 29199+4254)",
+    "reading": "treated at first as a coincidence of counting, and as the confirmation that the new base was a genuinely different support with the same statistics",
+    "actualCause": "it was the same support. Identical counts were the tell, not the confirmation."
+  },
+  "whatThisCloses": {
+    "route": "construct a NEW rank-23 base by repairing a rank-22 near-miss with a single unit term, then screen its band as fresh ground",
+    "verdict": "CLOSED for the T12c near-miss: every unit-term repair returns a landed anchor rather than a new base",
+    "scope": "this refutes the unit-term patch on T12c only. It does NOT refute repairs of other near-misses by non-unit terms, and it is not a bound on the rank of 3x3 multiplication"
+  },
+  "whatSurvives": {
+    "instrument": "src/matmul/tools/newAnchorBand.ts",
+    "soundStatement": "for an EXACT base B and a drop set K of size k, any completion with j fresh rank-1 terms has modpFlatDim(D_K) <= flatDim_over_Q(D_K) <= j, and reaching rank <= 22 from rank 23 forces j <= k - 1. So modpFlatDim(D_K) > k - 1 refutes the ENTIRE add-j family at once, with no coefficient, sparsity or factor ansatz assumed.",
+    "knownAnswerControl": "closes k=2 (253/253) and k=3 (1771/1771) on all four landed anchors, matching the campaign's own closure; at k=4 it reduces 8855 rows to exactly 3 per anchor",
+    "measuredLimit": "the 3 surviving k=4 rows per anchor all have a 7-entry deficit with L1 = 7 (a signed perfect matching) and exact flattening rank exactly 3 = addLimit. The flattening bound is therefore exactly tight on them and provably cannot refute them; a split-refined or box-cover stage is required, which is what R76 supplied.",
+    "artifact": "src/matmul/attempts/R77_newanchor_band.json",
+    "boundsUntouched": "19 <= R <= 23 over Q/R and 21 <= R <= 23 over F_2"
+  }
+}

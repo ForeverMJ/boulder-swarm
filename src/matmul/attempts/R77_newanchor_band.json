@@ -1,0 +1,308 @@
+{
+  "round": "R77",
+  "screen": "tools/newAnchorBand.ts (modpFlatDim lower bound on the kept-support deficit)",
+  "primes": [
+    2,
+    3,
+    5,
+    7,
+    11,
+    13
+  ],
+  "kmax": 4,
+  "targetRank": 22,
+  "profiles": {
+    "T11_solution.ts": "14r1+9r2+0r3",
+    "T12_rank23_variant.ts": "13r1+9r2+1r3",
+    "T12d_fam_A.ts": "11r1+8r2+4r3",
+    "T12d_fam_B.ts": "10r1+10r2+3r3"
+  },
+  "bands": [
+    {
+      "base": "T11_solution.ts",
+      "isNewBase": false,
+      "k": 2,
+      "addLimit": 1,
+      "rows": 253,
+      "refuted": 253,
+      "unresolved": []
+    },
+    {
+      "base": "T11_solution.ts",
+      "isNewBase": false,
+      "k": 3,
+      "addLimit": 2,
+      "rows": 1771,
+      "refuted": 1767,
+      "unresolved": []
+    },
+    {
+      "base": "T11_solution.ts",
+      "isNewBase": false,
+      "k": 4,
+      "addLimit": 3,
+      "rows": 8855,
+      "refuted": 8503,
+      "unresolved": [
+        {
+          "base": "T11_solution.ts",
+          "k": 4,
+          "drop": [
+            3,
+            14,
+            15,
+            16
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "7entries/L1=7 exactFlatDim=3"
+        },
+        {
+          "base": "T11_solution.ts",
+          "k": 4,
+          "drop": [
+            3,
+            15,
+            16,
+            21
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "7entries/L1=7 exactFlatDim=3"
+        },
+        {
+          "base": "T11_solution.ts",
+          "k": 4,
+          "drop": [
+            14,
+            15,
+            16,
+            21
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "7entries/L1=7 exactFlatDim=3"
+        }
+      ]
+    },
+    {
+      "base": "T12_rank23_variant.ts",
+      "isNewBase": false,
+      "k": 2,
+      "addLimit": 1,
+      "rows": 253,
+      "refuted": 253,
+      "unresolved": []
+    },
+    {
+      "base": "T12_rank23_variant.ts",
+      "isNewBase": false,
+      "k": 3,
+      "addLimit": 2,
+      "rows": 1771,
+      "refuted": 1769,
+      "unresolved": []
+    },
+    {
+      "base": "T12_rank23_variant.ts",
+      "isNewBase": false,
+      "k": 4,
+      "addLimit": 3,
+      "rows": 8855,
+      "refuted": 8653,
+      "unresolved": [
+        {
+          "base": "T12_rank23_variant.ts",
+          "k": 4,
+          "drop": [
+            3,
+            4,
+            11,
+            15
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "7entries/L1=7 exactFlatDim=3"
+        },
+        {
+          "base": "T12_rank23_variant.ts",
+          "k": 4,
+          "drop": [
+            3,
+            4,
+            15,
+            19
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "7entries/L1=7 exactFlatDim=3"
+        },
+        {
+          "base": "T12_rank23_variant.ts",
+          "k": 4,
+          "drop": [
+            4,
+            11,
+            15,
+            19
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "7entries/L1=7 exactFlatDim=3"
+        }
+      ]
+    },
+    {
+      "base": "T12d_fam_A.ts",
+      "isNewBase": false,
+      "k": 2,
+      "addLimit": 1,
+      "rows": 253,
+      "refuted": 253,
+      "unresolved": []
+    },
+    {
+      "base": "T12d_fam_A.ts",
+      "isNewBase": false,
+      "k": 3,
+      "addLimit": 2,
+      "rows": 1771,
+      "refuted": 1771,
+      "unresolved": []
+    },
+    {
+      "base": "T12d_fam_A.ts",
+      "isNewBase": false,
+      "k": 4,
+      "addLimit": 3,
+      "rows": 8855,
+      "refuted": 8826,
+      "unresolved": [
+        {
+          "base": "T12d_fam_A.ts",
+          "k": 4,
+          "drop": [
+            3,
+            14,
+            15,
+            16
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "48entries/L1=70 exactFlatDim=3"
+        },
+        {
+          "base": "T12d_fam_A.ts",
+          "k": 4,
+          "drop": [
+            3,
+            15,
+            16,
+            21
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "40entries/L1=58 exactFlatDim=3"
+        },
+        {
+          "base": "T12d_fam_A.ts",
+          "k": 4,
+          "drop": [
+            14,
+            15,
+            16,
+            21
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "48entries/L1=68 exactFlatDim=3"
+        }
+      ]
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "isNewBase": false,
+      "k": 2,
+      "addLimit": 1,
+      "rows": 253,
+      "refuted": 253,
+      "unresolved": []
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "isNewBase": false,
+      "k": 3,
+      "addLimit": 2,
+      "rows": 1771,
+      "refuted": 1771,
+      "unresolved": []
+    },
+    {
+      "base": "T12d_fam_B.ts",
+      "isNewBase": false,
+      "k": 4,
+      "addLimit": 3,
+      "rows": 8855,
+      "refuted": 8846,
+      "unresolved": [
+        {
+          "base": "T12d_fam_B.ts",
+          "k": 4,
+          "drop": [
+            3,
+            14,
+            15,
+            16
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "40entries/L1=231 exactFlatDim=3"
+        },
+        {
+          "base": "T12d_fam_B.ts",
+          "k": 4,
+          "drop": [
+            3,
+            15,
+            16,
+            21
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "40entries/L1=213 exactFlatDim=3"
+        },
+        {
+          "base": "T12d_fam_B.ts",
+          "k": 4,
+          "drop": [
+            14,
+            15,
+            16,
+            21
+          ],
+          "addLimit": 3,
+          "flatDimLB": 3,
+          "refuted": false,
+          "deficitPrint": "40entries/L1=231 exactFlatDim=3"
+        }
+      ]
+    }
+  ],
+  "honestLimits": [
+    "modpFlatDim is a LOWER bound on the flattening of the deficit, so it under-refutes: a surviving drop set is UNRESOLVED, never a candidate and never a witness.",
+    "A refutation covers the whole add-j family at that drop set, because flattening rank is subadditive and the screen needs no coefficient, sparsity or factor ansatz.",
+    "The screen is scoped to the NAMED bases and to k <= kmax. It says nothing about k > kmax and nothing about the rank of 3x3 multiplication.",
+    "Bounds are untouched: 19 <= R <= 23 over Q/R and 21 <= R <= 23 over F_2."
+  ]
+}
