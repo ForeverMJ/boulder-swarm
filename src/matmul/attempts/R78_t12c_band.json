@@ -1,0 +1,246 @@
+{
+  "round": "R78",
+  "claim": "For a drop set K of size k of `T12c_absorb_best` (22 terms, 1/729 mismatches), the deficit D_K = M - sum_{s not in K} t_s has rank > k = maxAdded(22,k), which refutes EVERY completion of T12c minus K with j <= k fresh rank-1 terms. Exact over Z/Q; no search, no cover, no budget.",
+  "instrument": "R74's `fibreVerdict` (tools/nonAxialSplit.ts, recovered verbatim from agent/goal-w0-T12@r26_d6a2973, its 18 tests pass unmodified). dim span{d_a} <= j is necessary; at equality the fibre space is forced and sum_s rank(M_s) is basis-independent, so it exceeds j for EVERY rank-j decomposition of D.",
+  "whyThisBase": "T12c is rank 22, so the add-j allowance is j <= k, one fresh term MORE per row than the rank-23 bases' j <= k-1 that R74 closed. Its deficits are also nonzero at k=0 (M - T12c is the unit tensor e_7 (x) e_4 (x) e_7), so the band has no empty row to hide behind.",
+  "deficitConstruction": "D_K = M - sum_{s not in K} t_s against the TRUE target. NOT sum_{s in K} t_s as `nonAxialSplit.deficitFromTriples` computes: the two agree for an exact base, but T12c is not exact, and matrix rank is not monotone under addition, so rank(sum_K) does not bound rank(D_K).",
+  "bands": {
+    "T12c_absorb_best/k=2": {
+      "j": 2,
+      "rows": 231,
+      "refuted": 231,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 226,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 14
+    },
+    "T12c_absorb_best/k=3": {
+      "j": 3,
+      "rows": 1540,
+      "refuted": 1540,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 1424,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 66
+    },
+    "T12c_absorb_best/k=7": {
+      "j": 7,
+      "rows": 170544,
+      "refuted": 170544,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 47852,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 9308
+    },
+    "T12c_absorb_best/k=8": {
+      "j": 8,
+      "rows": 319770,
+      "refuted": 319770,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 30232,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 19794
+    },
+    "T12c_absorb_best/k=9": {
+      "j": 9,
+      "rows": 497420,
+      "refuted": 497420,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 0,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 33388
+    },
+    "T12c_absorb_best/k=10": {
+      "j": 10,
+      "rows": 646646,
+      "refuted": 646646,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 0,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 47154
+    },
+    "T12c_absorb_best/k=11": {
+      "j": 11,
+      "rows": 705432,
+      "refuted": 705432,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 0,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 55079
+    },
+    "T11_solution/k=2": {
+      "j": 1,
+      "rows": 253,
+      "refuted": 253,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 250,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 7
+    },
+    "T11_solution/k=3": {
+      "j": 2,
+      "rows": 1771,
+      "refuted": 1771,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 1695,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 47
+    },
+    "T11_solution/k=7": {
+      "j": 6,
+      "rows": 245157,
+      "refuted": 245157,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 115489,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 12449
+    },
+    "T11_solution/k=8": {
+      "j": 7,
+      "rows": 490314,
+      "refuted": 490314,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 130019,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 28062
+    },
+    "T11_solution/k=9": {
+      "j": 8,
+      "rows": 817190,
+      "refuted": 817190,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 72331,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 51906
+    },
+    "T11_solution/k=10": {
+      "j": 9,
+      "rows": 1144066,
+      "refuted": 1144066,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 0,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 77665
+    },
+    "T11_solution/k=11": {
+      "j": 10,
+      "rows": 1352078,
+      "refuted": 1352078,
+      "unresolved": 0,
+      "refutedBySliceDimAlone": 0,
+      "refutedByFibreTotalAlone": 0,
+      "unresolvedRows": [],
+      "unresolvedSample": [],
+      "ms": 97168
+    }
+  },
+  "controls": {
+    "T11-exact-rank-23": true,
+    "T12c-rank-22-one-mismatch": true,
+    "k0-deficit-is-one-unit-tensor": true,
+    "k0-admissible-at-j1": true,
+    "k0-refuted-at-j0": true,
+    "k0-support-is-the-single-entry-7-4-7": true,
+    "planted-3-rank1-deficit-total-is-3": true,
+    "planted-admissible-at-j3": true,
+    "planted-refuted-at-j2": true,
+    "planted-2-rank1-deficit-total-is-2": true,
+    "planted2-admissible-at-j2": true,
+    "planted2-refuted-at-j1": true,
+    "R61-two-drop-reproduction-231-rows-fdim3": true,
+    "R61-two-drop-all-refuted-at-j2": true,
+    "no-unresolved-row-is-a-witness": true
+  },
+  "controlDetail": {
+    "T11-exact-rank-23": {
+      "correct": true,
+      "rank": 23,
+      "mismatches": 0,
+      "sampleBad": []
+    },
+    "T12c-rank-22-one-mismatch": {
+      "correct": false,
+      "rank": 22,
+      "mismatches": 1,
+      "sampleBad": [
+        "(7,4,7): got 0, want 1"
+      ]
+    },
+    "k0-deficit-is-one-unit-tensor": {
+      "sliceDim": 1,
+      "total": 1,
+      "basisRanks": [
+        1
+      ]
+    },
+    "k0-admissible-at-j1": "",
+    "k0-refuted-at-j0": "",
+    "k0-support-is-the-single-entry-7-4-7": "",
+    "planted-3-rank1-deficit-total-is-3": {
+      "sliceDim": 3,
+      "total": 3,
+      "basisRanks": [
+        1,
+        1,
+        1
+      ]
+    },
+    "planted-admissible-at-j3": "",
+    "planted-refuted-at-j2": "",
+    "planted-2-rank1-deficit-total-is-2": {
+      "sliceDim": 2,
+      "total": 2,
+      "basisRanks": [
+        1,
+        1
+      ]
+    },
+    "planted2-admissible-at-j2": "",
+    "planted2-refuted-at-j1": "",
+    "R61-two-drop-reproduction-231-rows-fdim3": {
+      "rows": 231,
+      "fdim3": 231
+    },
+    "R61-two-drop-all-refuted-at-j2": {
+      "refuted": 231
+    },
+    "no-unresolved-row-is-a-witness": []
+  },
+  "failures": [],
+  "outcome": "every swept row of every band is REFUTED exactly; no rank<=22 scheme contains 22-k terms of these bases at the swept k",
+  "honesty": {
+    "scope": "drop-k/add-j only. For T12c it covers every completion of (T12c minus K) with j <= k fresh rank-1 terms, which is a STRICTLY WIDER family than any band closed so far. It does NOT touch supports outside these bases, does not touch repairs by coordinate edits, and does not bound rank 22 in general: a rank-22 scheme sharing no terms with T12c or T11 is untouched by everything here.",
+    "notAProof": "A refuted row is a proof that no such completion exists (the bound is necessary, and rank(D_K) > k is decided exactly). A surviving row would be UNRESOLVED, never a witness — this file cannot build a scheme.",
+    "field": "exact integers and exact rationals. mod-p (65521) appears only as a refutation-FIRST prefilter, since rank over F_p <= rank over Q, so a mod-p verdict already proves the Q verdict; every non-refuted row is re-decided with exact rational elimination.",
+    "bound": "19 <= R <= 23 over Q/R is untouched. This moves no bound."
+  },
+  "rank22Witness": false,
+  "scoreboardBest22": "none",
+  "goalCheckExit": 1
+}
