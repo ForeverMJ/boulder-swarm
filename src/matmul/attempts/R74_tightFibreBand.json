@@ -1,0 +1,160 @@
+{
+  "round": "R74",
+  "claim": "sum_s rank(M_s) over the FORCED slice-space basis of a k-term deficit exceeds j = k-1, so rank(D) > j and the drop-k/add-j lever is refuted for that row. Exact, complete, no search.",
+  "derivation": "D = sum_s u_s (x) M_s forces span{d_a} <= span{M_s}; at dim span{d_a} = j the fibre space is forced and sum rank(M_s) is basis-independent, so it is the value for EVERY rank-j decomposition of D.",
+  "correctsR73": "R73 enumerated subspaces U of the first factor as if U were a free variable. It is not: U is determined by the slices once the fibre space is fixed. R73's 3,866,310-subspace sweep is therefore retracted as vacuous — 0 of them were consistent for the reason above, not because the rows are hard.",
+  "namedR72Rows": [
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        20
+      ],
+      "j": 6,
+      "sliceDim": 6,
+      "tightTotal": 12,
+      "status": "refuted"
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        20
+      ],
+      "j": 6,
+      "sliceDim": 6,
+      "tightTotal": 21,
+      "status": "refuted"
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        20
+      ],
+      "j": 6,
+      "sliceDim": 5,
+      "tightTotal": 13,
+      "status": "refuted"
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        11,
+        20
+      ],
+      "j": 6,
+      "sliceDim": 6,
+      "tightTotal": 18,
+      "status": "refuted"
+    },
+    {
+      "drop": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        15,
+        20
+      ],
+      "j": 6,
+      "sliceDim": 6,
+      "tightTotal": 13,
+      "status": "refuted"
+    }
+  ],
+  "bands": {
+    "T11_solution/k=6": {
+      "j": 5,
+      "rows": 100947,
+      "refuted": 100947,
+      "undecided": 0,
+      "admissible": 0,
+      "refutedBySliceDimAlone": 66313,
+      "admissibleRows": [],
+      "ms": 3959
+    },
+    "T11_solution/k=7": {
+      "j": 6,
+      "rows": 245157,
+      "refuted": 245157,
+      "undecided": 0,
+      "admissible": 0,
+      "refutedBySliceDimAlone": 115489,
+      "admissibleRows": [],
+      "ms": 9716
+    },
+    "T12d_fam_A/k=6": {
+      "j": 5,
+      "rows": 100947,
+      "refuted": 100947,
+      "undecided": 0,
+      "admissible": 0,
+      "refutedBySliceDimAlone": 66313,
+      "admissibleRows": [],
+      "ms": 5909
+    },
+    "T12d_fam_A/k=7": {
+      "j": 6,
+      "rows": 245157,
+      "refuted": 245157,
+      "undecided": 0,
+      "admissible": 0,
+      "refutedBySliceDimAlone": 115489,
+      "admissibleRows": [],
+      "ms": 16775
+    },
+    "T12d_fam_B/k=6": {
+      "j": 5,
+      "rows": 100947,
+      "refuted": 100947,
+      "undecided": 0,
+      "admissible": 0,
+      "refutedBySliceDimAlone": 66313,
+      "admissibleRows": [],
+      "ms": 4883
+    },
+    "T12d_fam_B/k=7": {
+      "j": 6,
+      "rows": 245157,
+      "refuted": 245157,
+      "undecided": 0,
+      "admissible": 0,
+      "refutedBySliceDimAlone": 115489,
+      "admissibleRows": [],
+      "ms": 13382
+    }
+  },
+  "controls": {
+    "bases-match-their-claims": true,
+    "all-five-R72-rows-refuted-at-j6": true,
+    "no-admissible-row-is-the-verdict": true,
+    "band-is-closed": true
+  },
+  "failures": [],
+  "outcome": "every swept row of the k=6 and k=7 bands of all three landed bases is REFUTED for drop-k/add-j, exactly",
+  "honesty": {
+    "scope": "drop-k/add-j only, k in {6,7}, three landed rank-23 bases, exact over Z/Q. This does NOT touch drop-k/absorb (T12c's route), does not touch supports outside these bases, and does not bound rank 22 in general.",
+    "field": "exact rationals; mod-p used only as a refutation-first prefilter (rank over F_p <= rank over Q)",
+    "bound": "19 <= R <= 23 over Q/R is untouched; this moves no bound"
+  },
+  "rank22Witness": false,
+  "goalCheckExit": 1
+}
