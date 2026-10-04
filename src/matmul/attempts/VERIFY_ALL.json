@@ -263,6 +263,18 @@
       "note": "consistent"
     },
     {
+      "file": "R69_coeffsolve_inconsistent.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R69_coeffsolve_sweep.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R6_survey_pm2.json",
       "verdict": "(no verdict field)",
       "selfConsistent": true,
@@ -344,7 +356,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 50,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
