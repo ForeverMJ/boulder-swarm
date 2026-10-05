@@ -580,5 +580,15 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-05T04:19:01.087Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "T02",
+    "branch": "agent/goal-w1-T02",
+    "passed": 5,
+    "total": 5,
+    "pass_rate": 1,
+    "duration_s": 0.1,
+    "loc": 3
   }
 ]
