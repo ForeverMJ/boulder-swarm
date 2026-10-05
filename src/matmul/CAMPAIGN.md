@@ -197,6 +197,66 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   satisfies `rank <= 22` trivially. A gate is only real if it is re-run after
   every change to what it reads.
 
+### Closed-space snapshot of the drop-k/add-j ladder (distilled R83 from R59-R82)
+
+The point of this entry is that the ladder has been climbed hard and the next
+round must not re-climb it. Everything below is a REFUTATION over Q/R, i.e. a
+proof that no scheme in the named ansatz reaches rank <= 22 — not a proof that
+rank 22 is impossible.
+
+**CLOSED, by refutation:**
+
+- The drop-k/add-j neighbourhood of all four named bases — `T11_solution`,
+  `T12_rank23_variant`, `T12d_fam_A`, `T12d_fam_B` — through **k=7** at
+  `j = k-1`: R74 closed all 1,038,156 rows of k=6 and k=7 for the three
+  rank-23 bases, exactly, 0 undecided.
+- `T12c_absorb_best` itself, which is a *strictly wider* class (22 terms, so
+  `j <= k` rather than `j <= k-1`): R79 closed k=2 (231/231), k=3 (1540/1540)
+  and k=7..k=11 (2,339,352 rows) — 6,392,412 rows, every one refuted, no work
+  budget anywhere in that claim.
+- The **k=5 (j=3) band at split-refined rank-24 anchors, over the ENTIRE
+  enumerable anchor inventory of all four bases: 25,459,896 rows, 599 distinct
+  anchors, 0 unresolved, 0 zero-deficit hits — CLOSED (R83; see the R83 row for
+  the independent re-verification and for the correction it makes to R82's row).
+- The **k=4 band at split-refined anchors**, across 28 shards (R76), and the
+  k<=4 bands of every base by flattening + box-cover + incompatibility-clique
+  (R61/R62/R64: 231 two-drops, 1986 flatDim survivors at k=5 all refuted).
+- **Coefficient widening inside a landed support is refuted over all of Q**
+  (R69): the `T12c` deficit is the single entry `(7,4,7)`, slice dimension
+  exactly 1, tight total exactly 1 — admissible at `j=1`, refuted at `j=0`.
+  There is no integer coefficient to find.
+
+**INSTRUMENTS, and why the ladder is two instruments, not one:** the cheap
+slice-dimension bound `dim span{slices} >= j+1` (R74, extended to all three
+axes in `tools/splitRefinedScreens.ts`) decides the large-k bands for most
+rows, but at **k >= 9 on `T12c` it decides ZERO rows** and all 1,849,498 of
+them are refuted only by the forced-fibre total `sum_s rank(M_s) > j`. A round
+that stops at the flattening bound sees the two biggest bands as flat when they
+are not.
+
+**SUBSUMED / do not rebuild:** `segreSpan` is SUBSUMED by `flatDim` wherever it
+is complete (R64) — it closes nothing and is a bounded null.
+
+**HONESTLY UNSCREENED (the real remaining ground):**
+
+- k>=6 at split-refined rank-24 anchors, and k>=8 at the rank-23 bases directly.
+- Neighbourhoods beyond `MAXANCHORS` in the split-refined anchor enumeration.
+- Drop-k/absorb (`T12c`'s own route), coordinate edits inside a term, and
+  repair by non-unit terms.
+- **Any rank-22 scheme that shares no term with the four landed supports** —
+  the class R74 named as the main open ground and which every round above
+  leaves completely untouched. This is where Lane B (border-rank) lives.
+
+**Process lesson, R83:** R78's row claimed the R59-R77 snapshot had been
+appended to Standing findings. It had not — this entry is that snapshot, and
+the claim was false in the same direction R63 caught (round branches archived
+at their tip, so the log records work whose artifacts are not on the branch).
+The corollary is R83's own finding: **count artifact CONTENT, not artifact
+FILES.** R82's consolidation counted 14 shard files and concluded 2 anchors
+plus all of `T12d_fam_B` were unscreened; the shards already contained every
+`T12d_fam_B` row and the merge was already green. Verify a completion claim by
+re-running the merge over the landed checkpoints before scheduling the work.
+
 ## Next hypotheses (queued)
 
 - H1: rank 22 needs a construction outside the 23-term orbit entirely (border-rank
@@ -227,3 +287,4 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | R80 | round r36 of the system loop opened the wide-anchor lane (not the named R74 class) | `attempts/R79_wideAnchor_search.ts` on branch `agent/goal-w0-T12@r36_rescue` | **The supervisor died mid-round before the agent could finish or write its row**; the worktree was RESCU wholesale (commit e868b17: artifacts + the full recovered ladder). No certificate, no verdict, no row from the agent — nothing is claimed; the lane's content lives only in the rescued search file and the rerun is due | artifacts: `agent/goal-w0-T12@r36_rescue` (e868b17) |
 | R81 | round r37 (system loop, v14 Lane A): the k=5 split-band completion job, sharded | recovered `R78_split_k5_band_search.ts` from `@d68e4c4` and built the sharded sweep `attempts/R81_split_k5_band_search.ts` (16 shards, rowsPerAnchor=42504) + recovered `R79_wideAnchor_search.ts` (redo pending), all verified per shard through the checker discipline | **Shards 0-1 complete before the supervisor crashed mid-round (second mid-death; rescue commit ac4d185 = branch `agent/goal-w0-T12@r37_rescue`)**: each shard ~3,570,336 rows ALL REFUTED (plus a 722,568 sub-band), unresolved=0. Remaining: shards 2-15 (a compute continuation of the same sound run, ~45 min total). No witness; T12c unchanged; `BEST22=none` stands; goalCheck exits 1; no bound moves | artifacts: branch `agent/goal-w0-T12@r37_rescue` (`R81_split_k5_band_shard{0,1}.{json,ndjson}` + searches) |
 | R82 | round r39 (system loop, v14 continuation): the k=5 split-band completion, per-anchor sharded | `R82_shard*.ndjson` streamed per anchor (42,504 rows each); supervisor died mid-round AGAIN and the tree was	rescue-committed `agent/goal-w0-T12@r39_rescue` (6261713) — 14 shards landed, shards 14-15 + the T12d_fam_B pass remain | **14/14 landed shards FULLY REFUTED (42,504 rows each, unresolved=0)** — the k=5 pattern: nothing admits. Remaining: ~2 anchors + T12d_fam_B entirely (the R78 rate finding: ~6 min compute). No witness; T12c unchanged; `BEST22=none` stands; goalCheck exits 1; no bound moves | artifacts: `agent/goal-w0-T12@r39_rescue` (`R82_shard0..13.ndjson`) |
+| R83 | Lane A job 1 of the T12 prompt v14 (k=5 split-band completion), run to COMPLETION and then independently re-verified. Prerequisite work, stated as such: `tools/splitRefinedScreens.ts` (+test, 27 pass), `attempts/R78_split_k5_band_search.ts`, `attempts/R82_split_k5_band_search.ts`, `R78_split_k5_band.ndjson` and `R82_shard0..13.ndjson` **did not exist on this branch** — recovered verbatim from `agent/goal-w0-T12@d68e4c4` and `@r39_rescue`, unmodified. Step 0 of the prompt (the R59-R77 closed-space snapshot) was also genuinely outstanding: R78's row CLAIMED it had been appended to Standing findings and it had not, so that is done here | `attempts/R83_k5_band_independent_verify.py` — a Python re-derivation that imports nothing from `tools/`, rebuilds the target tensor from its definition, re-enumerates the anchor inventory, and re-implements the slice-dimension bound with `fractions.Fraction` Gaussian elimination; plus `attempts/R83_k5_band_closed.json` | **The k=5 (j=3) split-refined band is CLOSED over the whole enumerable anchor inventory, and the log's own record of that was wrong in the direction that hides a closure.** Re-running R82's own merge over the landed checkpoints gives `verdict=CERTIFIED-NO-HIT-WITHIN-ANSATZ, positions=1330, distinct=599, coveredDistinct=599, missing=0, rows=25,459,896, refuted=25,459,896, unresolved=0, zeroHits=0` — per base `T11_solution` 108 anchors / 4,590,432 rows, `T12_rank23_variant` 108 / 4,590,432, `T12d_fam_A` 195 / 8,288,280, `T12d_fam_B` **188 / 7,990,752**. **R82's consolidation row is therefore FALSE** where it says "two anchors + T12d_fam_B entirely remain (the R78 rate finding: ~6 min compute)": the shards that landed already contained every `T12d_fam_B` row, `R82_split_k5_band.json` on the round branch already said CERTIFIED, and the named job was finished — the consolidation counted shard FILES instead of shard CONTENT. **The independent verifier agrees on all of it and adds the checks the merge cannot make:** identical inventory (1330 positions / 599 distinct labels) from a second implementation, 0 enumerated-but-unscreened and 0 screened-but-unenumerated labels, 0 row-count clashes across 1,920 ndjson lines, 599/599 labels carrying a clean 42504/42504 refutation, and **36/36 sampled rows re-screened and refuted** by the independent instrument (12 anchors x 3 drop sets — first, middle and last of C(24,5) — spread over all four bases and deliberately including `T12d_fam_B`, the class the log believed had zero rows). Two soundness notes carried forward: the deficit is `D_K = M - sum_{s not in K} t_s` against the TRUE target, not `sum_{s in K} t_s` (R79's catch, and the reason a shared builder would have screened the wrong tensor), and the zero-deficit alignment control (drop no terms from an exact anchor -> `D = 0` exactly, not refuted, 6/6) is what proves the verifier's tensor and target are aligned; dedup by anchor label is sound because `cutIdx = min(cut, supp.length-1)` collapses larger cuts onto the *same* split, so one label is one anchor and all 1,330 positions map onto the 599 distinct anchors. **Honest scope, unchanged:** this closes drop-k/add-j at k=5, j=3, at split-refined rank-24 anchors of the four bases and nothing else — not k>=6 there, not drop-k/absorb, not coordinate edits, not repair by non-unit terms, and not any rank-22 scheme sharing no term with these supports. A closure of an ansatz is not a proof that R >= 23. No rank<=22 witness; no scheme exported; T12c unchanged at 22 with 1/729 mismatches; `BEST22=none` stands; goalCheck exits 1. This moves no bound: `19 <= R <= 23` over Q/R untouched | artifacts: `attempts/R83_k5_band_independent_verify.py`, `attempts/R83_k5_band_closed.json`, recovered `tools/splitRefinedScreens.ts`(+test), `attempts/R78_split_k5_band_search.ts`, `attempts/R82_split_k5_band_search.ts`, `attempts/R78_split_k5_band.ndjson`, `attempts/R82_shard0..13.ndjson` |

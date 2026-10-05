@@ -1,0 +1,75 @@
+{
+  "round": "R83",
+  "lane": "Lane A job 1 of the T12 prompt v14 (k=5 split-band completion), run to COMPLETION and independently re-verified",
+  "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+  "verdictMeaning": "the k=5 (j=3) drop-k/add-j band at split-refined rank-24 anchors is CLOSED over the ENTIRE enumerable anchor inventory of all four named bases: every one of the 25,459,896 rows (599 distinct anchors x C(24,5)=42,504 drop sets) is REFUTED by exact integer slice-dimension arithmetic, with 0 unresolved and 0 zero-deficit hits. No rank<=22 scheme exists in this ansatz. This is a refutation of an ansatz, NOT a proof that R(3x3x3) >= 23.",
+  "whatThisCorrects": "CAMPAIGN.md's R82 consolidation row states that 'two anchors + T12d_fam_B entirely remain (cheap compute)'. That is FALSE, and it is false in the direction that matters: the shard files R82_shard0..13.ndjson that landed DO contain T12d_fam_B rows. The consolidation counted shard FILES, not shard CONTENT. Re-running R82's own merge over the landed checkpoints yields verdict=CERTIFIED-NO-HIT-WITHIN-ANSATZ, missing=0, and CAMPAIGN.md's own artifact R82_split_k5_band.json (written on the round branch) already said so. The named 'cheap compute' job was already finished; only the log was behind. Nothing was screens-left undone.",
+  "closure": {
+    "positions": 1330,
+    "distinctAnchors": 599,
+    "rowsPerAnchor": 42504,
+    "rowsTotal": 25459896,
+    "refuted": 25459896,
+    "unresolved": 0,
+    "zeroDeficitHits": 0,
+    "distinctAnchorsPerBase": {
+      "T11_solution": 108,
+      "T12_rank23_variant": 108,
+      "T12d_fam_A": 195,
+      "T12d_fam_B": 188
+    },
+    "rowsPerBase": {
+      "T11_solution": 4590432,
+      "T12_rank23_variant": 4590432,
+      "T12d_fam_A": 8288280,
+      "T12d_fam_B": 7990752
+    }
+  },
+  "soundness": {
+    "screen": "tools/splitRefinedScreens.ts S1, generalised by R74 to all three axes: dim span{slices along axis a} >= j+1 REFUTES a deficit that must be a sum of j rank-1 tensors. Integer arithmetic, no float, no budget, no branch and bound.",
+    "deficitIsTheTrueOne": "D_K = M - sum_{s not in K} t_s against the TRUE target, NOT sum_{s in K} t_s (R79's catch). Verified by the zero-deficit alignment control below.",
+    "dedupIsSound": "anchor labels are not unique (maxLabelMultiplicity=7) because cutIdx = min(cut, supp.length-1) collapses larger cuts onto the same split; same label => same anchor, so dedup by label is exact coverage, and all 1330 positions map onto the 599 distinct anchors.",
+    "exactness": "rationals only. No float appears in any equality decision, here or in the screen."
+  },
+  "independentVerification": {
+    "why": "the closure rests on one enumeration and one screen, both from the same author lineage; the only defence against a shared bug is a second implementation that shares no code",
+    "artifact": "attempts/R83_k5_band_independent_verify.py",
+    "independence": "Python; re-derives the target tensor from its definition, re-derives the anchor inventory, and re-implements the slice-dimension bound with fractions.Fraction Gaussian elimination. It imports nothing from tools/ and reads no repo TypeScript. The single cross-checked input is types.buildTarget, whose 729 entries it compares against its own derivation and hard-fails on any disagreement.",
+    "inventoryAgreement": "1330 positions / 599 distinct labels, identical to the driver",
+    "coverage": "0 enumerated-but-unscreened labels, 0 screened-but-unenumerated labels, 0 row-count clashes across 1920 ndjson lines",
+    "rowIntegrity": "599/599 labels carry a clean 42504/42504 refutation with unresolved=0 and zeroHits=0",
+    "reScreen": "36 rows re-screened independently (12 anchors x 3 drop sets: first, middle, last of C(24,5); anchors spread across all four bases and including T12d_fam_B, which CAMPAIGN believed had 0 rows): 36/36 REFUTED, 0 disagreements",
+    "controls": [
+      {
+        "name": "zero-deficit-alignment",
+        "result": "6/6 anchors with NO dropped terms give D = 0 exactly and are NOT refuted",
+        "why": "if the deficit construction or the target were misaligned this control fires; it is the control R79's soundness note demands"
+      },
+      {
+        "name": "non-vacuity-of-the-bound",
+        "result": "the bound refutes 36/36 sampled real rows but refuses to refute a zero deficit",
+        "why": "a screen that killed the zero deficit would be refuting the truth"
+      }
+    ],
+    "stdout": [
+      "independent inventory: 1330 positions, 599 distinct labels",
+      "ndjson lines read: 1920; distinct covered labels: 599",
+      "missing (enumerated but unscreened): 0; unknown (screened but not enumerated): 0",
+      "distinct anchors covered per base: {'T11_solution': 108, 'T12_rank23_variant': 108, 'T12d_fam_A': 195, 'T12d_fam_B': 188}",
+      "labels whose row is not a clean 42504/42504 refutation: 0",
+      "TOTAL distinct rows accounted: 25459896",
+      "independent re-screen: 36 rows probed, 36 refuted, 0 NOT refuted",
+      "zero-deficit alignment control: 6/6 anchors give D = 0 and are NOT refuted",
+      "VERDICT: consistent"
+    ]
+  },
+  "reproduce": [
+    "bun test src/matmul/tools/splitRefinedScreens.test.ts   # 27 pass",
+    "R82_MERGE=1 bun src/matmul/attempts/R82_split_k5_band_search.ts",
+    "bun -e 'import {buildTarget} from \"./src/matmul/types\"; ...' > /tmp/opencode/target.json  (the R83 script cross-checks against this)",
+    "python3 src/matmul/attempts/R83_k5_band_independent_verify.py"
+  ],
+  "honestScope": "This closes drop-k/add-j at k=5, j=3, at split-refined rank-24 anchors of T11_solution, T12_rank23_variant, T12d_fam_A and T12d_fam_B, and nothing else. It does NOT touch: k>=6 at these anchors; drop-k/absorb (T12c's route, whose single (7,4,7) residual R69 showed is structurally unabsorbable); coordinate edits inside a term; repair by non-unit terms; or ANY rank-22 scheme that shares no term with these four supports - the class R74 named as the main open ground, still untouched. Over Q/R. No bound moves: 19 <= R <= 23 stands.",
+  "scoreboardNote": "no scheme exported; BEST22=none stands; goalCheck exits 1; T12c unchanged at rank 22 with 1/729 mismatches",
+  "boundsUnchanged": "19 <= R(3x3x3) <= 23 over Q/R (untouched); 21 <= R_F2 <= 23 over F_2 (untouched)"
+}

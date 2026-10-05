@@ -305,6 +305,18 @@
       "note": "consistent"
     },
     {
+      "file": "R82_split_k5_band.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R83_k5_band_closed.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R8_alldrops_2move_pm2.json",
       "verdict": "CERTIFIED-LOCAL-OPTIMAL-2MOVE",
       "selfConsistent": true,
@@ -344,7 +356,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 50,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
