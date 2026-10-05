@@ -1,0 +1,119 @@
+{
+  "round": "R81",
+  "shard": 7,
+  "shards": 16,
+  "band": {
+    "anchors": 24,
+    "k": 5,
+    "j": 3,
+    "rowsPerAnchor": 42504
+  },
+  "controls": [
+    {
+      "name": "every-split-anchor-is-exact-rank-24",
+      "ok": true,
+      "detail": "60/60 anchors verify correct at rank 24"
+    },
+    {
+      "name": "non-vacuity-synthetic-rank3-not-refuted-at-j3 (T11_solution)",
+      "ok": true,
+      "detail": "3 unit terms at j=3 must survive the screen"
+    },
+    {
+      "name": "threshold-synthetic-rank4-refuted-at-j3 (T11_solution)",
+      "ok": true,
+      "detail": "4 terms of the same family at j=3 must be refuted"
+    },
+    {
+      "name": "real-data-non-vacuity-3-terms-at-j19-not-refuted (T11_solution)",
+      "ok": true,
+      "detail": "a deficit that is literally a 3-term sum must not be refuted at j=19"
+    },
+    {
+      "name": "non-vacuity-synthetic-rank3-not-refuted-at-j3 (T12_rank23_variant)",
+      "ok": true,
+      "detail": "3 unit terms at j=3 must survive the screen"
+    },
+    {
+      "name": "threshold-synthetic-rank4-refuted-at-j3 (T12_rank23_variant)",
+      "ok": true,
+      "detail": "4 terms of the same family at j=3 must be refuted"
+    },
+    {
+      "name": "real-data-non-vacuity-3-terms-at-j19-not-refuted (T12_rank23_variant)",
+      "ok": true,
+      "detail": "a deficit that is literally a 3-term sum must not be refuted at j=19"
+    },
+    {
+      "name": "non-vacuity-synthetic-rank3-not-refuted-at-j3 (T12d_fam_A)",
+      "ok": true,
+      "detail": "3 unit terms at j=3 must survive the screen"
+    },
+    {
+      "name": "threshold-synthetic-rank4-refuted-at-j3 (T12d_fam_A)",
+      "ok": true,
+      "detail": "4 terms of the same family at j=3 must be refuted"
+    },
+    {
+      "name": "real-data-non-vacuity-3-terms-at-j19-not-refuted (T12d_fam_A)",
+      "ok": true,
+      "detail": "a deficit that is literally a 3-term sum must not be refuted at j=19"
+    },
+    {
+      "name": "non-vacuity-synthetic-rank3-not-refuted-at-j3 (T12d_fam_B)",
+      "ok": true,
+      "detail": "3 unit terms at j=3 must survive the screen"
+    },
+    {
+      "name": "threshold-synthetic-rank4-refuted-at-j3 (T12d_fam_B)",
+      "ok": true,
+      "detail": "4 terms of the same family at j=3 must be refuted"
+    },
+    {
+      "name": "real-data-non-vacuity-3-terms-at-j19-not-refuted (T12d_fam_B)",
+      "ok": true,
+      "detail": "a deficit that is literally a 3-term sum must not be refuted at j=19"
+    }
+  ],
+  "skippedAlreadyScreenedByR78": 0,
+  "totals": {
+    "rows": 3527832,
+    "refuted": 3527832,
+    "unresolved": 0,
+    "zeroHits": 0
+  },
+  "perBase": {
+    "T11_solution": {
+      "rows": 722568,
+      "refuted": 722568,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 17
+    },
+    "T12_rank23_variant": {
+      "rows": 680064,
+      "refuted": 680064,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 16
+    },
+    "T12d_fam_A": {
+      "rows": 1105104,
+      "refuted": 1105104,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 26
+    },
+    "T12d_fam_B": {
+      "rows": 1020096,
+      "refuted": 1020096,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 24
+    }
+  },
+  "exhausted": true,
+  "survivors": [],
+  "survivorNote": "a survivor is a NOT-refuted row, not a scheme; it requires the witness certification path before any rank claim",
+  "elapsedMs": 86869
+}

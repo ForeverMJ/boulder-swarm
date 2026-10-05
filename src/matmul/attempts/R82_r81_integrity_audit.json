@@ -1,0 +1,206 @@
+{
+  "round": "R82",
+  "kind": "INTEGRITY-AUDIT-OF-A-COMPLETED-RUN (no new rows screened)",
+  "audited": "attempts/R81_split_k5_band.json + 16 shard certificates + 16 shard waypoint logs",
+  "recomputedFromWaypoints": {
+    "shards": 16,
+    "anchorSlotsLogged": 1330,
+    "distinctAnchorLabels": 599,
+    "rows": 56530320,
+    "refuted": 56530320,
+    "unresolved": 0,
+    "zeroHits": 0,
+    "distinctRowsIfLabelsWereUnique": 25459896,
+    "duplicateInflationFactor": 2.2204,
+    "perBase": {
+      "T11_solution": {
+        "slots": 266,
+        "distinct": 108
+      },
+      "T12_rank23_variant": {
+        "slots": 266,
+        "distinct": 108
+      },
+      "T12d_fam_A": {
+        "slots": 413,
+        "distinct": 195
+      },
+      "T12d_fam_B": {
+        "slots": 385,
+        "distinct": 188
+      }
+    }
+  },
+  "perShard": [
+    {
+      "shard": 0,
+      "rows": 3570336,
+      "refuted": 3570336,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 1,
+      "rows": 3570336,
+      "refuted": 3570336,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 2,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 3,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 4,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 5,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 6,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 7,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 8,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 9,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 10,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 11,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 12,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 13,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 14,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    },
+    {
+      "shard": 15,
+      "rows": 3527832,
+      "refuted": 3527832,
+      "unresolved": 0,
+      "zeroHits": 0
+    }
+  ],
+  "correctedClosure": {
+    "statement": "The k=5 (j=3) band at split-refined rank-24 anchors is CLOSED BY REFUTATION over the DISTINCT anchors the run actually enumerated. Every logged row was refuted (0 unresolved, 0 zero-deficit hits) by the fixed three-axis slice-dimension screen, in exact integer arithmetic, with no work budget, no cover and no branch and bound.",
+    "soundRows": 56530320,
+    "soundDistinctAnchors": 599,
+    "anchorSlots": 1330,
+    "basesFullyScreened": [
+      "T11_solution",
+      "T12_rank23_variant",
+      "T12d_fam_A",
+      "T12d_fam_B"
+    ],
+    "t12d_fam_B": "screened for the first time in this campaign (0 rows before R81)",
+    "quotedInCertificateButNotUsable": 81607680
+  },
+  "findings": [
+    {
+      "name": "r81-waypoint-rows-reproduce-the-certificate",
+      "ok": true,
+      "detail": "waypoints 56530320 rows / 56530320 refuted vs certificate 56530320 / 56530320"
+    },
+    {
+      "name": "every-row-decided-no-unresolved-no-zeroHits",
+      "ok": true,
+      "detail": "rows=56530320 refuted=56530320 unresolved=0 zeroHits=0"
+    },
+    {
+      "name": "shard-certificate-per-base-sums-match-the-aggregate",
+      "ok": true,
+      "detail": "per-shard certificates summed per base: {\"T11_solution\":{\"rows\":11306064,\"refuted\":11306064,\"anchors\":266},\"T12_rank23_variant\":{\"rows\":11306064,\"refuted\":11306064,\"anchors\":266},\"T12d_fam_A\":{\"rows\":17554152,\"refuted\":17554152,\"anchors\":413},\"T12d_fam_B\":{\"rows\":16364040,\"refuted\":16364040,\"anchors\":385}}; total 56530320 vs certificate 56530320"
+    },
+    {
+      "name": "DEFECT-1-anchor-labels-are-not-unique-per-shard",
+      "ok": false,
+      "detail": "the anchor index IS partitioned across shards, yet 599 distinct labels cover 1330 logged anchor slots, with cross-shard label reuse in {\"T11_solution\":37,\"T12_rank23_variant\":37,\"T12d_fam_A\":56,\"T12d_fam_B\":51}. Cause: splitAnchor clamps cutIdx = Math.min(cut, supp.length-1), so cuts >= supp-1 collapse to ONE anchor and are re-screened once per cut."
+    },
+    {
+      "name": "DEFECT-2-combined-rows-adds-the-r78-run-the-driver-declares-unsound",
+      "ok": false,
+      "detail": "certificate combined.rows=81607680 = R81 56530320 + R78 25077360. R81's own code comment states R78's rows were screened with a pre-fix sliceDimCapped and are deliberately NOT inherited (skippedAlreadyScreenedByR78=0), so adding them back into one total contradicts the run that produced the number."
+    },
+    {
+      "name": "combined-anchor-count-matches-its-own-rows",
+      "ok": true,
+      "detail": "certificate combined.anchorsScreened=1330 equals R81's own anchor slots (1330), NOT R78's 590 plus R81's."
+    },
+    {
+      "name": "DEFECT-3-r78-waypoint-labels-also-non-unique",
+      "ok": false,
+      "detail": "R78 logged 590 anchor slots covering 251 distinct labels; its certificate claims 590 anchors screened. Same clamp defect, inherited verbatim by R81."
+    }
+  ],
+  "controlsPass": 4,
+  "controlsTotal": 4,
+  "controlsGate": true,
+  "defectsFound": 3,
+  "verdict": "R81-CLOSES-THE-k=5-BAND-OVER-599-DISTINCT-ANCHORS (3 counting/reporting defects in the certificates corrected; refutation set unaffected and re-derived from waypoints)",
+  "witness": null,
+  "scoreboardNote": "no scheme exported and none possible: a NOT-refuted row would be needed, and there are none. BEST22=none stands; goalCheck exits 1; 19 <= R <= 23 over Q/R untouched."
+}
