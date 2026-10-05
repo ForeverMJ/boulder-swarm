@@ -305,6 +305,186 @@
       "note": "consistent"
     },
     {
+      "file": "R85_m2_merge.json",
+      "verdict": "BOUNDED-INCOMPLETE - the shard set or an anchor space is incomplete; the remainder is UNSCREENED and is never called refuted",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard0of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard10of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard11of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard12of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard13of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard14of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard15of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard16of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard17of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard18of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard19of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard1of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard20of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard21of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard22of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard23of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard24of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard25of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard26of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard27of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard2of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard3of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard4of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard5of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard6of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard7of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard8of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R85_m2_shard9of28.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R86_wideAnchor_m2_merge.json",
+      "verdict": "BOUNDED-INCOMPLETE - the shard set or an anchor space is incomplete; the remainder is UNSCREENED and is never called refuted",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R8_alldrops_2move_pm2.json",
       "verdict": "CERTIFIED-LOCAL-OPTIMAL-2MOVE",
       "selfConsistent": true,
@@ -344,7 +524,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 78,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,
