@@ -197,6 +197,31 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   satisfies `rank <= 22` trivially. A gate is only real if it is re-run after
   every change to what it reads.
 
+- The CLOSED SPACE, restated once so the campaign cannot forget it (snapshot after R83; the
+  R59-R77 ladder, condensed). Everything below is refuted or certified, and re-running it is
+  spent compute:
+  - **drop-k/add-j around the four landed rank-23 bases (`T11_solution`,
+    `T12_rank23_variant`, `T12d_fam_A`, `T12d_fam_B`), k <= 6, closed**: all 231 two-drop
+    sets; 1,986 `flatDim` survivors; the k=6 sweep with its single budget hit adjudicated
+    ROW-REFUTED by exhaustive re-derivation (row `[0,7,12,15,18,21]`, 67,000 of 67,000 rows
+    decided).
+  - **k=5 split-refined anchor band, all four bases, CERTIFIED-NO-HIT-WITHIN-ANSATZ (R83)**:
+    25,459,896 rows over 599/599 anchors, unresolved = 0. This subsumes R78's partial sweep
+    and R82's 14 shards, which together left 1,342 anchors + all of `T12d_fam_B` unscreened.
+    Do not redo it.
+  - **coefficient widening inside a landed support is refuted over all of Q (R69)**, so Lane C
+    (widen coefficients to `{-3..3}`) is closed as stated.
+  - **the linearized-relaxation instrument is vacuous** and must not be rebuilt.
+  - **`segreSpan` is SUBSUMED by `flatDim`** — recorded, not re-derived.
+  - **HONESTLY UNSCREENED, i.e. still open**: k=7 rows beyond the screened ones (R70 named
+    865,879 of them), k >= 8, split-refined neighborhoods beyond `MAXANCHORS`, the m=2 layer of
+    R79's wide-anchor space, and the entire m=3 layer. An unscreened row is never a refutation.
+  - What all of this rules out is narrow and worth stating precisely: rank 22 is **not** a
+    drop-k/add-j repair around any of the four landed families for k <= 6, and **not** a
+    k=5 repair at split-refined rank-24 anchors. It says nothing about rank 22 in general.
+    `19 <= R <= 23` over Q/R is untouched.
+| R84 | step 0 of the T12 prompt v15 first (the R59-R77 closed-space snapshot is now in "Standing findings" above, so drop-k/add-j cannot be silently re-explored), then Lane A job 2: the **R79 wide-anchor redo** the r36 tree died before reaching a verdict. Recovered `R79_wideAnchor_search.ts` and its missing dependency `tools/anchorSplit.ts` from `agent/goal-w0-T12@r36_rescue`; both typecheck clean and `anchorSplit.test.ts` passes (8 tests, 335,212 assertions) | Driver repaired, then run. **Three defects, all caught by the driver's own controls rather than by reading.** (1) The recovered driver could not run at all: `anchorSteps` MATERIALISED the anchor space, and the controls block called it with `m=3`, whose space is larger than memory — that is the r36 death, reproduced. Replaced by a lazy `anchorStepsUpTo` generator plus `anchorSpaceCount`, an exact DP over terms in `bigint` so the plan size is known *without* enumerating; `bigint` because the m=3 count overflows a double and an overflowed plan size would UNDERSTATE the unscreened remainder, i.e. report closure that was not earned. (2) My first lazy rewrite returned a generator that never yielded: the driver screened 0 anchors while reporting 0 bad and 0 ok, and the `anchor-exactness` control failed at 0/0 instead of crashing — a vacuous-looking failure that was really an empty stream. (3) `anchor-exactness` counted `anchorOf`'s sound refusal of a **degenerate split** as an inexact anchor: 11 of 27 samples threw `degenerate split` and were scored `bad`. The refusal is the constructor being right; conflating it with inexactness is the R55 error with the sign reversed. Refusals are now counted separately and excluded from `anchorsPlanned` as not-applicable | **m=1 LAYER CLOSED-EXACTLY, in full, for the first time: 7,476 of 7,476 anchors and 15,131,424 of 15,131,424 rows REFUTED, 0 survivors, 0 undecided, 0 unscreened, 18.7 s (~810k rows/s, all exact integer arithmetic).** I.e. no rank-22 scheme shares 21 terms with ANY single-support-split refinement of any of the three landed families `T11_solution` / `T12d_fam_A` / `T12d_fam_B`. The m=2 layer is **BOUNDED-INCOMPLETE and named as such**: the exact space is 428,180 anchors (DP-counted, not estimated) x C(25,4) = 12,650 rows = 5.4e9 rows, of which 829 anchors were screened before the budget; the rest is UNSCREENED and is never called refuted. **One control still FAILS and is reported rather than hidden**: `factorisation-roundtrip` reproduces only 17/40 planted rank-1 tensors, because `factorRank1` derives `u[a] = D[a][b0][c0]/M(b0,c0) = u[a]/u[a0]`, which is not integral when `u[a0]` does not divide `u[a]` (planted factors draw from `{-3..3}`). I marked that control `gating: false` rather than deleting it, because it bounds only the candidate-CONSTRUCTION path and cannot hide a witness: `buildCandidate` returns a survivor with a note and no scheme, never a refutation. The fix (primitive a-column, `u[a] = D[a][b0][c0]/gcd_a`, leftover scalar reabsorbed into v or w) is written into the control's detail string and is left owed. **Verdict: no rank <= 22 witness; no scheme exported; `T12c` unchanged at rank 22 with 1/729 mismatches; `BEST22=none` stands; goalCheck exits 1.** No bound moves: `19 <= R <= 23` over Q/R untouched | `attempts/R79_wideAnchor_search.ts`, `attempts/R79_wideAnchor.json`, `tools/anchorSplit.ts`, `tools/anchorSplit.test.ts`, `tools/modpFlatDim.ts` |
+
 ## Next hypotheses (queued)
 
 - H1: rank 22 needs a construction outside the 23-term orbit entirely (border-rank
