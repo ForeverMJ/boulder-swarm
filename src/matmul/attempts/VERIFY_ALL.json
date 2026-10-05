@@ -275,6 +275,12 @@
       "note": "consistent"
     },
     {
+      "file": "R78_split_k5_band.json",
+      "verdict": "BOUNDED-INCOMPLETE",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
       "file": "R7_full_pm2.json",
       "verdict": "blocked",
       "selfConsistent": true,
@@ -301,6 +307,108 @@
     {
       "file": "R7_two_move_pm3.json",
       "verdict": "blocked",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band.json",
+      "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard0.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard1.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard10.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard11.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard12.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard13.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard14.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard15.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard2.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard3.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard4.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard5.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard6.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard7.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard8.json",
+      "verdict": "(no verdict field)",
+      "selfConsistent": true,
+      "note": "consistent"
+    },
+    {
+      "file": "R81_split_k5_band_shard9.json",
+      "verdict": "(no verdict field)",
       "selfConsistent": true,
       "note": "consistent"
     },
@@ -344,7 +452,7 @@
   "summary": {
     "schemeCount": 4,
     "allSchemesPass": true,
-    "artifactCount": 48,
+    "artifactCount": 66,
     "driftedArtifacts": [],
     "driftedSchemes": [],
     "controlsRun": 4,

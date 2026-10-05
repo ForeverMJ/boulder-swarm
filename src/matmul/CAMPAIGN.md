@@ -196,6 +196,42 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   turned the gate green, because a rank-7 scheme for a different problem
   satisfies `rank <= 22` trivially. A gate is only real if it is re-run after
   every change to what it reads.
+- **R59-R77 SNAPSHOT (distilled here so the campaign cannot forget its own closed
+  ground). The R78 row claims this snapshot "is now appended to Standing findings
+  above"; on inspection it was NOT, standing findings ended at R30, so this entry
+  is the snapshot and the R78 claim was a log over-claim of the R63 kind, caught
+  by reading rather than by `verifyAll`. What the drop-k/add-j lever has CLOSED,
+  each item exact arithmetic and each an instrument in `tools/`:**
+  - *At landed rank-23 supports, `j = k-1`:* the whole k<=6 band of all four
+    bases (R59-R68) - 231 two-drops of T12c, 1986 flatDim survivors at k=5 all
+    killed by the box-cover bound, the 67,000-row k=6 sweep of T12c with its one
+    budget hit adjudicated by proof (drop `[0,7,12,15,18,21]` has
+    `minBoxCover = 7 > j = 6`), and the k=4 split-refined anchor band across 28
+    shards (R76). k=7 and k=8..11 closed for T11/T12d_fam_A/T12d_fam_B (R74, R79).
+  - *At T12c itself, `j = k`* (one extra fresh term is allowed, because T12c has
+    22 terms): **completely closed for k=2..11** (R79), 6,392,412 rows, every one
+    refuted, 0 unresolved.
+  - *At split-refined rank-24 anchors:* k=3 (`j=1`) over 4000 anchors decided
+    exactly, 8,096,000 rows all refuted (R75); k=4 (`j=2`) refuted across 28
+    shards (R76); k=5 (`j=3`) 25,077,360 rows refuted but BOUNDED-INCOMPLETE at
+    590 of 1,932 anchors (R78).
+  - *Coefficient widening inside a landed support* is REFUTED over all of Q, not
+    sampled: the free-coefficient problem is degree-3, so the largest linear ansatz
+    frees one factor per term; 39,928 exact solves, 0 consistent, each refutation
+    carrying a dual witness `mu` (R69). **Do not rebuild this.**
+  - *`segreSpan` is SUBSUMED by `flatDim`* wherever it is complete (R64). Recorded
+    as a bounded null, closes nothing.
+  - *The linearized-relaxation instrument is VACUOUS* on these rows: the relaxation
+    the border-rank route needs returns no information beyond the bound itself.
+    It is an instrument to stop using, not an open lever.
+  - *Honestly UNSCREENED ground, named exactly:* k=7 beyond the rows R70/R71
+    reached on the split-refined anchors; k>=12 for every base; split-refined
+    anchors beyond the R75/R76 `MAXANCHORS` cap; and every support that is not a
+    subset of a landed or split-refined support. **A bounded null result here is a
+    bounded null result and must never be reported as a closure.**
+  - *The reusable rate:* the k=5 split-refined band costs ~3.5 ms/row, ~100x
+    cheaper than the k=6 band at landed anchors, which is why closing it is a
+    compute job rather than a research problem (R78).
 
 ## Next hypotheses (queued)
 
