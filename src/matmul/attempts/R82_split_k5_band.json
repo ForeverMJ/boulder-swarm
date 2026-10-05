@@ -43,7 +43,7 @@
   "coveredPositions": 1330,
   "coveredDistinct": 599,
   "fromR78": 590,
-  "fromR82Shards": 1330,
+  "fromR82Shards": 1496,
   "shardSizes": {
     "shard0": 95,
     "shard1": 95,
@@ -58,7 +58,9 @@
     "shard10": 95,
     "shard11": 95,
     "shard12": 95,
-    "shard13": 95
+    "shard13": 95,
+    "shard14": 83,
+    "shard15": 83
   },
   "missingAnchors": [],
   "missingCount": 0,
@@ -105,5 +107,5 @@
   "notRefutedSample": [],
   "witness": null,
   "scoreboardNote": "no scheme exported; BEST22=none stands; goalCheck exits 1; 19 <= R <= 23 over Q/R untouched",
-  "elapsedMs": 34
+  "elapsedMs": 41
 }
