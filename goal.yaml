@@ -32,6 +32,10 @@ L1:
     title: Erdős–Straus 4/n = 1/x+1/y+1/z 有限验证管线（用户明确任务，coordinator 注入）
     verifier: bun test src/es4/
     done_when: E1（n∈[2..10^4]）、E2（10^5）、E3（缩放引理+素数归约的 10^6）与 E4（突破表上限的 10^7 全覆盖）全部经合并门落盘
+  - id: M8
+    title: 4x4 matmul 精确方案数平齐 AlphaTensor（F₂ 上 47，Nature 2022）
+    verifier: bun src/matmul/goalCheckA.ts
+    done_when: A1 从零自主搜索（不导入 AlphaTensor 已发表张量）构造精确 rank<=47 over F₂ 的方案并经合并门落盘
 L2:
   - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
   - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
@@ -70,6 +74,7 @@ L2:
   - {id: E2, problem: src/es4/verifyLarge.ts, tests: src/es4/verifyLarge.test.ts, owner: worker, milestone: M7, note: "N=10^5 within 10s judge budget (scaling lemma legal); stub red until agent lands; file-ownership src/es4/verifyLarge.ts only, imports from es4Search allowed"}
   - {id: E3, problem: src/es4/primeCover.ts, tests: src/es4/primeCover.test.ts, owner: worker, milestone: M7, note: "N=10^6 within 45s judge budget - scaling lemma + prime/residue reduction required; bounded null must stay honest via firstMissing; stub red until agent lands; file-ownership src/es4/primeCover.ts only"}
   - {id: E4, problem: src/es4/wideCover.ts, tests: src/es4/wideCover.test.ts, owner: worker, milestone: M7, note: "N=10^7 full coverage within 45s judge budget - lift the landed solver's hard table caps (sieve to 2*maxN derives from maxN); undecided n stay honestly uncovered; file-ownership src/es4/wideCover.ts only, imports from es4Search/verifyLarge/primeCover allowed"}
+  - {id: A1, problem: src/matmul/attempts/A1_f2_scheme.ts, tests: src/matmul/goalCheckA.test.ts, owner: worker, milestone: M8, success: BESTA47, timeoutMs: 1800000, note: "AlphaTensor parity: autonomous from-zero F_2 search for exact 4x4x4 rank<=47 (Nature 610,42,2022 record); NO import of AlphaTensor's published tensors; stub starts red; file-ownership attempts/A1_<name>.ts + _search.ts only; prompt src/matmul/prompts/A1.md"}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker

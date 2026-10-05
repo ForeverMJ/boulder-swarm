@@ -28,7 +28,7 @@ async function main(): Promise<void> {
         const mod = (await import(join(dir, f))) as { scheme?: unknown }
         const s = mod.scheme as Scheme
         const v = verify(s)
-        rows.push({ file: f, correct: v.correct && s.n === 3, rank: v.rank, mismatches: v.mismatches })
+        rows.push({ file: f, correct: v.correct && (s.n === 3 || s.n === 4), rank: v.rank, mismatches: v.mismatches })
       } catch (e) {
         if (e instanceof Error) {
           rows.push({ file: f, correct: false, rank: -1, mismatches: -1 })
@@ -38,7 +38,7 @@ async function main(): Promise<void> {
       }
     }
     rows.sort((a, b) => Number(b.correct) - Number(a.correct) || a.rank - b.rank)
-    console.log("file | correct(n=3) | rank | mismatches")
+    console.log("file | correct(n=3|n=4) | rank | mismatches")
     for (const r of rows) {
       console.log(`${r.file} | ${r.correct} | ${r.rank} | ${r.mismatches}`)
     }
