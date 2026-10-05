@@ -1,0 +1,101 @@
+{
+  "round": "R85",
+  "m": 2,
+  "shard": 2,
+  "shards": 24,
+  "question": "can a rank-22 scheme share 21 terms with a TWO-SUPPORT-SPLIT refinement of a landed rank-23 family, i.e. can 21 of an anchor's 23+m terms absorb the dropped deficit in a single rank-1 tensor?",
+  "closes": "R84 named this layer BOUNDED-INCOMPLETE with 829 of 428,180 anchors screened; this round continues it",
+  "relation": "at R = 25 terms, dropping k = 4 leaves 21 kept and needs j = 1 extra term",
+  "instrument": {
+    "test": "isRankAtMostOne, exact integer O(729), no branch and bound, no budget",
+    "crossCheck": "unfoldingRankAtMostOne, an independent Segre/unfolding characterisation, run on every survivor and on a 1-in-4096 sample of refuted rows (93216 rows); a disagreement is UNDECIDED, never a verdict",
+    "accumulation": "the deficit is summed into a reused scratch buffer, zeroing only touched indices; `scratch-matches-reference` gates this against tools/anchorSplit.droppedSum on 500 real rows",
+    "factorisation": "tools/rank1Factor.ts, primitive a-column — discharges R84's owed defect (17/40 -> 40/40 planted)",
+    "field": "integer arithmetic throughout, so a refutation holds over Q, Z and every F_p alike"
+  },
+  "controls": [
+    {
+      "name": "base-exact",
+      "pass": true,
+      "detail": "verify(): rank23/mm0 rank23/mm0 rank23/mm0",
+      "gating": true
+    },
+    {
+      "name": "anchor-exactness",
+      "pass": true,
+      "detail": "verify() on 31 m=2 split anchors: all exact at rank 25; 0 bad; 5 refused as degenerate splits (not applicable, not bad)",
+      "gating": true
+    },
+    {
+      "name": "scratch-matches-reference",
+      "pass": true,
+      "detail": "the reused-buffer deficit equals tools/anchorSplit.droppedSum on 500 real rows, 0 disagreeing (1 anchors skipped as degenerate splits)",
+      "gating": true
+    },
+    {
+      "name": "positive-control-rank1",
+      "pass": true,
+      "detail": "40 planted rank-1 tensors accepted by both oracles: 40 ok, 0 rejected",
+      "gating": true
+    },
+    {
+      "name": "factorisation-roundtrip",
+      "pass": true,
+      "detail": "tools/rank1Factor reproduced 40/40 planted rank-1 tensors (R84's inline factorRank1 scored 17/40 on this population)",
+      "gating": true
+    },
+    {
+      "name": "negative-control-rank2",
+      "pass": true,
+      "detail": "40 planted rank-2 tensors rejected by both oracles: 40/40",
+      "gating": true
+    },
+    {
+      "name": "band-relation",
+      "pass": true,
+      "detail": "for m=1,2,3: (23 + m) - (m + 2) = 21 terms kept, and 21 + j=1 = 22",
+      "gating": true
+    }
+  ],
+  "controlGate": "every control with gating=true must pass; the shard refuses to screen otherwise",
+  "bases": [
+    {
+      "base": "T11_solution",
+      "anchorsPlanned": "428180",
+      "anchorsScreened": 7192,
+      "anchorsRefused": 10649,
+      "rowsPerAnchor": 12650,
+      "rowsScreened": 90978800,
+      "rowsRefuted": 0,
+      "rowsSurvivor": 0,
+      "rowsUndecided": 0
+    },
+    {
+      "base": "T12d_fam_A",
+      "anchorsPlanned": "4169972",
+      "anchorsScreened": 22991,
+      "anchorsRefused": 23959,
+      "rowsPerAnchor": 12650,
+      "rowsScreened": 290836150,
+      "rowsRefuted": 0,
+      "rowsSurvivor": 0,
+      "rowsUndecided": 0
+    }
+  ],
+  "rowsPerAnchor": 12650,
+  "rowsScreened": 381814950,
+  "rowsRefuted": 381814950,
+  "rowsUndecided": 0,
+  "rowsSurvivor": 0,
+  "seconds": 1500,
+  "timedOut": true,
+  "oracleRows": 93216,
+  "oracleDisagreements": 0,
+  "survivors": [],
+  "scope": [
+    "this screens only rank-22 schemes sharing 21 terms with an enumerated anchor; it does not bound rank 22",
+    "an UNSCREENED anchor is never a refutation and is reported as unscreened by the merge",
+    "no bound moves: 19 <= R <= 23 over Q/R stands untouched"
+  ],
+  "witness": 0
+}
