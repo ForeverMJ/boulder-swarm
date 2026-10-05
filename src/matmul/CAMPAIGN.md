@@ -197,6 +197,65 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   satisfies `rank <= 22` trivially. A gate is only real if it is re-run after
   every change to what it reads.
 
+### Addendum, R85: what R78-R84 closed, and one lane that is now OBSOLETE
+
+The snapshot above stops at R77. R78-R84 moved the closed space again, and one of
+the lanes the T12 prompt v15 offers is no longer open ground. Read this before
+picking a lane.
+
+**Lane A+ ("k=7's unscreened remainder", R70's 865,879 rows) is OBSOLETE - do not run
+it.** R70 named those rows unscreened because the ladder of the day (mod-p prefilter
+-> exact `flatDim` -> clique -> branch-and-bound cover) ran at ~76 rows/s per shard and
+collapsed to zero. **R74 then replaced the expensive half of that ladder with an O(1)
+bound** (`dim span{d_a} > j` implies `rank(D) > j`, no cover, no branch and bound) and
+closed the whole k=7 band for `T11_solution`/`T12d_fam_A`/`T12d_fam_B`: 245,157 rows per
+base, **0 undecided, 0 admissible**, the entire 1.04M-row k=6+k=7 band in 55 s. **R79
+closed the rest of k=7** (`T12c` at `j = k`, 170,544/170,544). R70's remainder is not
+slow, it is **decided**; re-running it would re-derive R74 and R79 at ~830 rows/s
+instead of ~2,000 rows/s and would learn nothing. The general lesson, now paid for
+twice (R65, R71): *when a ladder's cost explodes in `k`, the fix is a cheaper PROVEN
+bound, never a wider enumeration of the same rows.*
+
+**What else R78-R84 closed, so it is not re-explored:**
+- **k=5 at split-refined rank-24 anchors: CLOSED, zero residual** (R83). 25,459,896 rows,
+  599/599 anchors, `unresolved=0`, controls green. R78 priced this at ~6 min of compute
+  and three rounds (R78/R81/R82) deferred it before it was simply run.
+- **`T12c`'s own band at `j = k`, k=2..11: CLOSED** (R79), 2,341,583 rows, all refuted
+  exactly. `T12c` has 22 terms, so it gets one extra fresh term per row over every
+  other base - and it still yields nothing.
+- **`T11_solution` at `j = k-1`, k=2..11: CLOSED** (R79), 4,050,829 rows.
+- **Coefficient widening inside a landed support is refuted over all of Q** (R69): the
+  free-coefficient problem on a FIXED support is degree-3, not linear, so `lambda` and
+  the three `free*` modes are the largest linear ansatz; 39,928 exact solves, 0
+  CONSISTENT, each with a dual witness. `T12c`'s headline reduces to one line: its
+  residual entry `(7,4,7)` is forced to 0 by all 22 retained terms, so it is
+  structurally unabsorbable. **This closes H3** ("widen to {-3..3}") as stated.
+- **`k=3` (j=1) at a split-refined rank-24 anchor is an O(1), budget-free, exact screen**
+  (R75), 8,096,000 rows in ~2 min single-process; `k=4` closed at 40 anchors (R76).
+  This is the reachability fix R65/R71 said the ladder needed, and it is why the
+  wide-anchor lane below is affordable at all.
+- **The wide-anchor class: m=1 LAYER CLOSED-EXACTLY** (R84). 7,476/7,476 anchors and
+  15,131,424/15,131,424 rows refuted, 0 survivors - i.e. no rank-22 scheme shares 21
+  terms with ANY single-support-split refinement of the three landed families.
+
+**Still honestly UNSCREENED (an unscreened band is never a refutation):**
+- the wide-anchor **m=2 layer** (428,180 anchors x C(25,4) = 12,650 rows = 5.4e9 rows),
+  which R84 named BOUNDED-INCOMPLETE after 829 anchors;
+- the **m=3 layer** (~67,180 anchors x 65,780 rows ~ 4.4e9 rows), never attempted;
+- `k >= 8` at split-refined anchors; anchors beyond `MAXANCHORS`; and, the big one,
+  **rank-22 schemes that share NO 21 terms with any enumerated anchor** - the class
+  R74 named as the main open ground and which nothing since has touched.
+
+**Owed defect, carried forward from R84:** the wide-anchor driver's `factorRank1`
+reproduced only 17/40 planted rank-1 tensors, because it derives
+`u[a] = D[a][b0][c0] / M[b0][c0] = u[a]/u[a0]`, which is not integral when
+`u[a0]` does not divide `u[a]`. This cannot hide a witness (it only LOSES
+candidates - survivors are still recorded, just without a constructed scheme) but it
+does under-report one. The fix is the primitive a-column:
+`u[a] = D[a][b0][c0] / gcd_a D[.][b0][c0]`, which is integral by construction because
+that gcd divides every entry it is taken over; the leftover scalar is then carried by
+dividing the pivot slice by `u[a0]`.
+
 ## Next hypotheses (queued)
 
 - H1: rank 22 needs a construction outside the 23-term orbit entirely (border-rank
