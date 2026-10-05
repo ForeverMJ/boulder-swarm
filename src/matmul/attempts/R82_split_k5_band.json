@@ -1,0 +1,109 @@
+{
+  "round": "R82",
+  "lane": "Lane A job 1 — k=5 (j=3) split-refined band completion over the full anchor inventory",
+  "band": {
+    "anchors": 24,
+    "k": 5,
+    "j": 3,
+    "rowsPerAnchor": 42504
+  },
+  "verdict": "CERTIFIED-NO-HIT-WITHIN-ANSATZ",
+  "verdictMeaning": "the union of R78's checkpoint and every R82 shard covers the ENTIRE enumerable anchor inventory (599 anchors) exactly once with no row-count disagreement, and every one of the 25459896 rows was refuted; no rank<=22 witness exists in this ansatz",
+  "scope": "the k=5 (j=3) band at split-refined rank-24 anchors of the four named exact rank-23 bases. Rows are screened by the REFUTATION-ONLY S1 slice-dimension screen, so a refuted row is genuinely impossible and an unresolved row would still need adjudication.",
+  "controls": [
+    {
+      "name": "every-split-anchor-is-exact-rank-24",
+      "ok": true,
+      "detail": "60/60 anchors verify correct at rank 24"
+    },
+    {
+      "name": "non-vacuity-synthetic-rank3-not-refuted-at-j3",
+      "ok": true,
+      "detail": "3 unit terms at j=3 must survive the screen"
+    },
+    {
+      "name": "threshold-synthetic-rank4-refuted-at-j3",
+      "ok": true,
+      "detail": "4 terms of the same family at j=3 must be refuted"
+    },
+    {
+      "name": "real-data-non-vacuity-3-terms-at-j19-not-refuted",
+      "ok": true,
+      "detail": "a deficit that is literally a 3-term sum must not be refuted at j=19"
+    },
+    {
+      "name": "rows-per-anchor-equals-C24choose5",
+      "ok": true,
+      "detail": "C(24,5)=42504, driver constant 42504"
+    }
+  ],
+  "inventorySize": 599,
+  "inventoryPositions": 1330,
+  "maxLabelMultiplicity": 7,
+  "coveredPositions": 1330,
+  "coveredDistinct": 599,
+  "fromR78": 590,
+  "fromR82Shards": 1330,
+  "shardSizes": {
+    "shard0": 95,
+    "shard1": 95,
+    "shard2": 95,
+    "shard3": 95,
+    "shard4": 95,
+    "shard5": 95,
+    "shard6": 95,
+    "shard7": 95,
+    "shard8": 95,
+    "shard9": 95,
+    "shard10": 95,
+    "shard11": 95,
+    "shard12": 95,
+    "shard13": 95
+  },
+  "missingAnchors": [],
+  "missingCount": 0,
+  "unknownAnchors": [],
+  "clashCount": 0,
+  "complete": true,
+  "totals": {
+    "rows": 25459896,
+    "refuted": 25459896,
+    "unresolved": 0,
+    "zeroHits": 0
+  },
+  "perBase": {
+    "T11_solution": {
+      "rows": 4590432,
+      "refuted": 4590432,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 108
+    },
+    "T12_rank23_variant": {
+      "rows": 4590432,
+      "refuted": 4590432,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 108
+    },
+    "T12d_fam_A": {
+      "rows": 8288280,
+      "refuted": 8288280,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 195
+    },
+    "T12d_fam_B": {
+      "rows": 7990752,
+      "refuted": 7990752,
+      "unresolved": 0,
+      "zeroHits": 0,
+      "anchors": 188
+    }
+  },
+  "survivors": [],
+  "notRefutedSample": [],
+  "witness": null,
+  "scoreboardNote": "no scheme exported; BEST22=none stands; goalCheck exits 1; 19 <= R <= 23 over Q/R untouched",
+  "elapsedMs": 34
+}
