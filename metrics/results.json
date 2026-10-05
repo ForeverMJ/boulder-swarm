@@ -544,5 +544,41 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-05T03:12:55.412Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 1742.41,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-05T03:51:06.510Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 314.16,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-05T03:56:33.431Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "T12",
+    "branch": "agent/goal-w0-T12",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 1167.21,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-05T04:19:01.087Z"
   }
 ]
