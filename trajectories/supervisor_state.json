@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "round": 36,
+  "round": 37,
   "budget": {
     "maxRounds": 3,
     "maxWallClockMs": 3600000,
@@ -358,6 +358,16 @@
     {
       "round": 36,
       "startedAt": 1791157041207,
+      "finishedAt": 1791165259576,
+      "status": "abandoned",
+      "tasks": [
+        "T12"
+      ],
+      "note": "interrupted; requeued"
+    },
+    {
+      "round": 37,
+      "startedAt": 1791165259585,
       "finishedAt": null,
       "status": "running",
       "tasks": [
