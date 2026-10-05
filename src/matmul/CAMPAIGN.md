@@ -197,6 +197,77 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
   satisfies `rank <= 22` trivially. A gate is only real if it is re-run after
   every change to what it reads.
 
+### R59-R77 CLOSED-SPACE SNAPSHOT (standing; read before opening a new T12 round)
+
+The drop-k/add-j route class is closed over a large, explicit region. A new round
+must not re-enumerate any of it, and must not report a bounded null in it as
+impossibility. Everything below is over Q/R unless tagged; the support and
+slice-space instruments are field-free, so their refutations hold over Z and every
+F_p as well.
+
+**CLOSED — drop-k/add-j neighbourhoods of the four named landed bases**
+(`T11_solution`, `T12_rank23_variant`, `T12d_fam_A`, `T12d_fam_B`):
+
+| Band | Coverage | Decided by |
+|---|---|---|
+| `T12c` k=2 (231 two-drops) | 231/231 REFUTED | `flatDim` (R61): `fdim(D) = 3 > j = 2` |
+| `k <= 4` flatDim survivors (1986 total: 1588 `T12c` + 199 T11 + 199 `fam_B`) | 1986/1986 REFUTED | exact box cover (R62/R64): `minBoxCover(supp D) > j` |
+| k=6, 67,000 rows of `T12c` | 67,000/67,000 REFUTED, field-free | `flatDim` + incompatibility-clique (R67); the single budget-hit row `[0,7,12,15,18,21]` adjudicated ROW-REFUTED in R68 with `minBoxCover = 7 > 6` decided EXACTLY and independently re-derived by a from-scratch clique of 7 pairwise non-boxable points, 0 violations |
+| k=4 split-refined anchor band (28 shards, 4230 split-refined rank-24 anchors) | ~2.6M rows REFUTED, admitted=0, winners=[] | stage-A sound mod-2 refutation then stage-B exact (R76); k=3 at those anchors decided exactly first at `O(1)` per row (R75) |
+| k=6 + k=7 of the three rank-23 bases | 1,038,156 rows REFUTED (100,947 at k=6, 245,157 at k=7 per base), 0 undecided, 0 admissible | `dim span{d_a} > j` (R74) — an `O(1)` proven slice-space bound, tight, refuting 66,313 / 115,489 rows by itself |
+| k=2 and k=3 of all four landed anchors | 253/253 and 1771/1771 REFUTED | `modpFlatDim > k-1` refutes the whole add-j family at once (R77, `newAnchorBand.ts`), matching the campaign's closure by an independent route |
+| coefficient solve on sub-supports | 39,928 exact solves, 0 CONSISTENT | exact BigInt rational elimination in all four modes; each refutation carries a dual witness `mu` with `mu . M = 0`, `mu . target != 0` (R69) |
+
+**Why this is closed and not merely exhausted.** The bounds are proved, not
+sampled: `rank(M - sum_K) <= j` is forced by `modpFlatDim(D_K) <= flatDim_Q(D_K) <= j`,
+by `dim span{d_a} <= j` for a `j`-fibre split, and by "every valid box lies inside
+`supp(D)`, so `minBoxCover(supp D)` is a coefficient-free lower bound on the number
+of rank-1 terms". None assumes a coefficient set, a sparsity pattern or a factor
+ansatz. The decisive structural fact behind the `T12c` case: `T12c = T11` minus the
+triple `e_7 (x) e_4 (x) e_7`, so entry `(7,4,7)` satisfies `u_k[7] * v_k[4] = 0` for
+every retained `k` and the equation's left side is forced to 0 — an impossibility,
+not a search failure (R69, independently re-derived in R77).
+
+**CLOSED — instruments, do not rebuild.**
+
+- The **linearized-relaxation instrument is VACUOUS**. R69 showed
+  `sum_k u_k[a] v_k[b] w_k[c] = T[a][b][c]` is degree-3 in the unknowns, so the
+  66-unknown / 729-equation framing of a free-coefficient solve is not a linear
+  system. The largest *linear* ansatz frees one factor per term. Any future
+  "linearized relaxation" is one of those four modes or is not a relaxation.
+- `segreSpan` is **SUBSUMED by flatDim** wherever it is complete (R64). Do not
+  rebuild it.
+- The **unit-term-patch route to a new base is CLOSED for the `T12c` near-miss**:
+  `e_7 (x) e_4 (x) e_7` is already one of `T11`'s own 23 terms, so patching returns
+  `T11` re-sorted (R77). Refuted for `T12c` only; says nothing about non-unit
+  patches or other near-misses. The tell that caught it was *identical* refutation
+  counts for the "new" base and for `T11` at every k.
+- **Measured limits worth inheriting**: exact branch-and-bound is the wrong tool at
+  k=6+ (~6.8 s/drop set vs ~10 ms at k=5) until a cheap proven bound sits above the
+  cover — R74's slice-space bound is that lever and it paid off; and
+  `newAnchorBand`'s k=4 survivors all have `flatDim` exactly `= addLimit = 3`, so the
+  bound is exactly tight on them and **no prime can ever refute them** — a
+  split-refined or box-cover stage is mandatory there.
+
+**OPEN / UNSCREENED — the honest remainder, named precisely.**
+
+1. **k=7 beyond the screened rows.** The k=7 band of `T11`/`fam_A`/`fam_B` is closed
+   (245,157 rows each, R74). What is NOT closed is `T12c` at k=7 and beyond, and any
+   `k >= 8` band of any base.
+2. **k >= 8, all bases.** Cost, not principle, is what defers it.
+3. **Neighbourhoods beyond MAXANCHORS.** The split-refined anchor sweeps are capped
+   by `MAXANCHORS` (4,230 anchors indexed of the reachable split pool; R75), so
+   split-refined bases beyond the cap are untouched.
+4. **Supports that are NOT subsets of any landed rank-23 support.** This is the main
+   open class. R74 closed repairs *around* the landed anchors, which is silent about
+   this class; R75/R76 closed the split-refined subclass of it (a strict sub-box of a
+   landed mode support) but only up to the `MAXANCHORS` cap. A rank-22 scheme whose
+   22 supports are outside every landed support is not excluded by anything above.
+5. **Border-rank <= 21 outside the 23-term orbit** (H1), untouched.
+
+A bounded null inside a CLOSED region is redundant. A survivor found in region 4 is
+the first new information this route has produced since R57.
+
 ## Next hypotheses (queued)
 
 - H1: rank 22 needs a construction outside the 23-term orbit entirely (border-rank
