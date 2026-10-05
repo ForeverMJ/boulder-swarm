@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "round": 40,
+  "round": 41,
   "budget": {
     "maxRounds": 3,
     "maxWallClockMs": 3600000,
-    "agentMsSpent": 58861050
+    "agentMsSpent": 59706430
   },
   "history": [
     {
@@ -397,6 +397,16 @@
     },
     {
       "round": 40,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "T12"
+      ],
+      "note": ""
+    },
+    {
+      "round": 41,
       "tasks": [
         "T12"
       ],
