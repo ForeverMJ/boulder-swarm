@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "round": 61,
+  "round": 63,
   "budget": {
     "maxRounds": 3,
     "maxWallClockMs": 3600000,
-    "agentMsSpent": 92074230
+    "agentMsSpent": 94906820
   },
   "history": [
     {
@@ -597,13 +597,33 @@
     },
     {
       "round": 60,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "A1"
+      ],
+      "note": ""
+    },
+    {
+      "round": 61,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "A1"
+      ],
+      "note": ""
+    },
+    {
+      "round": 62,
       "tasks": [
         "A1"
       ],
       "status": "failed"
     },
     {
-      "round": 61,
+      "round": 63,
       "tasks": [
         "A1"
       ],
