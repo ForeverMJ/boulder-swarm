@@ -710,5 +710,29 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-06T14:46:21.665Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "A1",
+    "branch": "agent/goal-w0-A1",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 1712.13,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-07T00:58:00.199Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "A1",
+    "branch": "agent/goal-w0-A1",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 839.93,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-07T01:12:48.685Z"
   }
 ]
