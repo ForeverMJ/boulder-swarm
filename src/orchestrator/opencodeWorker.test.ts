@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from "bun:test"
-import { resolveOpencodeBin, resolveOpencodeBinFor } from "./opencodeWorker"
+import { resolveModel, resolveOpencodeBin, resolveOpencodeBinFor } from "./opencodeWorker"
 
 const ORIGINAL_BIN = process.env["OPENCODE_BIN"]
+const ORIGINAL_MODEL = process.env["OPENCODE_MODEL"]
 
 function restoreBin(): void {
   if (ORIGINAL_BIN === undefined) {
@@ -11,8 +12,19 @@ function restoreBin(): void {
   }
 }
 
+function restoreModel(): void {
+  if (ORIGINAL_MODEL === undefined) {
+    delete process.env["OPENCODE_MODEL"]
+  } else {
+    process.env["OPENCODE_MODEL"] = ORIGINAL_MODEL
+  }
+}
+
 describe("opencodeWorker bin resolution, judged independently", () => {
-  afterEach(restoreBin)
+  afterEach(() => {
+    restoreBin()
+    restoreModel()
+  })
 
   it("windows keeps the .cmd launcher (cmd shim is required there)", () => {
     expect(resolveOpencodeBinFor("win32")).toBe("opencode.cmd")
@@ -35,5 +47,10 @@ describe("opencodeWorker bin resolution, judged independently", () => {
   it("without override, runtime resolution follows the host platform", () => {
     delete process.env["OPENCODE_BIN"]
     expect(resolveOpencodeBin()).toBe(resolveOpencodeBinFor(process.platform))
+  })
+
+  it("uses the registered Muse Spark free model when no model override is set", () => {
+    delete process.env["OPENCODE_MODEL"]
+    expect(resolveModel()).toBe("opencode/muse-spark-1.3-contributor-free")
   })
 })

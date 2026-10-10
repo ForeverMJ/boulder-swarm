@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { countTree, runTree } from "./agentLifecycle"
 
-export const DEFAULT_MODEL = "opencode-go/space-bunny-free"
+export const DEFAULT_MODEL = "opencode/muse-spark-1.3-contributor-free"
 
 export type AgentResult = {
   readonly task_id: string

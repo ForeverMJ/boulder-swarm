@@ -208,7 +208,7 @@ async function runMock(assigns: ReturnType<typeof dispatch>): Promise<LiveRun> {
     mode: "mock" as const,
     ts: stamp,
   }))
-  return { results: mapped, produced: {} }
+  return { results: mapped, produced: {}, revisions: {} }
 }
 
 type AgentDeps = {
@@ -238,6 +238,7 @@ function worktreePaths(wt: string): string[] {
 type LiveRun = {
   readonly results: WorkerResult[]
   readonly produced: Record<string, readonly string[]>
+  readonly revisions: Record<string, string>
   readonly progress?: Record<string, boolean>
 }
 
@@ -349,6 +350,7 @@ export async function runLive(
         console.log(v.outputTail)
       }
       const committed = safeToScore ? commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`) : false
+      const revision = git(wt, ["rev-parse", "HEAD"])
       // Progress receipts are recorded after the merge gate below, so the
       // receipt carries the integration verdict and the planner can see it.
       const progressInput = context && a.task.progress ? {
@@ -363,6 +365,7 @@ export async function runLive(
         agent: deps.kind,
         task_id: a.task.id,
         branch: a.branch,
+        revision,
         committed,
         produced,
         emptyCommit: committed && produced.length === 0,
@@ -387,7 +390,7 @@ export async function runLive(
         mode: deps.kind,
         ts: new Date().toISOString(),
       })
-      return { wt, agent, durationSeconds, verdict: v, assignment: a, produced, progressInput }
+      return { wt, agent, durationSeconds, verdict: v, assignment: a, produced, progressInput, revision }
     }),
   )
   const results: WorkerResult[] = settled.map((s) => ({
@@ -453,6 +456,7 @@ export async function runLive(
   return {
     results: results.map((r) => r.pass_rate >= 1 && !accepted.has(r.task_id) ? { ...r, pass_rate: 0 } : r),
     produced: Object.fromEntries(settled.map((s) => [s.assignment.task.id, s.produced])),
+    revisions: Object.fromEntries(settled.map((s) => [s.assignment.task.id, s.revision])),
     progress: Object.fromEntries(receipts.map((r) => [r.taskId, r.decision.action !== "stop"])),
   }
 }
@@ -540,6 +544,7 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
           passed: r.passed,
           total: r.total,
           produced: live.produced[r.task_id] ?? [],
+          ...(live.revisions[r.task_id] === undefined ? {} : { revision: live.revisions[r.task_id] }),
           ...(live.progress?.[r.task_id] === undefined ? {} : { continuationAllowed: live.progress[r.task_id] }),
         }
       })

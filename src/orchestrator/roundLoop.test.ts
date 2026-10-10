@@ -45,6 +45,45 @@ describe("S4 round loop, judged independently", () => {
     expect(r.why).toBe("no-progress")
   })
 
+  it("continues when a new worker commit changes the revision but keeps the same output paths", () => {
+    const baseline = {
+      taskId: "A1",
+      passRate: 0,
+      passed: 0,
+      total: 1,
+      produced: ["src/matmul/attempts/A1_sisyphus_v2.ndjson"],
+    }
+    const r = decideStop({
+      round: 2,
+      goalReached: false,
+      budgetExhausted: false,
+      previous: [{ ...baseline, revision: "commit-one" }],
+      current: [{ ...baseline, revision: "commit-two" }],
+    })
+    expect(r).toEqual(noop)
+  })
+
+  it("honors a new revision and a replanning allowance at once", () => {
+    const baseline = {
+      taskId: "A1",
+      passRate: 0,
+      passed: 0,
+      total: 1,
+      produced: ["src/matmul/attempts/A1_sisyphus_v2.ndjson"],
+    }
+    const previous = [{ ...baseline, revision: "commit-one" }]
+    const current = [{ ...baseline, revision: "commit-two", continuationAllowed: true }]
+    expect(sameOutcome(previous, current)).toBe(false)
+    const r = decideStop({
+      round: 2,
+      goalReached: false,
+      budgetExhausted: false,
+      previous,
+      current,
+    })
+    expect(r).toEqual(noop)
+  })
+
   it("does not call progress-blocking when the outcome actually changed", () => {
     const r = decideStop({
       round: 2,

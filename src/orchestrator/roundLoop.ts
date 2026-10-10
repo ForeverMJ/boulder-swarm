@@ -43,6 +43,7 @@ export type Outcome = {
   readonly total: number
   /** Paths the commit actually produced. Empty means nothing landed. */
   readonly produced: readonly string[]
+  readonly revision?: string
   /** Verified progress OR a bounded replanning allowance; not itself proof of progress. */
   readonly continuationAllowed?: boolean
 }
@@ -54,7 +55,7 @@ export type StopReason = {
 
 function fingerprint(outcomes: readonly Outcome[]): string {
   return outcomes
-    .map((o) => `${o.taskId}|${o.passRate}|${[...o.produced].sort().join(",")}`)
+    .map((o) => `${o.taskId}|${o.passRate}|${o.revision ?? ""}|${[...o.produced].sort().join(",")}`)
     .sort()
     .join("\n")
 }
