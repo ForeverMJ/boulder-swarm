@@ -94,6 +94,15 @@ runLoop 同时修正：0/0 不算完成；工作分支通过但整合检查失�
 
 已产出证书均通过独立检查，均未完成原 rank≤22 目标。有限任务仍一轮达到上限，提示已限定证书方向，不能验证自主研究路线发现或多轮恢复。覆盖数是本实验的证书数量，不是新增科学知识量或全局不可能性证明。
 
+## 门禁可见性修订（2026-10-10，live pilot 实证后并入）
+
+live 发现：planner 的世界在覆盖率封顶处结束，而合并门禁在其视野之外。一轮"E3 测试全绿、tsc/biome 三错、门禁拦截"的真实记录后，planner 因覆盖 2/2、无穷尽声明而下达 stop，3 行可修的解法被永久搁置——receipt 里没有门禁字段是根因。
+
+本次修订（`progress.ts` + `runLoop.ts` + 2 项新测试，既有 14 项全绿）：
+- receipt 新增可选 `integration`（merged/blocked/skipped + 原因，区分"main 上验收挂"与"静态契约挂"）；
+- progress 记录推迟到门禁之后，planner 提示词在上轮门禁 blocked 时给出修复-switch 指令（覆盖封顶不再是 stop 理由）；
+- E3 重跑验证：receipt 载 `integration: merged`，planner 上下文贯通；编排层 127/127、tsc 通过、Biome 与基线诊断集合一致。
+
 ## 已知限制
 
 - 配对结果是暂时选择；未实现重复采样、置信区间、隐藏评测、跨任务迁移或学习式预算分配。
@@ -105,6 +114,7 @@ runLoop 同时修正：0/0 不算完成；工作分支通过但整合检查失�
 - 中断记录可审计，但无 exactly-once 恢复；突然崩溃可能未记全 supervisor 成本。未完成试跑不自动晋升。
 - 引用校验不证明解释逻辑正确；字符串去重不识别所有改写重复。
 - checker hash 只含入口文件与策略配置；依赖变更需更新 scope/version。
+- 平局保现任：按 `selectStrategy` 现规则，覆盖打平的纯修复型候选赢不了配对试验（读代码结论，尚未 live 证实；门禁可见性修订未动选择规则）。
 - CLI 修复针对原生可执行文件；Windows cmd/bat 仍经 shell，需继续审查特殊字符和 CLI 版本差异。
 
 借鉴 [GEPA](https://arxiv.org/abs/2507.19457) 的候选实测、[SEAGym](https://arxiv.org/abs/2606.17546) 的评估纪律和 [PIVOT-KG](https://arxiv.org/abs/2609.32677) 的成对验证思想。本分支不是完整复现，论文结果不能替代本项目实测。

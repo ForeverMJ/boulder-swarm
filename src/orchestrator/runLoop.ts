@@ -26,7 +26,7 @@ import {
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
-import { type AgentPlan, type StrategyComparison, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
+import { type AgentPlan, type ProgressIntegration, type StrategyComparison, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
 import { runStrategyTrial } from "./strategyTrial"
 import { superviseBudgetExhausted, runRounds, type Outcome, type RoundDeps } from "./roundLoop"
 import { waitForStable } from "./settle"
@@ -349,12 +349,14 @@ export async function runLive(
         console.log(v.outputTail)
       }
       const committed = safeToScore ? commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`) : false
-      const progress = context && a.task.progress ? recordProgress(context, a.task.progress, {
+      // Progress receipts are recorded after the merge gate below, so the
+      // receipt carries the integration verdict and the planner can see it.
+      const progressInput = context && a.task.progress ? {
         taskId: a.task.id, worktree: wt, commit: git(wt, ["rev-parse", "HEAD"]),
         durationSeconds, settled: settled.stable && agent.straysAfter === 0,
         ...(plan ? { plan } : {}), ...(planningFailure ? { planningFailure } : {}),
         ...(comparison ? { comparison } : {}),
-      }) : undefined
+      } : undefined
       await appendEvent(repo, runId, {
         type: "live_agent",
         ts: new Date().toISOString(),
@@ -385,7 +387,7 @@ export async function runLive(
         mode: deps.kind,
         ts: new Date().toISOString(),
       })
-      return { wt, agent, durationSeconds, verdict: v, assignment: a, produced, progress }
+      return { wt, agent, durationSeconds, verdict: v, assignment: a, produced, progressInput }
     }),
   )
   const results: WorkerResult[] = settled.map((s) => ({
@@ -406,32 +408,52 @@ export async function runLive(
     gitStashPush(repo)
   }
   const accepted = new Set<string>()
+  const integrations = new Map<string, ProgressIntegration>()
   try {
     for (const r of [...results].sort((x, y) => x.task_id.localeCompare(y.task_id))) {
       if (r.pass_rate < 1 || r.total === 0) {
         console.log(`GATE skip ${r.task_id} (${r.branch}): pass_rate=${r.pass_rate.toFixed(2)} < 1.0`)
+        integrations.set(r.task_id, { verdict: "skipped", reason: `gate not attempted: worker pass_rate=${r.pass_rate.toFixed(2)} < 1.0` })
         continue
       }
+      let gateReason = "blocked: merge into main failed before verify completed"
       const verdict = mergeGate(repo, r.branch, () => {
         const t = assigns.find((a) => a.task.id === r.task_id)?.task
         const onMain = scoreAssignment(repo, t?.tests ?? "", t?.success, t?.evidence)
-        // Full verification contract, not just the harness: a merge that is green
-        // on tests but type/lint dirty must not land (observed on E1).
-        return onMain.passRate >= 1 && onMain.total > 0 && repoContractPasses(repo)
+        if (!(onMain.passRate >= 1 && onMain.total > 0)) {
+          gateReason = "blocked: acceptance failed on main after merge"
+          return false
+        }
+        if (!repoContractPasses(repo)) {
+          gateReason = "blocked: static contract (tsc/biome) failed on main after merge"
+          return false
+        }
+        gateReason = "merged: gate verify passed on main"
+        return true
       })
       console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
       if (verdict !== "blocked") accepted.add(r.task_id)
+      integrations.set(r.task_id, verdict === "blocked"
+        ? { verdict: "blocked", reason: gateReason }
+        : { verdict: "merged", reason: gateReason })
     }
   } finally {
     if (wip) {
       gitStashPop(repo)
     }
   }
+  const receipts = settled.flatMap((s) => {
+    const policy = s.assignment.task.progress
+    const integration = integrations.get(s.assignment.task.id)
+    if (policy === undefined || s.progressInput === undefined || integration === undefined) return []
+    return [recordProgress(progressContext(repo, s.assignment.task.id, policy), policy, {
+      ...s.progressInput, integration,
+    })]
+  })
   return {
     results: results.map((r) => r.pass_rate >= 1 && !accepted.has(r.task_id) ? { ...r, pass_rate: 0 } : r),
     produced: Object.fromEntries(settled.map((s) => [s.assignment.task.id, s.produced])),
-    progress: Object.fromEntries(settled.flatMap((s) => s.progress
-      ? [[s.assignment.task.id, s.progress.decision.action !== "stop"]] : [])),
+    progress: Object.fromEntries(receipts.map((r) => [r.taskId, r.decision.action !== "stop"])),
   }
 }
 

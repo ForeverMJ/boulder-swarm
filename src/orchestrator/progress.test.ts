@@ -599,3 +599,59 @@ describe("policy replay (synthetic, not a live-agent performance claim)", () => 
     }
   })
 })
+
+describe("integration verdicts reach the planner", () => {
+  it("records a provided gate verdict on the receipt", () => {
+    const f = fixture()
+    try {
+      f.record([0])
+      const context = progressContext(f.repo, "T", policy)
+      const plan = proposedPlan(context)
+      const receipt = recordProgress(context, policy, {
+        taskId: "T",
+        worktree: f.wt,
+        commit: git(f.wt, ["rev-parse", "HEAD"]),
+        durationSeconds: 1,
+        settled: true,
+        plan,
+        integration: { verdict: "blocked", reason: "blocked: static contract failed" },
+      })
+      expect(receipt.integration).toEqual({
+        verdict: "blocked",
+        reason: "blocked: static contract failed",
+      })
+    } finally {
+      f.close()
+    }
+  })
+
+  it("tells the planner to repair only while integration is blocked", () => {
+    const f = fixture()
+    try {
+      const fresh = progressPrompt(progressContext(f.repo, "T", policy))
+      expect(fresh).toContain("merge gate, not coverage alone")
+      expect(fresh).not.toContain("INTEGRATION GATE BLOCKED")
+      const first = f.record([0, 1])
+      expect(first.observation?.covered).toBe(2)
+      const context = progressContext(f.repo, "T", policy)
+      const plan = proposedPlan(context)
+      writeFileSync(join(f.wt, "proof.json"), JSON.stringify([0, 1]))
+      git(f.wt, ["add", "proof.json"])
+      git(f.wt, ["commit", "--allow-empty", "-m", "blocked round"])
+      recordProgress(context, policy, {
+        taskId: "T",
+        worktree: f.wt,
+        commit: git(f.wt, ["rev-parse", "HEAD"]),
+        durationSeconds: 1,
+        settled: true,
+        plan,
+        integration: { verdict: "blocked", reason: "blocked: static contract failed" },
+      })
+      const gated = progressPrompt(progressContext(f.repo, "T", policy))
+      expect(gated).toContain("INTEGRATION GATE BLOCKED")
+      expect(gated).toContain("blocked: static contract failed")
+    } finally {
+      f.close()
+    }
+  })
+})

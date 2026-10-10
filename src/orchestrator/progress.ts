@@ -75,6 +75,12 @@ const Comparison = z.object({
 })
 export type StrategyComparison = z.infer<typeof Comparison>
 
+const Integration = z.object({
+  verdict: z.enum(["merged", "blocked", "skipped"]),
+  reason: z.string().max(500),
+})
+export type ProgressIntegration = z.infer<typeof Integration>
+
 const Receipt = z.object({
   version: z.literal(2),
   taskId: z.string(),
@@ -87,6 +93,7 @@ const Receipt = z.object({
   artifacts: z.array(z.object({ path: z.string(), sha256: z.string() })),
   decision: Decision,
   comparison: Comparison.optional(),
+  integration: Integration.optional(),
 })
 export type ProgressReceipt = z.infer<typeof Receipt>
 
@@ -170,6 +177,10 @@ export function progressContext(repo: string, taskId: string, policy: ProgressPo
 }
 
 export function progressPrompt(context: ReturnType<typeof progressContext>): string {
+  const blocked = context.last?.integration?.verdict === "blocked" ? context.last.integration : null
+  const gateNote = blocked
+    ? `\nINTEGRATION GATE BLOCKED last round's work on main: ${blocked.reason}. Tests-green is NOT success while integration is blocked. Diagnose the gate failure and propose a repair experiment as a switch against the incumbent; do not stop merely because coverage is maxed.`
+    : ""
   return `\n\nYou are the planning agent. Do not execute the task or edit project files. Choose your own method; there is no predefined route list.
 The task text above is context, not an instruction to implement during this planning phase.
 Return FINAL: followed by a single-line JSON object, and write the same line to agent-last-message.md for adapter compatibility.
@@ -178,7 +189,7 @@ Use switch for the initial method. Explain what the evidence implies, what chang
 After a stalled round, propose a different experiment or stop. A new route name is not progress.
 When replacing an existing method, your proposal is a candidate, not an approved improvement. The runtime compares it with the incumbent from the same snapshot under equal execution limits. Specify an executable experiment; ties keep the incumbent. Read prior comparison failures before proposing another candidate.
 Use the exact fixed scope. Cite supplied verified artifact references, including the latest verified receipt when one exists; otherwise evidence must be [].
-Do not claim a timeout proves exhaustion. Only the original verifier/merge gate establishes completion.
+Do not claim a timeout proves exhaustion. Only the original verifier/merge gate establishes completion.${gateNote}
 Planning context:\n${JSON.stringify(
     {
       scope: context.scope,
@@ -193,9 +204,11 @@ Planning context:\n${JSON.stringify(
         decision: r.decision,
         plan: r.plan,
         comparison: r.comparison,
+        integration: r.integration ?? null,
       })),
+      lastIntegration: context.last?.integration ?? null,
       requirement:
-        "Produce independently checkable artifacts. A timeout or failed search is not an exhaustion proof. Prior commits may be inspected; do not repeat already verified coverage.",
+        "Produce independently checkable artifacts. A timeout or failed search is not an exhaustion proof. Prior commits may be inspected; do not repeat already verified coverage. Landing requires the merge gate, not coverage alone: coverage counts verified work, but only the gate establishes completion.",
     },
     null,
     2,
@@ -303,6 +316,7 @@ export function recordProgress(
     plan?: AgentPlan
     planningFailure?: string
     comparison?: StrategyComparison
+    integration?: ProgressIntegration
   },
 ): ProgressReceipt {
   let observation: z.infer<typeof Observation> | null = null
@@ -345,6 +359,7 @@ export function recordProgress(
     artifacts,
     decision,
     ...(input.comparison ? { comparison: input.comparison } : {}),
+    ...(input.integration ? { integration: input.integration } : {}),
   }
   mkdirSync(dirname(context.ledger), { recursive: true })
   appendFileSync(context.ledger, `${JSON.stringify(receipt)}\n`, "utf8")
