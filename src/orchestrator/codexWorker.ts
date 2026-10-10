@@ -135,7 +135,9 @@ export function spawnAgent(opts: {
       child = spawn(bin, [...args], {
         cwd: opts.workdir,
         env: { ...agentEnv(), ...opts.env },
-        shell: process.platform === "win32",
+        shell: process.platform === "win32" && /\.(cmd|bat)$/i.test(bin),
+        // The prompt is already an argument; an open stdin pipe makes Codex wait for EOF.
+        stdio: ["ignore", "pipe", "pipe"],
       })
     } catch (e) {
       if (e instanceof Error) {
@@ -167,6 +169,7 @@ export function spawnAgent(opts: {
       stderrTail = (stderrTail + String(d)).slice(-8_192)
     })
     setTimeout(() => {
+      if (done) return
       salvage()
       void killTree(pid, 4_000).then(() => {
         finish(1, true, countTree(pid))

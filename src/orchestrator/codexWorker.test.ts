@@ -58,6 +58,27 @@ afterAll(async () => {
 })
 
 describe("codexWorker agent lifecycle, judged independently", () => {
+  it("preserves native argv and closes stdin for noninteractive agents", async () => {
+    const script = join(dir, "argv-and-stdin.js")
+    writeFileSync(
+      script,
+      `process.stdin.resume(); process.stdin.on('end', () => console.log('FINAL: ' + JSON.stringify({arg: process.argv[2]})));`,
+    )
+    const prompt = 'spaces, "quotes", & shell metacharacters\nand a second line'
+    const result = await spawnAgent({
+      workdir: dir,
+      prompt,
+      taskId: "argv",
+      branch: "test",
+      bin: process.execPath,
+      binArgs: [script, prompt],
+      timeoutMs: 2000,
+    })
+    expect(result.timedOut).toBe(false)
+    expect(result.exitCode).toBe(0)
+    expect(JSON.parse(result.final).arg).toBe(prompt)
+  })
+
   it("resolves the codex binary name per platform", () => {
     expect(resolveCodexBinFor("win32")).toBe("codex.cmd")
     expect(resolveCodexBinFor("linux")).toBe("codex")

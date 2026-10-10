@@ -3,6 +3,7 @@ import { join } from "node:path"
 import { z } from "zod"
 import { taskId } from "../shared/brands"
 import type { TaskId } from "../shared/brands"
+import { ProgressPolicy } from "./progress"
 
 const L2Entry = z.object({
   id: z.string(),
@@ -12,6 +13,7 @@ const L2Entry = z.object({
   success: z.string().optional(),
   evidence: z.string().optional(),
   timeoutMs: z.number().int().positive().optional(),
+  progress: ProgressPolicy.optional(),
 })
 const GoalFile = z.object({ L2: z.array(L2Entry) })
 
@@ -24,6 +26,7 @@ export type Task = {
   readonly evidence?: string
   /** Optional per-task agent window (ms) for deep-research tasks (e.g. T12). */
   readonly timeoutMs?: number
+  readonly progress?: ProgressPolicy
 }
 
 export type Assignment = {
@@ -45,6 +48,7 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     ...(t.success === undefined ? {} : { success: t.success }),
     ...(t.evidence === undefined ? {} : { evidence: t.evidence }),
     ...(t.timeoutMs === undefined ? {} : { timeoutMs: t.timeoutMs }),
+    ...(t.progress === undefined ? {} : { progress: t.progress }),
   }))
 }
 

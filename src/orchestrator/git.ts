@@ -119,6 +119,7 @@ export async function createWorktree(
   worktreesRoot: string,
   workerId: number,
   branch: string,
+  startPoint = "main",
 ): Promise<string> {
   await archiveBranchIfExists(repoRoot, branch)
   await mkdir(worktreesRoot, { recursive: true })
@@ -145,7 +146,7 @@ export async function createWorktree(
   if (branchExists(repoRoot, branch)) {
     git(repoRoot, ["branch", "-D", branch])
   }
-  git(repoRoot, ["worktree", "add", "-b", branch, path, "main"])
+  git(repoRoot, ["worktree", "add", "-b", branch, path, startPoint])
   return path
 }
 

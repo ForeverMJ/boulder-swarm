@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process"
-import { existsSync, readFileSync } from "node:fs"
+import { existsSync, readFileSync, unlinkSync } from "node:fs"
 import { readFile, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -14,6 +14,7 @@ import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } 
 import {
   commitWorktree,
   createWorktree,
+  git,
   gitStashPop,
   gitStashPush,
   gitStatus,
@@ -25,6 +26,8 @@ import {
 import { dispatch, loadTasks, workerIds } from "./scheduler"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
+import { type AgentPlan, type StrategyComparison, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
+import { runStrategyTrial } from "./strategyTrial"
 import { superviseBudgetExhausted, runRounds, type Outcome, type RoundDeps } from "./roundLoop"
 import { waitForStable } from "./settle"
 import {
@@ -159,6 +162,7 @@ export function scoreAssignment(
   tests: string,
   success: string | undefined,
   evidence?: string,
+  timeoutMs = 60_000,
 ): Verdict {
   if (evidence !== undefined && evidence !== "") {
     return evidenceVerdict(wt, evidence)
@@ -170,17 +174,17 @@ export function scoreAssignment(
     return { testFile: file, passed: ok ? 1 : 0, total: 1, passRate: ok ? 1 : 0, returncode: 0, parsed: true, outputTail: `checked ${path}` }
   }
   if (success !== undefined && success !== "") {
-    const r = spawnSync("bun", ["src/matmul/scoreboard.ts"], { cwd: wt, encoding: "utf-8", timeout: 120_000 })
+    const r = spawnSync("bun", ["src/matmul/scoreboard.ts"], { cwd: wt, encoding: "utf-8", timeout: timeoutMs })
     const m = `${r.stdout ?? ""}`.match(new RegExp(`${success}=(\\S+)`))
     const hit = m?.[1] !== undefined && m[1] !== "none"
     return { testFile: "scoreboard", passed: hit ? 1 : 0, total: 1, passRate: hit ? 1 : 0, returncode: 0, parsed: true, outputTail: `looked for ${success} in scoreboard output` }
   }
-  return runTestFile(wt, tests)
+  return runTestFile(wt, tests, timeoutMs)
 }
 
-async function taskPrompt(a: { task: { id: string } }, fallback: string): Promise<string> {
+async function taskPrompt(repo: string, a: { task: { id: string } }, fallback: string): Promise<string> {
   try {
-    return await readFile(join(REPO, "src", "matmul", "prompts", `${a.task.id}.md`), "utf-8")
+    return await readFile(join(repo, "src", "matmul", "prompts", `${a.task.id}.md`), "utf-8")
   } catch (e) {
     if (e instanceof Error) {
       return fallback
@@ -234,46 +238,124 @@ function worktreePaths(wt: string): string[] {
 type LiveRun = {
   readonly results: WorkerResult[]
   readonly produced: Record<string, readonly string[]>
+  readonly progress?: Record<string, boolean>
 }
 
-async function runLive(
+export async function runLive(
   assigns: ReturnType<typeof dispatch>,
   deps: AgentDeps,
   runId: string,
+  repo: string = REPO,
 ): Promise<LiveRun> {
-  initRepo(REPO)
-  const worktreesRoot = `${REPO}-worktrees`
+  if (assigns.some((a) => a.task.progress)
+    && new Set(assigns.map((a) => a.workerId)).size !== assigns.length) {
+    throw new Error("Evidence-guided runs require one worktree per assignment; increase --workers or select fewer tasks.")
+  }
+  initRepo(repo)
+  const worktreesRoot = `${repo}-worktrees`
   const ready: { wt: string; a: (typeof assigns)[number] }[] = []
   for (const a of assigns) {
-    const wt = await createWorktree(REPO, worktreesRoot, a.workerId, a.branch)
+    const previous = a.task.progress ? progressContext(repo, a.task.id, a.task.progress).last : undefined
+    const wt = await createWorktree(repo, worktreesRoot, a.workerId, a.branch, previous?.commit ?? "main")
     ready.push({ wt, a })
   }
   const settled = await Promise.all(
     ready.map(async ({ wt, a }) => {
-      const prompt = await taskPrompt(a, deps.buildPrompt(a.task.id, a.task.problem, a.task.tests))
+      const context = a.task.progress ? progressContext(repo, a.task.id, a.task.progress) : undefined
+      const basePrompt = await taskPrompt(repo, a, deps.buildPrompt(a.task.id, a.task.problem, a.task.tests))
+      let plan: AgentPlan | undefined
+      let planningFailure: string | undefined
+      let planningSeconds = 0
+      let comparison: StrategyComparison | undefined
+      let trialSeconds = 0
+      let trialSelected = false
+      const attemptStarted = performance.now()
+      const timeoutMs = a.task.timeoutMs ?? 600_000
+      if (context) {
+        try {
+          if (context.last?.decision.action === "stop") throw new Error("Persisted stop; review policy before restarting")
+          const before = git(wt, ["rev-parse", "HEAD"])
+          const planner = await deps.spawnAgent({
+            workdir: wt, prompt: `${basePrompt}${progressPrompt(context)}`,
+            taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(120_000, timeoutMs),
+          })
+          planningSeconds = planner.duration_s
+          const stable = await waitForStable(() => gitStatus(wt))
+          if (planner.exitCode !== 0 || planner.timedOut || planner.straysAfter !== 0 || !stable.stable) {
+            throw new Error("Planning agent failed, timed out, or did not settle")
+          }
+          if (git(wt, ["rev-parse", "HEAD"]) !== before || git(wt, ["diff", "HEAD", "--", ".", ":(exclude)agent-last-message.md"]) !== ""
+            || worktreePaths(wt).some((p) => p !== "agent-last-message.md")) {
+            throw new Error("Planning agent modified project files; execution withheld")
+          }
+          plan = validatePlan(context, JSON.parse(planner.final))
+          // Adapter output is not research state; both trials must start from the same clean commit.
+          if (existsSync(join(wt, "agent-last-message.md"))) {
+            if (git(wt, ["ls-files", "--", "agent-last-message.md"]) !== "") {
+              git(wt, ["restore", "--source=HEAD", "--staged", "--worktree", "--", "agent-last-message.md"])
+            } else unlinkSync(join(wt, "agent-last-message.md"))
+          }
+        } catch (error) {
+          if (!(error instanceof Error)) throw error
+          planningFailure = error.message
+        }
+      }
+      const remainingMs = Math.max(0, timeoutMs - (performance.now() - attemptStarted))
+      if (context && remainingMs === 0) planningFailure = "Attempt budget exhausted during planning"
+      const experimentPrompt = (method: AgentPlan) => `${basePrompt}\n\nAgent-selected experiment (original task restrictions still apply):\n${JSON.stringify(method)}\nPrior evidence commits:\n${JSON.stringify(context?.history.map((r) => ({commit: r.commit, observation: r.observation, artifacts: r.artifacts})))}`
+      if (context && plan?.action === "switch" && context.last?.plan && !planningFailure) {
+        const trialStarted = performance.now()
+        try {
+          const trial = await runStrategyTrial({
+            repo, worktree: wt, context, incumbent: context.last.plan, candidate: plan,
+            taskId: a.task.id, deadline: attemptStarted + timeoutMs, prompt: experimentPrompt,
+            spawn: deps.spawnAgent,
+            score: (path, limit) => scoreAssignment(path, a.task.tests, a.task.success, a.task.evidence, limit),
+          })
+          comparison = trial.comparison
+          plan = trial.plan
+          trialSeconds = trial.durationSeconds
+          trialSelected = trial.selected
+        } catch (error) {
+          if (!(error instanceof Error)) throw error
+          trialSeconds = Math.max(trialSeconds, (performance.now() - trialStarted) / 1000)
+          planningFailure = `Comparison failed; no candidate promoted: ${error.message}`
+        }
+      }
+      const execute = !context || (!planningFailure && plan && plan.action !== "stop")
+      const prompt = plan ? experimentPrompt(plan) : basePrompt
       let salvaged = false
-      const agent = await deps.spawnAgent({
+      const agent = execute && !comparison ? await deps.spawnAgent({
         workdir: wt,
         prompt,
         taskId: a.task.id,
         branch: a.branch,
-        ...(a.task.timeoutMs === undefined ? {} : { timeoutMs: a.task.timeoutMs }),
+        ...(context ? { timeoutMs: remainingMs } : a.task.timeoutMs === undefined ? {} : { timeoutMs: a.task.timeoutMs }),
         onSalvage: () => {
           salvaged = true
         },
-      })
+      }) : { exitCode: trialSelected ? 0 : 1, timedOut: false, duration_s: 0, final: comparison?.reason ?? planningFailure ?? plan?.reason ?? "Stopped", straysAfter: 0 }
+      const durationSeconds = planningSeconds + trialSeconds + agent.duration_s
       const settled = await waitForStable(() => gitStatus(wt))
       if (!settled.stable) {
-        console.log(`SETTLE ${a.task.id}: worktree still moving after ${settled.polls} polls; committing anyway`)
+        console.log(`SETTLE ${a.task.id}: worktree still moving after ${settled.polls} polls; ${context ? "withholding scoring and commit" : "committing anyway"}`)
       }
       const produced = worktreePaths(wt)
-      const v = scoreAssignment(wt, a.task.tests, a.task.success, a.task.evidence)
+      const safeToScore = execute && (!comparison || trialSelected) && (!context || (settled.stable && agent.straysAfter === 0))
+      const v = safeToScore ? scoreAssignment(wt, a.task.tests, a.task.success, a.task.evidence)
+        : { testFile: a.task.tests, passed: 0, total: 0, passRate: 0, parsed: true, returncode: 1, outputTail: "Execution withheld or worker unsettled" }
       if (v.parsed === false) {
         console.log(`HARNESS could not parse a test result for ${a.task.id} (rc=${v.returncode}); tail:`)
         console.log(v.outputTail)
       }
-      const committed = commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`)
-      await appendEvent(REPO, runId, {
+      const committed = safeToScore ? commitWorktree(wt, `agent: ${a.task.id} via ${deps.kind}`) : false
+      const progress = context && a.task.progress ? recordProgress(context, a.task.progress, {
+        taskId: a.task.id, worktree: wt, commit: git(wt, ["rev-parse", "HEAD"]),
+        durationSeconds, settled: settled.stable && agent.straysAfter === 0,
+        ...(plan ? { plan } : {}), ...(planningFailure ? { planningFailure } : {}),
+        ...(comparison ? { comparison } : {}),
+      }) : undefined
+      await appendEvent(repo, runId, {
         type: "live_agent",
         ts: new Date().toISOString(),
         agent: deps.kind,
@@ -288,8 +370,9 @@ async function runLive(
         timedOut: agent.timedOut,
         final: agent.final,
         harness: v,
+        ...(comparison ? { comparison } : {}),
       })
-      await appendEvent(REPO, runId, {
+      await appendEvent(repo, runId, {
         type: "worker_result",
         worker_id: a.workerId,
         task_id: a.task.id,
@@ -297,12 +380,12 @@ async function runLive(
         passed: v.passed,
         total: v.total,
         pass_rate: v.passRate,
-        duration_s: agent.duration_s,
+        duration_s: durationSeconds,
         loc: 0,
         mode: deps.kind,
         ts: new Date().toISOString(),
       })
-      return { wt, agent, verdict: v, assignment: a, produced }
+      return { wt, agent, durationSeconds, verdict: v, assignment: a, produced, progress }
     }),
   )
   const results: WorkerResult[] = settled.map((s) => ({
@@ -312,39 +395,43 @@ async function runLive(
     passed: s.verdict.passed,
     total: s.verdict.total,
     pass_rate: s.verdict.passRate,
-    duration_s: s.agent.duration_s,
+    duration_s: s.durationSeconds,
     loc: 0,
     mode: deps.kind,
     ts: new Date().toISOString(),
   }))
   // Merge gate on main, task order, only fully-passing branches land.
-  const wip = gitStatus(REPO) !== ""
+  const wip = gitStatus(repo) !== ""
   if (wip) {
-    gitStashPush(REPO)
+    gitStashPush(repo)
   }
+  const accepted = new Set<string>()
   try {
     for (const r of [...results].sort((x, y) => x.task_id.localeCompare(y.task_id))) {
-      if (r.pass_rate < 1) {
+      if (r.pass_rate < 1 || r.total === 0) {
         console.log(`GATE skip ${r.task_id} (${r.branch}): pass_rate=${r.pass_rate.toFixed(2)} < 1.0`)
         continue
       }
-      const verdict = mergeGate(REPO, r.branch, () => {
+      const verdict = mergeGate(repo, r.branch, () => {
         const t = assigns.find((a) => a.task.id === r.task_id)?.task
-        const onMain = scoreAssignment(REPO, t?.tests ?? "", t?.success, t?.evidence)
+        const onMain = scoreAssignment(repo, t?.tests ?? "", t?.success, t?.evidence)
         // Full verification contract, not just the harness: a merge that is green
         // on tests but type/lint dirty must not land (observed on E1).
-        return onMain.passRate >= 1 && onMain.total > 0 && repoContractPasses(REPO)
+        return onMain.passRate >= 1 && onMain.total > 0 && repoContractPasses(repo)
       })
       console.log(`GATE ${verdict} ${r.task_id} (${r.branch})`)
+      if (verdict !== "blocked") accepted.add(r.task_id)
     }
   } finally {
     if (wip) {
-      gitStashPop(REPO)
+      gitStashPop(repo)
     }
   }
   return {
-    results,
+    results: results.map((r) => r.pass_rate >= 1 && !accepted.has(r.task_id) ? { ...r, pass_rate: 0 } : r),
     produced: Object.fromEntries(settled.map((s) => [s.assignment.task.id, s.produced])),
+    progress: Object.fromEntries(settled.flatMap((s) => s.progress
+      ? [[s.assignment.task.id, s.progress.decision.action !== "stop"]] : [])),
   }
 }
 
@@ -406,7 +493,8 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
       writeState(s)
     },
     runRound: async (round, requeued) => {
-      const queue = selected.filter((t) => !solved.has(t.id) || requeued.includes(t.id))
+      const queue = selected.filter((t) => (!solved.has(t.id) || requeued.includes(t.id))
+        && (!t.progress || progressContext(REPO, t.id, t.progress).last?.decision.action !== "stop"))
       if (queue.length === 0) return []
       const opened = beginRound(readState(), queue.map((t) => t.id), Date.now())
       writeState(opened.state)
@@ -422,7 +510,7 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
               `${runId}_r${round}`,
             )
       const outcomes: Outcome[] = live.results.map((r) => {
-        if (r.pass_rate >= 1) solved.add(r.task_id)
+        if (r.pass_rate >= 1 && r.total > 0) solved.add(r.task_id)
         agentMs += r.duration_s * 1000
         return {
           taskId: r.task_id,
@@ -430,6 +518,7 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
           passed: r.passed,
           total: r.total,
           produced: live.produced[r.task_id] ?? [],
+          ...(live.progress?.[r.task_id] === undefined ? {} : { continuationAllowed: live.progress[r.task_id] }),
         }
       })
       let s = finishRound(readState(), round, outcomes.some((o) => o.passRate >= 1) ? "landed" : "failed", `round ${round}: ${outcomes.length} tasks`, Date.now())
@@ -505,4 +594,4 @@ async function main(): Promise<void> {
   }
 }
 
-await main()
+if (import.meta.main) await main()

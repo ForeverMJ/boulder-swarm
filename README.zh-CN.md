@@ -1,5 +1,7 @@
 # boulder-swarm(推石者的蜂群)
 
+实验性自主策略功能：[协议](PROGRESS.md) · [完整改动说明](docs/strategy-changes.zh-CN.md) · [其他 Coding Agent 测试指南](docs/strategy-testing.zh-CN.md)。该功能需显式启用，目前尚未证明真实模型效果提升。
+
 **目标驱动的多智能体蜂群:只交付"被验证过"的结果——和西西弗斯一样推石,不同的是:石头成功上了山(进了 main)。**
 
 一份冻结的目标树扇出到并行编码 agent,每个 agent 在隔离的 git worktree 里干活。能进 `main` 的路只有一条:合并门——在 main 上重新跑一遍 harness,失败即回滚。每一条 claim 都由确定性 checker 重新推导。蜂群自己蒸馏经验、自己继续迭代,直到目标**真的**完成——而不是它**声称**完成。

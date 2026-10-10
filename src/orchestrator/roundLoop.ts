@@ -43,6 +43,8 @@ export type Outcome = {
   readonly total: number
   /** Paths the commit actually produced. Empty means nothing landed. */
   readonly produced: readonly string[]
+  /** Verified progress OR a bounded replanning allowance; not itself proof of progress. */
+  readonly continuationAllowed?: boolean
 }
 
 export type StopReason = {
@@ -72,6 +74,10 @@ export function decideStop(input: {
 }): StopReason {
   if (input.goalReached) return { stop: true, why: "goal" }
   if (input.budgetExhausted) return { stop: true, why: "budget" }
+  if (input.current.some((o) => o.continuationAllowed === true)) return { stop: false, why: "" }
+  if (input.current.length > 0 && input.current.every((o) => o.continuationAllowed === false)) {
+    return { stop: true, why: "no-progress" }
+  }
   if (input.round > 1 && sameOutcome(input.previous, input.current)) {
     return { stop: true, why: "no-progress" }
   }
@@ -159,7 +165,7 @@ export async function runRounds(deps: RoundDeps, maxRounds: number): Promise<Rou
     history.push({ round, tasks, status: landed ? "landed" : "failed" })
     await deps.saveState({ round, history })
 
-    const after = decideStop({ round: i + 1, goalReached, budgetExhausted, previous, current })
+    const after = decideStop({ round: i + 1, goalReached: await deps.goalReached(), budgetExhausted: await deps.budgetExhausted(), previous, current })
     if (after.stop) {
       stoppedBecause = after.why
       break

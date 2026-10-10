@@ -2,6 +2,11 @@
 
 **English** · [中文](README.zh-CN.md) · [日本語](README.ja.md)
 
+Experimental agent-directed replanning: [protocol](PROGRESS.md),
+[complete change review](docs/strategy-changes.zh-CN.md), and
+[independent Coding Agent test handoff](docs/strategy-testing.zh-CN.md).
+This opt-in feature has not demonstrated a live-model performance gain.
+
 **A goal-driven multi-agent swarm that ships verified results — like Sisyphus, except the boulder ships.**
 
 One frozen goal tree fans out to parallel coding agents working in isolated git
