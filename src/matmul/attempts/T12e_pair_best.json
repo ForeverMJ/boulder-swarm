@@ -1,0 +1,11 @@
+{
+ "fam": "fam_B",
+ "desc": "pair(3,21)-structured-partial",
+ "drops": [
+  3,
+  21
+ ],
+ "mm": 2,
+ "l1": 3,
+ "evals": 2691342
+}
