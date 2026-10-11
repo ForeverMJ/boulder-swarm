@@ -1,0 +1,41 @@
+{
+  "perBase": [
+    {
+      "name": "T12d_fam_A",
+      "refinements": 4474,
+      "slots": 57,
+      "anchorsM2": 9256528,
+      "anchorsM3": 11793549216,
+      "rowsPerAnchor": 65780,
+      "totalRowsM3": 775779667428480
+    },
+    {
+      "name": "T12d_fam_B",
+      "refinements": 3458,
+      "slots": 55,
+      "anchorsM2": 5488356,
+      "anchorsM3": 5338296456,
+      "rowsPerAnchor": 65780,
+      "totalRowsM3": 351153140875680
+    }
+  ],
+  "totalAnchorsM3": 17131845672,
+  "totalRowsM3": 1126932808304160,
+  "assumedRowsPerSecPerShard": 200000,
+  "projectionCoreHours": 1565184.4559779998,
+  "projectionWallHours28Shards": 55899.444856357135,
+  "verdict": "SIZING-FAILED",
+  "note": "m=2 ground-truth cross-check failed, so no closure verdict is claimed. expected anchorsM2 fam_A=4169972 fam_B=5383004, computed 9256528 / 5488356 via the distinct-slot e2 closed form. The port is not the cause: against the branch's own anchorSplit.ts it gives identical pool sizes, and grouping the branch-era fam_A pool by TERM reproduces 4169972 exactly (current fam_B by TERM gives 5383004). The quoted numbers are R85 anchorSpaceCount values (distinct TERM anchors); e2 counts distinct term:mode SLOT pairs, a larger set (branch-era fam_A e2=4246780; current fam_B e2=5488356). Additionally fam_A was replaced on main after the R85 measurement (commit 7cb279c), so the old number is unreproducible on the current file under any formula (current fam_A e2=9256528, distinct-term dp2=9069616). Informational sizing only: m=3 totals 17131845672 anchors x 65780 rows = 1126932808304160 rows, ~1565184 core-hours at 200000 rows/s/shard (~55899 wall-hours on 28 shards), far above the 28-shard x 3h (84 core-hour) closure budget.",
+  "groundTruth": {
+    "expectedAnchorsM2": {
+      "T12d_fam_A": 4169972,
+      "T12d_fam_B": 5383004
+    },
+    "computedAnchorsM2": {
+      "T12d_fam_A": 9256528,
+      "T12d_fam_B": 5488356
+    },
+    "match": false
+  },
+  "generatedAt": "2026-10-11T13:27:18.795Z"
+}
