@@ -1,0 +1,29 @@
+{
+  "configs": [
+    {
+      "shards": 1,
+      "seconds": 40.2,
+      "rows": 16971240,
+      "rowsPerSec": 422695.9
+    },
+    {
+      "shards": 4,
+      "seconds": 40.1,
+      "rows": 60254480,
+      "rowsPerSec": 1500958.5
+    },
+    {
+      "shards": 8,
+      "seconds": 40.2,
+      "rows": 103011480,
+      "rowsPerSec": 2563367.3
+    }
+  ],
+  "speedup4": 3.55,
+  "speedup8": 6.06,
+  "machineLoadNote": "driver ran configs shards=1,4,8 in turn, each shard measuring up to 2000 anchors or 40000ms (whichever first); total driver wall 120s. per-row work is the full m=3 row: deficit of dropped k=5 over a 26-term anchor into a reused Int32Array(729) plus exact O(729) isRankAtMostOne; no sampling inside an anchor. m=3 anchor space over fam_A: 11038539888 anchors x 65780 rows; at best measured aggregate 2563367.3 rows/s the full layer projects to 78685.04h wall. all three configs completed; speedups are measured aggregate-throughput ratios, not model fits.",
+  "recommendedShards": 8,
+  "recommendedBudgetMs": 3600000,
+  "closureFeasible": false,
+  "generatedAt": "2026-10-11T13:29:43.438Z"
+}

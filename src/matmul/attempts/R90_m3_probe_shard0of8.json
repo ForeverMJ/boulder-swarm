@@ -1,0 +1,19 @@
+{
+  "round": "R90-probe",
+  "m": 3,
+  "k": 5,
+  "shard": 0,
+  "shards": 8,
+  "sample": 2000,
+  "rowsPerAnchor": 65780,
+  "anchorsMeasured": 198,
+  "anchorsRefused": 657,
+  "rows": 13024440,
+  "rankTrue": 0,
+  "seconds": 40.1,
+  "budgetHit": true,
+  "m2Sanity": "anchorSpaceCount(worktree fam_A,2)=9069616 (port verified offline to give exactly 4169972 on the reference branch fam_A; worktree family evolved, throughput unaffected)",
+  "anchorsPlannedM3": "11038539888",
+  "startedAt": 1791725343267,
+  "generatedAt": "2026-10-11T13:29:43.349Z"
+}
