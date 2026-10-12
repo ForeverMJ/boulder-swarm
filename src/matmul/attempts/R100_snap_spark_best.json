@@ -1,0 +1,10 @@
+{
+  "task": "R100-snapspark",
+  "field": "F_2",
+  "hash": "55df1887",
+  "f2mm": 16,
+  "intMm": 341,
+  "solved": 74,
+  "consistent": 0,
+  "verdict": "BOUNDED-NO-CLOSURE"
+}
