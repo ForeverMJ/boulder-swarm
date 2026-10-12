@@ -1,3 +1,940 @@
+L2:
+  - id: T01
+    problem: src/problems/problem01.ts
+    tests: src/problems/problem01.test.ts
+    milestone: M1
+    owner: worker
+  - id: T02
+    problem: src/problems/problem02.ts
+    tests: src/problems/problem02.test.ts
+    milestone: M1
+    owner: worker
+  - id: T03
+    problem: src/problems/problem03.ts
+    tests: src/problems/problem03.test.ts
+    milestone: M2
+    owner: worker
+  - id: T04
+    problem: src/problems/problem04.ts
+    tests: src/problems/problem04.test.ts
+    milestone: M2
+    owner: worker
+  - id: T05
+    problem: src/problems/problem05.ts
+    tests: src/problems/problem05.test.ts
+    milestone: M3
+    owner: worker
+  - id: T06
+    problem: src/problems/problem06.ts
+    tests: src/problems/problem06.test.ts
+    milestone: M3
+    owner: worker
+  - id: T07
+    problem: src/problems/problem07.ts
+    tests: src/problems/problem07.test.ts
+    milestone: M4
+    owner: worker
+  - id: T08
+    problem: src/problems/problem08.ts
+    tests: src/problems/problem08.test.ts
+    milestone: M4
+    owner: worker
+  - id: T09
+    problem: src/problems/problem09.ts
+    tests: src/problems/problem09.test.ts
+    milestone: M4
+    owner: worker
+  - id: T10
+    problem: src/matmul/checker.ts
+    tests: src/matmul/checker.test.ts
+    milestone: M5
+    owner: orchestrator
+  - id: T11
+    problem: src/matmul/attempts/T11_solution.ts
+    tests: src/matmul/scoreboard.ts
+    milestone: M5
+    success: BEST23
+    owner: worker
+  - id: T12
+    problem: src/matmul/attempts/T12_rank23_variant.ts
+    tests: src/matmul/scoreboard.ts
+    milestone: M5
+    success: BEST22
+    timeoutMs: 1800000
+    note: best candidate T12c is rank 22 with 1/729 mismatches - not exact; goal is
+      exact rank<=22
+    owner: worker
+    verified by scoreboard marker BEST22; deep research window 30 min: null
+  - id: T12c
+    problem: src/matmul/attempts/T12c_absorb_best.ts
+    tests: src/matmul/scoreboard.ts
+    milestone: M5
+    success: BEST22
+    note: nearest rank-22 attempt
+    owner: worker
+    1/729 mismatches: null
+    not exact: null
+  - id: T12d
+    problem: src/matmul/attempts/T12d_fam_A.ts
+    tests: src/matmul/scoreboard.ts
+    milestone: M5
+    success: BEST23
+    owner: worker
+  - id: T12e
+    problem: src/matmul/attempts/T12d_fam_B.ts
+    tests: src/matmul/scoreboard.ts
+    milestone: M5
+    success: BEST23
+    owner: worker
+  - id: R08
+    problem: src/matmul/attempts/R8_alldrops_2move_pm2.json
+    tests: src/matmul/goalCheck.ts
+    milestone: M5
+    success: CERTIFIED-LOCAL-OPTIMAL-2MOVE
+    evidence: CAMPAIGN:R8
+    note: all 23 drops certified 2-move local optimality
+    owner: orchestrator
+  - id: R10
+    problem: src/matmul/attempts/R10_pair_repair.json
+    tests: src/matmul/goalCheck.ts
+    milestone: M5
+    success: PAIRTABLES
+    note: drop-2-add-1 completeness; 126 feasible all blocked
+    owner: orchestrator
+    127 impossible by support bound: null
+  - id: R14
+    problem: src/matmul/attempts/R14_compress.json
+    tests: src/matmul/goalCheck.ts
+    milestone: M5
+    success: ALL-IRREDUCIBLE
+    evidence: CAMPAIGN:R14
+    note: exact rational compression
+    owner: orchestrator
+    restricted ansatz irreducibility: null
+  - id: R19
+    problem: src/matmul/attempts/R19_cross_orbit.json
+    tests: src/matmul/goalCheck.ts
+    milestone: M5
+    success: NO-OVERLAP-OBSERVED
+    evidence: CAMPAIGN:R19
+    note: certificate extended to 4 families with pairwise disjoint de Groote orbits
+    owner: orchestrator
+  - id: R21
+    problem: src/matmul/attempts/VERIFY_ALL.json
+    tests: src/matmul/tools/verifyAll.test.ts
+    milestone: M5
+    success: ALL-CLAIMS-REPRODUCE
+    note: one-command hub re-derives every campaign claim
+    owner: orchestrator
+    exits non-zero on drift: null
+  - id: V1
+    problem: src/matmul/verify/profileCount.ts
+    tests: src/matmul/verify/profileCount.test.ts
+    milestone: M5
+    note: independent re-derivation of the rank-22 profile count; the test is the
+      judge and does not import the campaign implementation
+    owner: worker
+  - id: V2
+    problem: src/matmul/verify/restrictionCeilingVerify.ts
+    tests: src/matmul/verify/restrictionCeilingVerify.test.ts
+    milestone: M5
+    note: independent re-derivation of rank(T|alpha) = n*rank(alpha) <= n^2
+    owner: worker
+    the claim that closed the single-covariant route: null
+  - id: V3
+    problem: src/matmul/verify/reducibilityCriterion.ts
+    tests: src/matmul/verify/reducibilityCriterion.test.ts
+    milestone: M5
+    note: independent re-derivation of the m-matrix reducibility criterion that
+      underwrites the R14 irreducibility verdicts
+    owner: worker
+    with two-sided known-answer fixtures: null
+  - id: V4
+    problem: src/matmul/verify/blaserArithmetic.ts
+    tests: src/matmul/verify/blaserArithmetic.test.ts
+    milestone: M5
+    note: independent re-derivation of the published Blaser 2003 formula arithmetic
+      and the load-bearing hypotheses
+    owner: worker
+  - id: L1
+    problem: src/matmul/lit/zlarger.md
+    tests: src/matmul/verify/literatureProbe.test.ts
+    milestone: M5
+    note: obtain the missing definition of Z^v verbatim; the probe fails on any
+      concession of failure
+    owner: worker
+    so a not-found result is reported as a failure rather than passing quietly: null
+  - id: L2
+    problem: src/matmul/lit/zlarger2.md
+    tests: src/matmul/verify/literatureDiscipline.test.ts
+    milestone: M5
+    note: the three remaining Blaser ingredients (Z^v starred cells
+    owner: worker
+    verbatim "beta separates": null
+    Lemma 7) with VERBATIM and DERIVED sections kept apart; the publisher HTML MathJax is lossy for display matrices so the cells must come off a rendered page or PDF: null
+  - id: R52
+    problem: src/matmul/tools/repairSearch.ts
+    tests: src/matmul/tools/repairSearch.test.ts
+    milestone: M5
+    note: coordinated multi-triple repair of the single defect in T12c at tensor
+      entry 7,4,7; no triple has v supported exactly at index 4 together with u
+      supported exactly at index 7, so any activation carries collateral that
+      must be cancelled, and a bounded null result must not be reported as an
+      impossibility
+    owner: worker
+  - id: S1
+    problem: src/orchestrator/supervisorState.ts
+    tests: src/orchestrator/supervisorState.test.ts
+    milestone: M6
+    note: atomic durable round/budget journal with crash tolerance; loadState must
+      never throw on a corrupt file and staleRounds must expose an interrupted
+      round for requeue
+    owner: worker
+    which is the failure that lost the L1 result: null
+  - id: S2
+    problem: src/orchestrator/agentLifecycle.ts
+    tests: src/orchestrator/agentLifecycle.test.ts
+    milestone: M6
+    note: salvage the worktree while the agent tree is still alive
+    owner: worker
+    then kill it: null
+    then report zero strays including grandchildren; encodes the round-41 timeout race and the seven orphaned processes: null
+  - id: S3
+    problem: src/orchestrator/scoreAfterExit.ts
+    tests: src/orchestrator/scoreAfterExit.test.ts
+    milestone: M6
+    note: settle the worktree only after the agent tree exits
+    owner: worker
+    then score; record which paths a commit actually produced and treat an empty commit as not-a-success; ignore verdicts older than the commit that superseded them: null
+  - id: S4
+    problem: src/orchestrator/roundLoop.ts
+    tests: src/orchestrator/roundLoop.test.ts
+    milestone: M6
+    note: the loop that calls S1-S3; requeue crash survivors
+    owner: worker
+    persist per round: null
+    stop on goal before budget: null
+    and halt on a repeated outcome instead of spinning for a month: null
+  - id: D1
+    problem: src/recording/metrics.ts
+    tests: src/recording/metricsAppend.test.ts
+    milestone: M6
+    note: "saveResults must ACCUMULATE, not overwrite. It currently calls writeFile
+      with only the current run's rows, so metrics/results.json holds exactly
+      one run and replan, which reads that file, has a one-round-deep memory of
+      what is solved. Already observed: a mock dispatch of S4 destroyed the R52
+      failure row, which was the only evidence that live dispatch produces
+      nothing. Rows are append-only and replan's last-wins Map then gives
+      correct latest-state semantics; the CSV must stay in step with the JSON"
+    owner: worker
+  - id: D2
+    problem: src/orchestrator/runLoop.ts
+    tests: src/orchestrator/taskEvidence.test.ts
+    milestone: M6
+    note: "research tasks need an explicit completion-evidence field so replan can
+      recognise them. R08, R14 and R19 point at goalCheck.ts, which exits 1
+      because rank-22 is unsolved, so they score passRate 0 forever and replan
+      wants to redo finished work each round. Their success markers
+      (CERTIFIED-LOCAL-OPTIMAL-2MOVE, ALL-IRREDUCIBLE, NO-OVERLAP-OBSERVED) are
+      looked for in scoreboard output where they never appear, so the markers
+      are dead. Add evidence?: string to the Task schema and thread it through
+      loadTasks and both scoreAssignment call sites; when evidence names
+      CAMPAIGN:<label>, a substantive row for that label in the worktree's
+      CAMPAIGN.md scores 1, anything else scores 0 without throwing; tasks
+      without evidence must score exactly as before. Then set evidence
+      CAMPAIGN:R8 on R08, CAMPAIGN:R14 on R14 and CAMPAIGN:R19 on R19. Do NOT
+      touch R10 (works through PAIRTABLES) or T12c (correctly pending through
+      BEST22=none)."
+    owner: worker
+  - id: E1
+    problem: src/es4/es4Search.ts
+    tests: src/es4/es4Search.test.ts
+    milestone: M7
+    note: Erdos-Straus 4/n = 1/x+1/y+1/z finite verification, n in [2..10^4]; solved
+      by live agent, gate landed (cb7b595)
+    owner: worker
+  - id: E2
+    problem: src/es4/verifyLarge.ts
+    tests: src/es4/verifyLarge.test.ts
+    milestone: M7
+    note: N=10^5 within 10s judge budget (scaling lemma legal); stub red until agent
+      lands; file-ownership src/es4/verifyLarge.ts only, imports from es4Search
+      allowed
+    owner: worker
+  - id: E3
+    problem: src/es4/primeCover.ts
+    tests: src/es4/primeCover.test.ts
+    milestone: M7
+    note: N=10^6 within 45s judge budget - scaling lemma + prime/residue reduction
+      required; bounded null must stay honest via firstMissing; stub red until
+      agent lands; file-ownership src/es4/primeCover.ts only
+    owner: worker
+  - id: E4
+    problem: src/es4/wideCover.ts
+    tests: src/es4/wideCover.test.ts
+    milestone: M7
+    note: N=10^7 full coverage within 45s judge budget - lift the landed solver's
+      hard table caps (sieve to 2*maxN derives from maxN); undecided n stay
+      honestly uncovered; file-ownership src/es4/wideCover.ts only, imports from
+      es4Search/verifyLarge/primeCover allowed
+    owner: worker
+  - id: A1
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "AlphaTensor parity: autonomous from-zero F_2 search for exact 4x4x4
+      rank<=47 (Nature 610,42,2022 record); NO import of AlphaTensor's published
+      tensors; stub starts red; file-ownership attempts/A1_<name>.ts +
+      _search.ts only; prompt src/matmul/prompts/A1.md"
+    owner: worker
+  - id: R90-size
+    problem: src/matmul/attempts/R90_m3_sizing.ts
+    tests: src/matmul/attempts/R90_m3_sizing.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "exact counts only: per-base anchor count via slot-group closed form
+      (streaming m=3 anchors is itself infeasible), rowsPerAnchor=C(26,5)=65780,
+      totalRows, and a core-hours projection at a calibrated rows/s. Report
+      numbers; claim nothing closed"
+  - id: R90-probe
+    problem: src/matmul/attempts/R90_m3_probe.ts
+    tests: src/matmul/attempts/R90_m3_probe.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "measured throughput: run the m=3 row loop on a bounded anchor sample with
+      1 vs 4 vs 8 parallel shard processes (~40s each), record rows/s and
+      speedup, and recommend shards/budget for a closure round or declare it
+      infeasible. Claim nothing closed"
+  - id: R97-size
+    problem: src/matmul/attempts/R97_m2_sizing.ts
+    tests: src/matmul/attempts/R97_m2_sizing.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Re-derive the m=2 remainder sizing on the CURRENT main files: exact
+      bigint DP anchorSpaceCount for T12d_fam_A and T12d_fam_B at m=2, rows
+      planned/screened/unscreened per base carried forward from
+      R86_wideAnchor_m2_merge.json, wall-clock projection at R86's measured
+      6.27M rows/s aggregate. Ground-truth control: reproduce R86's T11 equality
+      (428180 anchors = 121680 screened + 306500 refused) exactly. Verdict
+      SIZING-OK only if the remainder fits 28 shards x 30 min x 3 rounds; else
+      SIZING-FAILED with the honest projection, and the sweep tasks must not
+      run."
+    planned: true
+  - id: R97-sweepA
+    problem: src/matmul/attempts/R97_m2_famA_search.ts
+    tests: src/matmul/attempts/R97_m2_famA.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Resume the R85 m=2 screen for the T12d_fam_A remainder only, importing
+      the R85/R86 ladder unchanged (rank1Factor, anchorSplit, modpFlatDim
+      prefilter then exact rank<=1 decision); shard over the unscreened anchor
+      range from R97-size, checkpoint per-shard NDJSON with cursors never ahead
+      of counted work. Every row REFUTED or UNRESOLVED with the reason; a
+      budget-limited row is UNRESOLVED, never a refutation. Gating controls:
+      factorisation-roundtrip 40/40 and R86 T11-row reproduction."
+    planned: true
+  - id: R97-sweepB
+    problem: src/matmul/attempts/R97_m2_famB_search.ts
+    tests: src/matmul/attempts/R97_m2_famB.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Same sound R85/R86 screen for T12d_fam_B, which R86 never reached: shard
+      over its full m=2 anchor space (exact bigint planned count from R97-size),
+      same per-row instrument, same checkpoint discipline, same gating controls.
+      No coefficient, sparsity or factor ansatz beyond the wide-anchor
+      definition; supports outside enumerated two-support-split anchors are
+      untouched and stated as such."
+    planned: true
+  - id: R97-merge
+    problem: src/matmul/attempts/R97_m2_merge.ts
+    tests: src/matmul/attempts/R97_m2_merge.test.ts
+    milestone: M5
+    evidence: CAMPAIGN:R97
+    timeoutMs: 1800000
+    note: Merge all R97 shards plus the R86 screened ranges into
+      R97_wideAnchor_m2_merge.json; closure decided ONLY by the per-base
+      equality anchorsScreened + anchorsRefused === anchorsPlanned against exact
+      bigint DP counts (stringified, never rounded doubles). Refuse closure when
+      the equality fails. On closure write the CAMPAIGN.md R97 row
+      (refuted/unresolved/unscreened per base, 0 survivors). Any surviving
+      candidate is handed to checker.verify(), never claimed by the merge.
+    planned: true
+  - id: R98-size
+    problem: src/matmul/attempts/R98_m2_reconcile.ts
+    tests: src/matmul/attempts/R98_m2_reconcile.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Reconcile R90's SIZING-FAILED on current main files: enumerate
+      refinements for T11_solution, T12d_fam_A, T12d_fam_B, report BOTH counts
+      per base (distinct term:mode slots e2/e3 AND distinct-term DP
+      anchorSpaceCount), name which formula each historic number used, emit a
+      shard plan for the m=2 sweeps below. Test is an independent re-derivation
+      (own enumerator, no import of the implementation) that locks pool sizes,
+      both counts, rowsPerAnchor 12650, and the shard cursors. Must not claim
+      closure of any band."
+    planned: true
+  - id: R98-sweepT11
+    problem: src/matmul/attempts/R98_m2_t11_search.ts
+    tests: src/matmul/attempts/R98_m2_t11.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Sharded exact m=2 sweep over T11_solution only (428180 anchors, 12650
+      rows each, smallest band): reuse the landed R97 ladder unchanged, resume
+      past R97 cursors if present, checkpoint cursor only after the chunk is
+      counted, per-row verdict refuted/unresolved/admissible with stage
+      attribution. Bounded nulls reported as bounded with unscreenedFrom; a
+      survivor must be handed to checker.verify before any claim. Test gates
+      controls (factorisation roundtrip, planted rank-1 accept/reject) plus
+      cursor-resume integrity."
+    planned: true
+  - id: R98-sweepFamB
+    problem: src/matmul/attempts/R98_m2_famB_search.ts
+    tests: src/matmul/attempts/R98_m2_famB.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Sharded exact m=2 sweep over T12d_fam_B (5383004 anchors per R97 DP count
+      on the current file; re-derive, do not quote): same ladder, same
+      checkpoint discipline and verdict taxonomy as R98-sweepT11. Extends the
+      R97_m2_famB instrument rather than replacing it; imports from it where
+      sound, duplicates nothing silently. Partial coverage is an honest bounded
+      result, never a partial refutation."
+    planned: true
+  - id: R98-merge
+    problem: src/matmul/attempts/R98_m2_merge.ts
+    tests: src/matmul/attempts/R98_m2_merge.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Merge job for the R98 shard streams: assert every shard present and
+      distinct, totals reconcile (rowsPlanned vs rowsScreened vs
+      rowsUnscreened), no checkpoint ahead of work, gating controls green on
+      every shard, survivors re-verified with checker.verify, tools/verifyAll
+      stays ALL-CLAIMS-REPRODUCE. Emits the closed vs unresolved vs unscreened
+      partition per base; unresolved rows are named targets, not refutations."
+    planned: true
+  - id: R99-size
+    problem: src/matmul/attempts/R99_snap_census.ts
+    tests: src/matmul/attempts/R99_snap_census.test.ts
+    milestone: M8
+    note: "Census, not closure (R98 RECONCILED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47 near-miss support across agent/goal-w0-A1@muse-r72
+      (Lane F merge3 seed 66, ILS seeds 22/66), @r54_52080c9 (R90 mm=12 probes,
+      1230-trial storm), @r65_7a03c63 (orbit-fam 49s), the R73 v2 checkpoint (27
+      exact-49 states with full vecs+hashes), R75 v3 meld split-open states, and
+      spark 4126ca7f (exact rank-53, 17970a9); emit R99_snap_census.json with
+      per-candidate (hash, rank, mismatches, vecs-present, archive) plus
+      exact-solve workload pricing; verdict SIZED-NO-CLOSURE; file-ownership
+      attempts/R99_snap_census.ts + .test.ts + .json only; field F_2 throughout"
+    planned: true
+  - id: R99-sweepA
+    problem: src/matmul/attempts/R99_drain_spark.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Spark-anchored ALS drain (A1.md round-80 lane): recover
+      A1_spark_search.ts + A1_spark.ndjson from 17970a9, reload exact hash
+      4126ca7f via the anchored ALS CLI route (repair2/repair2d/focus/snap are
+      the wrong modes for this seed), drain exact rank-53 toward <=47 with
+      interleaved merge/flip moves; checkpoint every best state as full {u,v,w}
+      vecs plus stable hash in R99_drain_spark.ndjson; verify any rank<=47
+      candidate with bun src/matmul/goalCheckA.ts; bounded sweep with no witness
+      is an honest RED; file-ownership attempts/R99_drain_spark*.ts + .ndjson
+      only; no AlphaTensor tensors"
+    planned: true
+  - id: R99-sweepB
+    problem: src/matmul/attempts/R99_snap_ils.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "V5 composition lane (A1.md decisive move): reproduce Lane F seed 66 and
+      ILS seeds 22/66 as narrow probes first (skip already-processed R99-size
+      hashes), then run the exact F_2 coefficient solve on each rank-47
+      candidate's fixed support (R69 machinery, archived at @r50_fd96654):
+      CONSISTENT ships the exact scheme, INCONSISTENT retires that support
+      family; checkpoint candidate hash, axis, consistency result and mismatch
+      count per solve; never leave a rank-47 candidate unmatched; file-ownership
+      attempts/R99_snap_ils*.ts + .ndjson only; no AlphaTensor tensors"
+    planned: true
+  - id: R99-merge
+    problem: src/matmul/attempts/R99_merge.ts
+    tests: src/matmul/attempts/R99_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R99
+    note: "Adjudication merge: take the best candidate hashes from R99-size and both
+      sweeps, re-verify each with checker verifyMod2 plus bun
+      src/matmul/goalCheckA.ts, exact-solve-snap any unsnapped rank-47 support,
+      write R99_merge.json (hashes, consistency outcomes, mismatch counts,
+      0-drift self-check) and the colocated test gating those counts, then
+      record the substantive CAMPAIGN:R99 row (exact-47 scheme or honest
+      bounded-red naming the residual); file-ownership attempts/R99_merge.ts +
+      .test.ts + .json only"
+    planned: true
+  - id: R100-snapspark
+    problem: src/matmul/attempts/R100_snap_spark.ts
+    tests: src/matmul/attempts/R100_snap_spark.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Recover the exact F_2 solve machinery (gaussSolve/solveSupport) from
+      branch agent/goal-w2-R99-sweepB (R99_snap_ils.ts). Exact-solve every
+      replayable spark rank-47/48 support in R99_snap_census.json (75 states,
+      commit 17970a9 vecs): CONSISTENT ships an exact scheme file, INCONSISTENT
+      retires the hash with axis/mm/intMm. Checkpoint candidate hash, axis,
+      consistency and mismatch counts to R100_snap_spark.ndjson. Controls: floor
+      seed solves CONSISTENT, a retired R99 ILS hash re-derives INCONSISTENT.
+      File-ownership attempts/R100_snap_spark* only; no AlphaTensor tensors."
+    planned: true
+  - id: R100-seedils
+    problem: src/matmul/attempts/R100_seed_ils.ts
+    tests: src/matmul/attempts/R100_seed_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Fresh ILS ground only (seeds other than 22/66, longer budgets than
+      R99-sweepB's 8s lanes): probe from the exact-49 floor, and exact-solve
+      EVERY new rank-47 candidate on its fixed support before the window closes
+      (unmatched=0 invariant). Checkpoint vecs+hashes for all best states.
+      File-ownership attempts/R100_seed_ils* only; bounded reds stay bounded."
+    planned: true
+  - id: R100-drain49
+    problem: src/matmul/attempts/R100_drain49.ts
+    tests: src/matmul/attempts/R100_drain49.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Deterministic drain/meld from replayable exact-49 states (sweepA 1e8db216
+      plus the 25 v2 floor hashes): merge/flip moves toward 47 with full
+      factor-vector checkpoints and stable hashes; any rank<=47 candidate is
+      verified with the goalCheckA gate path. Skip already-processed R99 hashes.
+      File-ownership attempts/R100_drain49* only."
+    planned: true
+  - id: R100-merge
+    problem: src/matmul/attempts/R100_merge.json
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    evidence: CAMPAIGN:R100
+    note: "Adjudication merge, run AFTER its R100 siblings land: re-verify every
+      R100 input with verifyMod2 plus the goalCheckA gate path, snap-check for
+      unsnapped rank<=47 supports, drift-check hashes, and append the
+      substantive CAMPAIGN.md row for R100 that this evidence cites. Bounded
+      verdicts only (BOUNDED-NO-WITNESS while 47 stands)."
+    planned: true
+  - id: R101-drain
+    problem: src/matmul/attempts/R101_drain49b.ts
+    tests: src/matmul/attempts/R101_drain49b.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deep deterministic drain/meld from the 16 replayable exact-49 F_2 anchors
+      (sweepA 1e8db216 chain plus the 15 distinct snapped v2-floor supports
+      enumerated in R100_drain49.ts); at least 50 iters per start with greedy
+      exact F_2 drain, shear flips, split kicks and deterministic meld, seeded
+      and deterministic; checkpoint full factor vectors plus stable fnv hashes
+      to R101_drain49b.ndjson with resume-skip of hashes already checkpointed;
+      verify any rank<=47 candidate via verifyMod2 plus goalSatisfiedA; export
+      the replayed exact-49 anchor as scheme so the gate stays honestly red
+      absent a witness; verdict BOUNDED-RED unless a witness lands;
+      file-ownership attempts/R101_drain49b* only; no AlphaTensor tensors.
+    planned: true
+  - id: R101-ils
+    problem: src/matmul/attempts/R101_seed_ils2.ts
+    tests: src/matmul/attempts/R101_seed_ils2.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude all
+      previously run ILS seeds (22, 66, 7, 77, 107, 207, 307, 407); at least 6
+      new seeds, at least 10s per lane; each lane calibrates against the
+      exact-49 floor then runs ILS at fixed rank 47; EVERY rank<=47
+      zero-mismatch candidate exact-solved on its fixed support in-window
+      (composition rule, never leave a candidate unmatched); checkpoint vecs
+      plus hashes for lane-best 47 and floor-best 49 states; verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified; file-ownership attempts/R101_seed_ils2* only; no AlphaTensor
+      tensors."
+    planned: true
+  - id: R101-solve
+    problem: src/matmul/attempts/R101_snap_solve.ts
+    tests: src/matmul/attempts/R101_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the remaining replayable rank-47/48 supports in
+      R99_snap_census.json that R100-snapspark did not retire (non-spark
+      archives: orbit-fam 49s, storm rows with stored vectors, v3 meld
+      split-open states with vectors); recover the gaussSolve per-axis
+      machinery, solve every replayable support exactly over F_2; CONSISTENT
+      ships an exact scheme file, INCONSISTENT retires the hash with axis and
+      mismatch counts; checkpoint candidate hash, axis, consistency and mismatch
+      counts to R101_snap_solve.ndjson; controls: floor seed solves CONSISTENT
+      and one R100-retired hash re-derives INCONSISTENT; verdict SIZED-or-SWEPT
+      with no closure claim unless a witness lands; file-ownership
+      attempts/R101_snap_solve* only; no AlphaTensor tensors."
+    planned: true
+  - id: R101-merge2
+    problem: src/matmul/attempts/R101_struct_merge.ts
+    tests: src/matmul/attempts/R101_struct_merge.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Structured gap-2 enumeration: enumerate structured 2-term mergings of the
+      7 Strassen triples (left-ideal and octonion-style linear combos that stay
+      rank-1 over F_2) against the replayable exact-49 skeleton; bounded
+      enumeration with exact verifyMod2 plus goalSatisfiedA on every rank<=47
+      candidate; checkpoint each best state as full 16-bit factor vectors with a
+      stable hash to R101_struct_merge.ndjson; verdict BOUNDED-RED unless a
+      witness lands; file-ownership attempts/R101_struct_merge* only; no
+      AlphaTensor tensors."
+    planned: true
+  - id: R102-replay
+    problem: src/matmul/attempts/R102_replayCorpus_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the unmatched-candidate space. Recover the archive chain
+      (agent/goal-w0-A1@r45_c8e92f3, @1f4f4eb, @r48_3c6327d, @ac55b26,
+      @r54_52080c9, @47afb53, @r57_3f32bfa, @r59_a7f7686, @r61_67e3f9f,
+      @r63_b1f946d, @r65_7a03c63, @r67_c58dfd0, @muse-r72) and scan every
+      A1_*.ndjson checkpoint for rows that carry full {u,v,w} factor vectors
+      (not metrics-only); dedupe by candidate hash. Run the exact F_2
+      coefficient solve (coeffSolve, recovered from @r50_fd96654) on each
+      distinct rank-47 fixed support and record CONSISTENT or INCONSISTENT per
+      candidate in attempts/R102_candidateInventory.json. A CONSISTENT solve
+      emits the scheme (attempts/R102_scheme.ts exporting scheme) and the gate
+      fires. Bounded nulls are reported bounded, never as impossibility.
+      File-ownership: attempts/R102_* only; no checker, no other workers' files.
+      Run exact-solve sweeps under nice -n 19 (load-spike policy)."
+    planned: true
+  - id: R102-meld
+    problem: src/matmul/attempts/R102_meld_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the meld lane. Continue from the v3 search script (archived at
+      commit 0d0af7d): generate promising split-open states around ranks 51-54
+      and checkpoint FULL factor vectors plus a stable candidate hash for every
+      state (fixing the R72/R75 defect that stored metrics only). Search those
+      states with interleaved merge/flip moves before greedy draining returns to
+      the frozen rank-49 floor; use the close route only on a saved state that
+      first passes the same-axis-factor eligibility check (R74 showed zero
+      eligible states among the states sampled so far - select for eligibility,
+      do not re-sample ineligible ones). Every rank<=47 candidate is matched by
+      the exact coefficient solve within the same round. File-ownership:
+      attempts/R102_* only."
+    planned: true
+  - id: R102-anchor
+    problem: src/matmul/attempts/R102_anchorDrain_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the anchored-drain lane. Load the exact F_2 rank-53 anchor hash
+      4126ca7f (commit 17970a9, carries a full vec) via the existing CLI (bun
+      src/matmul/attempts/A1_spark_search.ts <seconds> <seed> als 4126ca7f) and
+      run bounded ALS plus a narrowly scoped DETERMINISTIC drain mode
+      (repair2/repair2d only sample probabilistically and focus stops on an
+      already-zero mismatch count, so neither drains the seed). Preserve each
+      best tensor with its hash; match every rank<=47 candidate with the exact
+      solve; verify any result with the gate. File-ownership: attempts/R102_*
+      only."
+    planned: true
+  - id: R102-merge
+    problem: src/matmul/attempts/R102_strassenMerge_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the constructive route: exhaustively enumerate the structured
+      2-term mergings of the 7 two-level Strassen triples (F_2-linear and
+      sign-bearing integer linear combos that stay rank-1 over F_2,
+      left-ideal/octonion-style), exactly verify each merged scheme with
+      checker.verifyMod2, and report the complete count. The gap to 47 is
+      exactly the 2 terms beyond the two-level recursion, so a rank-1-preserving
+      merging of two Strassen triples into one is the constructive answer; if
+      the full enumerated space is refuted, the certificate row closes the
+      ansatz exactly. Reuse the merge vocabulary of the 555-line merge-search
+      instrument (branch @r61_67e3f9f) but make the enumeration exhaustive over
+      the structured ansatz, not sampled. File-ownership: attempts/R102_* only."
+    planned: true
+  - id: A1-v7-1
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+    planned: true
+  - id: A1-v7-2
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts (coeffSolve path)
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: rank<=47 consistency=CONSISTENT
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+    planned: true
+  - id: A1-v7-3
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts (ILS probes)
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: new best state checkpoint with hash
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+    planned: true
+  - id: A1-v7-4
+    problem: goalCheckA.ts gate verification
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: goalCheckA exit 0
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-A1-1
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: scheme exported with rank 49 over F_2; goalCheckA prints M8 GOAL NOT
+      MET with rank 49 listed
+    note: two-level Strassen baseline; 64 terms reduced to 49 via two-level
+      recursion structure
+    planned: true
+  - id: M8-A1-2
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: scheme rank reduced to <= 47 over F_2; goalCheckA exits 0 with BESTA47
+    note: structured 2-term mergings of the 7 Strassen triples
+      (left-ideal/octonion-style linear combos that stay rank-1 over F_2)
+    planned: true
+  - id: M8-A1-3
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: beam search produces rank<=47 candidate; exact coefficient solve on
+      fixed support confirms consistency => BESTA47
+    note: F_2 beam search keeping hundreds of partial states; interleaved merge/flip
+      moves on promising states around ranks 51-54 before greedy drain
+    planned: true
+  - id: M8-A1-4
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: 'goalCheckA exits 0; FINAL:
+      {"task_id":"A1","verdict":"PASS","passed":1,"total":1} printed'
+    note: final exactification; every rank<=47 candidate verified against goalCheckA
+      before round close; checkpoint rows to attempts/A1_<name>.ndjson
+    planned: true
+  - id: M8-A2-task1
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: A1_sisyphus_v3_search.ts recovered; rank-49 floor confirmed via
+      goalCheckA test
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-A2-task2
+    problem: src/matmul/attempts/A1_2term_merge.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: 2-term merge candidates generated with F₂-structured Strassen triple
+      linear combos; each compiles and exports scheme
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-A2-task3
+    problem: src/matmul/attempts/A1_coeff_solve.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: Exact coefficient solve completed on promising candidate; hash,
+      consistency result, and mismatch count checkpointed
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-A2-task4
+    problem: src/matmul/attempts/A1_final_verify.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: goalCheckA exits 0; BESTA47 milestone landed; exact rank<=47 scheme
+      over F₂ verified
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-B1-task1
+    problem: src/matmul/attempts/A1_sisyphus.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: two-level-strassen-verified
+    note: Recover the two-level Strassen scheme from archived branch
+      agent/goal-w0-A1@r45_c8e92f3 and verify it achieves exact rank 49 over F_2
+      via goalCheckA
+    planned: true
+  - id: M8-B1-task2
+    problem: src/matmul/attempts/A1_sisyphus_v2_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: 47-candidate-probed
+    note: Run structured ILS probes around the two-level Strassen skeleton targeting
+      the +2 gap; identify rank-47 candidates with minimal mismatches (bestMm <=
+      16)
+    planned: true
+  - id: M8-B1-task3
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: exact-solve-consistent
+    note: Run exact coefficient solve on best rank-47 candidates from task2; if
+      CONSISTENT verdict, BESTA47 fires and milestone lands per goalCheckA exit
+      0
+    planned: true
+  - id: M8-C1-1
+    problem: src/matmul/attempts/M8C1_search_v1.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 1800000
+    note: Improved two-level Strassen search with tightened signed-mask encoding to
+      target rank 47 directly; reuse R87's base structure with modified
+      coefficient constraints.
+    planned: true
+  - id: M8-C1-2
+    problem: src/matmul/attempts/M8C1_screen_v1.ts
+    tests: src/matmul/tools/screen test.ts
+    milestone: M8
+    success: improved_fdim
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 600000
+    note: New screening instrument that computes flatDim across all three axes
+      simultaneously; designed to prune more rows than the single-axis flatDim
+      in R74/R77, reducing the search space before Strassen-level search.
+    planned: true
+  - id: M8-C1-3
+    problem: src/matmul/attempts/M8C1_round2.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: any_improvement
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 1800000
+    note: Second round using refined instruments from tasks 1 and 2; budget-limited
+      to close the gap. If rank 47 not reached, produce a report on the largest
+      remaining gap and candidate structures.
+    planned: true
+  - id: M8-C1-4
+    problem: src/matmul/attempts/M8C1_evaluate.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: evaluation_complete
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 300000
+    note: "Evaluate results from rounds 1-3: measure the rank distribution, identify
+      the most promising candidate structures, and decide whether to iterate
+      with a new proposal or close the space. Outputs a concise verdict with
+      evidence rows."
+    planned: true
+  - id: M8-C2-1
+    problem: src/matmul/attempts/A1_sisyphus_search.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-C2-2
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-C2-3
+    problem: src/matmul/attempts/A1_sisyphus_merge_search.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-C2-4
+    problem: src/matmul/attempts/A1_<worker>.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+    planned: true
+  - id: M8-C3-1
+    problem: src/matmul/attempts/A1_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C3
+    timeoutMs: 1800000
+    note: Set up search infrastructure and verify naive(4) baseline (64 terms, exact
+      rank over F_2) and Strassen two-level baseline (49 terms, exact rank over
+      F_2) as checkpointed exact schemes under attempts/.
+    planned: true
+  - id: M8-C3-2
+    problem: src/matmul/attempts/A1_2merge.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C3
+    timeoutMs: 1800000
+    note: Implement 2-term merge procedures to search for rank-47 candidates from
+      the 49-term base, with exact coefficient solve to convert candidates into
+      exact rank-47 schemes; close k=2 and k=3 deficit spaces before widening to
+      larger k.
+    planned: true
+  - id: R103-1
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-1
+    timeoutMs: 1800000
+    note: Exact F_2 coefficient solve on rank-47 candidate supports from
+      R100_drain49 and R100_snap_spark archives. For each candidate support,
+      solve the linear system over F_2. CONSISTENT => exact rank-47 scheme
+      (verify with goalCheckA). INCONSISTENT => refute that support family.
+      Checkpoint all candidate hashes + consistency results.
+    planned: true
+  - id: R103-2
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-2
+    timeoutMs: 1800000
+    note: ALS search from R100_drain49 seed with exact-solve interleave. Every
+      rank-47 candidate support is immediately handed to the exact coefficient
+      solver. Preserve full factor vectors (not just metrics) in NDJSON
+      checkpoints.
+    planned: true
+  - id: R103-3
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-3
+    timeoutMs: 1800000
+    note: "Structured 2-term merge enumeration: left-ideal/octonion-style linear
+      combos of the 7 Strassen triples that stay rank-1 over F_2. Target: close
+      the 49->47 gap by finding a 47-term decomposition with two merged pairs."
+    planned: true
+  - id: R103-4
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-4
+    timeoutMs: 1800000
+    note: "Seed-diversified ILS: run >=8 independent ILS restarts from different
+      seeds around the rank-49 anchor. For each restart, checkpoint the best
+      state as full factor vectors. Hand any rank-47 candidate to exact solver."
+    planned: true
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)
@@ -18,7 +955,8 @@ L1:
     done_when: M3内题目全部通过
   - id: M4
     title: 未见新题（真解题验证）
-    verifier: bun test src/problems/problem07.test.ts src/problems/problem08.test.ts src/problems/problem09.test.ts
+    verifier: bun test src/problems/problem07.test.ts src/problems/problem08.test.ts
+      src/problems/problem09.test.ts
     done_when: agent从零写出通过解法并经合并门落盘
   - id: M5
     title: 3x3 matmul tensor rank（Laderman 23 开放 50 年，目标 22）
@@ -36,47 +974,16 @@ L1:
     title: 4x4 matmul 精确方案数平齐 AlphaTensor（F₂ 上 47，Nature 2022）
     verifier: bun src/matmul/goalCheckA.ts
     done_when: A1 从零自主搜索（不导入 AlphaTensor 已发表张量）构造精确 rank<=47 over F₂ 的方案并经合并门落盘
-L2:
-  - {id: T01, problem: src/problems/problem01.ts, tests: src/problems/problem01.test.ts, owner: worker, milestone: M1}
-  - {id: T02, problem: src/problems/problem02.ts, tests: src/problems/problem02.test.ts, owner: worker, milestone: M1}
-  - {id: T03, problem: src/problems/problem03.ts, tests: src/problems/problem03.test.ts, owner: worker, milestone: M2}
-  - {id: T04, problem: src/problems/problem04.ts, tests: src/problems/problem04.test.ts, owner: worker, milestone: M2}
-  - {id: T05, problem: src/problems/problem05.ts, tests: src/problems/problem05.test.ts, owner: worker, milestone: M3}
-  - {id: T06, problem: src/problems/problem06.ts, tests: src/problems/problem06.test.ts, owner: worker, milestone: M3}
-  - {id: T07, problem: src/problems/problem07.ts, tests: src/problems/problem07.test.ts, owner: worker, milestone: M4}
-  - {id: T08, problem: src/problems/problem08.ts, tests: src/problems/problem08.test.ts, owner: worker, milestone: M4}
-  - {id: T09, problem: src/problems/problem09.ts, tests: src/problems/problem09.test.ts, owner: worker, milestone: M4}
-  - {id: T10, problem: src/matmul/checker.ts, tests: src/matmul/checker.test.ts, owner: orchestrator, milestone: M5}
-  - {id: T11, problem: src/matmul/attempts/T11_solution.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
-  - {id: T12, problem: src/matmul/attempts/T12_rank23_variant.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22, timeoutMs: 1800000, note: best candidate T12c is rank 22 with 1/729 mismatches - not exact; goal is exact rank<=22, verified by scoreboard marker BEST22; deep research window 30 min}
-  - {id: T12c, problem: src/matmul/attempts/T12c_absorb_best.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST22, note: nearest rank-22 attempt, 1/729 mismatches, not exact}
-  - {id: T12d, problem: src/matmul/attempts/T12d_fam_A.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
-  - {id: T12e, problem: src/matmul/attempts/T12d_fam_B.ts, tests: src/matmul/scoreboard.ts, owner: worker, milestone: M5, success: BEST23}
-  - {id: R08, problem: src/matmul/attempts/R8_alldrops_2move_pm2.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: CERTIFIED-LOCAL-OPTIMAL-2MOVE, evidence: CAMPAIGN:R8, note: all 23 drops certified 2-move local optimality}
-  - {id: R10, problem: src/matmul/attempts/R10_pair_repair.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: PAIRTABLES, note: drop-2-add-1 completeness; 126 feasible all blocked, 127 impossible by support bound}
-  - {id: R14, problem: src/matmul/attempts/R14_compress.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: ALL-IRREDUCIBLE, evidence: CAMPAIGN:R14, note: exact rational compression, restricted ansatz irreducibility}
-  - {id: R19, problem: src/matmul/attempts/R19_cross_orbit.json, tests: src/matmul/goalCheck.ts, owner: orchestrator, milestone: M5, success: NO-OVERLAP-OBSERVED, evidence: CAMPAIGN:R19, note: certificate extended to 4 families with pairwise disjoint de Groote orbits}
-  - {id: R21, problem: src/matmul/attempts/VERIFY_ALL.json, tests: src/matmul/tools/verifyAll.test.ts, owner: orchestrator, milestone: M5, success: ALL-CLAIMS-REPRODUCE, note: one-command hub re-derives every campaign claim, exits non-zero on drift}
-  - {id: V1, problem: src/matmul/verify/profileCount.ts, tests: src/matmul/verify/profileCount.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the rank-22 profile count; the test is the judge and does not import the campaign implementation}
-  - {id: V2, problem: src/matmul/verify/restrictionCeilingVerify.ts, tests: src/matmul/verify/restrictionCeilingVerify.test.ts, owner: worker, milestone: M5, note: independent re-derivation of rank(T|alpha) = n*rank(alpha) <= n^2, the claim that closed the single-covariant route}
-  - {id: V3, problem: src/matmul/verify/reducibilityCriterion.ts, tests: src/matmul/verify/reducibilityCriterion.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the m-matrix reducibility criterion that underwrites the R14 irreducibility verdicts, with two-sided known-answer fixtures}
-  - {id: V4, problem: src/matmul/verify/blaserArithmetic.ts, tests: src/matmul/verify/blaserArithmetic.test.ts, owner: worker, milestone: M5, note: independent re-derivation of the published Blaser 2003 formula arithmetic and the load-bearing hypotheses}
-  - {id: L1, problem: src/matmul/lit/zlarger.md, tests: src/matmul/verify/literatureProbe.test.ts, owner: worker, milestone: M5, note: obtain the missing definition of Z^v verbatim; the probe fails on any concession of failure, so a not-found result is reported as a failure rather than passing quietly}
-  - {id: L2, problem: src/matmul/lit/zlarger2.md, tests: src/matmul/verify/literatureDiscipline.test.ts, owner: worker, milestone: M5, note: the three remaining Blaser ingredients (Z^v starred cells, verbatim "beta separates", Lemma 7) with VERBATIM and DERIVED sections kept apart; the publisher HTML MathJax is lossy for display matrices so the cells must come off a rendered page or PDF}
-  - {id: R52, problem: src/matmul/tools/repairSearch.ts, tests: src/matmul/tools/repairSearch.test.ts, owner: worker, milestone: M5, note: "coordinated multi-triple repair of the single defect in T12c at tensor entry 7,4,7; no triple has v supported exactly at index 4 together with u supported exactly at index 7, so any activation carries collateral that must be cancelled, and a bounded null result must not be reported as an impossibility"}
-  - {id: S1, problem: src/orchestrator/supervisorState.ts, tests: src/orchestrator/supervisorState.test.ts, owner: worker, milestone: M6, note: atomic durable round/budget journal with crash tolerance; loadState must never throw on a corrupt file and staleRounds must expose an interrupted round for requeue, which is the failure that lost the L1 result}
-  - {id: S2, problem: src/orchestrator/agentLifecycle.ts, tests: src/orchestrator/agentLifecycle.test.ts, owner: worker, milestone: M6, note: salvage the worktree while the agent tree is still alive, then kill it, then report zero strays including grandchildren; encodes the round-41 timeout race and the seven orphaned processes}
-  - {id: S3, problem: src/orchestrator/scoreAfterExit.ts, tests: src/orchestrator/scoreAfterExit.test.ts, owner: worker, milestone: M6, note: settle the worktree only after the agent tree exits, then score; record which paths a commit actually produced and treat an empty commit as not-a-success; ignore verdicts older than the commit that superseded them}
-  - {id: S4, problem: src/orchestrator/roundLoop.ts, tests: src/orchestrator/roundLoop.test.ts, owner: worker, milestone: M6, note: the loop that calls S1-S3; requeue crash survivors, persist per round, stop on goal before budget, and halt on a repeated outcome instead of spinning for a month}
-  - {id: D1, problem: src/recording/metrics.ts, tests: src/recording/metricsAppend.test.ts, owner: worker, milestone: M6, note: "saveResults must ACCUMULATE, not overwrite. It currently calls writeFile with only the current run's rows, so metrics/results.json holds exactly one run and replan, which reads that file, has a one-round-deep memory of what is solved. Already observed: a mock dispatch of S4 destroyed the R52 failure row, which was the only evidence that live dispatch produces nothing. Rows are append-only and replan's last-wins Map then gives correct latest-state semantics; the CSV must stay in step with the JSON"}
-  - {id: D2, problem: src/orchestrator/runLoop.ts, tests: src/orchestrator/taskEvidence.test.ts, owner: worker, milestone: M6, note: "research tasks need an explicit completion-evidence field so replan can recognise them. R08, R14 and R19 point at goalCheck.ts, which exits 1 because rank-22 is unsolved, so they score passRate 0 forever and replan wants to redo finished work each round. Their success markers (CERTIFIED-LOCAL-OPTIMAL-2MOVE, ALL-IRREDUCIBLE, NO-OVERLAP-OBSERVED) are looked for in scoreboard output where they never appear, so the markers are dead. Add evidence?: string to the Task schema and thread it through loadTasks and both scoreAssignment call sites; when evidence names CAMPAIGN:<label>, a substantive row for that label in the worktree's CAMPAIGN.md scores 1, anything else scores 0 without throwing; tasks without evidence must score exactly as before. Then set evidence CAMPAIGN:R8 on R08, CAMPAIGN:R14 on R14 and CAMPAIGN:R19 on R19. Do NOT touch R10 (works through PAIRTABLES) or T12c (correctly pending through BEST22=none)."}
-  - {id: E1, problem: src/es4/es4Search.ts, tests: src/es4/es4Search.test.ts, owner: worker, milestone: M7, note: "Erdos-Straus 4/n = 1/x+1/y+1/z finite verification, n in [2..10^4]; solved by live agent, gate landed (cb7b595)"}
-  - {id: E2, problem: src/es4/verifyLarge.ts, tests: src/es4/verifyLarge.test.ts, owner: worker, milestone: M7, note: "N=10^5 within 10s judge budget (scaling lemma legal); stub red until agent lands; file-ownership src/es4/verifyLarge.ts only, imports from es4Search allowed"}
-  - {id: E3, problem: src/es4/primeCover.ts, tests: src/es4/primeCover.test.ts, owner: worker, milestone: M7, note: "N=10^6 within 45s judge budget - scaling lemma + prime/residue reduction required; bounded null must stay honest via firstMissing; stub red until agent lands; file-ownership src/es4/primeCover.ts only"}
-  - {id: E4, problem: src/es4/wideCover.ts, tests: src/es4/wideCover.test.ts, owner: worker, milestone: M7, note: "N=10^7 full coverage within 45s judge budget - lift the landed solver's hard table caps (sieve to 2*maxN derives from maxN); undecided n stay honestly uncovered; file-ownership src/es4/wideCover.ts only, imports from es4Search/verifyLarge/primeCover allowed"}
-  - {id: A1, problem: src/matmul/attempts/A1_f2_scheme.ts, tests: src/matmul/goalCheckA.test.ts, owner: worker, milestone: M8, success: BESTA47, timeoutMs: 1800000, note: "AlphaTensor parity: autonomous from-zero F_2 search for exact 4x4x4 rank<=47 (Nature 610,42,2022 record); NO import of AlphaTensor's published tensors; stub starts red; file-ownership attempts/A1_<name>.ts + _search.ts only; prompt src/matmul/prompts/A1.md"}
 policy:
   workers: 12
   file_ownership: one-problem-per-worker
   merge: best-pass-rate-then-fewer-loc
   branch_prefix: agent/goal-
+  planner:
+    milestones:
+      - M5
+      - M8
+    maxTasksPerProposal: 4
+    maxTimeoutMsPerTask: 1800000
+    maxRoundsPerProposal: 4
+    idMustStartWithLabel: true
