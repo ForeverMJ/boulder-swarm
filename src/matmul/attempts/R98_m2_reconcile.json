@@ -1,0 +1,317 @@
+{
+  "perBase": [
+    {
+      "name": "T11_solution",
+      "refinements": 984,
+      "slots": 38,
+      "terms": 19,
+      "slotE2": 432852,
+      "slotE3": 114840064,
+      "distinctTermM2": 428180,
+      "rowsPerAnchor": 12650,
+      "totalRowsM2": 5416477000
+    },
+    {
+      "name": "T12d_fam_A",
+      "refinements": 4474,
+      "slots": 57,
+      "terms": 23,
+      "slotE2": 9256528,
+      "slotE3": 11793549216,
+      "distinctTermM2": 9069616,
+      "rowsPerAnchor": 12650,
+      "totalRowsM2": 114730642400
+    },
+    {
+      "name": "T12d_fam_B",
+      "refinements": 3458,
+      "slots": 55,
+      "terms": 23,
+      "slotE2": 5488356,
+      "slotE3": 5338296456,
+      "distinctTermM2": 5383004,
+      "rowsPerAnchor": 12650,
+      "totalRowsM2": 68095000600
+    }
+  ],
+  "historicNumbers": [
+    {
+      "value": 4169972,
+      "label": "R85 fam_A m=2 ground truth (branch-era file, pre-7cb279c)",
+      "formula": "distinct-term DP anchorSpaceCount",
+      "reproducesOnCurrentFiles": false
+    },
+    {
+      "value": 5383004,
+      "label": "R85 fam_B m=2 ground truth; current T12d_fam_B distinct-term count",
+      "formula": "distinct-term DP anchorSpaceCount",
+      "reproducesOnCurrentFiles": true
+    },
+    {
+      "value": 4246780,
+      "label": "branch-era fam_A distinct-slot pair count (R90 note)",
+      "formula": "distinct term:mode slot e2",
+      "reproducesOnCurrentFiles": false
+    },
+    {
+      "value": 5488356,
+      "label": "current T12d_fam_B distinct-slot pair count",
+      "formula": "distinct term:mode slot e2",
+      "reproducesOnCurrentFiles": true
+    },
+    {
+      "value": 9256528,
+      "label": "current T12d_fam_A distinct-slot pair count",
+      "formula": "distinct term:mode slot e2",
+      "reproducesOnCurrentFiles": true
+    },
+    {
+      "value": 9069616,
+      "label": "current T12d_fam_A distinct-term count",
+      "formula": "distinct-term DP anchorSpaceCount",
+      "reproducesOnCurrentFiles": true
+    },
+    {
+      "value": 428180,
+      "label": "current T11_solution m=2 planned (R98 sweepT11)",
+      "formula": "distinct-term DP anchorSpaceCount",
+      "reproducesOnCurrentFiles": true
+    },
+    {
+      "value": 432852,
+      "label": "current T11_solution distinct-slot pair count",
+      "formula": "distinct term:mode slot e2",
+      "reproducesOnCurrentFiles": true
+    }
+  ],
+  "shardPlan": [
+    {
+      "base": "T11_solution",
+      "m": 2,
+      "planned": 428180,
+      "rowsPerAnchor": 12650,
+      "rowsPlanned": 5416477000,
+      "shards": [
+        {
+          "shard": 0,
+          "shards": 8,
+          "selector": "ai % 8 === 0",
+          "anchors": 53523,
+          "rows": 677065950,
+          "start": 0
+        },
+        {
+          "shard": 1,
+          "shards": 8,
+          "selector": "ai % 8 === 1",
+          "anchors": 53523,
+          "rows": 677065950,
+          "start": 0
+        },
+        {
+          "shard": 2,
+          "shards": 8,
+          "selector": "ai % 8 === 2",
+          "anchors": 53523,
+          "rows": 677065950,
+          "start": 0
+        },
+        {
+          "shard": 3,
+          "shards": 8,
+          "selector": "ai % 8 === 3",
+          "anchors": 53523,
+          "rows": 677065950,
+          "start": 0
+        },
+        {
+          "shard": 4,
+          "shards": 8,
+          "selector": "ai % 8 === 4",
+          "anchors": 53522,
+          "rows": 677053300,
+          "start": 0
+        },
+        {
+          "shard": 5,
+          "shards": 8,
+          "selector": "ai % 8 === 5",
+          "anchors": 53522,
+          "rows": 677053300,
+          "start": 0
+        },
+        {
+          "shard": 6,
+          "shards": 8,
+          "selector": "ai % 8 === 6",
+          "anchors": 53522,
+          "rows": 677053300,
+          "start": 0
+        },
+        {
+          "shard": 7,
+          "shards": 8,
+          "selector": "ai % 8 === 7",
+          "anchors": 53522,
+          "rows": 677053300,
+          "start": 0
+        }
+      ],
+      "completionCursor": 428180
+    },
+    {
+      "base": "T12d_fam_A",
+      "m": 2,
+      "planned": 9069616,
+      "rowsPerAnchor": 12650,
+      "rowsPlanned": 114730642400,
+      "shards": [
+        {
+          "shard": 0,
+          "shards": 8,
+          "selector": "ai % 8 === 0",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 1,
+          "shards": 8,
+          "selector": "ai % 8 === 1",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 2,
+          "shards": 8,
+          "selector": "ai % 8 === 2",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 3,
+          "shards": 8,
+          "selector": "ai % 8 === 3",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 4,
+          "shards": 8,
+          "selector": "ai % 8 === 4",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 5,
+          "shards": 8,
+          "selector": "ai % 8 === 5",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 6,
+          "shards": 8,
+          "selector": "ai % 8 === 6",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        },
+        {
+          "shard": 7,
+          "shards": 8,
+          "selector": "ai % 8 === 7",
+          "anchors": 1133702,
+          "rows": 14341330300,
+          "start": 0
+        }
+      ],
+      "completionCursor": 9069616
+    },
+    {
+      "base": "T12d_fam_B",
+      "m": 2,
+      "planned": 5383004,
+      "rowsPerAnchor": 12650,
+      "rowsPlanned": 68095000600,
+      "shards": [
+        {
+          "shard": 0,
+          "shards": 8,
+          "selector": "ai % 8 === 0",
+          "anchors": 672876,
+          "rows": 8511881400,
+          "start": 0
+        },
+        {
+          "shard": 1,
+          "shards": 8,
+          "selector": "ai % 8 === 1",
+          "anchors": 672876,
+          "rows": 8511881400,
+          "start": 0
+        },
+        {
+          "shard": 2,
+          "shards": 8,
+          "selector": "ai % 8 === 2",
+          "anchors": 672876,
+          "rows": 8511881400,
+          "start": 0
+        },
+        {
+          "shard": 3,
+          "shards": 8,
+          "selector": "ai % 8 === 3",
+          "anchors": 672876,
+          "rows": 8511881400,
+          "start": 0
+        },
+        {
+          "shard": 4,
+          "shards": 8,
+          "selector": "ai % 8 === 4",
+          "anchors": 672875,
+          "rows": 8511868750,
+          "start": 0
+        },
+        {
+          "shard": 5,
+          "shards": 8,
+          "selector": "ai % 8 === 5",
+          "anchors": 672875,
+          "rows": 8511868750,
+          "start": 0
+        },
+        {
+          "shard": 6,
+          "shards": 8,
+          "selector": "ai % 8 === 6",
+          "anchors": 672875,
+          "rows": 8511868750,
+          "start": 0
+        },
+        {
+          "shard": 7,
+          "shards": 8,
+          "selector": "ai % 8 === 7",
+          "anchors": 672875,
+          "rows": 8511868750,
+          "start": 0
+        }
+      ],
+      "completionCursor": 5383004
+    }
+  ],
+  "totalAnchorsM2": 14880800,
+  "totalRowsM2": 188242120000,
+  "rowsPerAnchor": 12650,
+  "verdict": "RECONCILED-NO-CLOSURE",
+  "note": "R90 SIZING-FAILED reconciled: the quoted ground truths (4169972/5383004) are distinct-TERM DP counts while R90's closed form counted distinct term:mode SLOT pairs; both counts are reported per base above and each historic number is tagged with its formula. fam_A was additionally replaced on main (7cb279c), so 4169972 cannot reproduce on the current file under any formula. Sizing only: no m=2 band is closed, no refutation is claimed, and bounds stand (19 <= R <= 23 over Q/R, 21 <= R_F2 <= 23 over F_2). m=2 totals 14880800 distinct-term anchors x 12650 rows = 188242120000 rows.",
+  "generatedAt": "2026-10-12T02:55:27.248Z"
+}
