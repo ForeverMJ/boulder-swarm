@@ -14,6 +14,8 @@ const L2Entry = z.object({
   evidence: z.string().optional(),
   timeoutMs: z.number().int().positive().optional(),
   progress: ProgressPolicy.optional(),
+  planned: z.boolean().optional(),
+  note: z.string().optional(),
 })
 const GoalFile = z.object({ L2: z.array(L2Entry) })
 
@@ -26,6 +28,10 @@ export type Task = {
   readonly evidence?: string
   /** Optional per-task agent window (ms) for deep-research tasks (e.g. T12). */
   readonly timeoutMs?: number
+  /** Planner-minted: files may not exist yet; creating them IS the task. */
+  readonly planned?: boolean
+  /** Task spec written by the planner; workers never see goal.yaml, so this is the contract. */
+  readonly note?: string
   readonly progress?: ProgressPolicy
 }
 
@@ -49,6 +55,8 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     ...(t.evidence === undefined ? {} : { evidence: t.evidence }),
     ...(t.timeoutMs === undefined ? {} : { timeoutMs: t.timeoutMs }),
     ...(t.progress === undefined ? {} : { progress: t.progress }),
+    ...(t.planned === undefined ? {} : { planned: t.planned }),
+    ...(t.note === undefined ? {} : { note: t.note }),
   }))
 }
 
@@ -62,4 +70,30 @@ export function dispatch(tasks: readonly Task[], nWorkers: number, branchPrefix 
 
 export function workerIds(nWorkers: number): number[] {
   return Array.from({ length: nWorkers }, (_, i) => i)
+}
+
+// Prompt contract for planner-minted tasks. The built-in worker prompt assumes the
+// test file already exists; for planned tasks both files must be CREATED, and the
+// planner's note is the only spec the worker ever sees. The contract names the test
+// file explicitly because a missing test scores 0/0 and the work is discarded.
+export function buildPlannedTaskPrompt(taskId: string, problem: string, tests: string, note?: string): string {
+  return [
+    `You are worker for task ${taskId}, minted by the autonomous planner under policy.`,
+    "Repo root is your current directory.",
+    "DELIVERABLE CONTRACT (hard requirements, in order):",
+    `1. CREATE ${problem} - it does not exist yet; creating it IS the task.`,
+    `2. CREATE ${tests} - it does not exist yet. Without this file the harness scores 0/0 and your work is discarded no matter how good it is.`,
+    `3. \`bun test ${tests}\` must pass and finish well under 60 seconds; never run the full suite.`,
+    "4. Run `bun node_modules/typescript/bin/tsc --noEmit` before finishing: the merge gate runs the static contract on main and blocks on any type error, including in your own files.",
+    `5. ${problem} may write its own runtime artifacts next to itself when executed.`,
+    "You may NOT modify any other existing file.",
+    "",
+    "TASK SPEC (from the approved proposal):",
+    note ?? "(no spec recorded)",
+    "",
+    "Honesty: if you cannot complete the spec in your window, record what you measured and what you",
+    "did not in the artifact or test rather than fabricating results.",
+    "When done, print exactly one final line:",
+    `FINAL: {"task_id":"${taskId}","verdict":"PASS or FAIL","passed":n,"total":m}`,
+  ].join("\n")
 }

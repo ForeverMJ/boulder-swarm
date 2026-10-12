@@ -23,7 +23,7 @@ import {
   mergeGate,
   parsePorcelainPaths,
 } from "./git"
-import { dispatch, loadTasks, workerIds } from "./scheduler"
+import { buildPlannedTaskPrompt, dispatch, loadTasks, workerIds } from "./scheduler"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
 import { type AgentPlan, type ProgressIntegration, type StrategyComparison, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
@@ -263,7 +263,13 @@ export async function runLive(
   const settled = await Promise.all(
     ready.map(async ({ wt, a }) => {
       const context = a.task.progress ? progressContext(repo, a.task.id, a.task.progress) : undefined
-      const basePrompt = await taskPrompt(repo, a, deps.buildPrompt(a.task.id, a.task.problem, a.task.tests))
+      const basePrompt = await taskPrompt(
+        repo,
+        a,
+        a.task.planned === true
+          ? buildPlannedTaskPrompt(a.task.id, a.task.problem, a.task.tests, a.task.note)
+          : deps.buildPrompt(a.task.id, a.task.problem, a.task.tests),
+      )
       let plan: AgentPlan | undefined
       let planningFailure: string | undefined
       let planningSeconds = 0

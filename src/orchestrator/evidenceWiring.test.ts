@@ -15,7 +15,10 @@ const REPO = join(HERE, "..", "..")
 describe("evidence is wired from goal.yaml to the score", () => {
   it("gives evidence to exactly R08, R14 and R19", async () => {
     const tasks = await loadTasks(REPO)
-    const labelled = tasks.filter((t) => t.evidence !== undefined)
+    // Planner-minted tasks (planned: true) carry evidence through the autoPromote
+    // policy channel, not through this hand-curated wiring; they are excluded so
+    // this judge keeps guarding the hand-written set it was written for.
+    const labelled = tasks.filter((t) => t.evidence !== undefined && t.planned !== true)
     expect(labelled.map((t) => `${t.id}=${t.evidence}`).sort()).toEqual([
       "R08=CAMPAIGN:R8",
       "R14=CAMPAIGN:R14",
