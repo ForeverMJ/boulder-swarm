@@ -1,0 +1,17 @@
+{
+  "round": "R98-m2",
+  "generatedAt": "2026-10-12T02:47:19.541Z",
+  "bases": [],
+  "claimsReproduce": {
+    "ok": true,
+    "detail": "4/4 schemes exact rank23/mm0; 63 artifacts self-consistent"
+  },
+  "witnessTotal": 0,
+  "verdict": "NO-SHARDS-NOTHING-MEASURED",
+  "problems": [
+    "no R98 shard files found; nothing measured, nothing claimed"
+  ],
+  "generatedBy": "attempts/R98_m2_merge.ts",
+  "purpose": "merge the R98 m=2 shard streams into a closed vs unresolved vs unscreened partition per base; unresolved rows are named follow-up targets, never refutations",
+  "scannedDir": "/home/taotao/workspace/dev/boulder-swarm-worktrees/worker_3/src/matmul/attempts"
+}
