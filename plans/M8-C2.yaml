@@ -1,0 +1,42 @@
+label: M8-C2
+goal: Autonomously search for exact 4x4x4 matrix multiplication scheme over F_2
+  with rank <= 47 (AlphaTensor parity), from zero import of AlphaTensor
+  published tensors
+rationale: M8 currently has no exact rank<=47 scheme; previous rounds (R87-R96)
+  achieved rank 49 via two-level Strassen; goal is to close the gap to 47 using
+  interleaved ILS and exact coefficient solve on structured supports, following
+  the campaign's anti-idle protocol and exact-solve discipline
+budget:
+  maxRounds: 4
+stopConditions:
+  - "M8 GOAL MET: goalCheckA exits 0 with exact rank<=47 scheme"
+  - "M8 AFTER ROUNDS: maxRounds reached without landing rank<=47"
+tasks:
+  - id: M8-C2-1
+    problem: src/matmul/attempts/A1_sisyphus_search.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+  - id: M8-C2-2
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+  - id: M8-C2-3
+    problem: src/matmul/attempts/A1_sisyphus_merge_search.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000
+  - id: M8-C2-4
+    problem: src/matmul/attempts/A1_<worker>.ts
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C2
+    timeoutMs: 1800000

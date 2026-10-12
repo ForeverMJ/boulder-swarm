@@ -1,0 +1,85 @@
+label: R99
+goal: M8 AlphaTensor parity by composition, not by wandering - census every
+  replayable rank-47 near-miss support on the archive branches, drain the spark
+  rank-53 anchor toward 47, snap every rank-47 candidate with the exact F_2
+  coefficient solve, and merge the best candidates into one adjudicated CAMPAIGN
+  row (exact-47 scheme or honest bounded-red)
+rationale: "The A1 chase (CAMPAIGN R87-R96, 34 archive branches) has an exact-49
+  floor and a growing pile of rank-47 CANDIDATES with small mismatches (R90
+  mm=12 probes; ILS mm=16 rows and seeds-22/66 mm=118 states on @muse-r72; v3
+  meld split-open states at ranks 51-54; spark hash 4126ca7f exact rank-53 with
+  full vec at 17970a9), but the v5 composition step - run the exact coefficient
+  solve on each candidate's fixed support, CONSISTENT (exact scheme, BESTA47
+  fires) or INCONSISTENT (support killed by linear algebra) - has never snapped
+  a candidate (R94/R95). Rounds also keep repeating non-replayable lanes (R72
+  NDJSON stores metrics, not factor tensors; R75 v3 NDJSON drops intermediate
+  vectors). This proposal follows the R97/R98 size-before-closing pattern:
+  R99-size consolidates the candidate census and prices the exact-solve workload
+  first, R99-sweepA and R99-sweepB run the two named replayable lanes in
+  parallel (spark-anchored ALS drain; ILS-47 exact-solve snap), and R99-merge
+  adjudicates every candidate and records one row. No wholesale A1 re-search:
+  every lane starts from a pinned archive hash and skips processed checkpoints.
+  From-zero rule stands (A1.md): no import of AlphaTensor tensors."
+budget:
+  maxRounds: 4
+stopConditions:
+  - bun src/matmul/goalCheckA.ts exits 0 (exact n=4 rank<=47 over F_2 landed)
+  - R99-merge records a substantive CAMPAIGN:R99 row and both sweeps report
+    bounded-red with checkpointed full vecs plus stable candidate hashes
+  - two consecutive rounds produce no new replayable rank-47 candidate hash
+tasks:
+  - id: R99-size
+    problem: src/matmul/attempts/R99_snap_census.ts
+    tests: src/matmul/attempts/R99_snap_census.test.ts
+    milestone: M8
+    note: "Census, not closure (R98 RECONCILED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47 near-miss support across agent/goal-w0-A1@muse-r72
+      (Lane F merge3 seed 66, ILS seeds 22/66), @r54_52080c9 (R90 mm=12 probes,
+      1230-trial storm), @r65_7a03c63 (orbit-fam 49s), the R73 v2 checkpoint (27
+      exact-49 states with full vecs+hashes), R75 v3 meld split-open states, and
+      spark 4126ca7f (exact rank-53, 17970a9); emit R99_snap_census.json with
+      per-candidate (hash, rank, mismatches, vecs-present, archive) plus
+      exact-solve workload pricing; verdict SIZED-NO-CLOSURE; file-ownership
+      attempts/R99_snap_census.ts + .test.ts + .json only; field F_2 throughout"
+  - id: R99-sweepA
+    problem: src/matmul/attempts/R99_drain_spark.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Spark-anchored ALS drain (A1.md round-80 lane): recover
+      A1_spark_search.ts + A1_spark.ndjson from 17970a9, reload exact hash
+      4126ca7f via the anchored ALS CLI route (repair2/repair2d/focus/snap are
+      the wrong modes for this seed), drain exact rank-53 toward <=47 with
+      interleaved merge/flip moves; checkpoint every best state as full {u,v,w}
+      vecs plus stable hash in R99_drain_spark.ndjson; verify any rank<=47
+      candidate with bun src/matmul/goalCheckA.ts; bounded sweep with no witness
+      is an honest RED; file-ownership attempts/R99_drain_spark*.ts + .ndjson
+      only; no AlphaTensor tensors"
+  - id: R99-sweepB
+    problem: src/matmul/attempts/R99_snap_ils.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "V5 composition lane (A1.md decisive move): reproduce Lane F seed 66 and
+      ILS seeds 22/66 as narrow probes first (skip already-processed R99-size
+      hashes), then run the exact F_2 coefficient solve on each rank-47
+      candidate's fixed support (R69 machinery, archived at @r50_fd96654):
+      CONSISTENT ships the exact scheme, INCONSISTENT retires that support
+      family; checkpoint candidate hash, axis, consistency result and mismatch
+      count per solve; never leave a rank-47 candidate unmatched; file-ownership
+      attempts/R99_snap_ils*.ts + .ndjson only; no AlphaTensor tensors"
+  - id: R99-merge
+    problem: src/matmul/attempts/R99_merge.ts
+    tests: src/matmul/attempts/R99_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R99
+    note: "Adjudication merge: take the best candidate hashes from R99-size and both
+      sweeps, re-verify each with checker verifyMod2 plus bun
+      src/matmul/goalCheckA.ts, exact-solve-snap any unsnapped rank-47 support,
+      write R99_merge.json (hashes, consistency outcomes, mismatch counts,
+      0-drift self-check) and the colocated test gating those counts, then
+      record the substantive CAMPAIGN:R99 row (exact-47 scheme or honest
+      bounded-red naming the residual); file-ownership attempts/R99_merge.ts +
+      .test.ts + .json only"

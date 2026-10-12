@@ -1,0 +1,105 @@
+label: R102
+goal: "Land an exact 4x4x4 matrix-multiplication scheme of rank <= 47 over F_2
+  (AlphaTensor parity, M8 gate goalCheckA) by closing the named remainder space
+  of the A1 chase: every rank-47 near-miss candidate ever checkpointed gets
+  exactly solved on its fixed support, and the two standing search lanes (meld
+  around split-open states, anchored ALS drain) run with full-vector
+  checkpointing so no 47-candidate is ever left unmatched again."
+rationale: "The chase (CAMPAIGN R87-R96) holds an exact rank-49 floor (two-level
+  Strassen, F_2-exact, branch agent/goal-w0-A1@r45_c8e92f3) and a recurring
+  supply of rank-47 near-miss candidates (mm=12, mm=16, mm=118) that were never
+  decided by the exact coefficient solve. The A1 prompt names the composition
+  ILS-probe-then-exact-solve as the decisive move and forbids leaving a
+  47-candidate unmatched; the decisive instrument (coeffSolve) is archived at
+  agent/goal-w0-A1@r50_fd96654, a usable exact rank-53 anchor with a full vec
+  sits at commit 17970a9 (hash 4126ca7f), and the non-vacuous meld route around
+  split-open ranks 51-54 is the named next search. The failure mode to avoid is
+  re-running broad wander lanes: R72 showed metric-only NDJSON is not
+  replayable, and R90 showed the storm ansatz yields no sub-49 scheme. This plan
+  therefore closes space instead of wandering: replay and exactly solve the
+  existing candidate corpus, run the two named lanes with mandatory full-vector
+  checkpointing, and exhaustively enumerate the constructive 2-term mergings of
+  the 7 Strassen triples that stay rank-1 over F_2."
+budget:
+  maxRounds: 4
+stopConditions:
+  - bun src/matmul/goalCheckA.ts exits 0 with an exact rank<=47 n=4 scheme
+    (BESTA47 fires) - goal met
+  - Every replayable rank-47 candidate exactly solved and recorded in the
+    CAMPAIGN:R102 row, and the meld and anchor lanes reported bounded-honest if
+    no witness
+  - "Four rounds exhausted with no exact rank<=47 scheme: bounded null plus the
+    named unscreened remainder"
+tasks:
+  - id: R102-replay
+    problem: src/matmul/attempts/R102_replayCorpus_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the unmatched-candidate space. Recover the archive chain
+      (agent/goal-w0-A1@r45_c8e92f3, @1f4f4eb, @r48_3c6327d, @ac55b26,
+      @r54_52080c9, @47afb53, @r57_3f32bfa, @r59_a7f7686, @r61_67e3f9f,
+      @r63_b1f946d, @r65_7a03c63, @r67_c58dfd0, @muse-r72) and scan every
+      A1_*.ndjson checkpoint for rows that carry full {u,v,w} factor vectors
+      (not metrics-only); dedupe by candidate hash. Run the exact F_2
+      coefficient solve (coeffSolve, recovered from @r50_fd96654) on each
+      distinct rank-47 fixed support and record CONSISTENT or INCONSISTENT per
+      candidate in attempts/R102_candidateInventory.json. A CONSISTENT solve
+      emits the scheme (attempts/R102_scheme.ts exporting scheme) and the gate
+      fires. Bounded nulls are reported bounded, never as impossibility.
+      File-ownership: attempts/R102_* only; no checker, no other workers' files.
+      Run exact-solve sweeps under nice -n 19 (load-spike policy)."
+  - id: R102-meld
+    problem: src/matmul/attempts/R102_meld_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the meld lane. Continue from the v3 search script (archived at
+      commit 0d0af7d): generate promising split-open states around ranks 51-54
+      and checkpoint FULL factor vectors plus a stable candidate hash for every
+      state (fixing the R72/R75 defect that stored metrics only). Search those
+      states with interleaved merge/flip moves before greedy draining returns to
+      the frozen rank-49 floor; use the close route only on a saved state that
+      first passes the same-axis-factor eligibility check (R74 showed zero
+      eligible states among the states sampled so far - select for eligibility,
+      do not re-sample ineligible ones). Every rank<=47 candidate is matched by
+      the exact coefficient solve within the same round. File-ownership:
+      attempts/R102_* only."
+  - id: R102-anchor
+    problem: src/matmul/attempts/R102_anchorDrain_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the anchored-drain lane. Load the exact F_2 rank-53 anchor hash
+      4126ca7f (commit 17970a9, carries a full vec) via the existing CLI (bun
+      src/matmul/attempts/A1_spark_search.ts <seconds> <seed> als 4126ca7f) and
+      run bounded ALS plus a narrowly scoped DETERMINISTIC drain mode
+      (repair2/repair2d only sample probabilistically and focus stops on an
+      already-zero mismatch count, so neither drains the seed). Preserve each
+      best tensor with its hash; match every rank<=47 candidate with the exact
+      solve; verify any result with the gate. File-ownership: attempts/R102_*
+      only."
+  - id: R102-merge
+    problem: src/matmul/attempts/R102_strassenMerge_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R102
+    timeoutMs: 1800000
+    note: "Close the constructive route: exhaustively enumerate the structured
+      2-term mergings of the 7 two-level Strassen triples (F_2-linear and
+      sign-bearing integer linear combos that stay rank-1 over F_2,
+      left-ideal/octonion-style), exactly verify each merged scheme with
+      checker.verifyMod2, and report the complete count. The gap to 47 is
+      exactly the 2 terms beyond the two-level recursion, so a rank-1-preserving
+      merging of two Strassen triples into one is the constructive answer; if
+      the full enumerated space is refuted, the certificate row closes the
+      ansatz exactly. Reuse the merge vocabulary of the 555-line merge-search
+      instrument (branch @r61_67e3f9f) but make the enumeration exhaustive over
+      the structured ansatz, not sampled. File-ownership: attempts/R102_* only."

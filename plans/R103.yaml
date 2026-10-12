@@ -1,0 +1,60 @@
+label: R103
+goal: "M8: exact 4x4x4 rank<=47 over F_2 (AlphaTensor parity)"
+rationale: >
+  100+ rounds of A1 search have landed exact-49 (two-level Strassen) but not 47.
+  The gap is 2 terms. The campaign's own analysis identifies the decisive move:
+  exact F_2 coefficient solving on rank-47 candidate supports. R100 merged three
+  fresh search lanes (snap_spark, seed_ils, drain49) whose NDJSON stores
+  candidate metrics but not full factor tensors. This proposal decomposes the
+  remaining search into four independent lanes, each targeting the 49->47 gap
+  with a different strategy, all scoring against the same gate.
+budget:
+  maxRounds: 4
+stopConditions:
+  - An exact rank<=47 F_2 scheme passes goalCheckA (exit 0)
+  - All four lanes report bounded null with named refutation families
+  - R103-1 exact solver is verified on known-answer fixtures
+tasks:
+  - id: R103-1
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-1
+    timeoutMs: 1800000
+    note: Exact F_2 coefficient solve on rank-47 candidate supports from
+      R100_drain49 and R100_snap_spark archives. For each candidate support,
+      solve the linear system over F_2. CONSISTENT => exact rank-47 scheme
+      (verify with goalCheckA). INCONSISTENT => refute that support family.
+      Checkpoint all candidate hashes + consistency results.
+  - id: R103-2
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-2
+    timeoutMs: 1800000
+    note: ALS search from R100_drain49 seed with exact-solve interleave. Every
+      rank-47 candidate support is immediately handed to the exact coefficient
+      solver. Preserve full factor vectors (not just metrics) in NDJSON
+      checkpoints.
+  - id: R103-3
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-3
+    timeoutMs: 1800000
+    note: "Structured 2-term merge enumeration: left-ideal/octonion-style linear
+      combos of the 7 Strassen triples that stay rank-1 over F_2. Target: close
+      the 49->47 gap by finding a 47-term decomposition with two merged pairs."
+  - id: R103-4
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R103-4
+    timeoutMs: 1800000
+    note: "Seed-diversified ILS: run >=8 independent ILS restarts from different
+      seeds around the rank-49 anchor. For each restart, checkpoint the best
+      state as full factor vectors. Hand any rank-47 candidate to exact solver."

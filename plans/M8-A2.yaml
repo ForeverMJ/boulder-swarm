@@ -1,0 +1,46 @@
+label: M8-A2
+goal: Construct exact rank<=47 over F₂ 4x4x4 matrix multiplication scheme from
+  zero (AlphaTensor parity)
+rationale: Current best is rank 49 (R87 A1_sisyphus two-level Strassen scheme).
+  Need to close the 2-term gap using structured 2-term mergings of the 7
+  Strassen triples and exact coefficient solves via the R69 machinery. The A1.md
+  prompt v5 recovery map and ILS+exact-solve alternation pattern provide the
+  attack route.
+budget:
+  maxRounds: 4
+stopConditions:
+  - rank<=47 found
+  - no improvement 2 consecutive rounds
+tasks:
+  - id: M8-A2-task1
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: A1_sisyphus_v3_search.ts recovered; rank-49 floor confirmed via
+      goalCheckA test
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+  - id: M8-A2-task2
+    problem: src/matmul/attempts/A1_2term_merge.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: 2-term merge candidates generated with F₂-structured Strassen triple
+      linear combos; each compiles and exports scheme
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+  - id: M8-A2-task3
+    problem: src/matmul/attempts/A1_coeff_solve.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: Exact coefficient solve completed on promising candidate; hash,
+      consistency result, and mismatch count checkpointed
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000
+  - id: M8-A2-task4
+    problem: src/matmul/attempts/A1_final_verify.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: goalCheckA exits 0; BESTA47 milestone landed; exact rank<=47 scheme
+      over F₂ verified
+    evidence: CAMPAIGN:M8-A2
+    timeoutMs: 1800000

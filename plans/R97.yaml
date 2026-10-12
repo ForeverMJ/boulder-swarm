@@ -1,0 +1,82 @@
+label: R97
+goal: "Close the m=2 wide-anchor remainder named UNRESOLVED by R86 — the rest of
+  T12d_fam_A and all of T12d_fam_B — as a compute continuation of the same sound
+  R85/R86 run (exact O(729) integer rank<=1 per-row decision, no cover, no
+  branch and bound, no budget inside a row). Explicitly out of scope: the m=3
+  layer, which R90 sized at 17131845672 anchors x 65780 rows (1126932808304160
+  rows, ~1565184 core-hours, SIZING-FAILED, closureFeasible=false) and is
+  therefore not to be swept or re-priced here."
+rationale: R86 closed T11_solution's entire m=2 wide-anchor space exactly
+  (428180 of 428180 anchors, 0 survivors, two-oracle agreement on 1377424 rows)
+  at 6.27M rows/s aggregate over 28 shards; the leftover it named is 52524634250
+  of 58166622800 planned rows UNSCREENED (fam_A 650007 of 4169972 anchors
+  reached, fam_B never reached), i.e. ~6x R86's wall clock — a continuation of a
+  sound run, not a research problem. R90 further showed fam_A was replaced on
+  main after the R85 measurement (commit 7cb279c), so the remainder must be
+  re-sized on the current files before closing (size-before-closing); the
+  per-row instrument is unchanged, only the plan counts move. This proposal
+  prices the remainder first, then sweeps it, then merges to an equality-decided
+  certificate.
+budget:
+  maxRounds: 4
+stopConditions:
+  - "goalCheck.ts exits 0 with an exact rank<=22 n=3 scheme: stop, M5 is met."
+  - R97 merge certifies the m=2 layer closed for fam_A and fam_B with 0
+    survivors, 0 undecided and 0 unscreened.
+  - "R97-size refresh shows the remainder exceeds the proposal compute budget
+    (28 shards x 30 min x 3 sweep rounds): stop, do not burn sweep compute."
+  - "Two consecutive rounds screen zero new rows: halt on no-progress, never
+    spin."
+  - "Any sweep reports a rank<=22 witness candidate: stop sweeping, verify it
+    with checker.verify() before any other work."
+tasks:
+  - id: R97-size
+    problem: src/matmul/attempts/R97_m2_sizing.ts
+    tests: src/matmul/attempts/R97_m2_sizing.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Re-derive the m=2 remainder sizing on the CURRENT main files: exact
+      bigint DP anchorSpaceCount for T12d_fam_A and T12d_fam_B at m=2, rows
+      planned/screened/unscreened per base carried forward from
+      R86_wideAnchor_m2_merge.json, wall-clock projection at R86's measured
+      6.27M rows/s aggregate. Ground-truth control: reproduce R86's T11 equality
+      (428180 anchors = 121680 screened + 306500 refused) exactly. Verdict
+      SIZING-OK only if the remainder fits 28 shards x 30 min x 3 rounds; else
+      SIZING-FAILED with the honest projection, and the sweep tasks must not
+      run."
+  - id: R97-sweepA
+    problem: src/matmul/attempts/R97_m2_famA_search.ts
+    tests: src/matmul/attempts/R97_m2_famA.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Resume the R85 m=2 screen for the T12d_fam_A remainder only, importing
+      the R85/R86 ladder unchanged (rank1Factor, anchorSplit, modpFlatDim
+      prefilter then exact rank<=1 decision); shard over the unscreened anchor
+      range from R97-size, checkpoint per-shard NDJSON with cursors never ahead
+      of counted work. Every row REFUTED or UNRESOLVED with the reason; a
+      budget-limited row is UNRESOLVED, never a refutation. Gating controls:
+      factorisation-roundtrip 40/40 and R86 T11-row reproduction."
+  - id: R97-sweepB
+    problem: src/matmul/attempts/R97_m2_famB_search.ts
+    tests: src/matmul/attempts/R97_m2_famB.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Same sound R85/R86 screen for T12d_fam_B, which R86 never reached: shard
+      over its full m=2 anchor space (exact bigint planned count from R97-size),
+      same per-row instrument, same checkpoint discipline, same gating controls.
+      No coefficient, sparsity or factor ansatz beyond the wide-anchor
+      definition; supports outside enumerated two-support-split anchors are
+      untouched and stated as such."
+  - id: R97-merge
+    problem: src/matmul/attempts/R97_m2_merge.ts
+    tests: src/matmul/attempts/R97_m2_merge.test.ts
+    milestone: M5
+    evidence: CAMPAIGN:R97
+    timeoutMs: 1800000
+    note: Merge all R97 shards plus the R86 screened ranges into
+      R97_wideAnchor_m2_merge.json; closure decided ONLY by the per-base
+      equality anchorsScreened + anchorsRefused === anchorsPlanned against exact
+      bigint DP counts (stringified, never rounded doubles). Refuse closure when
+      the equality fails. On closure write the CAMPAIGN.md R97 row
+      (refuted/unresolved/unscreened per base, 0 survivors). Any surviving
+      candidate is handed to checker.verify(), never claimed by the merge.

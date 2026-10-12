@@ -1,0 +1,57 @@
+label: M8-C1
+goal: Autonomous exact 4x4 matmul scheme over F₂ with rank ≤ 47 (AlphaTensor
+  parity). Close the gap from current best rank 49 to rank 47 without importing
+  AlphaTensor's published tensors.
+rationale: The campaign landed rank 49 via two-level Strassen (R87), but the
+  AlphaTensor parity target is 47. A focused, iterative improvement approach on
+  the search machinery and screening instruments can systematically close this
+  2-rank gap. Prioritizing targeted instruments over blind enumeration maximizes
+  budget efficiency.
+budget:
+  maxRounds: 4
+stopConditions:
+  - Rank <= 47 scheme found and merged to main
+  - 4 rounds completed without finding rank <= 47
+  - No progress (same best rank) across 2 consecutive rounds
+tasks:
+  - id: M8-C1-1
+    problem: src/matmul/attempts/M8C1_search_v1.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 1800000
+    note: Improved two-level Strassen search with tightened signed-mask encoding to
+      target rank 47 directly; reuse R87's base structure with modified
+      coefficient constraints.
+  - id: M8-C1-2
+    problem: src/matmul/attempts/M8C1_screen_v1.ts
+    tests: src/matmul/tools/screen test.ts
+    milestone: M8
+    success: improved_fdim
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 600000
+    note: New screening instrument that computes flatDim across all three axes
+      simultaneously; designed to prune more rows than the single-axis flatDim
+      in R74/R77, reducing the search space before Strassen-level search.
+  - id: M8-C1-3
+    problem: src/matmul/attempts/M8C1_round2.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: any_improvement
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 1800000
+    note: Second round using refined instruments from tasks 1 and 2; budget-limited
+      to close the gap. If rank 47 not reached, produce a report on the largest
+      remaining gap and candidate structures.
+  - id: M8-C1-4
+    problem: src/matmul/attempts/M8C1_evaluate.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: evaluation_complete
+    evidence: CAMPAIGN:M8-C1
+    timeoutMs: 300000
+    note: "Evaluate results from rounds 1-3: measure the rank distribution, identify
+      the most promising candidate structures, and decide whether to iterate
+      with a new proposal or close the space. Outputs a concise verdict with
+      evidence rows."

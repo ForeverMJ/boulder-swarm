@@ -1,0 +1,52 @@
+label: M8-A1
+goal: Autonomous F_2 search for exact 4x4x4 matrix multiplication scheme with
+  rank <= 47 (AlphaTensor parity)
+rationale: >
+  The M8 milestone requires discovering an exact 4x4x4 scheme over F_2 with at
+  most 47 scalar multiplications, matching AlphaTensor's Nature 2022 record. The
+  current baseline (A1_f2_scheme.ts) uses naive(4) at rank 64. A stepwise
+  approach closes the gap: (1) establish a two-level Strassen baseline at rank
+  49, (2) apply structured 2-term mergings of Strassen triples to reduce term
+  count, (3) implement F_2 beam search over factor sets to explore the
+  near-rank-47 landscape, (4) integrate exact coefficient solving on fixed
+  supports to convert candidates to exact schemes. This four-task plan mirrors
+  the proven campaign pattern of iterative narrowing from broad search to
+  deterministic exactification.
+budget:
+  maxRounds: 4
+stopConditions:
+  - rank<=47 exact scheme found and goalCheckA exits 0
+  - supervisor retries exhausted within maxRounds
+  - no new candidate rows in working directory for 2 consecutive rounds
+tasks:
+  - id: M8-A1-1
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: scheme exported with rank 49 over F_2; goalCheckA prints M8 GOAL NOT
+      MET with rank 49 listed
+    note: two-level Strassen baseline; 64 terms reduced to 49 via two-level
+      recursion structure
+  - id: M8-A1-2
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: scheme rank reduced to <= 47 over F_2; goalCheckA exits 0 with BESTA47
+    note: structured 2-term mergings of the 7 Strassen triples
+      (left-ideal/octonion-style linear combos that stay rank-1 over F_2)
+  - id: M8-A1-3
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: beam search produces rank<=47 candidate; exact coefficient solve on
+      fixed support confirms consistency => BESTA47
+    note: F_2 beam search keeping hundreds of partial states; interleaved merge/flip
+      moves on promising states around ranks 51-54 before greedy drain
+  - id: M8-A1-4
+    problem: src/matmul/attempts/A1_f2_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: 'goalCheckA exits 0; FINAL:
+      {"task_id":"A1","verdict":"PASS","passed":1,"total":1} printed'
+    note: final exactification; every rank<=47 candidate verified against goalCheckA
+      before round close; checkpoint rows to attempts/A1_<name>.ndjson

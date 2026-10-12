@@ -1,0 +1,39 @@
+label: M8-B1
+goal: Autonomously discover an exact 4x4x4 matrix multiplication scheme with
+  rank <= 47 over F_2, without importing AlphaTensor's published tensors,
+  continuing from the current frontier of rank-49 two-level Strassen
+rationale: The A1 chase (R87-R96) has established rank-49 as the exact floor via
+  two-level Strassen search. The remaining +2 term gap to reach AlphaTensor
+  parity target 47 requires structured ILS probes around the two-level skeleton
+  followed by exact coefficient solving to close that gap from the verified
+  frontier rather than open-ended exploration
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 with rank<=47 scheme landing
+  - BESTA47 appears on scoreboard
+tasks:
+  - id: M8-B1-task1
+    problem: src/matmul/attempts/A1_sisyphus.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: two-level-strassen-verified
+    note: Recover the two-level Strassen scheme from archived branch
+      agent/goal-w0-A1@r45_c8e92f3 and verify it achieves exact rank 49 over F_2
+      via goalCheckA
+  - id: M8-B1-task2
+    problem: src/matmul/attempts/A1_sisyphus_v2_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: 47-candidate-probed
+    note: Run structured ILS probes around the two-level Strassen skeleton targeting
+      the +2 gap; identify rank-47 candidates with minimal mismatches (bestMm <=
+      16)
+  - id: M8-B1-task3
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: exact-solve-consistent
+    note: Run exact coefficient solve on best rank-47 candidates from task2; if
+      CONSISTENT verdict, BESTA47 fires and milestone lands per goalCheckA exit
+      0

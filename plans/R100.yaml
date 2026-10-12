@@ -1,0 +1,69 @@
+label: R100
+goal: M8 AlphaTensor parity - exact 4x4x4 rank<=47 scheme over F_2 via the v5
+  composition loop (ILS/ALS probes + exact F_2 coefficient solve on every
+  rank-47 candidate support), closing the named remainder left by R99.
+rationale: "R99-size censused 106 near-miss supports (75 replayable spark
+  repair-drop states at rank 47/48 with full vecs, 25 v2 exact-49 floor states,
+  6 log-only). R99-sweepB exact-solved only its own 12 ILS candidates (all 12
+  INCONSISTENT-retired, unmatched=0 for seeds 22/66) and R99-sweepA drained only
+  the 4126ca7f anchor (53->49 exact, best 49). The 75 replayable spark rank-47
+  supports from commit 17970a9 have NEVER been exact-solved: that is the sized
+  remainder, and per the v5 doctrine no rank-47 candidate may stay unmatched.
+  New ILS seeds/budgets and drain/meld around the exact-49 floor states are the
+  only other replayable ground. Note for the coordinator: A1's success marker
+  BESTA47 never appears in scoreboard output (scoreboard prints only
+  BEST23/BEST22), so A1 scores 0 even on a win; R100 tasks therefore judge via
+  colocated harness tests, never via scoreboard markers."
+budget:
+  maxRounds: 4
+stopConditions:
+  - bun src/matmul/goalCheckA.ts exits 0 (exact rank<=47 over F_2 lands on main)
+  - every replayable spark rank-47 support in R99_snap_census.json is
+    exact-solved with unmatched=0 (CONSISTENT ships scheme, INCONSISTENT
+    retires)
+  - maxRounds exhausted with honest bounded-red rows (bounded nulls reported as
+    bounded, never as exhaustion or impossibility)
+tasks:
+  - id: R100-snapspark
+    problem: src/matmul/attempts/R100_snap_spark.ts
+    tests: src/matmul/attempts/R100_snap_spark.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Recover the exact F_2 solve machinery (gaussSolve/solveSupport) from
+      branch agent/goal-w2-R99-sweepB (R99_snap_ils.ts). Exact-solve every
+      replayable spark rank-47/48 support in R99_snap_census.json (75 states,
+      commit 17970a9 vecs): CONSISTENT ships an exact scheme file, INCONSISTENT
+      retires the hash with axis/mm/intMm. Checkpoint candidate hash, axis,
+      consistency and mismatch counts to R100_snap_spark.ndjson. Controls: floor
+      seed solves CONSISTENT, a retired R99 ILS hash re-derives INCONSISTENT.
+      File-ownership attempts/R100_snap_spark* only; no AlphaTensor tensors."
+  - id: R100-seedils
+    problem: src/matmul/attempts/R100_seed_ils.ts
+    tests: src/matmul/attempts/R100_seed_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Fresh ILS ground only (seeds other than 22/66, longer budgets than
+      R99-sweepB's 8s lanes): probe from the exact-49 floor, and exact-solve
+      EVERY new rank-47 candidate on its fixed support before the window closes
+      (unmatched=0 invariant). Checkpoint vecs+hashes for all best states.
+      File-ownership attempts/R100_seed_ils* only; bounded reds stay bounded."
+  - id: R100-drain49
+    problem: src/matmul/attempts/R100_drain49.ts
+    tests: src/matmul/attempts/R100_drain49.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Deterministic drain/meld from replayable exact-49 states (sweepA 1e8db216
+      plus the 25 v2 floor hashes): merge/flip moves toward 47 with full
+      factor-vector checkpoints and stable hashes; any rank<=47 candidate is
+      verified with the goalCheckA gate path. Skip already-processed R99 hashes.
+      File-ownership attempts/R100_drain49* only."
+  - id: R100-merge
+    problem: src/matmul/attempts/R100_merge.json
+    tests: src/matmul/goalCheckA.ts
+    milestone: M8
+    evidence: CAMPAIGN:R100
+    note: "Adjudication merge, run AFTER its R100 siblings land: re-verify every
+      R100 input with verifyMod2 plus the goalCheckA gate path, snap-check for
+      unsnapped rank<=47 supports, drift-check hashes, and append the
+      substantive CAMPAIGN.md row for R100 that this evidence cites. Bounded
+      verdicts only (BOUNDED-NO-WITNESS while 47 stands)."

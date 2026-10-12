@@ -1,0 +1,33 @@
+label: R90
+goal: "m=3 wide-anchor sizing: exact anchor counts and rows for T12d_fam_A+T12d_fam_B
+  at the m=3 layer (26-term anchors, drop k=5, C(26,5)=65780 rows/anchor, j=1),
+  measured per-shard throughput, and a shards/budget recommendation for a closure
+  round - or an honest infeasibility projection"
+rationale: "the m=2 layer closed by enumeration (R85: 9.55M anchors, 53.3B rows,
+  28 shards, 2.6h). The m=3 layer has 5.2x rows per anchor and an anchor count that
+  grows from distinct-slot pairs to triples, so a closure round must not launch
+  blind: size first, then decide"
+budget:
+  maxRounds: 2
+stopConditions:
+  - "both artifacts landed through the gate with real counts: sizing done, planner writes the closure proposal"
+  - "projection shows closure infeasible by enumeration: report the projection, do NOT launch a closure round"
+tasks:
+  - id: R90-size
+    problem: src/matmul/attempts/R90_m3_sizing.ts
+    tests: src/matmul/attempts/R90_m3_sizing.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "exact counts only: per-base anchor count via slot-group closed form
+      (streaming m=3 anchors is itself infeasible), rowsPerAnchor=C(26,5)=65780,
+      totalRows, and a core-hours projection at a calibrated rows/s. Report
+      numbers; claim nothing closed"
+  - id: R90-probe
+    problem: src/matmul/attempts/R90_m3_probe.ts
+    tests: src/matmul/attempts/R90_m3_probe.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "measured throughput: run the m=3 row loop on a bounded anchor sample
+      with 1 vs 4 vs 8 parallel shard processes (~40s each), record rows/s and
+      speedup, and recommend shards/budget for a closure round or declare it
+      infeasible. Claim nothing closed"

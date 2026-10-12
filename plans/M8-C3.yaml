@@ -1,0 +1,45 @@
+label: M8-C3
+goal: "Construct exact 4x4x4 matrix multiplication scheme over F_2 with rank <=
+  47 (AlphaTensor parity), matching M8 done_when: A1 从零自主搜索（不导入 AlphaTensor
+  已发表张量）构造精确 rank<=47 over F₂ 的方案并经合并门落盈"
+rationale: >
+  Break down the A1 task into specific, judgeable subtasks:
+
+  (1) Set up search infrastructure and verify naive(4) baseline (64 terms, rank
+  64 over F_2) and Strassen two-level baseline (49 terms, rank 49 over F_2) as
+  exact schemes, producing on-disk artifacts the gate can read.
+
+  (2) Implement 2-term merge procedures to search for rank-47 candidates from
+  the 49-term base, with exact coefficient solve (R69 machinery) to convert
+  candidates with mismatches into exact rank-47 schemes. Prefer closing named
+  remainder spaces (k=2, k=3 deficits) over open-ended enumeration.
+
+  The plan closes the k=2 and k=3 deficit spaces before considering larger k,
+  matching the campaign's pattern of closing smaller bands first.
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 with exact rank<=47 scheme
+  - BESTA47 marker appears in scoreboard
+tasks:
+  - id: M8-C3-1
+    problem: src/matmul/attempts/A1_scheme.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C3
+    timeoutMs: 1800000
+    note: Set up search infrastructure and verify naive(4) baseline (64 terms, exact
+      rank over F_2) and Strassen two-level baseline (49 terms, exact rank over
+      F_2) as checkpointed exact schemes under attempts/.
+  - id: M8-C3-2
+    problem: src/matmul/attempts/A1_2merge.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:M8-C3
+    timeoutMs: 1800000
+    note: Implement 2-term merge procedures to search for rank-47 candidates from
+      the 49-term base, with exact coefficient solve to convert candidates into
+      exact rank-47 schemes; close k=2 and k=3 deficit spaces before widening to
+      larger k.

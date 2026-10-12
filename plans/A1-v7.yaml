@@ -1,0 +1,41 @@
+label: A1-v7
+goal: M8 A1 parity with AlphaTensor - find exact rank≤47 over F₂
+rationale: Current best is exact 49 from two-level Strassen (R87); need to close
+  the 2-term gap via ILS search + exact coefficient solve (R69 machinery). 87+
+  campaign rounds have established a rank-49 floor with full factor vectors;
+  next step is interleaved merge/flip probes from best floor states with exact
+  solve on any rank-47 candidates.
+budget:
+  maxRounds: 4
+stopConditions:
+  - no exact-47 found after 4 rounds with exact coefficient solve
+  - all ILS/probe variants exhausted from rank-49 floor
+tasks:
+  - id: A1-v7-1
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+  - id: A1-v7-2
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts (coeffSolve path)
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: rank<=47 consistency=CONSISTENT
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+  - id: A1-v7-3
+    problem: src/matmul/attempts/A1_sisyphus_v3_search.ts (ILS probes)
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: new best state checkpoint with hash
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000
+  - id: A1-v7-4
+    problem: goalCheckA.ts gate verification
+    tests: src/matmul/goalCheckA.test.ts
+    milestone: M8
+    success: goalCheckA exit 0
+    evidence: CAMPAIGN:A1-v7
+    timeoutMs: 1800000

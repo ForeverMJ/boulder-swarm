@@ -1,0 +1,75 @@
+label: R98
+goal: Close the m=2 wide-anchor remainder the R97 instruments sized but did not
+  close, with size-first discipline; m=3 enumeration stays out of scope per R90
+rationale: "R90 sized m=3 at 17131845672 anchors x 65780 rows = 1126932808304160
+  rows (~1565184 core-hours, SIZING-FAILED with a documented slot-vs-term
+  ground-truth mismatch) and its probe measured closureFeasible false (full
+  layer ~78685 wall-hours at best aggregate throughput), so m=3 by enumeration
+  is closed as infeasible and must not be re-proposed. R97 sized m=2 at 14880800
+  anchors x 12650 rows = 188242120000 rows and landed the famA/famB sweep
+  instruments plus their tests, but no full m=2 closure exists: the T11 band
+  (428180 anchors, 5416477000 rows) is the smallest and cheapest to close first,
+  then famB (5383004 anchors), then famA. Every task sizes before closing,
+  reuses the landed R97 ladder unchanged (modp prefilter, exact flatDim, clique,
+  exact rank-1 cover), checkpoints cursor-after-work so a checkpoint never runs
+  ahead, and reports bounded nulls as bounded rather than as refutations."
+budget:
+  maxRounds: 4
+stopConditions:
+  - exact rank<=22 scheme lands and goalCheck exits 0 (goal met, stop all work)
+  - m=2 T11 band fully screened with 0 unresolved and 0 admissible (cheapest
+    band closed)
+  - R98-size reproduces the R90 slot-vs-term discrepancy and locks distinct-term
+    DP counts on current main files (sizing reconciled, sweeps proceed on true
+    numbers)
+  - two consecutive rounds screen zero new rows with no new instrument
+    (no-progress halt, do not spin the month)
+tasks:
+  - id: R98-size
+    problem: src/matmul/attempts/R98_m2_reconcile.ts
+    tests: src/matmul/attempts/R98_m2_reconcile.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Reconcile R90's SIZING-FAILED on current main files: enumerate
+      refinements for T11_solution, T12d_fam_A, T12d_fam_B, report BOTH counts
+      per base (distinct term:mode slots e2/e3 AND distinct-term DP
+      anchorSpaceCount), name which formula each historic number used, emit a
+      shard plan for the m=2 sweeps below. Test is an independent re-derivation
+      (own enumerator, no import of the implementation) that locks pool sizes,
+      both counts, rowsPerAnchor 12650, and the shard cursors. Must not claim
+      closure of any band."
+  - id: R98-sweepT11
+    problem: src/matmul/attempts/R98_m2_t11_search.ts
+    tests: src/matmul/attempts/R98_m2_t11.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Sharded exact m=2 sweep over T11_solution only (428180 anchors, 12650
+      rows each, smallest band): reuse the landed R97 ladder unchanged, resume
+      past R97 cursors if present, checkpoint cursor only after the chunk is
+      counted, per-row verdict refuted/unresolved/admissible with stage
+      attribution. Bounded nulls reported as bounded with unscreenedFrom; a
+      survivor must be handed to checker.verify before any claim. Test gates
+      controls (factorisation roundtrip, planted rank-1 accept/reject) plus
+      cursor-resume integrity."
+  - id: R98-sweepFamB
+    problem: src/matmul/attempts/R98_m2_famB_search.ts
+    tests: src/matmul/attempts/R98_m2_famB.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Sharded exact m=2 sweep over T12d_fam_B (5383004 anchors per R97 DP count
+      on the current file; re-derive, do not quote): same ladder, same
+      checkpoint discipline and verdict taxonomy as R98-sweepT11. Extends the
+      R97_m2_famB instrument rather than replacing it; imports from it where
+      sound, duplicates nothing silently. Partial coverage is an honest bounded
+      result, never a partial refutation."
+  - id: R98-merge
+    problem: src/matmul/attempts/R98_m2_merge.ts
+    tests: src/matmul/attempts/R98_m2_merge.test.ts
+    milestone: M5
+    timeoutMs: 1800000
+    note: "Merge job for the R98 shard streams: assert every shard present and
+      distinct, totals reconcile (rowsPlanned vs rowsScreened vs
+      rowsUnscreened), no checkpoint ahead of work, gating controls green on
+      every shard, survivors re-verified with checker.verify, tools/verifyAll
+      stays ALL-CLAIMS-REPRODUCE. Emits the closed vs unresolved vs unscreened
+      partition per base; unresolved rows are named targets, not refutations."
