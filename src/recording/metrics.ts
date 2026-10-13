@@ -36,7 +36,7 @@ function toCsv(results: readonly WorkerResult[]): string {
 // the supervisor journal - because a supervisor that dies while recording its
 // own history has turned a recoverable crash into an unrecoverable one.
 // Anything that is not an Error still propagates.
-async function loadHistory(jsonPath: string): Promise<readonly WorkerResult[]> {
+export async function loadHistory(jsonPath: string): Promise<readonly WorkerResult[]> {
   let text: string
   try {
     text = await readFile(jsonPath, "utf-8")
@@ -70,7 +70,7 @@ async function quarantine(jsonPath: string): Promise<void> {
 // Same shape as S1's `saveState`: a half-written ledger is worse than a stale one,
 // because the next read cannot parse it and the accumulation starts over from
 // nothing. Write a sibling scratch file, then rename over the target.
-async function writeAtomic(path: string, body: string): Promise<void> {
+export async function writeAtomic(path: string, body: string): Promise<void> {
   const scratch = `${path}.${process.pid}.partial`
   try {
     await writeFile(scratch, body, "utf-8")
