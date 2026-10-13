@@ -7,13 +7,18 @@ Experimental agent-directed replanning: [protocol](PROGRESS.md),
 [independent Coding Agent test handoff](docs/strategy-testing.zh-CN.md).
 This opt-in feature has not demonstrated a live-model performance gain.
 
-**A goal-driven multi-agent swarm that ships verified results — like Sisyphus, except the boulder ships.**
+**A goal-driven multi-agent system for long-horizon work. You define the goal
+and the checker; the swarm runs for weeks — through crashes, host reboots and
+model outages — and nothing counts as done until the checker agrees.** Like
+Sisyphus, except the boulder ships.
 
 One frozen goal tree fans out to parallel coding agents working in isolated git
 worktrees. Nothing reaches `main` except through a merge gate that runs the
 harness again on main and reverts on failure. Every claim is re-derived by a
 deterministic checker. The swarm distills its own lessons and keeps going until
-the goal is actually done — not until it *says* it's done.
+the goal is actually done — not until it *says* it's done. New work enters the
+frozen tree only as planner-minted proposal files (`plans/*.yaml`), so the
+system can redirect its own strategy without ever drifting the goal.
 
 ```
 goal.yaml → dispatch (file-ownership) → agents in git worktrees → harness verify
@@ -32,7 +37,7 @@ goal.yaml → dispatch (file-ownership) → agents in git worktrees → harness 
   solver at **full coverage of 10⁷ in 0.9 s** (E4). Every landing went through
   the gate; every claim re-verified by exact BigInt rational arithmetic.
 
-**It spent 28 rounds grinding an open problem and never once lied about it.**
+**It spent 87 rounds grinding an open problem and never once lied about it.**
 
 - **M5: exact 3×3 matrix-multiplication tensor rank ≤ 22** — open since 1976,
   stuck at Laderman's 23. The swarm:
@@ -51,6 +56,20 @@ goal.yaml → dispatch (file-ownership) → agents in git worktrees → harness 
     the anchors, the fully free-coefficient question, border-rank routes) is
     named, not sugar-coated.
 
+**It is now chasing AlphaTensor's 4×4 record — from scratch, and it plans its own rounds.**
+
+- **M8: exact 4×4 matrix multiplication over F₂, rank ≤ 47** — the number
+  AlphaTensor published (Nature 2022), which the swarm must reach *without
+  importing any published tensor*. From a verified rank-49 two-level-Strassen
+  floor it has run 13 planner-minted rounds (R90–R108): seeded ILS, walk
+  search with unitary reweighting and kink moves, orbit-family drain/meld,
+  and eligibility-close sweeps — every rank ≤ 47 candidate exact-solved
+  in-window, every lane-best state checkpointed with full factor vectors and
+  stable hashes. `goalCheckA.ts` exits 1 until `BESTA47` exists; it still
+  exits 1. The tasks themselves are proposed by the swarm's own planner:
+  proposal files in `plans/` are the only path into the frozen goal tree, and
+  every promoted task still lands through the same merge gate.
+
 **It improved itself while it worked.**
 
 - 16 real defects surfaced during the campaign — a Windows-only process-tree
@@ -58,7 +77,7 @@ goal.yaml → dispatch (file-ownership) → agents in git worktrees → harness 
   would have let rank-23 noise pass as solved, a lifetime-vs-per-run budget
   collision that froze restarts, worktree reuse that destroyed un-merged round
   artifacts — **every one of them caught by the system's own gates or judges,
-  fixed test-first, and locked in** (435 tests, 67 files, zero failing).
+  fixed test-first, and locked in** (691 tests, 94 files, zero failing).
 - Non-trivial self-caught bugs: agents flagged their *own* tools (a
   rank-monotonicity violation in a screening instrument; a degenerate-subspace
   guard), rewrote/retracted their own rows, and once **deleted a near-miss
@@ -79,14 +98,22 @@ exits non-zero on drift.
   artifact existence, scoreboard markers) *or* harness tests — but a merge only
   counts at `pass_rate == 1` **and** `total > 0`; unparsed 0/0 is failure, not
   success.
+- **Planner**: an agent proposes the next rounds as `plans/*.yaml`; approved
+  tasks are promoted into the frozen tree (R90–R108 were minted this way). The
+  goal never moves — only the strategy does.
 - **Merge gate**: merge → test on main (tsc + biome too) → revert on failure.
   It is the only path to main; gate rollbacks can never eat un-committed WIP
   (stash-guarded).
 - **Memory**: append-only trajectories (JSONL per run), metrics ledgers
-  (corrupt files quarantined, never overwritten), auto-distilled wiki lessons.
-- **Supervisor loop** (`--supervise`): crash-survivor rounds are marked
-  abandoned and requeued; goal > budget > no-progress stop precedence; repeated
-  identical outcomes halt instead of burning quota for a month.
+  (corrupt files quarantined, never overwritten), and a wiki distilled from
+  the *accumulated* ledger — a run can no longer erase the lessons of every
+  run before it.
+- **Supervisor loop** (`--supervise`): built for weeks-long runs. The journal
+  is atomic (temp file + rename), crash-survivor rounds are marked abandoned
+  and requeued, and a restart — process crash, host reboot, or model outage —
+  resumes from the last receipt instead of starting over. Goal > budget >
+  no-progress stop precedence; repeated identical outcomes halt instead of
+  burning quota for a month.
 
 Where it shined: bounded-repair sweeps, exact rank tests, ladder recovery from
 archive branches (`agent/goal-w0-T12@r*`), mid-run rescues with zero data loss.
@@ -95,7 +122,7 @@ archive branches (`agent/goal-w0-T12@r*`), mid-run rescues with zero data loss.
 
 ```bash
 bun install
-bun test                          # 435 tests
+bun test                          # 691 tests
 bunx tsc --noEmit && bunx biome check src
 
 bun src/orchestrator/runLoop.ts --workers 12          # dispatch plan (dry)
@@ -109,6 +136,7 @@ bun src/eval/leaderboard.ts       # regenerates BENCHMARK.md
 
 bun src/matmul/scoreboard.ts      # campaign table (always exit 0)
 bun src/matmul/goalCheck.ts       # the M5 gate: exit 0 iff exact rank<=22 exists
+bun src/matmul/goalCheckA.ts      # the M8 gate: exit 0 iff exact rank<=47 over F2 exists
 bun src/matmul/tools/verifyAll.ts # re-derives every claim; drift => nonzero
 ```
 
@@ -118,8 +146,9 @@ Runs on a **free-tier model** (`opencode-go/space-bunny-free`; override with
 
 ## Honest limits
 
-- The open problem stays open: rank ≤ 22 is *not* solved; the system narrows
-  the space and refuses to fake a witness.
+- Both open problems stay open: 3×3 rank ≤ 22 is *not* solved, and 4×4 rank
+  ≤ 47 over F₂ is *not* reached — `BEST22=none` and `goalCheckA` exits 1. The
+  system narrows the space and refuses to fake a witness.
 - Field discipline: `19 ≤ R ≤ 23` over Q/R and `21 ≤ R_F₂ ≤ 23` over F₂ —
   bounds never transfer between fields; every artifact states its field.
 - Best at problems where a **deterministic checker** can judge the work:
@@ -130,9 +159,10 @@ Runs on a **free-tier model** (`opencode-go/space-bunny-free`; override with
 
 ```
 goal.yaml           # the frozen L0→L1→L2 tree (+ policy)
+plans/              # planner proposals - the only path into the frozen tree
 src/orchestrator/   # runLoop CLI, scheduler, git/mergeGate, agent lifecycle, supervisor journal
 src/problems/       # 9 numbered algorithm tasks (test file is the judge)
-src/matmul/         # the M5 campaign: checker, scoreboard, goalCheck, attempts/, tools/, verify/, lit/
+src/matmul/         # the M5 (3x3, rank<=22) and M8 (4x4 over F2, rank<=47) campaigns
 src/es4/            # the Erdős–Straus ladder (E1–E4)
 src/eval/           # harness, e2eProof, gateProof, leaderboard
 src/recording/      # append-only trajectories/metrics/wiki writers
@@ -143,7 +173,8 @@ CAMPAIGN.md         # 87-round M5 log (generated rounds + distilled findings)
 ## What this is for
 
 If you're building agentic systems that are supposed to produce **verified**
-work instead of confident prose, this repo is a working end-to-end example:
-goal decomposition, isolated execution, deterministic verification, honest
-scoring, crash-tolerant supervision, and an append-only audit trail — over a
-50-year-old open problem and a solved one, in the same repo.
+work instead of confident prose — over weeks, not minutes — this repo is a
+working end-to-end example: goal decomposition, isolated execution,
+deterministic verification, honest scoring, crash-tolerant supervision, and an
+append-only audit trail — over a 50-year-old open problem, a record-chasing
+one, and a solved one, in the same repo.
