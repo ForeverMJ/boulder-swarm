@@ -1,0 +1,104 @@
+label: R104
+goal: "Close AlphaTensor parity (M8): land an exact 4x4 rank<=47 scheme over F2
+  through the walk, eligibility-close, and orbit-drain lanes, with the n=4
+  judges audited first"
+rationale: "M8 stands at the exact-49 floor against the 47 record (gap 2).
+  Planned R99-R103 already cover census, spark drain, fresh-seed ILS, replay
+  corpus, and structured 2-term merge. The uncovered remainder is: (a) the walk
+  ansatz lane (SS+reduce unitary-reweighting walks at @r59_a7f7686) with fresh
+  seeds plus in-window exact-solve, (b) the close move, which never executed on
+  an eligible state (examined=0 on v2 hashes), (c) the orbit-family rank-49
+  anchors at @r65_7a03c63, which no drain lane has touched, and (d) no machine
+  audit of the n=4 judges since R89. Four parallel workers on distinct files;
+  witness lanes retry via BESTA47-red while the finite inventory jobs close in
+  one round."
+budget:
+  maxRounds: 4
+stopConditions:
+  - "BESTA47 fires: goalCheckA exits 0 on an exact n=4 rank<=47 scheme over F2"
+  - "all witness lanes report bounded verdicts with no witness for two
+    consecutive rounds: replan a fresh lane instead of re-running these stems"
+  - "the gate audit surfaces a judge misclassification: halt all sweep lanes and
+    fix the judges first"
+  - "budget exhausted: maxRounds reached with no witness landed"
+tasks:
+  - id: R104-walk
+    problem: src/matmul/attempts/R104_walk_search.ts
+    tests: src/matmul/attempts/R104_walk.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Fresh walk-lane ground from the exact-49 floor (A1.md round-59 SS+reduce
+      instrument, branch agent/goal-w0-A1@r59_a7f7686): recover the walk search
+      script, run unitary-reweighting walks plus kink moves from the exact-49
+      floor using ONLY new seeds (exclude every previously run ILS and walk
+      seed: 22, 66, 7, 77, 107, 207, 307, 407), interleave the exact F2
+      coefficient solve on EVERY rank<=47 candidate support in-window so no
+      candidate is left unmatched, checkpoint full factor vectors plus stable
+      hashes for all lane-best states to R104_walk.ndjson, verify any exact
+      rank<=47 candidate with verifyMod2 plus the goalCheckA gate path and emit
+      it as attempts/R104_scheme.ts exporting scheme, run exact-solve sweeps
+      under nice -n 19, no AlphaTensor tensors, field F2 throughout. Colocated
+      test asserts the exact-49 floor re-verifies via verifyMod2, every
+      checkpointed best state carries full vecs plus a stable hash, and the gate
+      fires on an emitted witness; a bounded sweep with no witness is honest
+      RED. File-ownership attempts/R104_walk* plus optional
+      attempts/R104_scheme.ts only."
+  - id: R104-eligclose
+    problem: src/matmul/attempts/R104_eligclose_search.ts
+    tests: src/matmul/attempts/R104_eligclose.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Close the vacuous-close remainder (R74 finding: examined=0, hits=0 on v2
+      hashes, so close never ran on an eligible state): enumerate every
+      replayable exact-49 state carrying full vectors (R73 v2 checkpoint states,
+      orbit-family 49s at agent/goal-w0-A1@r65_7a03c63, storm vec rows at
+      @r54_52080c9, spark vec at 17970a9), run the same-axis-factor eligibility
+      screen on each, run the close move ONLY on eligible states, exact-solve
+      every rank<=47 candidate in-window, checkpoint eligibility outcome plus
+      hashes to R104_eligclose.ndjson, verify via verifyMod2 plus the goalCheckA
+      gate path, emit CONSISTENT exact schemes as attempts/R104_scheme_*.ts,
+      keep bounded nulls bounded (BOUNDED-NO-ELIGIBLE or BOUNDED-NO-WITNESS with
+      the residual inventory named), run heavy sweeps under nice -n 19, no
+      AlphaTensor tensors, F2 throughout. Colocated test asserts the inventory
+      count, per-hash eligibility outcomes, close executed on every eligible
+      state, and zero unmatched rank<=47 candidates; passes on honest bounded
+      completion. File-ownership attempts/R104_eligclose* plus optional
+      attempts/R104_scheme_*.ts only."
+  - id: R104-orbitdrain
+    problem: src/matmul/attempts/R104_orbitdrain_search.ts
+    tests: src/matmul/attempts/R104_orbitdrain.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Deterministic drain and meld from the orbit-family rank-49 states at
+      agent/goal-w0-A1@r65_7a03c63, the one replayable exact-49 family no drain
+      lane has touched (R100-drain49 and R101-drain cover the sweepA chain and
+      v2-floor hashes only, so skip those hashes): at least 50 seeded
+      deterministic iterations per start with greedy exact F2 drain, shear
+      flips, split kicks, and deterministic meld, checkpoint full factor vectors
+      plus stable hashes to R104_orbitdrain.ndjson with resume-skip of
+      already-processed hashes, exact-solve every rank<=47 candidate in-window,
+      verify via verifyMod2 plus goalSatisfiedA and emit witnesses as
+      attempts/R104_scheme_*.ts exporting scheme, a bounded sweep with no
+      witness is honest RED, run exact-solve sweeps under nice -n 19, no
+      AlphaTensor tensors, F2 throughout. Colocated test asserts floor
+      re-verification via verifyMod2, vec-plus-hash checkpoint discipline, and
+      gate firing on a witness. File-ownership attempts/R104_orbitdrain* plus
+      optional attempts/R104_scheme_*.ts only."
+  - id: R104-gateaudit
+    problem: src/matmul/attempts/R104_gateaudit.ts
+    tests: src/matmul/attempts/R104_gateaudit.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "M8 judge hygiene before further sweeps (R89 pattern, new scope): assert
+      via verifyMod2 that the landed exact-49 floor scheme on main is correct
+      with rank 49 over F2, assert bun src/matmul/goalCheckA.ts still exits 1 on
+      main (no false-green), assert classify() reports n=4 entries whose exact
+      F2 ranks match verifyMod2 on the floor plus a corrupted-floor negative
+      control that must NOT satisfy the gate, assert the scoreboard lists n=4
+      attempts without breaking its BEST23/BEST22 parse. Colocated test encodes
+      all four checks and passes on green machinery; any failure halts sweep
+      lanes until the judges are fixed. May not modify checker, goalCheckA,
+      goalCheck, scoreboard, or any scheme file. File-ownership
+      attempts/R104_gateaudit* only."

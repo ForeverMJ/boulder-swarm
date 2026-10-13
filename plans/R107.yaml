@@ -1,0 +1,70 @@
+label: R107
+goal: "M8 AlphaTensor parity: exact 4x4 rank<=47 over F_2 via composition closeout"
+rationale: Frontier stands at exact-49 two-level Strassen with repeated
+  ILS-plus-exact-solve composition lanes (R99-R106 census/drain/snap/merge
+  pattern, R106 census plus orbit-drain plus walk-ils on main). The named
+  remainder is unmatched rank-47 supports and undrained exact-49 anchors, not
+  open exploration. R107 sizes that residual first, then drains and ILS-probes
+  fresh ground only, then adjudicates with an exact-solve snap so no rank-47
+  candidate is left unmatched.
+budget:
+  maxRounds: 3
+stopConditions:
+  - goalCheckA exits 0 with an exact rank<=47 scheme over F_2 on main
+  - R107-merge records a substantive CAMPAIGN:R107 row with 0-drift self-check
+  - maxRounds exhausted with all bounded verdicts honestly reported
+tasks:
+  - id: R107-size
+    problem: src/matmul/attempts/R107_census.ts
+    tests: src/matmul/attempts/R107_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure: enumerate every replayable rank-47/48 support across
+      R99_snap_census.json, R105_census.json, R106_census.json,
+      R106_walk_ils.json plus archive branches agent/goal-w0-A1@muse-r72,
+      @r65_7a03c63, @r67_c58dfd0 and spark 4126ca7f at 17970a9, marking each
+      hash retired-live-unmatched with vecs-present and archive pin; emit
+      R107_census.json with exact-solve workload pricing; verdict
+      SIZED-NO-CLOSURE; field F_2 throughout; file-ownership
+      attempts/R107_census.* only; no AlphaTensor tensors"
+  - id: R107-drain
+    problem: src/matmul/attempts/R107_drain49c.ts
+    tests: src/matmul/attempts/R107_drain49c.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic drain/meld from replayable exact-49 anchors not yet drained
+      in R106_orbit_drain (fresh anchor subset from R107-size, skip hashes
+      already checkpointed in R100_drain49 and R101_drain49b ndjson); at least
+      50 iters per start with greedy exact F_2 drain, shear flips, split kicks
+      and deterministic meld, seeded and deterministic; checkpoint full factor
+      vectors plus stable fnv hashes to R107_drain49c.ndjson; verify any
+      rank<=47 candidate via verifyMod2 plus goalSatisfiedA and exact-solve it
+      in-window; bounded red unless a witness lands; file-ownership
+      attempts/R107_drain49c* only; run under nice -n 19
+  - id: R107-ils
+    problem: src/matmul/attempts/R107_seed_ils3.ts
+    tests: src/matmul/attempts/R107_seed_ils3.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero ILS on fresh ground only: seeds exclude all previously run ILS
+      seeds (22, 66, 7, 77, 107, 207, 307, 407 and any seed recorded in
+      R106_walk_ils.json); at least 6 new seeds, at least 10s per lane;
+      calibrate each lane against the exact-49 floor then run ILS at fixed rank
+      47; EVERY rank<=47 zero-mismatch candidate exact-solved on its fixed
+      support in-window with hash, axis, consistency and mismatch counts
+      checkpointed to R107_seed_ils3.ndjson; verdict BOUNDED-NO-CLOSURE unless
+      an exact state is re-verified; file-ownership attempts/R107_seed_ils3*
+      only; no AlphaTensor tensors"
+  - id: R107-merge
+    problem: src/matmul/attempts/R107_merge.ts
+    tests: src/matmul/attempts/R107_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R107
+    timeoutMs: 1800000
+    note: "Adjudication merge, run AFTER its R107 siblings land: re-verify every
+      R107 input with verifyMod2 plus the goalCheckA gate path, exact-solve-snap
+      any unsnapped rank<=47 support from R107-size and both sweeps, drift-check
+      hashes against R106 census counts, emit R107_merge.json with hashes,
+      consistency outcomes and mismatch counts, then record the substantive
+      CAMPAIGN:R107 row (exact-47 scheme or honest bounded-red naming the
+      residual); file-ownership attempts/R107_merge.* only"

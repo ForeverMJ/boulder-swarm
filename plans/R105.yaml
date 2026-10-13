@@ -1,0 +1,69 @@
+label: R105
+goal: Close the R104 remainder toward autonomous exact 4x4x4 rank<=47 over F_2
+  (M8 AlphaTensor parity)
+rationale: R104 ran four M8 lanes (walk, orbitdrain, gateaudit, eligclose) with
+  no witness landed; the replayable-candidate inventory from
+  R99_snap_census.json plus the R104 best-state checkpoints is countable, so
+  size it first, sweep only unprocessed supports and fresh seeds, then
+  adjudicate exactly once
+budget:
+  maxRounds: 2
+stopConditions:
+  - "R105-merge writes the substantive CAMPAIGN:R105 row: closed"
+  - "Budget exhausted with no exact rank<=47 scheme: report bounded reds, never
+    impossibility"
+tasks:
+  - id: R105-size
+    problem: src/matmul/attempts/R105_census.ts
+    tests: src/matmul/attempts/R105_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure (R98 RECONCILED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47/48 support across R99_snap_census.json, the R100
+      snap/solve retirements, and the R104 walk/orbitdrain/eligclose
+      checkpoints; mark each hash PROCESSED versus UNPROCESSED; emit
+      R105_census.json with per-candidate hash, rank, mismatches, vecs-present
+      and archive plus exact-solve workload pricing; verdict SIZED-NO-CLOSURE;
+      file-ownership attempts/R105_census.ts plus .test.ts plus .json only;
+      field F_2 throughout"
+  - id: R105-drain
+    problem: src/matmul/attempts/R105_orbit_drain3.ts
+    tests: src/matmul/attempts/R105_orbit_drain3.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic orbit-drain from R104-orbitdrain best states plus the
+      exact-49 floor anchors, fresh seeds only (exclude all previously run ILS
+      seeds 22, 66, 7, 77, 107, 207, 307 and 407); at least 50 iters per start
+      with greedy exact F_2 drain, shear flips, split kicks and deterministic
+      meld; checkpoint full factor vectors plus stable fnv hashes with
+      resume-skip of R104-checkpointed hashes; verify any rank<=47 candidate via
+      verifyMod2 plus goalSatisfiedA; verdict BOUNDED-RED unless a witness
+      lands; file-ownership attempts/R105_orbit_drain3* only; no AlphaTensor
+      tensors
+  - id: R105-snap
+    problem: src/matmul/attempts/R105_snap_solve3.ts
+    tests: src/matmul/attempts/R105_snap_solve3.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the UNPROCESSED replayable rank-47/48 supports
+      in R105_census.json only (skip every R100/R101-retired and R104-processed
+      hash); recover the gaussSolve per-axis machinery; solve every replayable
+      support exactly over F_2; CONSISTENT ships an exact scheme file,
+      INCONSISTENT retires the hash with axis and mismatch counts; checkpoint
+      candidate hash, axis, consistency and mismatch counts to
+      R105_snap_solve3.ndjson; controls: floor seed solves CONSISTENT and one
+      retired hash re-derives INCONSISTENT; file-ownership
+      attempts/R105_snap_solve3* only; no AlphaTensor tensors"
+  - id: R105-merge
+    problem: src/matmul/attempts/R105_merge.ts
+    tests: src/matmul/attempts/R105_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R105
+    timeoutMs: 1800000
+    note: "Adjudication merge, run AFTER its R105 siblings land: re-verify every
+      R105 input with verifyMod2 plus the goalCheckA gate path, snap-check for
+      unsnapped rank<=47 supports, drift-check hashes against R105_census.json,
+      emit R105_merge.json with hashes, consistency outcomes, mismatch counts
+      and a 0-drift self-check, then record the substantive CAMPAIGN:R105 row
+      (exact-47 scheme or honest bounded-red naming the residual);
+      file-ownership attempts/R105_merge.ts plus .test.ts plus .json only"
