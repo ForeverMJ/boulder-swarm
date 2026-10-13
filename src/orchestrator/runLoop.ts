@@ -559,6 +559,7 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
       writeState(s)
       roundsRunThisRun += 1
       await saveResults(REPO, live.results)
+      await distillFromResults(REPO, live.results)
       await appendEvent(REPO, `${runId}_r${round}`, { type: "round_summary", ts: new Date().toISOString(), round, outcomes })
       return outcomes
     },
