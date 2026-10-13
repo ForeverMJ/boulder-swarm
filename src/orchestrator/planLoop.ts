@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process"
-import { readdir, readFile, writeFile } from "node:fs/promises"
+import { readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import { createWorktree } from "./git"
 import { spawnAgent } from "./opencodeWorker"
@@ -127,6 +127,9 @@ async function main(): Promise<void> {
       .map((f) => f.replace(/\.yaml$/, "").replace(/_.*$/, ""))
     const branch = `agent/planner-r${state.rounds.length + 1}`
     const wt = await createWorktree(repo, `${repo}-worktrees`, 90, branch)
+    // The planner's plans/ dir must start empty: untracked files survive worktree
+    // recreation, and artifact detection requires exactly one NEW proposal.
+    await rm(join(wt, "plans"), { recursive: true, force: true })
     const result = await spawnAgent({
       workdir: wt,
       prompt: plannerPrompt(policyBlock, usedLabels, milestone),
