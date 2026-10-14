@@ -1,0 +1,12 @@
+{"kind":"start","task":"R113-snap","field":"F_2","n":4,"targetRank":47,"queued":4,"seedIls6":4,"census":"src/matmul/attempts/R112_census.json (4 UNPROCESSED rank-47)","resumeSkip":"src/matmul/attempts/R112_snap_solve.ndjson verdicts","controls":["floor-seed-CONSISTENT","spark-037a74ff-INCONSISTENT"]}
+{"kind":"control","name":"floor-seed","consistent":true,"mmBefore":0,"mmAfter":0,"intMmAfter":336,"f2exact":true}
+{"kind":"control","name":"spark-037a74ff","consistent":false,"mmBefore":24,"mmAfter":24,"intMmAfter":337}
+{"kind":"candidate","hash":"12f21302","seed":31013,"source":"seed-ils6","rank":47,"mm":34}
+{"kind":"skipped","hash":"12f21302","rank":47,"source":"seed-ils6","reason":"r112-retired","priorDisposition":"INCONSISTENT-retire","priorConsistent":false,"mm":34,"consistent":false}
+{"kind":"candidate","hash":"50cfdba5","seed":35029,"source":"seed-ils6","rank":47,"mm":37}
+{"kind":"skipped","hash":"50cfdba5","rank":47,"source":"seed-ils6","reason":"r112-retired","priorDisposition":"INCONSISTENT-retire","priorConsistent":false,"mm":37,"consistent":false}
+{"kind":"candidate","hash":"b73f4e8a","seed":29011,"source":"seed-ils6","rank":47,"mm":44}
+{"kind":"skipped","hash":"b73f4e8a","rank":47,"source":"seed-ils6","reason":"r112-retired","priorDisposition":"INCONSISTENT-retire","priorConsistent":false,"mm":44,"consistent":false}
+{"kind":"candidate","hash":"bc2e3e8e","seed":33013,"source":"seed-ils6","rank":47,"mm":36}
+{"kind":"skipped","hash":"bc2e3e8e","rank":47,"source":"seed-ils6","reason":"r112-retired","priorDisposition":"INCONSISTENT-retire","priorConsistent":false,"mm":36,"consistent":false}
+{"kind":"summary","queued":4,"skipped":4,"solved":0,"consistent":0,"unmatched":0,"verdict":"BOUNDED-NO-CLOSURE","shipped":null,"note":"bounded resume-skip sweep: R112-retired hashes skipped, pending replayed from stored vectors; probes not re-run; no exhaustion or impossibility claimed"}
