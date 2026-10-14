@@ -1,0 +1,146 @@
+{
+  "taskId": "R112-census",
+  "field": "F_2",
+  "n": 4,
+  "targetRank": 47,
+  "verdict": "SIZED-NO-CLOSURE",
+  "candidates": [
+    {
+      "id": "seedils6-12f21302",
+      "hash": "12f21302",
+      "field": "F_2",
+      "rank": 47,
+      "mismatches": 34,
+      "vecsPresent": true,
+      "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 31013)",
+      "source": "R111-seed-ils6",
+      "status": "UNPROCESSED",
+      "note": "rank-47 near-miss support over F_2 (47 terms, mm 34); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired"
+    },
+    {
+      "id": "seedils6-50cfdba5",
+      "hash": "50cfdba5",
+      "field": "F_2",
+      "rank": 47,
+      "mismatches": 37,
+      "vecsPresent": true,
+      "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 35029)",
+      "source": "R111-seed-ils6",
+      "status": "UNPROCESSED",
+      "note": "rank-47 near-miss support over F_2 (47 terms, mm 37); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired"
+    },
+    {
+      "id": "seedils6-b73f4e8a",
+      "hash": "b73f4e8a",
+      "field": "F_2",
+      "rank": 47,
+      "mismatches": 44,
+      "vecsPresent": true,
+      "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 29011)",
+      "source": "R111-seed-ils6",
+      "status": "UNPROCESSED",
+      "note": "rank-47 near-miss support over F_2 (47 terms, mm 44); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired"
+    },
+    {
+      "id": "seedils6-bc2e3e8e",
+      "hash": "bc2e3e8e",
+      "field": "F_2",
+      "rank": 47,
+      "mismatches": 36,
+      "vecsPresent": true,
+      "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 33013)",
+      "source": "R111-seed-ils6",
+      "status": "UNPROCESSED",
+      "note": "rank-47 near-miss support over F_2 (47 terms, mm 36); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired"
+    }
+  ],
+  "workload": {
+    "perCandidate": [
+      {
+        "id": "seedils6-12f21302",
+        "hash": "12f21302",
+        "field": "F_2",
+        "rank": 47,
+        "mismatches": 34,
+        "vecsPresent": true,
+        "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 31013)",
+        "source": "R111-seed-ils6",
+        "status": "UNPROCESSED",
+        "note": "rank-47 near-miss support over F_2 (47 terms, mm 34); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired",
+        "unknowns": 2256,
+        "equations": 4096,
+        "gaussXors": 11481993216,
+        "seconds": 3.827331072
+      },
+      {
+        "id": "seedils6-50cfdba5",
+        "hash": "50cfdba5",
+        "field": "F_2",
+        "rank": 47,
+        "mismatches": 37,
+        "vecsPresent": true,
+        "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 35029)",
+        "source": "R111-seed-ils6",
+        "status": "UNPROCESSED",
+        "note": "rank-47 near-miss support over F_2 (47 terms, mm 37); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired",
+        "unknowns": 2256,
+        "equations": 4096,
+        "gaussXors": 11481993216,
+        "seconds": 3.827331072
+      },
+      {
+        "id": "seedils6-b73f4e8a",
+        "hash": "b73f4e8a",
+        "field": "F_2",
+        "rank": 47,
+        "mismatches": 44,
+        "vecsPresent": true,
+        "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 29011)",
+        "source": "R111-seed-ils6",
+        "status": "UNPROCESSED",
+        "note": "rank-47 near-miss support over F_2 (47 terms, mm 44); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired",
+        "unknowns": 2256,
+        "equations": 4096,
+        "gaussXors": 11481993216,
+        "seconds": 3.827331072
+      },
+      {
+        "id": "seedils6-bc2e3e8e",
+        "hash": "bc2e3e8e",
+        "field": "F_2",
+        "rank": 47,
+        "mismatches": 36,
+        "vecsPresent": true,
+        "archive": "src/matmul/attempts/R111_seed_ils6.ndjson (lane-best rank-47 best47, seed 33013)",
+        "source": "R111-seed-ils6",
+        "status": "UNPROCESSED",
+        "note": "rank-47 near-miss support over F_2 (47 terms, mm 36); 47 vecs checkpointed, lane solved=[] / unmatched=0, disjoint from R107, R110 and snap-solve verdicts — priced, not retired",
+        "unknowns": 2256,
+        "equations": 4096,
+        "gaussXors": 11481993216,
+        "seconds": 3.827331072
+      }
+    ],
+    "pricedCount": 4,
+    "totalSeconds": 15.309324288,
+    "retiredCount": 0,
+    "liveCount": 0,
+    "unprocessedCount": 4,
+    "method": "dense upper bound: unknowns = terms * 48 over F_2, 4096 equations (16^3), gauss ~unknowns^3 F_2 XORs at 3e9 XOR/s per core; ESTIMATE only, not a measured runtime"
+  },
+  "sourcesMeasured": [
+    "src/matmul/attempts/R111_seed_ils6.ndjson",
+    "src/matmul/attempts/R107_census.json",
+    "src/matmul/attempts/R110_census.json",
+    "src/matmul/attempts/R109_snap_solve.ndjson",
+    "src/matmul/attempts/R111_snap_solve.ndjson"
+  ],
+  "sourcesNotMeasured": [
+    "rank-49 floor calibrations in the R111_seed_ils6 lanes: exact-49-adjacent states above the 47 target — pinned as above-target, excluded from the rank-47/48 candidate set by design",
+    "75 retired R107 states (74 spark exact-solved INCONSISTENT in R100, solved 74/74, consistent 0, plus 1 retired ILS control): verdict sources for lifecycle marking only, not re-enumerated here (their INCONSISTENT-retire verdicts stand; re-solving them is not measured here)",
+    "6 LIVE seed-ils + 9 UNMATCHED walk-ils of R107_census.json retired by R109_snap_solve.ndjson (15 INCONSISTENT-retire verdicts, solved 15/15, consistent 0): verdict sources for lifecycle marking only, not re-solved here",
+    "R111_snap_solve.ndjson 6 INCONSISTENT-retire verdicts over the R110 seed-ils5 supports (solved 6/6, consistent 0): verdict source for lifecycle marking only, not re-solved here"
+  ],
+  "note": "Census, not closure. 4 replayable rank-47 supports over F_2 with vecs present, deduped by stable fnv hash: 0 RETIRED, 0 LIVE, 4 UNPROCESSED (fresh R111_seed_ils6 lane-best rank-47, 47 vecs each, disjoint from all 90 R107 hashes, all 6 R110 hashes, all 15 R109 snap-solve verdict hashes and all 6 R111 snap-solve verdict hashes, never exact-solved). No exact support at rank<=47 over F_2: no witness, no band closed, no refutation claimed. M8 target is rank<=47 over F_2.",
+  "generatedAt": "2026-10-14T01:34:29.954Z"
+}
