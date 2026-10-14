@@ -1,0 +1,34 @@
+{"kind":"start","task":"R111-snap","field":"F_2","n":4,"targetRank":47,"queued":6,"seedIls5":6,"census":"src/matmul/attempts/R110_census.json (6 UNPROCESSED seed-ils5 lane-best rank-47)","controls":["floor-seed-CONSISTENT","spark-037a74ff-INCONSISTENT"]}
+{"kind":"control","name":"floor-seed","consistent":true,"mmBefore":0,"mmAfter":0,"intMmAfter":336,"f2exact":true}
+{"kind":"control","name":"spark-037a74ff","consistent":false,"mmBefore":24,"mmAfter":24,"intMmAfter":337}
+{"kind":"candidate","hash":"29273eed","seed":27001,"source":"seed-ils5","rank":47,"mm":41}
+{"kind":"solve","hash":"29273eed","axis":0,"ok":false,"mmBefore":41,"mmAfter":41}
+{"kind":"solve","hash":"29273eed","axis":1,"ok":false,"mmBefore":41,"mmAfter":41}
+{"kind":"solve","hash":"29273eed","axis":2,"ok":false,"mmBefore":41,"mmAfter":41}
+{"kind":"verdict","hash":"29273eed","rank":47,"source":"seed-ils5","consistent":false,"mmBefore":41,"mmAfter":41,"intMmAfter":146,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"51e973d1","seed":17001,"source":"seed-ils5","rank":47,"mm":39}
+{"kind":"solve","hash":"51e973d1","axis":0,"ok":false,"mmBefore":39,"mmAfter":39}
+{"kind":"solve","hash":"51e973d1","axis":1,"ok":false,"mmBefore":39,"mmAfter":39}
+{"kind":"solve","hash":"51e973d1","axis":2,"ok":false,"mmBefore":39,"mmAfter":39}
+{"kind":"verdict","hash":"51e973d1","rank":47,"source":"seed-ils5","consistent":false,"mmBefore":39,"mmAfter":39,"intMmAfter":88,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"71c75269","seed":21001,"source":"seed-ils5","rank":47,"mm":40}
+{"kind":"solve","hash":"71c75269","axis":0,"ok":false,"mmBefore":40,"mmAfter":40}
+{"kind":"solve","hash":"71c75269","axis":1,"ok":false,"mmBefore":40,"mmAfter":40}
+{"kind":"solve","hash":"71c75269","axis":2,"ok":false,"mmBefore":40,"mmAfter":40}
+{"kind":"verdict","hash":"71c75269","rank":47,"source":"seed-ils5","consistent":false,"mmBefore":40,"mmAfter":40,"intMmAfter":78,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"9384b1e5","seed":23003,"source":"seed-ils5","rank":47,"mm":38}
+{"kind":"solve","hash":"9384b1e5","axis":0,"ok":false,"mmBefore":38,"mmAfter":38}
+{"kind":"solve","hash":"9384b1e5","axis":1,"ok":false,"mmBefore":38,"mmAfter":38}
+{"kind":"solve","hash":"9384b1e5","axis":2,"ok":false,"mmBefore":38,"mmAfter":38}
+{"kind":"verdict","hash":"9384b1e5","rank":47,"source":"seed-ils5","consistent":false,"mmBefore":38,"mmAfter":38,"intMmAfter":87,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"e84e87b2","seed":25001,"source":"seed-ils5","rank":47,"mm":37}
+{"kind":"solve","hash":"e84e87b2","axis":0,"ok":false,"mmBefore":37,"mmAfter":37}
+{"kind":"solve","hash":"e84e87b2","axis":1,"ok":false,"mmBefore":37,"mmAfter":37}
+{"kind":"solve","hash":"e84e87b2","axis":2,"ok":false,"mmBefore":37,"mmAfter":37}
+{"kind":"verdict","hash":"e84e87b2","rank":47,"source":"seed-ils5","consistent":false,"mmBefore":37,"mmAfter":37,"intMmAfter":85,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"f76c1eb5","seed":19001,"source":"seed-ils5","rank":47,"mm":37}
+{"kind":"solve","hash":"f76c1eb5","axis":0,"ok":false,"mmBefore":37,"mmAfter":37}
+{"kind":"solve","hash":"f76c1eb5","axis":1,"ok":false,"mmBefore":37,"mmAfter":37}
+{"kind":"solve","hash":"f76c1eb5","axis":2,"ok":false,"mmBefore":37,"mmAfter":37}
+{"kind":"verdict","hash":"f76c1eb5","rank":47,"source":"seed-ils5","consistent":false,"mmBefore":37,"mmAfter":37,"intMmAfter":86,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"summary","queued":6,"solved":6,"consistent":0,"unmatched":0,"verdict":"BOUNDED-NO-CLOSURE","shipped":null,"note":"bounded exact-solve sweep: probes not re-run, supports replayed from stored vectors; no exhaustion or impossibility claimed"}
