@@ -201,3 +201,63 @@ describe("planned-task prompt contract", () => {
     expect(p).toContain('FINAL: {"task_id":"R98-size"')
   })
 })
+
+describe("dependsOn layering", () => {
+  const GOAL_WITH_POLICY = `${GOAL}  planner:\n    milestones: [M5]\n    maxTasksPerProposal: 4\n    maxTimeoutMsPerTask: 1800000\n    maxRoundsPerProposal: 4\n    idMustStartWithLabel: true\n`
+  const base = {
+    label: "R99",
+    goal: "g",
+    rationale: "r",
+    stopConditions: ["done"],
+  }
+
+  it("layers merges after their same-proposal dependencies", async () => {
+    const { planLayers } = await import("./planner")
+    const p = loadProposal(dumpProposal({
+      ...base,
+      tasks: [
+        { id: "R99-merge", problem: "m.ts", tests: "m.test.ts", milestone: "M5", dependsOn: ["R99-a", "R99-b"] },
+        { id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5" },
+        { id: "R99-b", problem: "b.ts", tests: "b.test.ts", milestone: "M5" },
+      ],
+    }))
+    expect(planLayers(p)).toEqual([["R99-a", "R99-b"], ["R99-merge"]])
+  })
+
+  it("refuses unknown dependency ids and dependency cycles", async () => {
+    const { planLayers } = await import("./planner")
+    const unknown = loadProposal(dumpProposal({
+      ...base,
+      tasks: [{ id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5", dependsOn: ["R99-ghost"] }],
+    }))
+    expect(() => planLayers(unknown)).toThrow(/unknown task/)
+    const cycle = loadProposal(dumpProposal({
+      ...base,
+      tasks: [
+        { id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5", dependsOn: ["R99-b"] },
+        { id: "R99-b", problem: "b.ts", tests: "b.test.ts", milestone: "M5", dependsOn: ["R99-a"] },
+      ],
+    }))
+    expect(() => planLayers(cycle)).toThrow(/cycle/)
+  })
+
+  it("autoPromote rejects cyclic proposals and threads dependsOn into the tree", () => {
+    const cyclic = loadProposal(dumpProposal({
+      ...base,
+      tasks: [
+        { id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5", dependsOn: ["R99-a"] },
+      ],
+    }))
+    expect(() => autoPromote(GOAL_WITH_POLICY, cyclic)).toThrow(/cycle/)
+    const ok = loadProposal(dumpProposal({
+      ...base,
+      tasks: [
+        { id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5" },
+        { id: "R99-m", problem: "m.ts", tests: "m.test.ts", milestone: "M5", dependsOn: ["R99-a"] },
+      ],
+    }))
+    const { goalYamlText } = autoPromote(GOAL_WITH_POLICY, ok)
+    expect(goalYamlText).toContain("dependsOn")
+    expect(goalYamlText).toContain("R99-a")
+  })
+})

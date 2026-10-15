@@ -16,6 +16,7 @@ const PlanTaskEntry = z.object({
   evidence: z.string().optional(),
   timeoutMs: z.number().int().positive().optional(),
   note: z.string().optional(),
+  dependsOn: z.array(z.string().min(1)).optional(),
 })
 
 const PlanBudget = z.object({
@@ -45,6 +46,31 @@ export type PromotionReceipt = {
   readonly taskIds: readonly string[]
   readonly approvedBy: string
   readonly approvedAt: string
+}
+
+// Execution layers for a proposal: Kahn layering over dependsOn edges so that
+// e.g. a merge task runs in a later layer of the SAME round, after its sweep
+// dependencies have landed on main through the gate. Edges may only reference
+// tasks inside the proposal; cross-round dependencies stay advisory via the
+// timing rule (the records, not the schema, carry them).
+export function planLayers(proposal: PlanProposal): string[][] {
+  const ids = new Set(proposal.tasks.map((t) => t.id))
+  for (const t of proposal.tasks) {
+    for (const d of t.dependsOn ?? []) {
+      if (!ids.has(d)) throw new Error(`task ${t.id} depends on unknown task ${d}`)
+    }
+  }
+  const done = new Set<string>()
+  const layers: string[][] = []
+  while (done.size < ids.size) {
+    const layer = proposal.tasks
+      .filter((t) => !done.has(t.id) && (t.dependsOn ?? []).every((d) => done.has(d)))
+      .map((t) => t.id)
+    if (layer.length === 0) throw new Error("dependency cycle in proposal")
+    layers.push(layer)
+    for (const id of layer) done.add(id)
+  }
+  return layers
 }
 
 export function loadProposal(yamlText: string): PlanProposal {
@@ -177,6 +203,7 @@ function appendEntries(goalYamlText: string, proposal: PlanProposal, planned: bo
     ...(t.evidence === undefined ? {} : { evidence: t.evidence }),
     ...(t.timeoutMs === undefined ? {} : { timeoutMs: t.timeoutMs }),
     ...(t.note === undefined ? {} : { note: t.note }),
+    ...(t.dependsOn === undefined ? {} : { dependsOn: t.dependsOn }),
     ...(planned ? { planned: true } : {}),
   }))
   const next = { ...doc, L2: [...doc.L2, ...entries] }
@@ -233,6 +260,7 @@ export function autoPromote(
       `refusing to auto-promote: maxRounds ${proposal.budget.maxRounds} exceeds policy cap ${policy.maxRoundsPerProposal}`,
     )
   }
+  planLayers(proposal)
   const seenPaths = new Set<string>()
   for (const t of proposal.tasks) {
     for (const p of [t.problem, t.tests]) {
