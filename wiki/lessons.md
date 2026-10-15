@@ -63,6 +63,55 @@
 - [R108-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R108-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R108-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R109-drain] Hypothesis: standard solution passes; Evidence: 21/21; Rule: keep pattern and reuse.
+- [R109-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R109-snap] Hypothesis: standard solution passes; Evidence: 9/9; Rule: keep pattern and reuse.
+- [R110-census] Hypothesis: standard solution passes; Evidence: 15/15; Rule: keep pattern and reuse.
+- [R110-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R111-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R111-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R111-snap] Hypothesis: standard solution passes; Evidence: 9/9; Rule: keep pattern and reuse.
+- [R112-census] Hypothesis: standard solution passes; Evidence: 14/14; Rule: keep pattern and reuse.
+- [R112-drain] Hypothesis: standard solution passes; Evidence: 24/24; Rule: keep pattern and reuse.
+- [R112-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R112-snap] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R113-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R113-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R113-size] Hypothesis: standard solution passes; Evidence: 15/15; Rule: keep pattern and reuse.
+- [R113-snap] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
+- [R114-altbase] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R114-analyze] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R114-audit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R114-sweep] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R115-1] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R115-2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R115-3] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R115-4] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R116-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R116-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R116-size] Hypothesis: standard solution passes; Evidence: 20/20; Rule: keep pattern and reuse.
+- [R116-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 13/13; Rule: retry with different strategy next round.
+- [R117-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R117-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R117-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R117-snap] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
+- [R118-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R118-ils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R118-snap] Hypothesis: standard solution passes; Evidence: 13/13; Rule: keep pattern and reuse.
+- [R119-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R119-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R119-size] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R119-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R120-snapA] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R120-snapB] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R121-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R121-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R121-seedils] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
+- [R121-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R122-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R122-drain49l] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R122-exactsnap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R122-seedils12] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R52] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/6; Rule: retry with different strategy next round.
 - [R90-probe] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R90-size] Hypothesis: standard solution passes; Evidence: 3/3; Rule: keep pattern and reuse.
