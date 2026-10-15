@@ -1,9 +1,10 @@
 import { spawnSync } from "node:child_process"
-import { readdir, readFile, rm, writeFile } from "node:fs/promises"
+import { appendFile, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { join } from "node:path"
+import { z } from "zod"
 import { createWorktree } from "./git"
 import { spawnAgent } from "./opencodeWorker"
-import { autoPromote, dumpProposal, loadProposal } from "./planner"
+import { autoPromote, dumpProposal, loadProposal, planLayers } from "./planner"
 import type { PlanProposal } from "./planner"
 import { replan } from "./replan"
 
@@ -12,12 +13,49 @@ import { replan } from "./replan"
 //
 //   planner agent reads the records and writes a proposal
 //   -> schema validate -> policy-checked autoPromote (no per-round human)
-//   -> runLoop dispatches the new tasks to parallel agents -> gate
+//   -> runLoop dispatches each dependency layer in turn to parallel agents -> gate
 //   -> outcomes feed the next planning round
 //
 // Stops: goal verifier exits 0, plan-round budget exhausted, or a round repeats
 // the previous round's fingerprint exactly (no-progress halt, same as roundLoop).
 // decidePlanAction is pure so the stop logic is judged without processes.
+// Round history is journaled append-only so a crash mid-run loses nothing:
+// --resume rebuilds the round list (and with it the no-progress fingerprint)
+// from trajectories/planloop_journal.jsonl instead of starting blind.
+
+const PlanRoundRow = z.object({
+  label: z.string(),
+  taskIds: z.array(z.string()),
+  solved: z.array(z.string()),
+})
+const JournalRow = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("start"), runId: z.string(), maxRounds: z.number(), ts: z.string() }),
+  z.object({ kind: z.literal("round"), runId: z.string(), round: PlanRoundRow, ts: z.string() }),
+])
+export type JournalRow = z.infer<typeof JournalRow>
+
+export function parsePlanJournal(text: string): JournalRow[] {
+  const rows: JournalRow[] = []
+  for (const line of text.split("\n")) {
+    if (line.trim() === "") continue
+    try {
+      rows.push(JournalRow.parse(JSON.parse(line)))
+    } catch {
+      // corrupt line: skip, never throw - the journal is a recovery aid, not a gate
+    }
+  }
+  return rows
+}
+
+export function roundsOfRun(rows: readonly JournalRow[], runId: string): PlanRound[] {
+  return rows.filter((r): r is Extract<JournalRow, { kind: "round" }> => r.kind === "round" && r.runId === runId)
+    .map((r) => r.round)
+}
+
+export function lastRunId(rows: readonly JournalRow[]): string | undefined {
+  const starts = rows.filter((r) => r.kind === "start")
+  return starts.length === 0 ? undefined : (starts[starts.length - 1] as { runId: string }).runId
+}
 
 export type PlanRound = {
   readonly label: string
@@ -53,6 +91,12 @@ export function decidePlanAction(state: PlanState, signal: PlanSignal): PlanActi
   return { kind: "plan-and-run" }
 }
 
+export function plannerPromptForTest(
+  policyBlock: string, usedLabels: readonly string[], milestone: string,
+): string {
+  return plannerPrompt(policyBlock, usedLabels, milestone)
+}
+
 function plannerPrompt(policyBlock: string, usedLabels: readonly string[], milestone: string): string {
   return [
     "You are the PLANNER in a goal-driven swarm. You do not solve the goal; you decompose it.",
@@ -80,6 +124,17 @@ function plannerPrompt(policyBlock: string, usedLabels: readonly string[], miles
     "Hard rules: all problem/tests paths in one proposal must be DISTINCT (parallel workers",
     "never share a file), and every tests path must be a NEW file - never name an existing",
     "test or judge script, editing a judge into passing is treated as tampering.",
+    "Timing rule: a task that AGGREGATES other tasks' artifacts (merge, audit, report) may",
+    "only reference artifacts already merged on main. Check `git log --format=%s` for",
+    "'gate passed merge' and the tail of metrics/results.json for recent per-task outcomes",
+    "before planning. If you propose sweeps or searches in this round, their merge/audit",
+    "either belongs to a LATER round, or declares dependsOn: [ids of tasks in THIS",
+    "proposal] - such tasks run in a later layer of the same round, after their",
+    "dependencies have landed on main through the gate.",
+    "Scoring rule: never attach a goal-level success marker (e.g. BESTA47) to a task whose",
+    "normal outcome is a bounded null (sweeps, snaps, drains, censuses, analyses) - the",
+    "marker only fires when the goal is actually reached, so honest negative work scores 0",
+    "and is discarded by the gate. Judge such tasks by their own tests or CAMPAIGN evidence.",
     "Prefer closing a named remainder space over open-ended exploration. Size before closing.",
     "The current policy caps:",
     policyBlock,
@@ -95,7 +150,9 @@ async function main(): Promise<void> {
   let maxRounds = 4
   let goalCheck = "src/matmul/goalCheck.ts"
   let milestone = "M5"
+  let resume = false
   for (let i = 2; i < process.argv.length; i++) {
+    if (process.argv[i] === "--resume") resume = true
     if (process.argv[i] === "--rounds") {
       const v = Number.parseInt(process.argv[i + 1] ?? "", 10)
       if (Number.isInteger(v) && v > 0) maxRounds = v
@@ -110,7 +167,19 @@ async function main(): Promise<void> {
     }
   }
 
-  let state: PlanState = { rounds: [], maxRounds }
+  const journalPath = join(repo, "trajectories", "planloop_journal.jsonl")
+  const journalBefore = parsePlanJournal(await readFile(journalPath, "utf-8").catch(() => ""))
+  let runId = `planrun_${new Date().toISOString()}`
+  if (resume) {
+    const last = lastRunId(journalBefore)
+    if (last !== undefined) runId = last
+  }
+  const priorRounds = resume ? roundsOfRun(journalBefore, runId) : []
+  if (!resume || journalBefore.every((r) => r.kind !== "start" || r.runId !== runId)) {
+    await appendFile(journalPath, `${JSON.stringify({ kind: "start", runId, maxRounds, ts: new Date().toISOString() })}\n`, "utf-8")
+  }
+  let state: PlanState = { rounds: priorRounds, maxRounds }
+  if (priorRounds.length > 0) console.log(`resumed run ${runId} with ${priorRounds.length} journaled rounds`)
   for (;;) {
     const goal = spawnSync("bun", [goalCheck], { cwd: repo, encoding: "utf-8" })
     const action = decidePlanAction(state, { goalReached: goal.status === 0 })
@@ -145,10 +214,9 @@ async function main(): Promise<void> {
       console.log(
         `planner produced ${created.length} proposal files in plans/ (want exactly 1, exit ${result.exitCode}); recording a failed round`,
       )
-      state = {
-        ...state,
-        rounds: [...state.rounds, { label: "(no-proposal)", taskIds: [], solved: [] }],
-      }
+      const round: PlanRound = { label: "(no-proposal)", taskIds: [], solved: [] }
+      await appendFile(journalPath, `${JSON.stringify({ kind: "round", runId, round, ts: new Date().toISOString() })}\n`, "utf-8")
+      state = { ...state, rounds: [...state.rounds, round] }
       continue
     }
     const proposalPath = `plans/${created[0]}`
@@ -160,7 +228,9 @@ async function main(): Promise<void> {
       console.log(
         `proposal ${proposalPath} failed schema validation; recording a failed round, not crashing: ${e instanceof Error ? e.message.slice(0, 200) : String(e)}`,
       )
-      state = { ...state, rounds: [...state.rounds, { label: proposalPath, taskIds: [], solved: [] }] }
+      const round: PlanRound = { label: proposalPath, taskIds: [], solved: [] }
+      await appendFile(journalPath, `${JSON.stringify({ kind: "round", runId, round, ts: new Date().toISOString() })}\n`, "utf-8")
+      state = { ...state, rounds: [...state.rounds, round] }
       continue
     }
 
@@ -178,27 +248,30 @@ async function main(): Promise<void> {
       console.log(`AUTO-PROMOTED ${proposal.label}: ${promotedTaskIds.join(",")}`)
     } catch (e) {
       console.log(`auto-promote refused: ${e instanceof Error ? e.message : String(e)}`)
-      state = { ...state, rounds: [...state.rounds, { label: proposal.label, taskIds: [], solved: [] }] }
+      const round: PlanRound = { label: proposal.label, taskIds: [], solved: [] }
+      await appendFile(journalPath, `${JSON.stringify({ kind: "round", runId, round, ts: new Date().toISOString() })}\n`, "utf-8")
+      state = { ...state, rounds: [...state.rounds, round] }
       continue
     }
 
-    const run = spawnSync(
-      "bun",
-      ["src/orchestrator/runLoop.ts", "--workers", String(promotedTaskIds.length), "--run",
-        "--mode", "opencode", ...promotedTaskIds.flatMap((id) => ["--tasks", id])],
-      { cwd: repo, stdio: "inherit" },
-    )
-    if (run.status !== 0) console.log(`runLoop exited ${run.status}; reading outcomes anyway`)
+    for (const layer of planLayers(proposal)) {
+      const run = spawnSync(
+        "bun",
+        ["src/orchestrator/runLoop.ts", "--workers", String(layer.length), "--run",
+          "--mode", "opencode", ...layer.flatMap((id) => ["--tasks", id])],
+        { cwd: repo, stdio: "inherit" },
+      )
+      if (run.status !== 0) console.log(`runLoop exited ${run.status}; continuing to next layer anyway`)
+    }
 
     const { loadTasks } = await import("./scheduler")
     const tasks = await loadTasks(repo)
     const mine = tasks.filter((t) => promotedTaskIds.includes(String(t.id)))
     const plan = await replan(mine, repo)
     console.log(`round ${state.rounds.length + 1}: solved=[${plan.solved.join(",")}] pending=[${plan.pending.join(",")}]`)
-    state = {
-      ...state,
-      rounds: [...state.rounds, { label: proposal.label, taskIds: promotedTaskIds, solved: plan.solved }],
-    }
+    const round: PlanRound = { label: proposal.label, taskIds: promotedTaskIds, solved: plan.solved }
+    await appendFile(journalPath, `${JSON.stringify({ kind: "round", runId, round, ts: new Date().toISOString() })}\n`, "utf-8")
+    state = { ...state, rounds: [...state.rounds, round] }
   }
 }
 

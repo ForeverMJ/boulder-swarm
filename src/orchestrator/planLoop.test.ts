@@ -41,3 +41,37 @@ describe("plan loop stop logic", () => {
     expect(decidePlanAction(stateWith([ROUND_A, ROUND_A], 3), { goalReached: false })).toEqual({ kind: "stop", why: "no-progress" })
   })
 })
+
+describe("planner prompt carries the aggregation-timing rule", () => {
+  it("tells the planner that merges of same-round inputs always fail", async () => {
+    const { plannerPromptForTest } = await import("./planLoop")
+    const p = plannerPromptForTest("caps", [], "M8")
+    expect(p).toContain("gate passed merge")
+    expect(p).toContain("metrics/results.json")
+    expect(p).toContain("dependsOn")
+    expect(p).toContain("goal-level success marker")
+    expect(p).toContain("bounded null")
+  })
+})
+
+describe("plan journal", () => {
+  it("round-trips rows, skips corrupt lines, and rebuilds a run's rounds", async () => {
+    const { lastRunId, parsePlanJournal, roundsOfRun } = await import("./planLoop")
+    const text = [
+      '{"kind":"start","runId":"r1","maxRounds":4,"ts":"t0"}',
+      '{"kind":"round","runId":"r1","round":{"label":"R1","taskIds":["R1-a"],"solved":["R1-a"]},"ts":"t1"}',
+      "not json at all",
+      '{"kind":"round","runId":"r1","round":{"label":"R2","taskIds":[],"solved":[]},"ts":"t2"}',
+      '{"kind":"start","runId":"r2","maxRounds":8,"ts":"t3"}',
+      '{"kind":"round","runId":"r2","round":{"label":"R3","taskIds":["R3-a"],"solved":[]},"ts":"t4"}',
+    ].join("\n")
+    const rows = parsePlanJournal(text)
+    expect(rows.length).toBe(5)
+    expect(lastRunId(rows)).toBe("r2")
+    expect(roundsOfRun(rows, "r1").map((r) => r.label)).toEqual(["R1", "R2"])
+    expect(roundsOfRun(rows, "r2").map((r) => r.label)).toEqual(["R3"])
+    expect(roundsOfRun(rows, "nope")).toEqual([])
+    expect(parsePlanJournal("")).toEqual([])
+    expect(lastRunId([])).toBeUndefined()
+  })
+})
