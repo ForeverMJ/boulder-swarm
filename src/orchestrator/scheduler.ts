@@ -16,6 +16,7 @@ const L2Entry = z.object({
   progress: ProgressPolicy.optional(),
   planned: z.boolean().optional(),
   note: z.string().optional(),
+  dependsOn: z.array(z.string()).optional(),
 })
 const GoalFile = z.object({ L2: z.array(L2Entry) })
 
@@ -32,6 +33,8 @@ export type Task = {
   readonly planned?: boolean
   /** Task spec written by the planner; workers never see goal.yaml, so this is the contract. */
   readonly note?: string
+  /** Intra-proposal dependency ids; execution layering is the plan driver's job. */
+  readonly dependsOn?: readonly string[]
   readonly progress?: ProgressPolicy
 }
 
@@ -57,6 +60,7 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     ...(t.progress === undefined ? {} : { progress: t.progress }),
     ...(t.planned === undefined ? {} : { planned: t.planned }),
     ...(t.note === undefined ? {} : { note: t.note }),
+    ...(t.dependsOn === undefined ? {} : { dependsOn: t.dependsOn }),
   }))
 }
 
