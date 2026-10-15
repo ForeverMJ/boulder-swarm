@@ -1,0 +1,81 @@
+label: R115
+goal: M8 — exact 4x4x4 matmul rank <= 47 over F_2 (AlphaTensor parity, Nature 2022)
+rationale: "The campaign is stuck at rank 49 (two-level Strassen) after ~25
+  rounds (R87–R113). R113 identified 10 rank-47 near-miss candidates: 4 RETIRED
+  (exact-solved INCONSISTENT in R112/R113) and 6 UNPROCESSED. The
+  exact-solve-on-near-miss approach keeps returning INSISTENT, and local search
+  (ILS/drain/meld/walks) never breaks 49. R115 closes the named remainder (6
+  UNPROCESSED), analyzes the obstruction, and tries two fundamentally different
+  construction principles. The gap is 2 terms (49->47); AlphaTensor's 47 exists
+  but cannot be imported. The campaign must either find a new algebraic
+  structure or prove the near-miss space is exhausted."
+budget:
+  maxRounds: 4
+stopConditions:
+  - BESTA47 exists and goalCheckA exits 0
+  - All 6 UNPROCESSED candidates exact-solved with verdicts recorded (CONSISTENT
+    or INCONSISTENT)
+  - Structural analysis identifies the algebraic obstruction pattern in the 4
+    RETIRED INCONSISTENT candidates
+  - At least 100 algebraically-natural 47-term supports enumerated and
+    exact-solved
+  - Direct 2-term merge search exhausts the mergeable-pair space or finds a
+    rank-47 scheme
+tasks:
+  - id: R115-1
+    problem: src/matmul/attempts/R115_solve_unprocessed.ts
+    tests: src/matmul/attempts/R115_solve_unprocessed.test.ts
+    milestone: M8
+    success: All 6 UNPROCESSED rank-47 candidates from R113_census.json exact-solved
+      over F_2; verdicts recorded
+    evidence: CAMPAIGN:R115
+    timeoutMs: 1800000
+    note: "Close the named remainder: process the 6 UNPROCESSED rank-47 near-miss
+      candidates (seedils7-500da8a8, seedils7-9944867d, seedils7-a071504d,
+      seedils7-bf7b0100, seedils7-d6648496, seedils7-dc6f9f39) from
+      R113_census.json with fixed-support exact coefficient solve over F_2. Each
+      candidate's vectors are checkpointed in R113_census.json. If any
+      CONSISTENT, BESTA47 fires. Bounded, concrete, judgeable."
+  - id: R115-2
+    problem: src/matmul/attempts/R115_analyze_inconsistent.ts
+    tests: src/matmul/attempts/R115_analyze_inconsistent.test.ts
+    milestone: M8
+    success: Report identifies structural pattern in the 4 RETIRED INCONSISTENT
+      candidates from R112/R113
+    evidence: CAMPAIGN:R115
+    timeoutMs: 1800000
+    note: "Analyze WHY the 4 RETIRED candidates (seedils6-12f21302,
+      seedils6-50cfdba5, seedils6-b73f4e8a, seedils6-bc2e3e8e) exact-solved
+      INCONSISTENT. Identify the algebraic obstruction: specific tensor entries
+      that cannot be satisfied, structural properties that prevent exactness, or
+      a pattern in the mismatch distribution. This is the campaign's most
+      valuable information — it could reveal whether the near-miss space is
+      structurally exhausted or just needs a different approach."
+  - id: R115-3
+    problem: src/matmul/attempts/R115_alt_supports.ts
+    tests: src/matmul/attempts/R115_alt_supports.test.ts
+    milestone: M8
+    success: At least 100 algebraically-natural 47-term supports enumerated and
+      exact-solved over F_2
+    evidence: CAMPAIGN:R115
+    timeoutMs: 1800000
+    note: "Fundamentally different search space: enumerate 47-term supports based on
+      algebraic structure (subgroup cosets of F_2^4 x F_2^4 x F_2^4, symmetric
+      supports, or other algebraically natural constructions) rather than
+      near-misses of the 49-term Strassen. Exact-solve each over F_2. This
+      breaks the pattern of searching only in the neighbourhood of 49. If any
+      CONSISTENT, BESTA47 fires."
+  - id: R115-4
+    problem: src/matmul/attempts/R115_merge2.ts
+    tests: src/matmul/attempts/R115_merge2.test.ts
+    milestone: M8
+    success: Identify 2 pairs of terms in the 49-term Strassen mergeable via F_2
+      linear combinations, or exhaust the mergeable-pair space
+    evidence: CAMPAIGN:R115
+    timeoutMs: 1800000
+    note: "Most direct approach to the 2-term gap: the 49-term two-level Strassen
+      has 7 Strassen triples. Search for 2 pairs of triples that can be merged
+      via F_2 linear combinations preserving rank-1 structure, reducing 49 to
+      47. This is an algebraic/structural search, not a local search. If the
+      mergeable-pair space is exhausted with no rank-47 scheme, that is a
+      bounded negative result."

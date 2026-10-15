@@ -1,0 +1,53 @@
+label: R121
+goal: M8 AlphaTensor parity - next bounded fresh-seed round after every
+  replayable rank-47 support named in prior M8 censuses has been retired, with
+  no goal-level marker attached to bounded work
+rationale: R105-R116 replayable supports are all RETIRED/consistency-failed on
+  main (R118 plus R120), so the seed-ils/drain bands restart from fresh seeds
+  only. This round generates and exact-solves new rank-47 candidates over F_2
+  without claiming exhaustion or impossibility. No merge of not-yet-existing
+  artifacts.
+budget:
+  maxRounds: 3
+stopConditions:
+  - "an exact rank<=47 scheme verifies via verifyMod2 and goalCheckA: close
+    WITNESS"
+  - "fresh seeds generate rank-47 candidates and all are exact-solved in-window:
+    close BOUNDED-NO-CLOSURE"
+  - "budget exhausted with coverage remaining: report coverage honestly"
+tasks:
+  - id: R121-seedils
+    problem: src/matmul/attempts/R121_seed_ils.ts
+    tests: src/matmul/attempts/R121_seed_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: From-zero ILS on seeds disjoint from every R100-R120 seed list, 6 lanes,
+      at least 10s per lane; every rank<=47 zero-mismatch candidate exact-solved
+      in-window; checkpoint vecs plus hashes; bounded null only.
+  - id: R121-drain
+    problem: src/matmul/attempts/R121_drain49k.ts
+    tests: src/matmul/attempts/R121_drain49k.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic drain plus meld from freshly checkpointed exact-49 anchors;
+      at least 50 iters per start; checkpoint full factor vectors plus stable
+      hashes with resume-skip; bounded RED only.
+  - id: R121-snap
+    problem: src/matmul/attempts/R121_snap_solve.ts
+    tests: src/matmul/attempts/R121_snap_solve.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R121
+    timeoutMs: 1800000
+    note: Exact-solve sweeper over replayable rank-47 supports carrying vecs and not
+      in the retired set; CONSISTENT ships an exact scheme via verifyMod2 plus
+      goalSatisfiedA, INCONSISTENT retires the hash with axis and mismatch
+      counts.
+  - id: R121-census
+    problem: src/matmul/attempts/R121_census.ts
+    tests: src/matmul/attempts/R121_census.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R121
+    timeoutMs: 600000
+    note: Census (no closure claim) of replayable rank-47 supports after this round
+      with per-candidate hash, rank, mismatch, vecs-present and status; report
+      SIZED-NO-CLOSURE honestly.

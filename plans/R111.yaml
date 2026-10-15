@@ -1,0 +1,68 @@
+label: R111
+goal: "Close the R110 named remainder on M8 (exact 4x4 rank<=47 over F_2):
+  exact-solve every UNPROCESSED rank-47 support in R110_census.json, probe fresh
+  ILS ground once, and adjudicate the already-landed R109 plus R110 artifacts
+  into a CAMPAIGN R111 row"
+rationale: "R110-census landed SIZED-NO-CLOSURE on main with a small priced
+  remainder (UNPROCESSED seed-ils5 lane-best rank-47 supports with vecs present,
+  disjoint from all retired sets), and R109 snap plus drain plus ils are all on
+  main with no adjudication merge yet. R108 showed full sweeps no longer fit the
+  30-minute window (three 0/0 timeouts), so this round sizes tight: one cheap
+  exact-solve sweeper over the named remainder, one small fresh-seed ILS lane,
+  and a merge whose inputs already exist on main per the timing rule"
+budget:
+  maxRounds: 2
+stopConditions:
+  - goalCheckA exits 0 with BESTA47 (exact rank<=47 over F_2 landed)
+  - R111_merge.json written with a 0-drift self-check and the substantive
+    CAMPAIGN R111 row recorded
+  - all tasks report honest bounded verdicts with residuals named, never
+    impossibility
+tasks:
+  - id: R111-snap
+    problem: src/matmul/attempts/R111_snap_solve.ts
+    tests: src/matmul/attempts/R111_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Exact-solve sweeper over the UNPROCESSED rank-47 supports named in
+      R110_census.json on main (seed-ils5 lane-best hashes with vecs, disjoint
+      from retired spark and R107 sets). Recover the gaussSolve per-axis
+      machinery from landed R109_snap_solve.ts on main, no archive recovery.
+      CONSISTENT ships an exact scheme file verified by verifyMod2, INCONSISTENT
+      retires the hash with axis and mismatch counts. Checkpoint hash plus axis
+      plus consistency plus mismatch counts to R111_snap_solve.ndjson. Controls
+      are floor seed solves CONSISTENT and one retired hash re-derives
+      INCONSISTENT. Bounded nulls stay bounded. File-ownership
+      attempts/R111_snap_solve plus ndjson only. No AlphaTensor tensors. Field
+      F_2 throughout. Run heavy solves under nice -n 19.
+  - id: R111-ils
+    problem: src/matmul/attempts/R111_seed_ils6.ts
+    tests: src/matmul/attempts/R111_seed_ils6.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: From-zero ILS on fresh ground only. Seeds exclude every previously run ILS
+      seed plus all R109 seed-ils5 lane seeds. At least 4 new seeds with at
+      least 10s per lane, each lane calibrates against the exact-49 floor then
+      runs ILS at fixed rank 47. Every rank-47 zero-mismatch candidate
+      exact-solved on its fixed support in-window, never left unmatched.
+      Checkpoint vecs plus hashes for lane-best 47 and floor-best 49 states to
+      R111_seed_ils6.ndjson. Verdict BOUNDED-NO-CLOSURE unless an exact state is
+      solved and independently re-verified. File-ownership
+      attempts/R111_seed_ils6 plus ndjson only. No AlphaTensor tensors. Run
+      under nice -n 19.
+  - id: R111-merge
+    problem: src/matmul/attempts/R111_merge.ts
+    tests: src/matmul/attempts/R111_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R111
+    timeoutMs: 1800000
+    note: Adjudication merge over ALREADY-LANDED inputs only (R109_snap_solve plus
+      R109_drain49e plus R109_seed_ils5 ndjson and R110_census.json, all on
+      main). Must NOT reference R111-snap or R111-ils sibling outputs, those
+      belong to a later round. Re-verify every input with verifyMod2 plus the
+      goalCheckA gate path, snap-check any unsnapped rank-47 support,
+      drift-check hashes against R110_census.json, write R111_merge.json with
+      hashes plus consistency outcomes plus mismatch counts plus a zero-drift
+      self-check, then append the substantive CAMPAIGN R111 row (exact-47 scheme
+      or honest bounded red naming the residual). File-ownership
+      attempts/R111_merge plus test plus json only.

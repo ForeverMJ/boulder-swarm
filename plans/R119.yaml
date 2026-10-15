@@ -1,0 +1,86 @@
+label: R119
+goal: "Close the R116-R118 residual: census every replayable rank-47/48 support
+  on main, exact-solve the unprocessed remainder, and open two fresh lanes
+  (drain from R118 lane-best exact-49 states, from-zero ILS on new seeds) toward
+  exact rank<=47 over F_2"
+rationale: "R116-size/R117/R118 all merged green but wrote no adjudication row,
+  so the live residual is unpriced: R116_census.json is the freshest merged
+  census while R117/R118 snaps (snap_solve, snap_solve2), ILS lanes (ils9,
+  ils10) and drains (drain49i, drain49j) may have retired or added candidates.
+  Sizing before closing: R119-size reprices the residual first, the sweeps work
+  only main-landed artifacts, and no merge is proposed here - adjudication of
+  R119 outputs belongs to a later round once they land."
+budget:
+  maxRounds: 3
+stopConditions:
+  - BESTA47 fires via goalCheckA exit 0 on an exact rank<=47 scheme over F_2
+  - R119 census verdict is SIZED-NO-CLOSURE with every candidate marked
+    retired-live-unmatched
+  - All R119 sweeps report bounded verdicts with unmatched rank<=47 count 0 and
+    no witness
+tasks:
+  - id: R119-size
+    problem: src/matmul/attempts/R119_census.ts
+    tests: src/matmul/attempts/R119_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure (R116 SIZED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47/48 support across R116_census.json, the R112/R113
+      census chain, and the merged R117/R118 checkpoints
+      (R117_snap_solve.ndjson, R118_snap_solve2.ndjson, R117_seed_ils9.ndjson,
+      R118_seed_ils10.ndjson, R118_drain49j.ndjson, R117 drain49i artifacts)
+      plus archive pins agent/goal-w0-A1@muse-r72, @r65_7a03c63, @r67_c58dfd0
+      and spark 4126ca7f at 17970a9; mark each hash retired-live-unmatched with
+      vecs-present and archive pin; emit R119_census.json with exact-solve
+      workload pricing; verdict SIZED-NO-CLOSURE; file-ownership
+      attempts/R119_census.* only; field F_2 throughout; no AlphaTensor tensors"
+  - id: R119-snap
+    problem: src/matmul/attempts/R119_snap_solve4.ts
+    tests: src/matmul/attempts/R119_snap_solve4.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the UNPROCESSED replayable rank-47/48 supports
+      in R116_census.json on main only (skip every hash retired by a merged snap
+      ndjson: R111_snap_solve, R112_snap_solve, R113_snap_solve,
+      R117_snap_solve, R118_snap_solve2, and every R100/R101-retired spark
+      hash); recover the gaussSolve per-axis machinery without importing
+      AlphaTensor tensors; CONSISTENT ships an exact scheme file verified by
+      verifyMod2, INCONSISTENT retires the hash with axis and mismatch counts;
+      checkpoint hash plus axis plus consistency plus mismatch counts to
+      R119_snap_solve4.ndjson; controls: floor seed solves CONSISTENT and one
+      retired hash re-derives INCONSISTENT; bounded nulls stay bounded, never
+      impossibility; file-ownership attempts/R119_snap_solve4* only; run
+      exact-solve sweeps under nice -n 19"
+  - id: R119-drain
+    problem: src/matmul/attempts/R119_drain49k.ts
+    tests: src/matmul/attempts/R119_drain49k.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Deterministic drain plus meld from fresh exact-49 starts only: the
+      lane-best exact-49 states checkpointed in merged R118_seed_ils10.ndjson
+      and R118_drain49j.ndjson that no earlier drain lane used as a start, with
+      resume-skip of hashes already checkpointed in any merged
+      R100/R101/R104/R105/R106/R107/R112/R113/R116/R117/R118 drain ndjson; at
+      least 50 seeded deterministic iters per start with greedy exact F_2 drain
+      plus shear flips plus split kicks plus deterministic meld; checkpoint full
+      factor vectors plus stable fnv hashes to R119_drain49k.ndjson; every
+      rank<=47 candidate exact-solved in-window and verified by verifyMod2 plus
+      goalSatisfiedA; verdict BOUNDED-RED unless a witness lands; file-ownership
+      attempts/R119_drain49k* only; no AlphaTensor tensors; run under nice -n
+      19"
+  - id: R119-ils
+    problem: src/matmul/attempts/R119_seed_ils11.ts
+    tests: src/matmul/attempts/R119_seed_ils11.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude every
+      seed recorded in any merged R*_seed_ils*.ndjson or R*_walk_ils.json on
+      main (including 22, 66, 7, 77, 107, 207, 307, 407 and all
+      R101/R106/R107/R108/R111/R112/R113/R116/R117/R118 lane seeds); at least 6
+      new seeds with at least 10s per lane, each lane calibrates against the
+      exact-49 floor then runs ILS at fixed rank 47; every rank<=47
+      zero-mismatch candidate exact-solved on its fixed support in-window, never
+      left unmatched; checkpoint vecs plus hashes for lane-best 47 and
+      floor-best 49 states to R119_seed_ils11.ndjson; verdict BOUNDED-NO-CLOSURE
+      unless an exact state is solved and independently re-verified;
+      file-ownership attempts/R119_seed_ils11* only; no AlphaTensor tensors"

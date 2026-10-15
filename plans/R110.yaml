@@ -1,0 +1,50 @@
+label: R110
+goal: Adjudicate the landed M8 R109 round and size the next sweep space toward
+  exact 4x4 rank-47 over F_2
+rationale: R109-snap, R109-drain and R109-ils all landed on main through the
+  merge gate, and R109-snap solved 15 of 15 queued rank-47 supports at 0
+  consistent with both controls green, yet no CAMPAIGN row adjudicates R109 and
+  the R107 census LIVE/UNMATCHED set it swept is now fully retired. This round
+  closes R109 honestly with an adjudication merge over main-landed inputs only
+  and sizes the fresh lane-best ground from the R109 drain/ILS lanes before any
+  further sweep runs.
+budget:
+  maxRounds: 2
+stopConditions:
+  - Stop when the CAMPAIGN:R110 row is appended and R110_merge.json drift-checks
+    clean against R107_census.json and the R109 ndjson inputs.
+  - Stop when R110_census.json enumerates every replayable rank-47/48 support
+    from the R109 lane-bests with RETIRED versus LIVE versus UNPROCESSED marks.
+  - "Do not claim closure of any band: bounded verdicts only unless goalCheckA
+    exits 0 on a shipped exact scheme."
+tasks:
+  - id: R110-merge
+    problem: src/matmul/attempts/R110_merge.ts
+    tests: src/matmul/attempts/R110_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R110
+    timeoutMs: 1800000
+    note: "Adjudication merge over main-landed R109 inputs only: re-verify every
+      R109 snap verdict with verifyMod2 plus the goalCheckA gate path, confirm
+      15 of 15 solves at 0 consistent against R109_snap_solve.ndjson,
+      drift-check hashes against the R107_census.json LIVE/UNMATCHED rows,
+      cross-check R109_drain49e and R109_seed_ils5 lane-best claims as bounded
+      reds, emit R110_merge.json with hashes plus consistency outcomes plus
+      mismatch counts plus a zero-drift self-check, then append the substantive
+      CAMPAIGN:R110 row (exact-47 scheme or honest bounded-red naming the
+      residual); file-ownership attempts/R110_merge.ts plus .test.ts plus .json
+      only; no AlphaTensor tensors; field F_2 throughout"
+  - id: R110-census
+    problem: src/matmul/attempts/R110_census.ts
+    tests: src/matmul/attempts/R110_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure (R107 SIZED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47/48 support with vecs present across the
+      R109_seed_ils5.ndjson lane-bests and the R109_drain49e checkpoints,
+      marking each hash RETIRED versus LIVE versus UNPROCESSED against
+      R107_census.json and R109_snap_solve.ndjson verdicts; dedupe by stable
+      hash; emit R110_census.json with per-candidate hash plus rank plus
+      mismatches plus vecs-present plus archive plus exact-solve workload
+      pricing; verdict SIZED-NO-CLOSURE; file-ownership attempts/R110_census.ts
+      plus .test.ts plus .json only; field F_2 throughout"

@@ -1,0 +1,55 @@
+label: R114
+goal: Close the 49-to-47 gap in the 4x4x4 F_2 AlphaTensor campaign
+rationale: After 9+ rounds of census-drain-snap_solve-ils with no witness, the
+  campaign needs to consolidate results, analyze why the exact solver finds
+  everything INCONSISTENT, and try fundamentally different search strategies.
+budget:
+  maxRounds: 4
+stopConditions:
+  - A rank-47 scheme is found and verified by goalCheckA
+  - The search space is exhausted with proof of no rank-47 scheme
+  - The budget of 4 rounds is exhausted
+tasks:
+  - id: R114-audit
+    problem: src/matmul/attempts/R114_audit.ts
+    tests: src/matmul/attempts/R114_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R114
+    timeoutMs: 1800000
+    note: Consolidate all R105-R113 census/drain/snap_solve/ils results into a
+      unified audit. Verify no witness was missed. Build a coverage map. Output
+      R114_audit.json with per-round summaries, total supports tried, exact
+      solves, inconsistency patterns, and coverage gaps.
+  - id: R114-analyze
+    problem: src/matmul/attempts/R114_analyze.ts
+    tests: src/matmul/attempts/R114_analyze.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R114
+    timeoutMs: 1800000
+    note: Deep structural analysis of exact-solve inconsistency patterns from
+      R105-R113. For each INCONSISTENT support, extract axis, mismatch count,
+      factor rank profile, support size. Look for common features distinguishing
+      close supports from far ones. Output R114_analyze.json with pattern
+      clusters and structural insights.
+  - id: R114-altbase
+    problem: src/matmul/attempts/R114_altbase.ts
+    tests: src/matmul/attempts/R114_altbase.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R114
+    timeoutMs: 1800000
+    note: Try a fundamentally different base scheme or decomposition structure. The
+      two-level Strassen at 49 may be a local minimum. Try different recursion
+      structures, non-Strassen bases, or direct algebraic construction targeting
+      rank-47. Output R114_altbase.json with base scheme description and best
+      result.
+  - id: R114-sweep
+    problem: src/matmul/attempts/R114_sweep.ts
+    tests: src/matmul/attempts/R114_sweep.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R114
+    timeoutMs: 1800000
+    note: New targeted exact-solve sweep using a different support enumeration
+      strategy than R105-R113. Must be a new strategy, not a repeat of the
+      census-snap pattern. Output R114_sweep.json with strategy description,
+      candidates tried, and best result. Merge and audit of this sweep belongs
+      to a later round.

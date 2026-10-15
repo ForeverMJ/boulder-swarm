@@ -1,0 +1,42 @@
+label: R120
+goal: "Close the named unsnapped rank-47 candidate space: exact-solve the six
+  UNPROCESSED supports left in R116_census.json over F_2"
+rationale: R118 retired the six LIVE census supports (all INCONSISTENT). Six
+  UNPROCESSED supports (seedils8-*) still carry vectors but have never been
+  exact-solved. This round spends no time on new search or census expansion; it
+  discharges that named remainder exactly, which is the smallest possible
+  progress surface.
+budget:
+  maxRounds: 1
+stopConditions:
+  - campaign gate goalCheckA exits 0 (BESTA47 landed)
+  - all six UNPROCESSED supports are either CONSISTENT (scheme emitted) or
+    INCONSISTENT (retired)
+  - no live candidate remains INCONSISTENT-unsnapped in R116_census
+tasks:
+  - id: R120-snapA
+    problem: src/matmul/attempts/R120_snap_solveA.ts
+    tests: src/matmul/attempts/R120_snap_solveA.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Exact-solve three of six UNPROCESSED supports from R116_census.json:
+      seedils8-6362cc4c, seedils8-77358fc4, seedils8-7802d244. Recover
+      gaussSolve per-axis machinery without importing AlphaTensor tensors.
+      CONSISTENT ships an exact scheme under attempts/R120_scheme_*.ts.
+      INCONSISTENT retires each hash with axis and mismatch counts. Controls:
+      floor seed solves CONSISTENT, one retired R118 hash re-derives
+      INCONSISTENT. Run exact-solve sweeps under nice -n 19. File ownership:
+      attempts/R120_snap_solveA* plus optional attempts/R120_scheme_*.ts only."
+  - id: R120-snapB
+    problem: src/matmul/attempts/R120_snap_solveB.ts
+    tests: src/matmul/attempts/R120_snap_solveB.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Same exact-solve discipline for the other three UNPROCESSED supports:
+      seedils8-93e4f432, seedils8-b05ee118, seedils8-d1b8e00b. Same controls,
+      checkpoint format and file-ownership boundary. A bounded null here is
+      honest RED; no witness is reported without verifyMod2 plus goalSatisfiedA.
+      File ownership: attempts/R120_snap_solveB* plus optional
+      attempts/R120_scheme_*.ts only."

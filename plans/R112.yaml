@@ -1,0 +1,69 @@
+label: R112
+goal: Close the 4 fresh rank-47 lane-best supports landed by R111-ils6 by exact
+  F_2 coefficient solve, census the remainder, and open fresh ILS plus drain
+  ground for M8 AlphaTensor parity
+rationale: R111-snap retired the 6 R110-census UNPROCESSED supports 6 of 6
+  INCONSISTENT, and R111-ils6 landed 4 new rank-47 lane-best states with full
+  factor vectors that no snap has touched. The composition rule requires every
+  rank-47 candidate to be exact-solved before the window closes. R108 showed
+  mass timeout with 0 of 0 rows, so lanes stay bounded with per-lane budgets.
+  Same-round merges failed four rounds in a row, so this round ships sweeps plus
+  census only and the R112 adjudication merge belongs to a later round.
+budget:
+  maxRounds: 4
+stopConditions:
+  - "goal met: exact rank<=47 scheme verified by verifyMod2 plus the goalCheckA
+    gate path"
+  - "bounded red: all replayable rank-47 supports retired INCONSISTENT with
+    hashes named"
+  - "budget exhausted: 4 rounds or per-task timeoutMs, residuals stay
+    UNPROCESSED never refuted"
+tasks:
+  - id: R112-census
+    problem: src/matmul/attempts/R112_census.ts
+    tests: src/matmul/attempts/R112_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Census not closure over the 4 fresh R111-ils6 lane-best rank-47 states
+      with vecs present against all retired sets on main. Emit R112_census.json
+      with per-candidate hash rank mismatches vecs-present and archive plus
+      exact-solve workload pricing. Verdict SIZED-NO-CLOSURE. Field F_2
+      throughout.
+  - id: R112-snap
+    problem: src/matmul/attempts/R112_snap_solve.ts
+    tests: src/matmul/attempts/R112_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Exact-solve the 4 fresh R111-ils6 lane-best rank-47 supports replayed from
+      stored vectors on main with the gaussSolve per-axis machinery recovered
+      from landed R111_snap_solve.ts on main. CONSISTENT ships an exact scheme
+      file verified by verifyMod2, INCONSISTENT retires the hash with axis and
+      mismatch counts. Checkpoint candidate hash axis consistency and mismatch
+      counts to R112_snap_solve.ndjson. Controls are floor seed CONSISTENT and
+      one R111-retired hash re-deriving INCONSISTENT. Zero unmatched rank-47
+      candidates. No AlphaTensor tensors.
+  - id: R112-ils
+    problem: src/matmul/attempts/R112_seed_ils7.ts
+    tests: src/matmul/attempts/R112_seed_ils7.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: From-zero iterated local search on fresh ground only with seeds excluding
+      every previously run ILS seed. At least 6 new seeds at least 10s per lane,
+      calibrate against the exact-49 floor then run ILS at fixed rank 47.
+      Exact-solve EVERY new rank-47 candidate on its fixed support in-window.
+      Checkpoint vecs plus hashes for lane-best 47 and floor-best 49 states.
+      Verdict BOUNDED-NO-CLOSURE unless an exact state is solved and
+      independently re-verified. No AlphaTensor tensors.
+  - id: R112-drain
+    problem: src/matmul/attempts/R112_drain49f.ts
+    tests: src/matmul/attempts/R112_drain49f.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic drain and meld from the exact-49 floor anchors plus the
+      R111-ils6 lane floor-49 states, fresh seeds only excluding all previously
+      run ILS seeds. At least 50 seeded deterministic iterations per start with
+      greedy exact F_2 drain shear flips split kicks and deterministic meld.
+      Checkpoint full factor vectors plus stable hashes with resume-skip of
+      already-processed hashes. Verify any rank-47 candidate via verifyMod2 plus
+      goalSatisfiedA. Verdict BOUNDED-RED unless a witness lands. No AlphaTensor
+      tensors.

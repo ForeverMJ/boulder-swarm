@@ -1,0 +1,62 @@
+label: R122
+goal: M8 AlphaTensor parity - continue F_2 4x4x4 exact rank<=47 work by sizing,
+  draining and probing the named R122 remainder after R121, with no goal-level
+  success marker on bounded null tasks.
+rationale: R121 merged seedils/drain lanes and left replayable candidate
+  handles, exact-49 floor anchors and drain checkpoints. This round sizes that
+  remainder, drains a fresh subset of exact-49 anchors, and runs bounded ILS on
+  new seeds only. It avoids merge, gate, or AlphaTensor import work and does not
+  judge bounded searches as goal success.
+budget:
+  maxRounds: 4
+stopConditions:
+  - bun src/matmul/goalCheckA.ts exits 0 with an exact rank<=47 over F_2 scheme
+    on main
+  - maxRounds exhausted with honest bounded-red rows (bounded nulls reported as
+    bounded, never as impossibility)
+tasks:
+  - id: R122-census
+    problem: src/matmul/attempts/R122_census.ts
+    tests: src/matmul/attempts/R122_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure: enumerate replayable rank-47/48 supports and
+      exact-49 floor states across the R119-R121 candidate, ndjson, and
+      archived-branch artifacts; dedupe by stable hash; mark each hash
+      processed, unprocessed, retired-live-unmatched, or vecs-absent; emit
+      R122_census.json with per-candidate hash, rank, mismatches, vecs-present,
+      archive and exact-solve workload pricing; verdict SIZED-NO-CLOSURE; F_2
+      throughout; no AlphaTensor tensors."
+  - id: R122-drain49l
+    problem: src/matmul/attempts/R122_drain49l.ts
+    tests: src/matmul/attempts/R122_drain49l.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic drain and meld from a fresh subset of replayable exact-49
+      anchors named by R122-census, skipping hashes checkpointed by R100 through
+      R121 ndjson; at least 50 deterministic iters per start with greedy exact
+      F_2 drain, shear flips, split kicks and meld; checkpoint full factor
+      vectors plus stable fnv hashes; exact-solve every rank<=47 candidate
+      in-window with verifyMod2 plus goalSatisfiedA; bounded red absent a
+      witness.
+  - id: R122-seedils12
+    problem: src/matmul/attempts/R122_seed_ils12.ts
+    tests: src/matmul/attempts/R122_seed_ils12.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: From-zero ILS on fresh ground only, using seeds outside all prior R100
+      through R121 ILS and walk seeds; at least 6 lanes at at least 10s each;
+      calibrate against the exact-49 floor, run fixed rank 47, exact-solve every
+      rank<=47 candidate in-window, and checkpoint hashes, axes, consistency and
+      mismatch counts; verdict BOUNDED-NO-CLOSURE absent a verified witness.
+  - id: R122-exactsnap
+    problem: src/matmul/attempts/R122_snap_solve.ts
+    tests: src/matmul/attempts/R122_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Exact-solve sweeper over the replayable rank-47 supports named by
+      R122-census and not retired by prior R100-R121 solve ledgers; recover
+      gaussSolve without AlphaTensor imports; CONSISTENT ships and verifies an
+      exact scheme, INCONSISTENT retires the hash with axis and mismatch counts;
+      checkpoint hash, axis, consistency and mismatch counts; bounded nulls stay
+      bounded.
