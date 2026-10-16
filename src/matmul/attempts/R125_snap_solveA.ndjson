@@ -1,0 +1,34 @@
+{"kind":"start","task":"R125-snapA","field":"F_2","n":4,"targetRank":47,"queued":6,"seedIls121":6,"census":"src/matmul/attempts/R124_census.json (6 R121 UNPROCESSED rank-47)","residual":"disjoint from all merged snap verdicts, residual 6 pending","skipSets":["src/matmul/attempts/R100_snap_spark_data.json (75 R100-retired spark hashes)","src/matmul/attempts/R109_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R111_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R112_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R113_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R117_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R118_snap_solve2.ndjson checkpoint hashes","src/matmul/attempts/R123_snap_solve.ndjson checkpoint hashes"],"controls":["floor-seed-CONSISTENT","spark-037a74ff-INCONSISTENT"]}
+{"kind":"control","name":"floor-seed","consistent":true,"mmBefore":0,"mmAfter":0,"intMmAfter":336,"f2exact":true}
+{"kind":"control","name":"spark-037a74ff","consistent":false,"mmBefore":24,"mmAfter":24,"intMmAfter":337}
+{"kind":"candidate","hash":"1ca2fcc3","seed":109027,"source":"seed-ils121","rank":47,"mm":405}
+{"kind":"solve","hash":"1ca2fcc3","axis":0,"ok":false,"mmBefore":405,"mmAfter":405}
+{"kind":"solve","hash":"1ca2fcc3","axis":1,"ok":false,"mmBefore":405,"mmAfter":405}
+{"kind":"solve","hash":"1ca2fcc3","axis":2,"ok":false,"mmBefore":405,"mmAfter":405}
+{"kind":"verdict","hash":"1ca2fcc3","rank":47,"source":"seed-ils121","consistent":false,"mmBefore":405,"mmAfter":405,"intMmAfter":1619,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"427a527c","seed":105013,"source":"seed-ils121","rank":47,"mm":34}
+{"kind":"solve","hash":"427a527c","axis":0,"ok":false,"mmBefore":34,"mmAfter":34}
+{"kind":"solve","hash":"427a527c","axis":1,"ok":false,"mmBefore":34,"mmAfter":34}
+{"kind":"solve","hash":"427a527c","axis":2,"ok":false,"mmBefore":34,"mmAfter":34}
+{"kind":"verdict","hash":"427a527c","rank":47,"source":"seed-ils121","consistent":false,"mmBefore":34,"mmAfter":34,"intMmAfter":76,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"97c63432","seed":111031,"source":"seed-ils121","rank":47,"mm":44}
+{"kind":"solve","hash":"97c63432","axis":0,"ok":false,"mmBefore":44,"mmAfter":44}
+{"kind":"solve","hash":"97c63432","axis":1,"ok":false,"mmBefore":44,"mmAfter":44}
+{"kind":"solve","hash":"97c63432","axis":2,"ok":false,"mmBefore":44,"mmAfter":44}
+{"kind":"verdict","hash":"97c63432","rank":47,"source":"seed-ils121","consistent":false,"mmBefore":44,"mmAfter":44,"intMmAfter":171,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"ae8396bf","seed":107021,"source":"seed-ils121","rank":47,"mm":39}
+{"kind":"solve","hash":"ae8396bf","axis":0,"ok":false,"mmBefore":39,"mmAfter":39}
+{"kind":"solve","hash":"ae8396bf","axis":1,"ok":false,"mmBefore":39,"mmAfter":39}
+{"kind":"solve","hash":"ae8396bf","axis":2,"ok":false,"mmBefore":39,"mmAfter":39}
+{"kind":"verdict","hash":"ae8396bf","rank":47,"source":"seed-ils121","consistent":false,"mmBefore":39,"mmAfter":39,"intMmAfter":123,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"d9fc9306","seed":115061,"source":"seed-ils121","rank":47,"mm":41}
+{"kind":"solve","hash":"d9fc9306","axis":0,"ok":false,"mmBefore":41,"mmAfter":41}
+{"kind":"solve","hash":"d9fc9306","axis":1,"ok":false,"mmBefore":41,"mmAfter":41}
+{"kind":"solve","hash":"d9fc9306","axis":2,"ok":false,"mmBefore":41,"mmAfter":41}
+{"kind":"verdict","hash":"d9fc9306","rank":47,"source":"seed-ils121","consistent":false,"mmBefore":41,"mmAfter":41,"intMmAfter":88,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"candidate","hash":"e039bcd2","seed":113047,"source":"seed-ils121","rank":47,"mm":42}
+{"kind":"solve","hash":"e039bcd2","axis":0,"ok":false,"mmBefore":42,"mmAfter":42}
+{"kind":"solve","hash":"e039bcd2","axis":1,"ok":false,"mmBefore":42,"mmAfter":42}
+{"kind":"solve","hash":"e039bcd2","axis":2,"ok":false,"mmBefore":42,"mmAfter":42}
+{"kind":"verdict","hash":"e039bcd2","rank":47,"source":"seed-ils121","consistent":false,"mmBefore":42,"mmAfter":42,"intMmAfter":86,"verifyInt":false,"verifyF2":false,"disposition":"INCONSISTENT-retire"}
+{"kind":"summary","queued":6,"skipped":0,"solved":6,"consistent":0,"unmatched":0,"verdict":"BOUNDED-NO-CLOSURE","shipped":null,"note":"bounded sweep: retired/checkpointed hashes skipped, pending replayed from stored vectors; probes not re-run; no exhaustion or impossibility claimed"}
