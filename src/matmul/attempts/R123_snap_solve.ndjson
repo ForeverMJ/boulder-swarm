@@ -1,0 +1,16 @@
+{"kind":"start","task":"R123-snap","field":"F_2","n":4,"targetRank":47,"queued":6,"seedIls8":6,"census":"src/matmul/attempts/R116_census.json (6 UNPROCESSED rank-47)","residual":"src/matmul/attempts/R117_snap_solve.ndjson (all 6 UNPROCESSED checkpointed, residual 0)","skipSets":["src/matmul/attempts/R100_snap_spark_data.json (75 R100/R101-retired spark hashes)","src/matmul/attempts/R111_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R112_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R113_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R117_snap_solve.ndjson checkpoint hashes","src/matmul/attempts/R118_snap_solve2.ndjson checkpoint hashes"],"controls":["floor-seed-CONSISTENT","spark-037a74ff-INCONSISTENT"]}
+{"kind":"control","name":"floor-seed","consistent":true,"mmBefore":0,"mmAfter":0,"intMmAfter":336,"f2exact":true}
+{"kind":"control","name":"spark-037a74ff","consistent":false,"mmBefore":24,"mmAfter":24,"intMmAfter":337}
+{"kind":"candidate","hash":"6362cc4c","seed":58067,"source":"seed-ils8","rank":47,"mm":36}
+{"kind":"skipped","hash":"6362cc4c","rank":47,"source":"seed-ils8","reason":"retired-or-checkpointed","mm":36,"consistent":false}
+{"kind":"candidate","hash":"77358fc4","seed":67121,"source":"seed-ils8","rank":47,"mm":36}
+{"kind":"skipped","hash":"77358fc4","rank":47,"source":"seed-ils8","reason":"retired-or-checkpointed","mm":36,"consistent":false}
+{"kind":"candidate","hash":"7802d244","seed":61081,"source":"seed-ils8","rank":47,"mm":42}
+{"kind":"skipped","hash":"7802d244","rank":47,"source":"seed-ils8","reason":"retired-or-checkpointed","mm":42,"consistent":false}
+{"kind":"candidate","hash":"93e4f432","seed":63103,"source":"seed-ils8","rank":47,"mm":39}
+{"kind":"skipped","hash":"93e4f432","rank":47,"source":"seed-ils8","reason":"retired-or-checkpointed","mm":39,"consistent":false}
+{"kind":"candidate","hash":"b05ee118","seed":55061,"source":"seed-ils8","rank":47,"mm":32}
+{"kind":"skipped","hash":"b05ee118","rank":47,"source":"seed-ils8","reason":"retired-or-checkpointed","mm":32,"consistent":false}
+{"kind":"candidate","hash":"d1b8e00b","seed":53039,"source":"seed-ils8","rank":47,"mm":51}
+{"kind":"skipped","hash":"d1b8e00b","rank":47,"source":"seed-ils8","reason":"retired-or-checkpointed","mm":51,"consistent":false}
+{"kind":"summary","queued":6,"skipped":6,"solved":0,"consistent":0,"unmatched":0,"verdict":"BOUNDED-NO-CLOSURE","shipped":null,"note":"bounded sweep: retired/checkpointed hashes skipped, pending replayed from stored vectors; probes not re-run; no exhaustion or impossibility claimed"}
