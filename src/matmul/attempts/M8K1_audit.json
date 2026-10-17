@@ -1,0 +1,50 @@
+{
+  "taskId": "M8-K1-audit",
+  "round": "M8-K1",
+  "field": "F_2",
+  "targetRank": 47,
+  "generatedAt": "2026-10-17T09:47:36.649Z",
+  "siblings": {
+    "strassenMerge": false,
+    "snapSolve": false,
+    "seedIls": false,
+    "allPresent": false,
+    "anyPresent": false
+  },
+  "missingSiblings": [
+    "M8K1_strassenMerge.json",
+    "M8K1_snap_solve.ndjson",
+    "M8K1_seed_ils.ndjson"
+  ],
+  "candidates": [],
+  "counts": {
+    "candidates": 0,
+    "withVectors": 0,
+    "withoutVectors": 0,
+    "reverified": 0,
+    "consistencyAgree": 0,
+    "consistencyDisagree": 0,
+    "hashDrift": 0,
+    "exactRankLeTarget": 0,
+    "unprocessedSupports": 0,
+    "mismatchTotalF2": 0,
+    "mismatchTotalInt": 0
+  },
+  "witnessHashes": [],
+  "gate": {
+    "ran": false,
+    "reason": "no M8K1_scheme.ts on this layer; goalCheckA not invoked"
+  },
+  "drift": {
+    "checked": 0,
+    "mismatches": 0,
+    "details": []
+  },
+  "zeroDriftSelfCheck": true,
+  "verdict": "PENDING-SIBLINGS",
+  "residual": "M8-K1 sibling layer not fully merged on main; the audit recorded presence and read nothing else. Residual class = the M8-K1 layer itself (M8K1_strassenMerge.json, M8K1_snap_solve.ndjson, M8K1_seed_ils.ndjson). No rank<=47 F_2 witness can exist before the siblings land; 47 stands and BESTA47 remains absent",
+  "notes": [
+    "exact-solve obligation: 0 unprocessed support(s) named here are for the exact F_2 coefficient solve (R69 machinery); this audit adjudicates recorded candidates and never fabricates a solve",
+    "spec: siblings must merge before this audit reads them; absent = M8K1_strassenMerge.json, M8K1_snap_solve.ndjson, M8K1_seed_ils.ndjson. Nothing else was read"
+  ]
+}
