@@ -5,3 +5,5 @@
 {"kind":"start","runId":"planrun_2026-10-18T00:33:48.003Z","maxRounds":8,"ts":"2026-10-18T00:33:48.003Z"}
 {"kind":"round","runId":"planrun_2026-10-18T00:33:48.003Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-18T00:33:53.562Z"}
 {"kind":"round","runId":"planrun_2026-10-18T00:33:48.003Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-18T00:33:58.899Z"}
+{"kind":"round","runId":"planrun_2026-10-18T00:48:20.682Z","round":{"label":"R137","taskIds":["R137-seedils","R137-snapsolve","R137-49band","R137-merge"],"solved":[]},"ts":"2026-10-18T06:17:47.255Z"}
+{"kind":"round","runId":"planrun_2026-10-18T00:48:20.682Z","round":{"label":"R138","taskIds":["R138-merge","R138-wide","R138-ils","R138-merge-audit"],"solved":[]},"ts":"2026-10-18T06:54:34.329Z"}

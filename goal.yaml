@@ -2249,6 +2249,94 @@ L2:
       and consistency from the vecs in-window and verifies seed-disjointness
       against the named lists."
     planned: true
+  - id: R138-merge
+    problem: src/matmul/attempts/R138_merge_search.ts
+    tests: src/matmul/attempts/R138_merge_search.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R138
+    timeoutMs: 1800000
+    note: >
+      Structured 2-term merge enumeration: exhaustively enumerate F_2-linear and
+      sign-bearing integer-linear combos of the 7 two-level Strassen triples
+      that stay rank-1 over F_2 (left-ideal and octonion-style). For each merged
+      pair, verify exact rank<=47 with checker.verifyMod2 and goalSatisfiedA.
+      The gap to 47 is exactly the 2 terms beyond two-level recursion. If the
+      full enumerated space is refuted, the certificate closes this ansatz
+      exactly. Reuse the merge vocabulary from the 555-line instrument (branch
+      @r61_67e3f9f) but make enumeration exhaustive over the structured ansatz,
+      not sampled. Checkpoint every candidate hash, consistency, and mismatch
+      counts. File-ownership: attempts/R138_merge_search.ts + .test.ts + .ndjson
+      only; no AlphaTensor tensors; field F_2 throughout.
+    planned: true
+  - id: R138-wide
+    problem: src/matmul/attempts/R138_wide_anchor.ts
+    tests: src/matmul/attempts/R138_wide_anchor.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R138
+    timeoutMs: 1800000
+    note: >
+      Wide-anchor lane for 4x4 (R79/R84-R86 methodology transfer): reconstruct
+      rank1Factor.ts + anchorSplit.ts for n=4 (16-bit factors). Enumerate anchor
+      schemes by splitting one factor's support of one term in the exact-49
+      floor (bipartition P+Q=supp, both nonempty) -> exact rank-50 decomposition
+      F'. Then for k=3,4,5 drop sets K of F', deficit D = sum of dropped terms,
+      screen with F_2 flattening-rank prefilter (modpFlatDim at p<2^24, integer
+      arithmetic) then exact F_2 rank decision. Exact integer arithmetic
+      throughout, no float, no branch-and-bound. Stream per-k checkpoints and
+      summaries to ndjson/json. Honest verdict: CERTIFIED-NO-HIT-WITHIN-ANSATZ
+      or BOUNDED-NO-CLOSURE with named unscreened remainder. File-ownership:
+      attempts/R138_wide_anchor.ts + .test.ts + .ndjson/.json only; no
+      AlphaTensor tensors; field F_2 throughout.
+    planned: true
+  - id: R138-ils
+    problem: src/matmul/attempts/R138_seed_ils.ts
+    tests: src/matmul/attempts/R138_seed_ils.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R138
+    timeoutMs: 1800000
+    note: >
+      Fresh-seed ILS lane (M8-M1 / R121 / R125-R126 pattern): reconstruct the
+      exact-49 floor (hash f4640c18) and the archived spark anchor 4126ca7f
+      (rank 53) from their own encodings. Seeds: 6 new seeds disjoint from ALL
+      prior ILS/walk seeds (22,66,7,77,107,207,307,407, plus every seed recorded
+      in M8M1_seed_ils.ndjson, R121_seed_ils.ndjson, R125_seed_ils.ndjson,
+      R126_seed_ils.ndjson on main). For each seed: split a term on one axis to
+      open ranks 50..54, run interleaved merge/flip moves, then greedy same-axis
+      drain. Checkpoint every lane-best and split-open state with full 16-bit
+      u,v,w factor vectors and stable FNV hash to R138_seed_ils.ndjson. EVERY
+      rank<=47 candidate exact-solved on its fixed support in-window via BigInt
+      Gaussian coefficient solver (unmatched=0 invariant). Verdict:
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified. Run exact-solve sweeps under nice -n 19. File-ownership:
+      attempts/R138_seed_ils.ts + .test.ts + .ndjson only; no AlphaTensor
+      tensors.
+    planned: true
+  - id: R138-merge-audit
+    problem: src/matmul/attempts/R138_merge_audit.ts
+    tests: src/matmul/attempts/R138_merge_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R138
+    timeoutMs: 1800000
+    note: >
+      Adjudication merge (later layer, runs AFTER R138-merge, R138-wide,
+      R138-ils land on main): re-verify every candidate from the three sibling
+      artifacts (R138_merge_search.ndjson, R138_wide_anchor.ndjson,
+      R138_seed_ils.ndjson) with checker.verifyMod2 AND checker.verify AND
+      goalSatisfiedA gate selector. Drift-check every recorded hash against the
+      canonical F_2 campaign FNV (hashMasks, +0x9e37 fold), preferring
+      canonicalHash when present. Exact-solve-snap any unsnapped rank<=47
+      support. Write R138_merge_audit.json with per-source summaries, total
+      candidates, witnesses, hash drift (must be 0), consistency agree/disagree,
+      and zero-drift self-check. Run bun src/matmul/goalCheckA.ts and record its
+      exit code iff a R138_scheme.ts exists. Verdict: WITNESS (BESTA47) or
+      BOUNDED-NO-WITNESS naming the residual. File-ownership:
+      attempts/R138_merge_audit.ts + .test.ts + .json only; no AlphaTensor
+      tensors; field F_2 throughout.
+    dependsOn:
+      - R138-merge
+      - R138-wide
+      - R138-ils
+    planned: true
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)
