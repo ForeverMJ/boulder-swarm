@@ -3,6 +3,7 @@ import { appendFile, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import { z } from "zod"
 import { createWorktree } from "./git"
+import { DEFAULT_MODEL_POOL, probeModelEdit, reselectModel, selectHealthyModel } from "./modelPool"
 import { spawnAgent } from "./opencodeWorker"
 import { autoPromote, dumpProposal, loadProposal, planLayers } from "./planner"
 import type { PlanProposal } from "./planner"
@@ -131,6 +132,12 @@ function plannerPrompt(policyBlock: string, usedLabels: readonly string[], miles
     "either belongs to a LATER round, or declares dependsOn: [ids of tasks in THIS",
     "proposal] - such tasks run in a later layer of the same round, after their",
     "dependencies have landed on main through the gate.",
+    "Double-bet rule: at most ONE task per proposal may carry replicas: 2, and only if it is",
+    "the round's blocking task (its failure voids the round's goal) AND it is either",
+    "first-of-kind (no playbook yet) or historically flaky in metrics/results.json despite",
+    "healthy models. Never double bookkeeping (merge/audit/census) or small deterministic",
+    "tasks - dependsOn covers those. The second replica runs a DIFFERENT pool model; the",
+    "gate merges the better branch and archives the other.",
     "Scoring rule: never attach a goal-level success marker (e.g. BESTA47) to a task whose",
     "normal outcome is a bounded null (sweeps, snaps, drains, censuses, analyses) - the",
     "marker only fires when the goal is actually reached, so honest negative work scores 0",
@@ -180,6 +187,20 @@ async function main(): Promise<void> {
   }
   let state: PlanState = { rounds: priorRounds, maxRounds }
   if (priorRounds.length > 0) console.log(`resumed run ${runId} with ${priorRounds.length} journaled rounds`)
+
+  const forcedModel = process.env["OPENCODE_MODEL"]?.trim()
+  let model = forcedModel ?? await selectHealthyModel(DEFAULT_MODEL_POOL, probeModelEdit)
+  let zeroSolveStreak = 0
+  // Models that already forced a switch this run are dead for production work no
+  // matter what the quick probe says; excluding them turns rotation into honest
+  // exhaustion instead of ping-pong between probe-healthy failures.
+  const failedModels = new Set<string>()
+  if (model === undefined) {
+    console.log("no healthy model in the pool right now; halting before round 1")
+    return
+  }
+  process.env["OPENCODE_MODEL"] = model
+  console.log(`model: ${model}${forcedModel !== undefined && forcedModel !== "" ? " (forced via OPENCODE_MODEL)" : " (pool-probed)"}`)
   for (;;) {
     const goal = spawnSync("bun", [goalCheck], { cwd: repo, encoding: "utf-8" })
     const action = decidePlanAction(state, { goalReached: goal.status === 0 })
@@ -217,6 +238,18 @@ async function main(): Promise<void> {
       const round: PlanRound = { label: "(no-proposal)", taskIds: [], solved: [] }
       await appendFile(journalPath, `${JSON.stringify({ kind: "round", runId, round, ts: new Date().toISOString() })}\n`, "utf-8")
       state = { ...state, rounds: [...state.rounds, round] }
+      if (forcedModel === undefined || forcedModel === "") {
+        const next = await reselectModel(model, DEFAULT_MODEL_POOL.filter((m) => !failedModels.has(m)), probeModelEdit)
+        if (next === undefined) {
+          console.log("no healthy model in the pool after planner failure; halting")
+          return
+        }
+        if (next !== model) {
+          model = next
+          process.env["OPENCODE_MODEL"] = model
+          console.log(`model switched to ${model}`)
+        }
+      }
       continue
     }
     const proposalPath = `plans/${created[0]}`
@@ -255,10 +288,24 @@ async function main(): Promise<void> {
     }
 
     for (const layer of planLayers(proposal)) {
+      const replicaId = proposal.tasks.find((t) => t.replicas === 2 && layer.includes(t.id))?.id
+      let altModel: string | undefined
+      if (replicaId !== undefined) {
+        altModel = await selectHealthyModel(
+          DEFAULT_MODEL_POOL.filter((m) => m !== model && !failedModels.has(m)),
+          probeModelEdit,
+        )
+        if (altModel === undefined) console.log(`no second healthy model; ${replicaId} runs single`)
+      }
+      const expanded = layer.flatMap((id) => (id === replicaId && altModel !== undefined ? [id, id] : [id]))
+      const replicaWorkerIdx = expanded.findIndex((id, i) => i > 0 && expanded[i - 1] === id)
+      const models = expanded.map((_, i) => (i === replicaWorkerIdx && altModel !== undefined ? altModel : model))
       const run = spawnSync(
         "bun",
-        ["src/orchestrator/runLoop.ts", "--workers", String(layer.length), "--run",
-          "--mode", "opencode", ...layer.flatMap((id) => ["--tasks", id])],
+        ["src/orchestrator/runLoop.ts", "--workers", String(expanded.length), "--run",
+          "--mode", "opencode", ...expanded.flatMap((id) => ["--tasks", id]),
+          ...(replicaId !== undefined && altModel !== undefined ? ["--replicas", replicaId] : []),
+          "--models", models.join(",")],
         { cwd: repo, stdio: "inherit" },
       )
       if (run.status !== 0) console.log(`runLoop exited ${run.status}; continuing to next layer anyway`)
@@ -272,6 +319,20 @@ async function main(): Promise<void> {
     const round: PlanRound = { label: proposal.label, taskIds: promotedTaskIds, solved: plan.solved }
     await appendFile(journalPath, `${JSON.stringify({ kind: "round", runId, round, ts: new Date().toISOString() })}\n`, "utf-8")
     state = { ...state, rounds: [...state.rounds, round] }
+    zeroSolveStreak = plan.solved.length === 0 ? zeroSolveStreak + 1 : 0
+    if (zeroSolveStreak >= 2 && (forcedModel === undefined || forcedModel === "")) {
+      failedModels.add(model)
+      const rest = DEFAULT_MODEL_POOL.filter((m) => !failedModels.has(m))
+      const next = await selectHealthyModel(rest, probeModelEdit)
+      if (next === undefined) {
+        console.log("zero-solve streak and the pool is exhausted of untried models; halting honestly")
+        return
+      }
+      console.log(`zero-solve streak ${zeroSolveStreak}: switching model ${model} -> ${next}`)
+      model = next
+      process.env["OPENCODE_MODEL"] = model
+      zeroSolveStreak = 0
+    }
   }
 }
 

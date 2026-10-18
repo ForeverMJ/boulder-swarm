@@ -90,10 +90,12 @@ export function spawnAgent(opts: {
   binArgs?: readonly string[]
   /** Judge seam: extra child env (PIDFILE-style fixtures). */
   env?: NodeJS.ProcessEnv
+  /** Replica diversity: explicit model beats the env default. */
+  model?: string
 }): Promise<AgentResult> {
   const timeoutMs = opts.timeoutMs ?? 600_000
   const bin = opts.bin ?? resolveCodexBin()
-  const model = resolveModel()
+  const model = opts.model ?? resolveModel()
   const outFile = join(opts.workdir, "agent-last-message.md")
   const args = opts.binArgs ?? [
     "exec",

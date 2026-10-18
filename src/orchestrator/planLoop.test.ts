@@ -75,3 +75,21 @@ describe("plan journal", () => {
     expect(lastRunId([])).toBeUndefined()
   })
 })
+
+describe("gate candidate selection with replicas", () => {
+  it("picks the better branch per task, deterministically", async () => {
+    const { selectGateCandidates } = await import("./runLoop")
+    const results = [
+      { task_id: "T-snap", branch: "agent/goal-w1-T-snap", pass_rate: 1 },
+      { task_id: "T-snap", branch: "agent/goal-w0-T-snap", pass_rate: 0 },
+      { task_id: "T-size", branch: "agent/goal-w2-T-size", pass_rate: 1 },
+    ]
+    const winners = selectGateCandidates(results)
+    expect(winners.map((w) => w.branch)).toEqual(["agent/goal-w2-T-size", "agent/goal-w1-T-snap"])
+    const tie = selectGateCandidates([
+      { task_id: "T", branch: "agent/goal-w1-T", pass_rate: 1 },
+      { task_id: "T", branch: "agent/goal-w0-T", pass_rate: 1 },
+    ])
+    expect(tie.map((w) => w.branch)).toEqual(["agent/goal-w0-T"])
+  })
+})

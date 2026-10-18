@@ -58,6 +58,8 @@ type Args = {
   maxRounds: number
   budgetHours: number
   tasks: string[]
+  models: string[]
+  replicas: string[]
 }
 
 function parseArgs(argv: readonly string[]): Args {
@@ -68,6 +70,8 @@ function parseArgs(argv: readonly string[]): Args {
   let maxRounds = 200
   let budgetHours = 24
   let tasks: string[] = []
+  let models: string[] = []
+  let replicas: string[] = []
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--workers") {
       const v = argv[i + 1]
@@ -86,6 +90,14 @@ function parseArgs(argv: readonly string[]): Args {
       const v = argv[i + 1]
       if (v === "codex" || v === "opencode") mode = v
     }
+    if (argv[i] === "--replicas") {
+      const v = argv[i + 1]
+      if (v !== undefined) replicas.push(...v.split(",").map((s) => s.trim()).filter((s) => s !== ""))
+    }
+    if (argv[i] === "--models") {
+      const v = argv[i + 1]
+      if (v !== undefined) models.push(...v.split(",").map((s) => s.trim()).filter((s) => s !== ""))
+    }
     if (argv[i] === "--tasks") {
       const v = argv[i + 1]
       if (v !== undefined && !v.startsWith("--")) {
@@ -94,7 +106,7 @@ function parseArgs(argv: readonly string[]): Args {
     }
     if (argv[i] === "--run") run = true
   }
-  return { workers, mode, run, supervise, maxRounds, budgetHours, tasks }
+  return { workers, mode, run, supervise, maxRounds, budgetHours, tasks, models, replicas }
 }
 
 const CAMPAIGN_EVIDENCE = "CAMPAIGN:"
@@ -221,6 +233,7 @@ type AgentDeps = {
     branch: string
     timeoutMs?: number
     onSalvage?: () => void
+    model?: string
   }) => Promise<{
     readonly exitCode: number
     readonly timedOut: boolean
@@ -240,6 +253,31 @@ type LiveRun = {
   readonly produced: Record<string, readonly string[]>
   readonly revisions: Record<string, string>
   readonly progress?: Record<string, boolean>
+}
+
+export type GateCandidate = {
+  readonly task_id: string
+  readonly branch: string
+  readonly pass_rate: number
+}
+
+// Replica gating: a double-bet task yields two branches; merge only the winner.
+// Deterministic pick: highest pass_rate, tie broken by branch name, so the choice
+// is reproducible from the record and never a coin flip.
+export function selectGateCandidates<T extends GateCandidate>(results: readonly T[]): T[] {
+  const byTask = new Map<string, T[]>()
+  for (const r of results) {
+    const list = byTask.get(r.task_id) ?? []
+    list.push(r)
+    byTask.set(r.task_id, list)
+  }
+  const winners: T[] = []
+  for (const [, group] of [...byTask.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    const sorted = [...group].sort((x, y) => y.pass_rate - x.pass_rate || x.branch.localeCompare(y.branch))
+    const winner = sorted[0]
+    if (winner !== undefined) winners.push(winner)
+  }
+  return winners
 }
 
 export async function runLive(
@@ -267,7 +305,7 @@ export async function runLive(
         repo,
         a,
         a.task.planned === true
-          ? buildPlannedTaskPrompt(a.task.id, a.task.problem, a.task.tests, a.task.note)
+          ? buildPlannedTaskPrompt(a.task.id, a.task.problem, a.task.tests, a.task.note, a.task.evidence)
           : deps.buildPrompt(a.task.id, a.task.problem, a.task.tests),
       )
       let plan: AgentPlan | undefined
@@ -337,6 +375,7 @@ export async function runLive(
         prompt,
         taskId: a.task.id,
         branch: a.branch,
+        ...(a.model === undefined ? {} : { model: a.model }),
         ...(context ? { timeoutMs: remainingMs } : a.task.timeoutMs === undefined ? {} : { timeoutMs: a.task.timeoutMs }),
         onSalvage: () => {
           salvaged = true
@@ -419,7 +458,14 @@ export async function runLive(
   const accepted = new Set<string>()
   const integrations = new Map<string, ProgressIntegration>()
   try {
-    for (const r of [...results].sort((x, y) => x.task_id.localeCompare(y.task_id))) {
+    const gateCandidates = selectGateCandidates(results)
+    const gated = new Set(gateCandidates.map((r) => r.branch))
+    for (const r of results) {
+      if (!gated.has(r.branch)) {
+        console.log(`GATE replica-loser ${r.task_id} (${r.branch}): pass_rate=${r.pass_rate.toFixed(2)} kept as archive branch`)
+      }
+    }
+    for (const r of gateCandidates) {
       if (r.pass_rate < 1 || r.total === 0) {
         console.log(`GATE skip ${r.task_id} (${r.branch}): pass_rate=${r.pass_rate.toFixed(2)} < 1.0`)
         integrations.set(r.task_id, { verdict: "skipped", reason: `gate not attempted: worker pass_rate=${r.pass_rate.toFixed(2)} < 1.0` })
@@ -530,7 +576,10 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
       if (queue.length === 0) return []
       const opened = beginRound(readState(), queue.map((t) => t.id), Date.now())
       writeState(opened.state)
-      const assigns = dispatch(queue, a.workers)
+      const assigns = dispatch(queue, a.workers).map((x) => ({
+        ...x,
+        ...(a.models[x.workerId] === undefined ? {} : { model: a.models[x.workerId] }),
+      }))
       const live: LiveRun =
         a.mode === "mock"
           ? await runMock(assigns)
@@ -575,12 +624,17 @@ async function main(): Promise<void> {
     const args = parseArgs(process.argv.slice(2))
     const { workers, mode, run, tasks } = args
     const all = await loadTasks(REPO)
-    const selected = tasks.length === 0 ? all : all.filter((t) => tasks.includes(t.id))
+    const replicaSet = new Set(args.replicas)
+    const filtered = tasks.length === 0 ? all : all.filter((t) => tasks.includes(t.id))
+    const selected = filtered.flatMap((t) => (replicaSet.has(String(t.id)) ? [t, t] : [t]))
     if (args.supervise) {
       await supervise(args, selected)
       return
     }
-    const assigns = dispatch(selected, workers)
+    const assigns = dispatch(selected, workers).map((x) => ({
+      ...x,
+      ...(args.models[x.workerId] === undefined ? {} : { model: args.models[x.workerId] }),
+    }))
     console.log(`mode=${mode} tasks=${selected.length} workers=${workers} assignments=${assigns.length}`)
     for (const wid of workerIds(workers)) {
       const mine = assigns.filter((a) => a.workerId === wid).map((a) => a.task.id)

@@ -57,10 +57,11 @@ export function spawnAgent(opts: {
   branch: string
   timeoutMs?: number
   onSalvage?: () => void
+  model?: string
 }): Promise<AgentResult> {
   const timeoutMs = opts.timeoutMs ?? 600_000
   const bin = resolveOpencodeBin()
-  const model = resolveModel()
+  const model = opts.model ?? resolveModel()
   const outFile = join(opts.workdir, "agent-last-message.md")
   const started = performance.now()
   return runTree({
