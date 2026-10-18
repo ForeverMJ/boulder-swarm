@@ -261,3 +261,38 @@ describe("dependsOn layering", () => {
     expect(goalYamlText).toContain("R99-a")
   })
 })
+
+describe("planned-task prompt evidence clause", () => {
+  it("requires the CAMPAIGN row when the task is evidence-scored", async () => {
+    const { buildPlannedTaskPrompt } = await import("./scheduler")
+    const p = buildPlannedTaskPrompt("R9-m", "m.ts", "m.test.ts", "spec", "CAMPAIGN:R9")
+    expect(p).toContain("CAMPAIGN:R9")
+    expect(p).toContain("CAMPAIGN.md")
+    expect(p).toContain("besides src/matmul/CAMPAIGN.md")
+    const plain = buildPlannedTaskPrompt("R9-m", "m.ts", "m.test.ts", "spec")
+    expect(plain).not.toContain("evidence-scored")
+  })
+})
+
+describe("replica double-bet cap", () => {
+  const base = { label: "R99", goal: "g", rationale: "r", stopConditions: ["done"] }
+  const GOAL_WITH_POLICY = `${GOAL}  planner:\n    milestones: [M5]\n    maxTasksPerProposal: 4\n    maxTimeoutMsPerTask: 1800000\n    maxRoundsPerProposal: 4\n    idMustStartWithLabel: true\n`
+  it("allows one replicated task, refuses two", () => {
+    const one = loadProposal(dumpProposal({
+      ...base,
+      tasks: [
+        { id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5", replicas: 2 },
+        { id: "R99-b", problem: "b.ts", tests: "b.test.ts", milestone: "M5" },
+      ],
+    }))
+    expect(() => autoPromote(GOAL_WITH_POLICY, one)).not.toThrow()
+    const two = loadProposal(dumpProposal({
+      ...base,
+      tasks: [
+        { id: "R99-a", problem: "a.ts", tests: "a.test.ts", milestone: "M5", replicas: 2 },
+        { id: "R99-b", problem: "b.ts", tests: "b.test.ts", milestone: "M5", replicas: 2 },
+      ],
+    }))
+    expect(() => autoPromote(GOAL_WITH_POLICY, two)).toThrow(/at most one double-bet/)
+  })
+})

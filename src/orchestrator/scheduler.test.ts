@@ -17,3 +17,16 @@ describe("scheduler task window plumbing, judged independently", () => {
     expect(undeclared?.timeoutMs).toBeUndefined()
   })
 })
+
+describe("dispatch with a duplicated replica task", () => {
+  it("assigns the same task to two different workers on distinct branches", async () => {
+    const { dispatch } = await import("./scheduler")
+    const { taskId } = await import("../shared/brands")
+    const t = { id: taskId("R9-a"), problem: "a.ts", tests: "a.test.ts", milestone: "M5" }
+    const assigns = dispatch([t, t], 4)
+    expect(assigns.length).toBe(2)
+    expect(assigns[0]?.workerId).toBe(0)
+    expect(assigns[1]?.workerId).toBe(1)
+    expect(assigns[0]?.branch).not.toBe(assigns[1]?.branch)
+  })
+})

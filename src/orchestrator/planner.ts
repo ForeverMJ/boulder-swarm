@@ -17,6 +17,7 @@ const PlanTaskEntry = z.object({
   timeoutMs: z.number().int().positive().optional(),
   note: z.string().optional(),
   dependsOn: z.array(z.string().min(1)).optional(),
+  replicas: z.literal(2).optional(),
 })
 
 const PlanBudget = z.object({
@@ -261,6 +262,10 @@ export function autoPromote(
     )
   }
   planLayers(proposal)
+  const replicaTasks = proposal.tasks.filter((t) => t.replicas !== undefined)
+  if (replicaTasks.length > 1) {
+    throw new Error(`refusing to auto-promote: ${replicaTasks.length} tasks request replicas; at most one double-bet per proposal`)
+  }
   const seenPaths = new Set<string>()
   for (const t of proposal.tasks) {
     for (const p of [t.problem, t.tests]) {

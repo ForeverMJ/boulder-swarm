@@ -17,6 +17,7 @@ const L2Entry = z.object({
   planned: z.boolean().optional(),
   note: z.string().optional(),
   dependsOn: z.array(z.string()).optional(),
+  replicas: z.literal(2).optional(),
 })
 const GoalFile = z.object({ L2: z.array(L2Entry) })
 
@@ -35,6 +36,8 @@ export type Task = {
   readonly note?: string
   /** Intra-proposal dependency ids; execution layering is the plan driver's job. */
   readonly dependsOn?: readonly string[]
+  /** Planner double-bet: run this task on two workers with different models. */
+  readonly replicas?: 2
   readonly progress?: ProgressPolicy
 }
 
@@ -42,6 +45,7 @@ export type Assignment = {
   readonly workerId: number
   readonly branch: string
   readonly task: Task
+  readonly model?: string
 }
 
 export async function loadTasks(repoRoot: string): Promise<Task[]> {
@@ -61,6 +65,7 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     ...(t.planned === undefined ? {} : { planned: t.planned }),
     ...(t.note === undefined ? {} : { note: t.note }),
     ...(t.dependsOn === undefined ? {} : { dependsOn: t.dependsOn }),
+    ...(t.replicas === undefined ? {} : { replicas: t.replicas }),
   }))
 }
 
@@ -80,7 +85,21 @@ export function workerIds(nWorkers: number): number[] {
 // test file already exists; for planned tasks both files must be CREATED, and the
 // planner's note is the only spec the worker ever sees. The contract names the test
 // file explicitly because a missing test scores 0/0 and the work is discarded.
-export function buildPlannedTaskPrompt(taskId: string, problem: string, tests: string, note?: string): string {
+export function buildPlannedTaskPrompt(
+  taskId: string,
+  problem: string,
+  tests: string,
+  note?: string,
+  evidence?: string,
+): string {
+  const evidenceItem =
+    evidence !== undefined && evidence.startsWith("CAMPAIGN:")
+      ? [
+          `6. This task is evidence-scored as ${evidence}: you MUST also append a substantive row to`,
+          "   src/matmul/CAMPAIGN.md with that label in the first column, stating what you did,",
+          "   the measured outcome, and the artifact path. Without the row the task scores 0.",
+        ]
+      : []
   return [
     `You are worker for task ${taskId}, minted by the autonomous planner under policy.`,
     "Repo root is your current directory.",
@@ -90,7 +109,8 @@ export function buildPlannedTaskPrompt(taskId: string, problem: string, tests: s
     `3. \`bun test ${tests}\` must pass and finish well under 60 seconds; never run the full suite.`,
     "4. Run `bun node_modules/typescript/bin/tsc --noEmit` before finishing: the merge gate runs the static contract on main and blocks on any type error, including in your own files.",
     `5. ${problem} may write its own runtime artifacts next to itself when executed.`,
-    "You may NOT modify any other existing file.",
+    ...evidenceItem,
+    `You may NOT modify any other existing file${evidenceItem.length > 0 ? " besides src/matmul/CAMPAIGN.md" : ""}.`,
     "",
     "TASK SPEC (from the approved proposal):",
     note ?? "(no spec recorded)",
