@@ -1,0 +1,83 @@
+label: R126
+goal: "Close the named M8 remainder: exact 4x4x4 rank<=47 scheme over F_2
+  (AlphaTensor parity), or bound the residual honestly"
+rationale: "R123/R124/R125 all landed through the gate with no witness (R121
+  drains passed their own judges at 10/10 and 22/22; R122 rounds went 0/0; floor
+  stays exact-49, BESTA47 absent, goalCheckA exits 1). The standing pattern is
+  census-size-then-sweep: R126 sizes the post-R125 residual first, then works
+  three independent lanes (deterministic drain, fresh-seed ILS, exact-solve
+  sweep) over ground named only by already-merged artifacts on main (R123/R124
+  censuses, R125 snapA/snapB retirements). No task aggregates in-flight
+  siblings, so the proposal runs in a single layer with no dependsOn."
+budget:
+  maxRounds: 4
+stopConditions:
+  - "witness: goalCheckA exits 0 with an exact rank<=47 scheme over F_2"
+  - "bounded: every task lands an honest bounded verdict naming its residual"
+  - "budget: wall clock exceeds 4 rounds, stop and report coverage"
+tasks:
+  - id: R126-census
+    problem: src/matmul/attempts/R126_census.ts
+    tests: src/matmul/attempts/R126_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure (R105 SIZED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47/48 support with vecs present across the already-merged
+      R123/R124 censuses on main, the R125 snapA/snapB retirements, and the
+      R123/R124 drain checkpoints; mark each hash PROCESSED versus UNPROCESSED;
+      emit R126_census.json with per-candidate hash, rank, mismatches,
+      vecs-present and archive plus exact-solve workload pricing; verdict
+      SIZED-NO-CLOSURE; file-ownership attempts/R126_census.ts plus .test.ts
+      plus .json only; field F_2 throughout"
+  - id: R126-drain
+    problem: src/matmul/attempts/R126_drain49o.ts
+    tests: src/matmul/attempts/R126_drain49o.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic orbit-drain from R124-drain best states plus the exact-49
+      floor anchors, fresh seeds only (discover every ILS/walk seed already used
+      in main R*_seed_ils*.ts and R*_walk*.ts and exclude them all, including
+      22, 66, 7, 77, 107, 207, 307 and 407); at least 50 seeded deterministic
+      iters per start with greedy exact F_2 drain, shear flips, split kicks and
+      deterministic meld; checkpoint full 16-bit factor vectors plus stable fnv
+      hashes with resume-skip of hashes already checkpointed on main;
+      exact-solve every rank<=47 candidate in-window so none is left unmatched;
+      verify any witness via verifyMod2 plus goalSatisfiedA and emit it as
+      attempts/R126_scheme_*.ts; verdict BOUNDED-RED unless a witness lands; run
+      heavy sweeps under nice -n 19; file-ownership attempts/R126_drain49o* plus
+      optional attempts/R126_scheme_*.ts only; no AlphaTensor tensors
+  - id: R126-ils
+    problem: src/matmul/attempts/R126_seed_ils16.ts
+    tests: src/matmul/attempts/R126_seed_ils16.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude every
+      ILS seed used on main (discover from R*_seed_ils*.ts, including 22, 66, 7,
+      77, 107, 207, 307, 407 and the R113-R125 lane seeds); at least 6 new
+      seeds, at least 10s per lane; each lane calibrates against the exact-49
+      floor then runs ILS at fixed rank 47; EVERY rank<=47 zero-mismatch
+      candidate exact-solved on its fixed support in-window (composition rule,
+      unmatched count stays 0); checkpoint vecs plus stable hashes for lane-best
+      47 and floor-best 49 states to R126_seed_ils16.ndjson; verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and re-verified via
+      verifyMod2 plus the goalCheckA gate path; run under nice -n 19;
+      file-ownership attempts/R126_seed_ils16* only; no AlphaTensor tensors"
+  - id: R126-snap
+    problem: src/matmul/attempts/R126_snap_solve.ts
+    tests: src/matmul/attempts/R126_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the UNPROCESSED replayable rank-47/48 supports
+      named by already-merged artifacts on main only (R124_census.json residual
+      plus R125 snapA/snapB retirement lists; skip every retired and processed
+      hash; do NOT read the in-flight R126 census so this task stays
+      single-layer independent); recover the gaussSolve per-axis machinery;
+      solve every replayable support exactly over F_2; CONSISTENT ships an exact
+      scheme file as attempts/R126_scheme_*.ts exporting scheme, INCONSISTENT
+      retires the hash with axis and mismatch counts; checkpoint candidate hash,
+      axis, consistency and mismatch counts to R126_snap_solve.ndjson; controls:
+      floor seed solves CONSISTENT and one retired hash re-derives INCONSISTENT;
+      verdict SIZED-or-SWEPT with no closure claim unless a witness lands and
+      re-verifies via verifyMod2 plus goalSatisfiedA; run under nice -n 19;
+      file-ownership attempts/R126_snap_solve* plus optional
+      attempts/R126_scheme_*.ts only; no AlphaTensor tensors"

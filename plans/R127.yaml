@@ -1,0 +1,143 @@
+label: R127
+goal: "M8 AlphaTensor parity (exact rank <= 47 over F_2 for 4x4x4): complete the
+  adjudication layer by landing the two sibling artifacts still missing from
+  main so the already-merged M8K1_audit can adjudicate the accumulated
+  replayable candidates, plus one bounded fresh-seed lane. Honest outcome either
+  way: a rank<=47 witness, or bounded nulls over the named remainders."
+rationale: "The M8-K1 adjudication audit (attempts/M8K1_audit.ts, gate-merged to
+  main, per CAMPAIGN.md M8-K1 row) re-verifies every vectored candidate with
+  checker.verifyMod2 and checker.verify, drift-checks hashes against the
+  canonical F_2 fnv (pinned to the 75 R100 census hashes), runs goalCheckA, and
+  emits a two-pass zero-drift self-check. It stays PENDING-SIBLINGS until three
+  sibling artifacts exist on main: M8K1_seed_ils.ndjson (now landed via M8-M1,
+  zero drift, self-check green) plus M8K1_strassenMerge.json and
+  M8K1_snap_solve.ndjson, both still ABSENT. This named remainder is the right
+  closing move: rounds R100-R126 produced replayable rank-47-support candidates
+  with vecs and hashes, and the audit can only finish once its siblings merge.
+  Tasks 1 and 2 are independent bounded lanes over disjoint file sets that each
+  ship one missing sibling artifact; either landing independently advances
+  integration. Task 3 declares dependsOn on both so it runs in a later layer of
+  the SAME round, after they land through the gate: it only exercises the
+  already-merged audit - no reimplementation - and is judged by CAMPAIGN
+  evidence plus its own test. Task 4 is one bounded fresh-seed ILS lane
+  continuing the R121-seedils pattern with seeds disjoint from R121's, from
+  M8-M1's [200003,200017,200029,200041,200053,200069], and from the R100 census
+  seed lists. No goal-level marker (BESTA47) is attached to any bounded search
+  task; only the later-layer audit task may carry it, and only if a candidate
+  actually survives the gate. Sized completion of a named remainder, not an
+  open-ended sweep; the next round plans from this round's actual outcomes."
+budget:
+  maxRounds: 4
+stopConditions:
+  - "a rank<=47 exact scheme verifies via verifyMod2 and goalSatisfiedA and
+    goalCheckA exits 0: close WITNESS"
+  - "both missing siblings land on main and the audit runs with all three
+    siblings present, 0 hash drift, self-check green, goalCheckA still exits 1:
+    close ADJUDICATION-COMPLETE (bounded no-closure over this layer)"
+  - "budget exhausted with either sibling still absent from main: report
+    coverage honestly, the audit stays PENDING-SIBLINGS"
+  - "any shipped scheme fails the merge-gate re-test of goalCheckA semantics: do
+    not claim parity, report the drift"
+tasks:
+  - id: R127-strassenMerge
+    problem: src/matmul/attempts/R127_strassenMerge.ts
+    tests: src/matmul/attempts/R127_strassenMerge.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "First missing sibling of the M8-K1 adjudication layer. In
+      attempts/R127_strassenMerge.ts: reconstruct the exact-49 two-level
+      Strassen floor from its own encoding (mismatchF2 = 0, canonical hash
+      f4640c18), enumerate structured 2-term mergings of the 7 Strassen triples
+      (left-ideal octonion-style F_2 linear combos that keep every term rank-1,
+      mirroring the M8-A2 design), screen each merging with verifyMod2, and
+      exact-solve any zero-mismatch rank<=47 candidate in-window with the
+      campaign's BigInt Gaussian solver (known-answer controls: naive(4)
+      solvable at supportRank 64, the rank-49 floor solvable, a 47-term
+      truncation refused). Stream every state to
+      attempts/M8K1_strassenMerge.ndjson with full vecs, mismatch count and
+      canonical-fnv hash in the audit's format, deriving the row schema from the
+      merged M8M1_seed_ils.ts conventions rather than inventing one. If a
+      candidate's exact solve is CONSISTENT and it passes goalSatisfiedA, export
+      attempts/M8K1_scheme.ts. On a bounded null, write
+      attempts/M8K1_strassenMerge.json as a minimal merge-census certificate
+      (mergings-enumerated, admitted, witnesses, exclusions) with a known-answer
+      control proving the enumeration is non-vacuous, and declare the bounded
+      null over the merging ansatz honestly. The colocated test re-derives every
+      recorded hash, mismatch and consistency status from the vecs in-window.
+      Bounded RED only; never claim impossibility beyond the merging ansatz."
+  - id: R127-snapSolve
+    problem: src/matmul/attempts/R127_snap_solve.ts
+    tests: src/matmul/attempts/R127_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Second missing sibling. In attempts/R127_snap_solve.ts: gather the
+      replayable-candidate inventory accumulated on main and archive branches
+      across R100-R126 (vecs + hashes + status rows from census and search
+      checkpoints, including the M8-M1 stream already on main), EXCLUDE every
+      hash named RETIRED or consistency-failed on main, and per candidate:
+      replay the stored vecs, independently re-derive canonical hash and
+      mismatchF2 in-window, and exact-solve every zero-mismatch rank<=47
+      candidate (BigInt Gaussian; CONSISTENT ships attempts/M8K1_scheme.ts via
+      goalSatisfiedA; INCONSISTENT or not-in-span retires the hash with axis and
+      mismatch counts). Exhausting the inventory with zero witnesses is a
+      bounded null, NOT impossibility. In both cases write
+      attempts/M8K1_snap_solve.json as a minimal inventory certificate
+      (candidates-considered, per-hash status, exclusions honored) so the audit
+      has a structurally-sound sibling to read; if the reachable inventory is
+      empty after exclusions, write the certificate with candidates-considered =
+      0 and honest status SIZED-NO-CLOSURE, and the audit's real-directory test
+      then legitimately stays PENDING-SIBLINGS. Stream all rows to
+      attempts/M8K1_snap_solve.ndjson in the audit's expected schema, derived
+      from the merged M8M1_seed_ils.ts conventions. The colocated test
+      re-derives every recorded hash/mismatch/status from the vecs in-window;
+      never edit the merged audit or any judge."
+  - id: R127-adjudicate
+    problem: src/matmul/attempts/R127_adjudicate.ts
+    tests: src/matmul/attempts/R127_adjudicate.test.ts
+    milestone: M8
+    success: ADJUDICATION-COMPLETE-OR-WITNESS
+    evidence: CAMPAIGN:R127
+    timeoutMs: 600000
+    note: "Later-layer audit closure; runs only after both siblings merge to main,
+      so attempts/M8K1_strassenMerge.ndjson (or its .json fallback) and
+      attempts/M8K1_snap_solve.ndjson (or .json) exist on main next to the
+      already-merged M8K1_seed_ils.ndjson. In attempts/R127_adjudicate.ts:
+      exercise the already-merged attempts/M8K1_audit.ts against the complete
+      sibling layer (its goalCheckA invocation fires iff attempts/M8K1_scheme.ts
+      exists), and write the outcome to attempts/R127_adjudicate.json: sibling
+      presence, per-candidate re-verified verdicts, drift count, self-check
+      result, goalCheckA exit code, and the audit's own verdict string. If a
+      zero-mismatch rank<=47 candidate survives audit and goalCheckA exits 0,
+      the witness ships via the scheme file the siblings produced and the
+      goal-level success marker BESTA47 attaches to THIS task only (the only
+      task this round allowed to carry it). If no candidate survives, record
+      BOUNDED-NO-CLOSURE honestly with the audit JSON as evidence. The colocated
+      test stays green on either branch and re-derives: sibling presence,
+      per-candidate verdicts, drift = 0, self-check green, the gate exit code,
+      and the verdict string. Do not re-implement the audit; it is merged and
+      its colocated test is the judge. Judged by evidence: CAMPAIGN:R127 plus
+      its own test."
+    dependsOn:
+      - R127-strassenMerge
+      - R127-snapSolve
+  - id: R127-seedils49
+    problem: src/matmul/attempts/R127_seed_ils49.ts
+    tests: src/matmul/attempts/R127_seed_ils49.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "One bounded fresh-seed ILS lane toward new rank-47 candidates, in the
+      R121-seedils pattern. Seeds asserted disjoint from R121's seed list, from
+      M8-M1's [200003,200017,200029,200041,200053,200069], and from the R100
+      census seed lists; give each seed its integer identity in the file so
+      disjointness is testable in-window, not asserted in prose. 4 lanes, >= 10
+      s per lane: split-open one axis of the exact-49 floor (canonical hash
+      f4640c18, mismatchF2 = 0), then flip + repair + same-axis greedy-drain
+      ILS. Every zero-mismatch rank<=47 candidate is exact-solved in-window
+      (BigInt Gaussian; known-answer controls: naive(4) supportRank 64 solvable,
+      floor solvable, 47-term truncation refused); CONSISTENT ships
+      attempts/M8K1_scheme.ts via goalSatisfiedA. Checkpoint full vecs plus
+      canonical-fnv hashes with resume-skip; the stream goes to
+      attempts/R127_seed_ils49.ndjson. Bounded null only, no goal marker
+      attached; the colocated test re-derives every checkpoint's hash, mismatch
+      and consistency from the vecs in-window and verifies seed-disjointness
+      against the named lists."

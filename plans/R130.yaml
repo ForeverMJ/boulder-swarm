@@ -1,0 +1,80 @@
+label: R130
+goal: M8
+rationale: >
+  The ILS/drain/snap loop has run 40+ rounds without a witness. R124 census
+  shows 18 LIVE rank-47 candidates (mm 32-94) never exact-solved, plus 12
+  UNPROCESSED now retired by R125 snap (all INCONSISTENT). R126 ILS just merged.
+  The structural 2-term merge approach is the most promising untested direction.
+  This round: (1) snap the 18 LIVE candidates, (2) exhaustive structural 2-term
+  merge enumeration, (3) fresh ILS with new seeds, (4) merge/adjudication.
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 with a verified rank<=47 witness
+  - all 18 LIVE candidates from R124 census retired INCONSISTENT
+  - structural merge space exhausted with no rank-47 scheme
+  - fresh ILS produces no new rank-47 candidate
+tasks:
+  - id: R130-snap
+    problem: src/matmul/attempts/R130_snap_live.ts
+    tests: src/matmul/attempts/R130_snap_live.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve the 18 LIVE rank-47 candidates from R124_census.json on main
+      (hashes: 17b83630, 3a28e5ea, 3d2d5109, 402e4941, 40bb1ad9, 49b8fa68,
+      53a6558b, 594652d9, 8d049ca1, 90b43d72, a0502ec8, b21e4c52, ba98ca29,
+      c8afeb24, d1195ac0, e962d8de, f62bdceb, fbecf7c6). Recover gaussSolve
+      per-axis machinery from landed R125_snap_solveA.ts on main. CONSISTENT
+      ships an exact scheme file verified by verifyMod2, INCONSISTENT retires
+      the hash with axis and mismatch counts. Checkpoint hash, axis, consistency
+      and mismatch counts to R130_snap_live.ndjson. Controls: floor seed solves
+      CONSISTENT, one R100-retired spark hash re-derives INCONSISTENT. Bounded
+      nulls stay bounded. File-ownership attempts/R130_snap_live* only. No
+      AlphaTensor tensors. Field F_2 throughout."
+  - id: R130-struct
+    problem: src/matmul/attempts/R130_struct_merge.ts
+    tests: src/matmul/attempts/R130_struct_merge.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exhaustive structural 2-term merge enumeration. The 49-term two-level
+      Strassen has 7 triples. Enumerate ALL F_2-linear combos of pairs of
+      triples that stay rank-1 over F_2 (left-ideal and octonion-style). For
+      each merged pair, check if the resulting 47-term scheme is exact via
+      verifyMod2. If the full enumerated space is refuted, emit a bounded
+      negative certificate with the exhaustive count. Controls: the 49-term
+      floor re-verifies exact via verifyMod2, a planted rank-1 merge is
+      detected. File-ownership attempts/R130_struct_merge* only. No AlphaTensor
+      tensors."
+  - id: R130-ils
+    problem: src/matmul/attempts/R130_seed_ils.ts
+    tests: src/matmul/attempts/R130_seed_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: From-zero ILS on fresh ground only. Seeds exclude every previously run ILS
+      seed (22, 66, 7, 77, 107, 207, 307, 407 and every seed recorded in any
+      R*_seed_ils*.ndjson or R*_walk_ils.json on main). At least 6 new seeds
+      with at least 10s per lane. Calibrate each lane against the exact-49 floor
+      then run ILS at fixed rank 47. Every rank<=47 zero-mismatch candidate
+      exact-solved on its fixed support in-window. Checkpoint vecs plus hashes
+      for lane-best 47 and floor-best 49 states to R130_seed_ils.ndjson. Verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified. File-ownership attempts/R130_seed_ils* only. No AlphaTensor
+      tensors.
+  - id: R130-merge
+    problem: src/matmul/attempts/R130_merge.ts
+    tests: src/matmul/attempts/R130_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R130
+    timeoutMs: 1800000
+    note: Adjudication merge over R130 inputs (all landed on main through the gate).
+      Re-verify every R130 snap/struct/ils input with verifyMod2 plus the
+      goalCheckA gate path, snap-check any unsnapped rank<=47 support,
+      drift-check hashes against R124_census.json, write R130_merge.json with
+      hashes, consistency outcomes, mismatch counts and a zero-drift self-check,
+      then append the substantive CAMPAIGN:R130 row (exact-47 scheme or honest
+      bounded-red naming the residual). File-ownership attempts/R130_merge.ts
+      plus .test.ts plus .json only.
+    dependsOn:
+      - R130-snap
+      - R130-struct
+      - R130-ils

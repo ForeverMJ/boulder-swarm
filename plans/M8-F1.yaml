@@ -1,0 +1,145 @@
+label: M8-F1
+goal: "M8: exact 4x4x4 scheme over F_2 at rank<=47 (AlphaTensor parity) - close
+  the drop-k/add-j remainder around the exact-49 two-level Strassen base exactly
+  and cheaply, sizing before closing, instead of another stochastic sweep"
+rationale: "Every M8 lane so far is stochastic (seeded ILS, walk probes,
+  orbit-family drain/meld, snap-solve, census) and none has closed a NAMED
+  space; the loops keep re-sweeping. The 3x3 campaign (T12) proved the opposite
+  pattern wins: buy a cheap PROVEN decision that decides an entire remainder
+  class exactly rather than enumerating more rows (R74/R86: the moment a cheaper
+  exact decision appeared, a 5.4e9-row space that had been priced at weeks
+  closed in seconds). The exact-49 two-level Strassen base is landed on archive
+  agent/goal-w0-A1@r45_c8e92f3 (attempts/A1_sisyphus.ts, verifyMod2-clean), and
+  its 49 nonzero rank-1 terms sum to the 4x4x4 F_2 target. Therefore, for a drop
+  set K of size k, the completion target is exactly the deficit D_K = sum of the
+  dropped terms: a rank<=47 scheme of the form (49-k kept base terms + fresh
+  rank-1 terms) exists IFF rank(D_K) <= k-2, because 49-k+j <= 47 forces j <=
+  k-2. This is an exact, budget-free decision per drop set over F_2, so the
+  whole drop-k band k=3,4 is cheap, and k=5,6 is decidable with sound lower
+  bounds (flattening rank plus forced-fibre totals, the R74 instruments) and a
+  small candidate set. k=2 is closed by inspection (distinct terms cannot XOR to
+  zero). This proposal sizes the space, closes the cheap bands exactly, sweeps
+  the heavier bands honestly, then adjudicates - it never attaches a goal-level
+  marker to a bounded null, so honest negative work is judged by its own tests.
+  The named remainder space is proven closed or a witness lands; either way the
+  round leaves a durable exact certificate and does not widen into open-ended
+  search (that belongs to the next round)."
+budget:
+  maxRounds: 4
+stopConditions:
+  - a rank<=47 scheme is exported and re-verified by verifyMod2 plus
+    goalSatisfiedA, so M8 is met
+  - "a k-band sweep finishes exactly with zero admissible rows: that band is
+    closed, exact counts recorded"
+  - "a task's time budget is exhausted with rows unscreened: report coverage
+    honestly and never claim closure"
+tasks:
+  - id: M8-F1-size
+    problem: src/matmul/attempts/M8F1_size.ts
+    tests: src/matmul/attempts/M8F1_size.test.ts
+    milestone: M8
+    timeoutMs: 900000
+    note: "TASK: size the drop-k/add-j remainder around the exact-49 two-level
+      Strassen base before anyone closes it. Recover the base with `git show
+      agent/goal-w0-A1@r45_c8e92f3:src/matmul/attempts/A1_sisyphus.ts` into
+      attempts/ (read-only copy for analysis), reduce it mod 2, and confirm with
+      checker.verifyMod2 that it is exact with rank 49 and 49 DISTINCT nonzero
+      terms; record the canonical key of each term. EXPECTED OUTCOME: a file
+      attempts/M8F1_size.json carrying (a) the base's verified rank and the 49
+      canonical term keys, (b) for k=2..8 the exact drop-set count C(49,k), (c)
+      for k=2..8 the exact count of rows a sound flattening-rank lower bound
+      already refutes at threshold k-2, and (d) the F_2 relation/lattice data:
+      the term-relation kernel dimension and which small-support relations
+      (support <= 4) exist among the 49 terms. REQUIRED TOOLS: node:fs,
+      node:child_process (git show), the existing checker.ts and types.ts, bun
+      test. MUST DO: use exact integer/F_2 arithmetic only; emit the JSON plus a
+      colocated test asserting the recorded counts (controls: base verifies rank
+      49 with 0 mismatches; k=2 admits exactly 0 by the distinct-terms argument;
+      C(49,k) equals the closed-form binomial for every k listed). MUST NOT DO:
+      claim any band closed, claim rank 47, edit checker.ts/types.ts any
+      existing file outside attempts/M8F1_*, import AlphaTensor tensors, use
+      floats. This task reports counts only; a nonzero admissible count here is
+      a lead, not a proof."
+  - id: M8-F1-closeLo
+    problem: src/matmul/attempts/M8F1_closeLo.ts
+    tests: src/matmul/attempts/M8F1_closeLo.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "TASK: decide the k=3 and k=4 drop-k/add-j bands around the exact-49 base
+      EXACTLY and completely. For every drop set K of size 3 and size 4, compute
+      the deficit D_K = XOR of the dropped terms and decide ADMISSIBLE
+      (rank(D_K) <= k-2 = 1 or 2) versus REFUTED (rank(D_K) > k-2), in exact F_2
+      arithmetic. Use the correct Segre/rank-1 characterisation (repeated index
+      on each side, the R75 fix - not the trivially-satisfied two-distinct-index
+      identity) for the rank-1 test, and a sound flattening-rank lower bound to
+      prune before the exact rank-<=2 decision on survivors. EXPECTED OUTCOME:
+      attempts/M8F1_closeLo.json plus a per-shard ndjson with exact counts
+      (refuted / admissible) for k=3 (C(49,3)=18424 rows) and k=4
+      (C(49,4)=211876 rows); every ADMISSIBLE row is turned into a concrete
+      scheme (49-k kept base terms plus the rank<=k-2 fresh decomposition) and
+      verified with checker.verifyMod2 and goalSatisfiedA before being named.
+      REQUIRED TOOLS: the recovered base, checker.ts, goalCheckA path, node:fs,
+      bun test. MUST DO: separate ADMISSIBLE from REFUTED with an exact
+      decision, never a bound; if an admissible row builds a scheme with rank
+      <=47, export it and let the gate fire; controls gate the run (base
+      re-verifies; planted rank-1 and rank-2 deficit tensors are classified
+      admissibly; a planted rank-3 tensor is refuted at k=3). MUST NOT DO: call
+      a row refuted from an upper bound, claim 47 without a verified scheme,
+      edit any existing test or the gate, import AlphaTensor tensors, exceed
+      attempts/M8F1_*."
+  - id: M8-F1-closeHi
+    problem: src/matmul/attempts/M8F1_closeHi.ts
+    tests: src/matmul/attempts/M8F1_closeHi.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "TASK: sweep the heavier k=5 and k=6 drop-k/add-j bands around the same
+      exact-49 base with the strongest SOUND lower bound available, then decide
+      the small survivor set exactly. For each drop set K (C(49,5)=1906884 and
+      C(49,6)=13983816 rows), compute D_K and a sound lower bound on rank(D_K):
+      flattening rank over the three modes plus the forced-fibre total dim span
+      of slices (the R74/R78 instruments; recover tools/nonAxialSplit.ts and
+      tools/modpFlatDim.ts from their archive branches if they are absent on
+      main, and import them). Rows whose lower bound exceeds k-2 are REFUTED;
+      survivors are decided exactly (rank(D_K) <= k-2) with the coefficient/
+      decomposition machinery in-window. EXPECTED OUTCOME: attempts/M8F1_closeHi
+      .json plus sharded ndjson with exact refuted / admissible / unscreened
+      counts per k, and for any admissible row a verified rank<=47 scheme via
+      checker.verifyMod2 + goalSatisfiedA. REQUIRED TOOLS: recovered/imported
+      sound-bound tools, the exact decision routine, node:fs, bun test. MUST DO:
+      shard deterministically, checkpoint only after the chunk is counted, keep
+      unscreened > 0 honestly UNSCREENED (never refuted); controls gate the run
+      (bound reproduces a planted known-rank case; a planted rank-(k-2) tensor
+      is admissible; a planted rank-(k-1) tensor is not). MUST NOT DO: report a
+      bounded run as a closure, refute from an upper bound, edit any existing
+      file, import AlphaTensor tensors, claim 47 without a verified scheme."
+  - id: M8-F1-merge
+    problem: src/matmul/attempts/M8F1_merge.ts
+    tests: src/matmul/attempts/M8F1_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-F1
+    timeoutMs: 900000
+    note: "TASK: adjudicate the M8-F1 layer AFTER its three siblings have landed on
+      main through the gate. Consume only their landed artifacts
+      (M8F1_size.json, M8F1_closeLo.json plus ndjson, M8F1_closeHi.json plus
+      ndjson). Re-verify every ADMISSIBLE candidate's scheme with
+      checker.verifyMod2 and the goalCheckA gate path, drift-check every
+      recorded count against the source ndjson, and if a scheme verifies at rank
+      <=47, export it and confirm `bun src/matmul/goalCheckA.ts` exits 0.
+      Otherwise emit the exact closed/refuted/unscreened partition per k and the
+      residual (any admissible-but-unbuilt support named as a target, not a
+      witness). EXPECTED OUTCOME: attempts/M8F1_merge.json with per-k counts,
+      the 0-drift self-check, and the single substantive CAMPAIGN:M8-F1 row
+      (either the exact rank<=47 scheme and BESTA47 firing, or the honest
+      bounded result naming exactly which k-bands are closed and which are
+      unscreened). REQUIRED TOOLS: the sibling JSON/ndjson artifacts,
+      checker.ts, goalCheckA path, node:fs, bun test. MUST DO: treat a missing
+      sibling artifact as NOT-REACHED (report it, do not invent counts); assert
+      refuted+admissible+unscreened reconciles to C(49,k) for every k; keep the
+      verdict honest (a bounded null stays bounded). MUST NOT DO: merge inputs
+      that are not on main, edit any existing file or the gate, re-run the
+      sweeps, import AlphaTensor tensors, claim closure where the reconciliation
+      does not hold."
+    dependsOn:
+      - M8-F1-size
+      - M8-F1-closeLo
+      - M8-F1-closeHi

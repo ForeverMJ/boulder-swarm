@@ -1,0 +1,37 @@
+label: M8-J1
+goal: 4x4 matmul exact scheme matching AlphaTensor (rank 47 over F₂)
+rationale: |
+  The campaign has been stuck at exact-49 (two-level Strassen) for ~90 rounds.
+  The gap is 2 terms. AlphaTensor proved 47 exists over F₂. The search needs
+  to move beyond local perturbations of the 49-scheme to targeted construction
+  of the 2-term reduction structure.
+budget:
+  maxRounds: 4
+stopConditions:
+  - "goalCheckA exits 0 (rank <= 47 scheme found and verified)"
+  - "budget exhausted with no rank <= 47 scheme found"
+tasks:
+  - id: M8-J1-analyze
+    problem: src/matmul/attempts/M8J1_analyze.ts
+    tests: src/matmul/attempts/M8J1_analyze.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-J1
+    note: "Characterize the 49->47 gap over F2. Enumerate possible 2-term reduction structures. Verify the two-level Strassen is indeed 49 and the gap is exactly 2."
+  - id: M8-J1-search
+    problem: src/matmul/attempts/M8J1_search.ts
+    tests: src/matmul/attempts/M8J1_search.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-J1
+    note: "Search for exact rank-47 schemes over F2 using a targeted approach. Any found scheme must be verified exact over F2 with rank <= 47."
+  - id: M8-J1-border
+    problem: src/matmul/attempts/M8J1_border.ts
+    tests: src/matmul/attempts/M8J1_border.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-J1
+    note: "Explore border rank approach. Maybe 47 is achieved through a border rank scheme that becomes exact over F2."
+  - id: M8-J1-compose
+    problem: src/matmul/attempts/M8J1_compose.ts
+    tests: src/matmul/attempts/M8J1_compose.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-J1
+    note: "Compose two-level Strassen with a 2-term reduction. Verify the composition is exact over F2 with rank <= 47."

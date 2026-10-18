@@ -1,0 +1,66 @@
+label: R131
+goal: "M8: Exact rank <= 47 for 4x4x4 matrix multiplication over F_2
+  (AlphaTensor parity)"
+rationale: The campaign has been stuck at exact rank 49 (two-level Strassen
+  floor) for 30+ rounds. All local search lanes (ILS, walk, orbit-drain, meld,
+  merge, snap) have been tried with honest reds. The gap is 2 terms. The
+  campaign log itself notes (R16, for M5) that attacking a hard rank target from
+  zero needs a global method, not descent. This round tries two fundamentally
+  different global methods (beam search and genetic algorithm) that have not
+  been attempted, plus a comprehensive census to ensure no candidates are
+  missed.
+budget:
+  maxRounds: 4
+stopConditions:
+  - A verified rank-47 witness is found and goalCheckA exits 0
+  - Both beam search and genetic algorithm complete with honest bounded nulls
+  - The census is complete and all replayable states are enumerated
+  - The merge is complete and all artifacts are adjudicated
+tasks:
+  - id: R131-census
+    problem: src/matmul/attempts/R131_census.ts
+    tests: src/matmul/attempts/R131_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Comprehensive census of all replayable states across all archives
+      (R99_snap_census.json through R126 checkpoints, all A1_*.ndjson files on
+      main and archive branches). Dedupe by stable hash. Emit R131_census.json
+      with per-candidate hash, rank, mismatches, vecs-present, archive. Verdict
+      SIZED-NO-CLOSURE. File-ownership attempts/R131_census* only.
+  - id: R131-beam
+    problem: src/matmul/attempts/R131_beam.ts
+    tests: src/matmul/attempts/R131_beam.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: Beam search from the exact-49 floor. Keep hundreds of partial states and
+      expand them systematically. At each level, expand all states and keep the
+      top-K by mismatch count. Interleave exact F_2 coefficient solve on every
+      rank<=47 candidate. Checkpoint full factor vectors plus stable hashes to
+      R131_beam.ndjson. File-ownership attempts/R131_beam* only.
+  - id: R131-genetic
+    problem: src/matmul/attempts/R131_genetic.ts
+    tests: src/matmul/attempts/R131_genetic.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: Genetic algorithm with crossover and mutation. Maintain a population of
+      schemes. Apply crossover (exchange terms between parents) and mutation
+      (perturb factors). Select by mismatch count. Interleave exact F_2
+      coefficient solve on every rank<=47 candidate. Checkpoint full factor
+      vectors plus stable hashes to R131_genetic.ndjson. File-ownership
+      attempts/R131_genetic* only.
+  - id: R131-merge
+    problem: src/matmul/attempts/R131_merge.ts
+    tests: src/matmul/attempts/R131_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R131
+    timeoutMs: 1800000
+    note: Adjudication merge of all R131 artifacts. Re-verify every input with
+      verifyMod2 plus the goalCheckA gate path. Emit R131_merge.json with
+      hashes, consistency outcomes, mismatch counts. Record the substantive
+      CAMPAIGN:R131 row. File-ownership attempts/R131_merge* only.
+    dependsOn:
+      - R131-census
+      - R131-beam
+      - R131-genetic

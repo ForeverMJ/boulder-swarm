@@ -1,0 +1,90 @@
+label: R124
+goal: "M8 AlphaTensor parity round after R123: size the fresh R123-lane
+  residual, work new drain and ILS ground, and adjudicate the R123 inputs on
+  main"
+rationale: "R123 landed all four lanes through the gate. Its snap test locks the
+  decisive fact: the replayable rank-47 queue is covered (75 spark plus
+  R111/R112/R113/R117/R118 checkpoint hashes union to 97, pending 0, solved 0),
+  so another snap over the old census queue would be rework. The live remainder
+  is the fresh R123 drain49m (25 checkpoints) and seed_ils13 (7 lane files) lane
+  output, which no census has sized and no snap has swept. This round therefore
+  sizes before closing: a census over the R123 lanes names the new residual,
+  drain and ILS work strictly fresh anchors and seeds, and a merge adjudicates
+  only already-landed R123 inputs (no sibling references), following the
+  R111-merge and R117-merge precedent."
+budget:
+  maxRounds: 2
+stopConditions:
+  - "ship: an exact rank<=47 scheme over F_2 verified by verifyMod2 plus
+    goalCheckA exit 0"
+  - "residual named: every R123-lane rank-47 support with vecs is RETIRED, LIVE,
+    or UNPROCESSED in R124_census.json"
+  - "budget out: all lanes end BOUNDED with verdicts checkpointed, never
+    impossibility claims"
+  - "judge red: any floor CONSISTENT or retired INCONSISTENT control failure
+    halts that lane"
+tasks:
+  - id: R124-census
+    problem: src/matmul/attempts/R124_census.ts
+    tests: src/matmul/attempts/R124_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure (R116 SIZED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47/48 support with vecs present across the freshly landed
+      R123 checkpoints (R123_drain49m.ndjson 25 rows, R123_seed_ils13.ndjson
+      lanes, R123_snap_solve.ndjson verdicts) reconciled against
+      R116_census.json, R119/R122 census chain, and all merged
+      R111/R112/R113/R117/R118/R123 snap verdicts; dedupe by stable hash; mark
+      each hash RETIRED versus LIVE versus UNPROCESSED with vecs-present and
+      archive pin; emit R124_census.json with per-candidate hash, rank,
+      mismatches, vecs-present, archive, and exact-solve workload pricing;
+      verdict SIZED-NO-CLOSURE; file-ownership attempts/R124_census.* only;
+      field F_2 throughout; no AlphaTensor tensors."
+  - id: R124-drain
+    problem: src/matmul/attempts/R124_drain49n.ts
+    tests: src/matmul/attempts/R124_drain49n.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Deterministic drain plus meld from a fresh subset of replayable exact-49
+      anchors named by R123-census inputs on main, skipping every hash
+      checkpointed in any merged R100 through R123 drain ndjson (resume-skip);
+      at least 50 seeded deterministic iters per start with greedy exact F_2
+      drain, shear flips, split kicks, and deterministic meld; checkpoint full
+      factor vectors plus stable fnv hashes to R124_drain49n.ndjson; exact-solve
+      every rank<=47 candidate in-window with verifyMod2 plus goalSatisfiedA;
+      verdict BOUNDED-RED absent a witness; file-ownership
+      attempts/R124_drain49n* only; no AlphaTensor tensors; run under nice -n
+      19.
+  - id: R124-ils
+    problem: src/matmul/attempts/R124_seed_ils14.ts
+    tests: src/matmul/attempts/R124_seed_ils14.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude every
+      seed recorded in any merged R*_seed_ils*.ndjson or R*_walk_ils.json on
+      main, including 22, 66, 7, 77, 107, 207, 307, 407 and all R123_seed_ils13
+      lane seeds; at least 6 new seeds with at least 10s per lane; each lane
+      calibrates against the exact-49 floor then runs ILS at fixed rank 47;
+      every rank<=47 zero-mismatch candidate exact-solved on its fixed support
+      in-window, never left unmatched; checkpoint vecs plus hashes for lane-best
+      47 and floor-best 49 states to R124_seed_ils14.ndjson; verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified; file-ownership attempts/R124_seed_ils14* only; no AlphaTensor
+      tensors; run under nice -n 19."
+  - id: R124-merge
+    problem: src/matmul/attempts/R124_merge.ts
+    tests: src/matmul/attempts/R124_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R124
+    timeoutMs: 1800000
+    note: "Adjudication merge over ALREADY-LANDED R123 inputs only
+      (R123_census.json, R123_snap_solve.ndjson, R123_drain49m.ndjson,
+      R123_seed_ils13.ndjson, all on main; must NOT reference any R124 sibling
+      artifact, their merge belongs to a later round): re-verify every input
+      with verifyMod2 plus the goalCheckA gate path, snap-check any rank<=47
+      support the R123 lanes left unsnapped, drift-check hashes against
+      R123_census.json, write R124_merge.json with hashes plus consistency
+      outcomes plus mismatch counts plus a zero-drift self-check, then append
+      the substantive CAMPAIGN R124 row (exact-47 scheme or honest bounded red
+      naming the residual); file-ownership attempts/R124_merge plus test plus
+      json only; field F_2 throughout; no AlphaTensor tensors."

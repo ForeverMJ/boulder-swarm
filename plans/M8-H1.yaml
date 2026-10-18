@@ -1,0 +1,114 @@
+label: M8-H1
+goal: "Close the named remainder space of the M8 campaign: exact-solve every
+  replayable rank<=47 near-miss support over F_2, exhaustively settle the
+  structured gap-2 two-level merge ansatz, and run one composition lane whose
+  every rank-47 candidate is matched by an exact coefficient solve, so that
+  either an exact rank<=47 scheme lands (goalCheckA exits 0) or the space is
+  honestly reported bounded with the residual named."
+rationale: M8 is pinned at an exact rank-49 two-level-Strassen floor over F_2,
+  with rank-47 candidates carrying small mismatch counts that prior rounds
+  enumerated but never decided. The A1 prompt names the decisive move, the exact
+  coefficient solve on a candidate's fixed support, where CONSISTENT ships the
+  scheme and INCONSISTENT retires the support, and it warns specifically against
+  leaving rank-47 candidates unmatched. The remaining space is therefore
+  decidable linear algebra over a finite candidate set, not open-ended search.
+  This proposal closes the candidate space exactly (solve lane), closes the
+  constructive ansatz the gap-2 structure implies (merge lane), keeps one fresh
+  composition lane under the unmatched=0 invariant, then adjudicates and records
+  the CAMPAIGN row. No goal-level marker is attached to any lane whose normal
+  outcome is a bounded null, so honest negative work is judged by its own
+  controls instead of scoring zero.
+budget:
+  maxRounds: 2
+stopConditions:
+  - "goalCheckA exits 0 with an exact rank<=47 F_2 scheme: milestone met"
+  - "every inventoried candidate has a recorded CONSISTENT or INCONSISTENT
+    outcome and every lane is bounded: report bounded-no-witness naming the
+    residual"
+  - "budget exhausted with candidates still unmatched: report coverage, claim
+    nothing closed"
+tasks:
+  - id: M8-H1-solve
+    problem: src/matmul/attempts/M8H1_solve.ts
+    tests: src/matmul/attempts/M8H1_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Close the unmatched-candidate space exactly. Recover the exact F2
+      coefficient-solve machinery (gaussSolve/solveSupport, the coeffSolve era
+      archived at agent/goal-w0-A1@r50_fd96654) and the archive chain
+      (agent/goal-w0-A1@r45_c8e92f3, @1f4f4eb, @r48_3c6327d, @ac55b26,
+      @r54_52080c9, @47afb53, @r57_3f32bfa, @r59_a7f7686, @r61_67e3f9f,
+      @r63_b1f946d, @r65_7a03c63, @r67_c58dfd0, @muse-r72, and spark commit
+      17970a9). Scan every A1_*.ndjson plus R99_snap_census.json for supports
+      carrying FULL {u,v,w} vectors, dedupe by stable hash, and exact-solve each
+      distinct rank<=48 fixed support over F2, recording CONSISTENT or
+      INCONSISTENT plus axis and mismatch count in
+      attempts/M8H1_candidateInventory.json. A CONSISTENT solve emits
+      attempts/M8H1_solve_scheme.ts exporting scheme and is verified with
+      verifyMod2 plus the goalCheckA gate. Controls gated by the colocated test:
+      the exact rank-49 floor support solves CONSISTENT, and one previously
+      retired hash re-derives INCONSISTENT. unmatched=0 invariant: any candidate
+      without a recorded outcome makes the lane bounded-incomplete, never
+      closed. File-ownership attempts/M8H1_* only; no checker edits; no
+      AlphaTensor tensors; run exact-solve sweeps under nice -n 19."
+  - id: M8-H1-merge
+    problem: src/matmul/attempts/M8H1_merge.ts
+    tests: src/matmul/attempts/M8H1_merge.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Close the constructive gap-2 ansatz exhaustively. The deficit from
+      two-level Strassen (49) to the record (47) is exactly two terms, so
+      enumerate EVERY structured 2-term merging of the 7 two-level Strassen
+      triples that stays rank-1 over F2 (F2-linear combinations and sign-bearing
+      integer left-ideal/octonion-style combos of triple pairs), exactly verify
+      each merged scheme with checker.verifyMod2, and report the complete
+      enumerated count with an exact witness-or-refutation verdict. Seed from
+      the archived 555-line merge-search instrument
+      (agent/goal-w0-A1@r61_67e3f9f) but make the enumeration EXHAUSTIVE over
+      the stated ansatz, not sampled. The colocated test gates completeness: the
+      enumerated count equals a closed-form or DP total over the stated
+      pair-support space, a planted rank-1-preserving merge is detected, and the
+      two-level 49 scheme reconstructs exactly. A rank<=47 witness ships as
+      attempts/M8H1_merge_scheme.ts and fires the gate; otherwise the row closes
+      the ansatz exactly. File-ownership attempts/M8H1_* only; no AlphaTensor
+      tensors."
+  - id: M8-H1-ils
+    problem: src/matmul/attempts/M8H1_ils.ts
+    tests: src/matmul/attempts/M8H1_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "One composition lane on fresh ground, with A1's decisive move honoured.
+      From-zero ILS on seeds excluding every previously run seed (22, 66, 7, 77,
+      107, 207, 307, 407 and the R99-R132 lanes); calibrate against the exact
+      rank-49 floor, run ILS at fixed rank 47 with interleaved merge/flip moves,
+      and checkpoint FULL 16-bit {u,v,w} factor vectors plus a stable hash for
+      every lane-best state to attempts/M8H1_ils.ndjson. Exact-solve EVERY
+      rank<=47 zero-mismatch candidate on its fixed support within the window
+      (unmatched=0 invariant), skipping hashes already retired by M8-H1-solve. A
+      CONSISTENT solve emits attempts/M8H1_ils_scheme.ts and is gate-verified.
+      The colocated test gates the invariant: the checkpoint loader round-trips
+      hash to vectors, the floor seed's known state re-derives rank 49, and no
+      checkpointed candidate row lacks an outcome. File-ownership
+      attempts/M8H1_* only; no AlphaTensor tensors."
+  - id: M8-H1-audit
+    problem: src/matmul/attempts/M8H1_audit.ts
+    tests: src/matmul/attempts/M8H1_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-H1
+    timeoutMs: 1800000
+    note: Adjudication layer; runs in a later layer after its dependencies land on
+      main through the gate. Re-verify every witness candidate and every
+      CONSISTENT solve from M8-H1-solve, M8-H1-merge and M8-H1-ils with
+      checker.verifyMod2 plus the goalCheckA gate path; reconcile the counts
+      (inventoried candidates equal recorded outcomes equal independently
+      verified), drift-check hashes, and snap-check any unsnapped rank<=47
+      support. Write attempts/M8H1_audit.json and append the substantive
+      CAMPAIGN.md row under label M8-H1 that this evidence cites. The colocated
+      test gates the reconciliation equation and the documented outcome table.
+      If a verified exact rank<=47 scheme exists it is the milestone witness;
+      otherwise the row is an honest bounded-no-witness naming the residual and
+      the unscreened remainder. File-ownership attempts/M8H1_audit* only.
+    dependsOn:
+      - M8-H1-solve
+      - M8-H1-merge
+      - M8-H1-ils

@@ -1,0 +1,121 @@
+label: M8-M1
+goal: "Close the named M8-K1 remainder and advance the AlphaTensor-parity chase
+  (autonomous exact rank<=47 over F_2 for 4x4x4, alphaTensor parity): land the
+  three missing M8-K1 sibling artifacts (M8K1_snap_solve.ndjson,
+  M8K1_strassenMerge.json, M8K1_seed_ils.ndjson) with sound instruments, then
+  adjudicate them in a later layer so goalCheckA can fire if any is a witness."
+rationale: "The latest M8 artifact, src/matmul/attempts/M8K1_audit.json
+  (generated 2026-10-17), returns verdict PENDING-SIBLINGS: the three sibling
+  artifacts are absent from main, so the audit read nothing and recorded 0
+  candidates, 0 witnesses and 0 hash drift. M8's best landed scheme remains the
+  exact rank-49 two-level Strassen baseline; goalCheckA prints M8 GOAL NOT MET
+  and BESTA47 is absent. The named, finite remainder is therefore the M8-K1
+  sibling layer itself: (a) an exact F_2 coefficient solve over recovered
+  rank-47 fixed supports carrying full factor vectors, (b) an exhaustive
+  structured 2-term Strassen merge (the gap to 47 is exactly the 2 terms beyond
+  the two-level recursion, so a rank-1-preserving merging of two triples into
+  one is the constructive answer), and (c) an ILS continuation that checkpoints
+  FULL factor vectors instead of metrics. Closing this bounded remainder is
+  directly judgeable and does not reopen the wider open-ended search lanes. No
+  AlphaTensor tensor is imported; field F_2 throughout."
+budget:
+  maxRounds: 3
+stopConditions:
+  - M8K1_snap_solve.ndjson, M8K1_strassenMerge.json and M8K1_seed_ils.ndjson all
+    exist on main, each with a recorded verdict (witness or an honest bounded
+    null)
+  - M8M1_audit.ts has re-verified every recorded candidate with
+    checker.verifyMod2 and checker.verify, and goalCheckA exits 0 with BESTA47
+    (goal reached)
+  - "The round budget (maxRounds: 3) is exhausted with the three sibling
+    artifacts landed and the audit verdict recorded"
+tasks:
+  - id: M8-M1-snap
+    problem: src/matmul/attempts/M8M1_snap_solve.ts
+    tests: src/matmul/attempts/M8M1_snap_solve.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-M1
+    timeoutMs: 1800000
+    note: "Snap-solve lane, the M8-K1 blocking artifact. Step 0 (size before
+      closing): recover the A1 archive chain (agent/goal-w0-A1@r45_c8e92f3,
+      @1f4f4eb, @r48_3c6327d, @ac55b26, @r54_52080c9, @47afb53, @r57_3f32bfa,
+      @r59_a7f7686, @r61_67e3f9f, @r63_b1f946d, @r65_7a03c63, @r67_c58dfd0,
+      @muse-r72) and census every A1_*.ndjson row that carries a FULL {u,v,w}
+      factor vector at rank<=47; metrics-only rows are NOT replayable state and
+      must be excluded. Dedupe by candidate hash and record the exact count.
+      Then run the exact F_2 coefficient solve (coeffSolve machinery, recovered
+      from @r50_fd96654) on each distinct rank-47 fixed support, recording
+      CONSISTENT or INCONSISTENT per candidate with hash, axis and mismatch
+      count to attempts/M8K1_snap_solve.ndjson. A CONSISTENT solve emits
+      attempts/M8M1_scheme.ts exporting the scheme and the goal gate fires; a
+      bounded null is reported bounded, never as impossibility. Run the
+      exact-solve sweeps under nice -n 19 (load-spike policy). File-ownership:
+      attempts/M8M1_snap_solve.ts, attempts/M8M1_snap_solve.test.ts,
+      attempts/M8K1_snap_solve.ndjson, attempts/M8M1_scheme.ts only; no checker
+      edits, no other workers' files; no AlphaTensor tensors."
+  - id: M8-M1-merge
+    problem: src/matmul/attempts/M8M1_strassenMerge.ts
+    tests: src/matmul/attempts/M8M1_strassenMerge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-M1
+    timeoutMs: 1800000
+    note: "StrassenMerge lane, the M8-K1 constructive artifact. The gap to 47 is
+      exactly the 2 terms beyond the two-level recursion, so a rank-1-preserving
+      merging of two Strassen triples into one is the constructive answer.
+      EXHAUSTIVELY enumerate the structured 2-term mergings of the 7 two-level
+      Strassen triples (F_2-linear and sign-bearing integer combinations that
+      stay rank-1 over F_2, left-ideal/octonion style), exactly verify each
+      merged scheme with checker.verifyMod2, and report the COMPLETE count plus
+      the per-candidate roster (key, rank, mismatches) to
+      attempts/M8K1_strassenMerge.json. If the full enumerated ansatz is
+      refuted, the certificate row closes the ansatz EXACTLY (an exhaustive
+      refutation, never a sampled null). Reuse the merge vocabulary of the
+      555-line merge-search instrument (branch @r61_67e3f9f) but make the
+      enumeration exhaustive over the structured ansatz. File-ownership:
+      attempts/M8M1_strassenMerge.ts, attempts/M8M1_strassenMerge.test.ts,
+      attempts/M8K1_strassenMerge.json only; no checker edits."
+  - id: M8-M1-ils
+    problem: src/matmul/attempts/M8M1_seed_ils.ts
+    tests: src/matmul/attempts/M8M1_seed_ils.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-M1
+    timeoutMs: 1800000
+    note: "Seed-ILS lane, the M8-K1 search artifact. Continue from the v3 search
+      script (archived at commit 0d0af7d) and the exact-49 anchor plus the spark
+      rank-53 anchor 4126ca7f (commit 17970a9, carries a full vec). Generate
+      split-open states around ranks 49-54 and checkpoint FULL {u,v,w} factor
+      vectors plus a stable candidate hash for EVERY state (fixing the R72/R75
+      metrics-only defect), streamed to attempts/M8K1_seed_ils.ndjson. Search
+      those states with interleaved merge/flip moves before greedy draining
+      returns to the frozen rank-49 floor; use the close route only on a saved
+      state that first passes the same-axis-factor eligibility check (R74 found
+      zero eligible among previously sampled states - select for eligibility, do
+      not re-sample ineligible ones). Match every rank<=47 candidate with the
+      exact coefficient solve within the round; skip, never repeat, already
+      processed A1_*.ndjson checkpoints. File-ownership:
+      attempts/M8M1_seed_ils.ts, attempts/M8M1_seed_ils.test.ts,
+      attempts/M8K1_seed_ils.ndjson only; no checker edits."
+  - id: M8-M1-audit
+    problem: src/matmul/attempts/M8M1_audit.ts
+    tests: src/matmul/attempts/M8M1_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-M1
+    timeoutMs: 1800000
+    note: "Adjudication audit, later layer: reads ONLY artifacts already merged to
+      main, so it runs after M8-M1-snap, M8-M1-merge and M8-M1-ils have landed
+      through the gate. Tolerant candidate extractor over
+      M8K1_strassenMerge.json and the two NDJSON streams; re-verify EVERY
+      vectored candidate with checker.verifyMod2 AND checker.verify and the
+      goalSatisfiedA gate selector; drift-check every recorded hash against the
+      canonical F_2 campaign fnv; run bun src/matmul/goalCheckA.ts and record
+      its exit code iff a scheme file exists; emit attempts/M8M1_audit.json with
+      the closed/unresolved partition, the zero-drift self-check and the
+      CAMPAIGN:M8-M1 row. Never fabricate a solve and never read a sibling that
+      has not merged (absent sibling = recorded absent, verdict
+      PENDING-SIBLINGS, not a refutation). File-ownership:
+      attempts/M8M1_audit.ts, attempts/M8M1_audit.test.ts,
+      attempts/M8M1_audit.json and the CAMPAIGN.md row only; no checker edits."
+    dependsOn:
+      - M8-M1-snap
+      - M8-M1-merge
+      - M8-M1-ils

@@ -1,0 +1,86 @@
+label: R125
+goal: M8
+rationale: "Close the named remainder from the merged R124 census on main
+  (SIZED-NO-CLOSURE, 142 candidates: 112 RETIRED, 18 LIVE, 12 UNPROCESSED):
+  exact-solve the 12 UNPROCESSED rank-47 supports with vecs (6 R121_seed_ils
+  lane-bests out of the R123 spec window plus 6 R123_seed_ils13 lane-bests
+  untouched by any snap lane), keep fresh-ground ILS pressure with new seeds,
+  then adjudicate the round in a merge that runs after its siblings land."
+budget:
+  maxRounds: 2
+stopConditions:
+  - An exact rank<=47 scheme over F_2 verifies via verifyMod2 plus the
+    goalCheckA gate path
+  - All 12 UNPROCESSED hashes from R124_census.json carry CONSISTENT or
+    INCONSISTENT verdicts with zero unmatched rank-47 candidates
+  - Budget exhausted with every lane reporting an honest bounded verdict and the
+    residual named
+tasks:
+  - id: R125-snapA
+    problem: src/matmul/attempts/R125_snap_solveA.ts
+    tests: src/matmul/attempts/R125_snap_solveA.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve the 6 R121 UNPROCESSED supports from R124_census.json on main
+      (1ca2fcc3, 427a527c, 97c63432, ae8396bf, d9fc9306, e039bcd2, all rank-47
+      with vecs in R121_seed_ils.ndjson). Recover the gaussSolve per-axis F_2
+      machinery from landed R123_snap_solve.ts on main, no archive recovery, no
+      AlphaTensor tensors. CONSISTENT ships an exact scheme file verified by
+      verifyMod2, INCONSISTENT retires the hash with axis and mismatch counts.
+      Checkpoint hash plus axis plus consistency plus mismatch counts to
+      R125_snap_solveA.ndjson. Controls: floor seed solves CONSISTENT, one
+      R100-retired spark hash re-derives INCONSISTENT. Bounded nulls stay
+      bounded, never impossibility. File-ownership attempts/R125_snap_solveA*
+      plus optional attempts/R125_scheme_A*.ts plus ndjson only. Run heavy
+      solves under nice -n 19."
+  - id: R125-snapB
+    problem: src/matmul/attempts/R125_snap_solveB.ts
+    tests: src/matmul/attempts/R125_snap_solveB.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Exact-solve the 6 R123 UNPROCESSED supports from R124_census.json on main
+      (5e4e9120, bc7cb09b, c1dece40, cf3e2243, d2d6cae0, d3efa9e0, all rank-47
+      with vecs in R123_seed_ils13.ndjson). Same gaussSolve discipline,
+      controls, checkpoint format and file-ownership boundary as R125-snapA,
+      disjoint hash set. CONSISTENT ships a verified exact scheme, INCONSISTENT
+      retires with axis and mismatch counts. Zero unmatched rank-47 candidates.
+      File-ownership attempts/R125_snap_solveB* plus optional
+      attempts/R125_scheme_B*.ts plus ndjson only. No AlphaTensor tensors. Run
+      heavy solves under nice -n 19.
+  - id: R125-ils
+    problem: src/matmul/attempts/R125_seed_ils15.ts
+    tests: src/matmul/attempts/R125_seed_ils15.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude every
+      seed recorded in any merged R*_seed_ils*.ndjson or R*_walk_ils.json on
+      main (including 22, 66, 7, 77, 107, 207, 307, 407 and all R121, R123 and
+      R124 lane seeds). At least 6 new seeds with at least 10s per lane, each
+      lane calibrates against the exact-49 floor then runs ILS at fixed rank 47.
+      Every rank-47 zero-mismatch candidate exact-solved on its fixed support
+      in-window, never left unmatched. Checkpoint vecs plus hashes for lane-best
+      47 and floor-best 49 states to R125_seed_ils15.ndjson. Verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified. File-ownership attempts/R125_seed_ils15* plus ndjson only. No
+      AlphaTensor tensors. Run under nice -n 19."
+  - id: R125-merge
+    problem: src/matmul/attempts/R125_merge.ts
+    tests: src/matmul/attempts/R125_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R125
+    timeoutMs: 1800000
+    note: "Adjudication merge over THIS round inputs only (R125_snap_solveA,
+      R125_snap_solveB and R125_seed_ils15 ndjson, run after they land through
+      the gate): re-verify every snap verdict with verifyMod2 plus the
+      goalCheckA gate path, confirm 12 of 12 R124 UNPROCESSED hashes carry
+      verdicts at 0 unmatched, cross-check R125-ils lane-best claims as bounded
+      reds, drift-check hashes against R124_census.json, emit R125_merge.json
+      with hashes plus consistency outcomes plus mismatch counts plus a
+      zero-drift self-check, then append the substantive CAMPAIGN R125 row
+      (exact-47 scheme or honest bounded-red naming the residual).
+      File-ownership attempts/R125_merge.ts plus .test.ts plus .json only. No
+      AlphaTensor tensors. Field F_2 throughout."
+    dependsOn:
+      - R125-snapA
+      - R125-snapB
+      - R125-ils

@@ -1,0 +1,82 @@
+label: R135
+goal: M8 AlphaTensor parity - exact rank<=47 over F_2 for 4x4x4 matmul from
+  scratch (no AlphaTensor tensors); current floor exact-49 (two-level Strassen),
+  gap = 2 terms
+rationale: "The M8 campaign (R87-R134, 48 rounds) holds an exact-49 floor and a
+  deep bench of rank-47 candidates with small mismatches, but the decisive step
+  - run the exact F_2 coefficient solve on each candidate's fixed support and
+  CONSISTENT/INCONSISTENT it - has never snapped to exact. R134 (census, snap,
+  merge, ils) stayed bounded-red at 49. The proven grind is: fresh ILS seeds at
+  fixed rank 47, deterministic drain+meld from exact-49 anchors, exact-solve
+  snap of every rank-47 candidate, and a census of what remains. R135 continues
+  that grind with seeds and anchors disjoint from every prior round, plus a snap
+  lane aimed at the residual unprocessed supports named by the R134 census. No
+  wholesale re-search; every lane skips processed checkpoints. From-zero rule
+  stands (A1.md): no import of AlphaTensor tensors."
+budget:
+  maxRounds: 4
+stopConditions:
+  - bun src/matmul/goalCheckA.ts exits 0 (exact n=4 rank<=47 over F_2 scheme
+    landed)
+  - two consecutive rounds produce no new replayable rank-47 candidate hash
+  - drain and seedils lanes both report BOUNDED-NO-CLOSURE with checkpointed
+    full vecs plus stable hashes and snap confirms no unprocessed rank-47
+    support remains
+tasks:
+  - id: R135-seedils17
+    problem: src/matmul/attempts/R135_seed_ils17.ts
+    tests: src/matmul/attempts/R135_seed_ils17.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude every
+      seed recorded in any merged R*_seed_ils*.ndjson or R*_walk_ils.json on
+      main through R134; at least 6 new seeds with at least 10s per lane, each
+      lane calibrates against the exact-49 floor then runs ILS at fixed rank 47;
+      every rank<=47 zero-mismatch candidate exact-solved on its fixed support
+      in-window, never left unmatched; checkpoint vecs plus hashes for lane-best
+      47 and floor-best 49 states to R135_seed_ils17.ndjson; verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified; file-ownership attempts/R135_seed_ils17* only; no AlphaTensor
+      tensors"
+  - id: R135-drain49m
+    problem: src/matmul/attempts/R135_drain49m.ts
+    tests: src/matmul/attempts/R135_drain49m.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Deterministic drain plus meld from fresh exact-49 starts only: the
+      lane-best exact-49 states checkpointed in merged R133/R134 ndjson that no
+      earlier drain lane used as a start, with resume-skip of hashes already
+      checkpointed in any merged R100-R134 drain ndjson; at least 50 seeded
+      deterministic iters per start with greedy exact F_2 drain plus shear flips
+      plus split kicks plus deterministic meld; checkpoint full factor vectors
+      plus stable fnv hashes to R135_drain49m.ndjson; every rank<=47 candidate
+      exact-solved in-window and verified by verifyMod2 plus goalSatisfiedA;
+      verdict BOUNDED-RED unless a witness lands; file-ownership
+      attempts/R135_drain49m* only; no AlphaTensor tensors; run under nice -n
+      19"
+  - id: R135-snapC
+    problem: src/matmul/attempts/R135_snapC.ts
+    tests: src/matmul/attempts/R135_snapC.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve the residual: replayable rank-47 supports named by the R134
+      census that are UNPROCESSED (not retired by any R100-R134 solve ledger);
+      recover gaussSolve per-axis machinery without importing AlphaTensor
+      tensors; CONSISTENT ships an exact scheme under attempts/R135_scheme_*.ts
+      verified by verifyMod2 plus goalSatisfiedA, INCONSISTENT retires each hash
+      with axis and mismatch counts; controls: floor seed solves CONSISTENT and
+      one retired hash re-derives INCONSISTENT; bounded nulls stay bounded,
+      never impossibility; file-ownership attempts/R135_snapC* plus optional
+      attempts/R135_scheme_*.ts only; run exact-solve sweeps under nice -n 19"
+  - id: R135-census
+    problem: src/matmul/attempts/R135_census.ts
+    tests: src/matmul/attempts/R135_census.test.ts
+    milestone: M8
+    timeoutMs: 600000
+    note: "Census, not closure (R122/R131/R134 pattern): enumerate replayable
+      rank-47/48 supports and exact-49 floor states across the R123-R134
+      candidate, ndjson, and archived-branch artifacts; dedupe by stable hash;
+      mark each hash processed, unprocessed, retired-live-unmatched, or
+      vecs-absent; emit R135_census.json with per-candidate hash, rank,
+      mismatches, vecs-present, archive and exact-solve workload pricing;
+      verdict SIZED-NO-CLOSURE; F_2 throughout; no AlphaTensor tensors"

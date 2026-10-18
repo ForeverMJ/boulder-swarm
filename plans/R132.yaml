@@ -1,0 +1,86 @@
+label: R132
+goal: "M8: either ship an exact rank<=47 F_2 scheme for 4x4x4 via the
+  never-leave-a-candidate-unmatched discipline, or shrink the LIVE/UNPROCESSED
+  rank-47 candidate remainder to zero with every support solved or retired and
+  the census test-verified"
+rationale: "The planner-loop M8 rounds R123-R126 are all gate-passed on main;
+  each census shows the same shape: dozens of replayable rank-47 near-miss
+  supports with vecs (R124_census.json alone holds 18 LIVE + 30 UNPROCESSED rows
+  on top of 224 RETIRED), and the solve lanes (R105-R108, R123-R125
+  snap/drain/ils) keep retiring them, so far without a CONSISTENT snap. The
+  banked remainder is a named, finite space - exactly the case where 'prefer
+  closing a named remainder space over open-ended exploration' applies. This
+  round prices and then closes it: consolidate one fresh census over the
+  R125/R126 lane outputs plus merged ndjson ledgers, exact-solve every remaining
+  LIVE/UNPROCESSED support in-window, and in parallel run a fresh-ground ILS at
+  fixed rank 47 disjoint from every previously used seed. Honest bounded reds
+  are expected and test-verified; a witness would be verified with verifyMod2
+  plus goalSatisfiedA and fire the goal through the normal gate. No
+  merge/aggregation task this round - the next round can adjudicate over
+  whatever this census and snap land. Field F_2 throughout; no AlphaTensor
+  tensors."
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA prints M8 GOAL MET for an exact rank<=47 F_2 scheme landed by the
+    gate
+  - R132_census.json shows zero LIVE and zero UNPROCESSED candidates with vecs
+    remaining while every rank-47 support is either solved CONSISTENT or retired
+    INCONSISTENT with axis and mismatch counts
+  - budget exhausted after 4 rounds with honest bounded-red verdicts recorded
+    and no witness
+tasks:
+  - id: R132-census
+    problem: src/matmul/attempts/R132_census.ts
+    tests: src/matmul/attempts/R132_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure: enumerate every replayable rank-47/48 state with
+      vecs present across the R125_snap_solveA/B ndjson, R125_seed_ils15 ndjson,
+      R126_seed_ils16 outputs reachable on main, and R123/R124_census.json rows;
+      dedupe by stable fnv hash; mark each hash RETIRED, LIVE, or UNPROCESSED
+      against the R123 and R124 census rows and every prior solve ledger it
+      cites; per-candidate record hash, rank, mismatches, vecs-present, source
+      lane and exact-solve workload pricing; emit R132_census.json plus a
+      colocated test gating the counts (all-retired set disjoint from unresolved
+      set, verdict SIZED-NO-CLOSURE); field F_2 throughout; file-ownership
+      attempts/R132_census.ts plus .test.ts plus .json only; no AlphaTensor
+      tensors"
+  - id: R132-snap
+    problem: src/matmul/attempts/R132_snap_solve.ts
+    tests: src/matmul/attempts/R132_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the LIVE plus UNPROCESSED rank-47 supports named
+      by R132_census.json (already merged on main by dependency order; skip
+      every RETIRED hash). Recover the gaussSolve per-axis machinery from the
+      landed R125_snap_solveA.ts on main, no archive recovery, no AlphaTensor
+      imports. CONSISTENT ships an exact scheme file verified by verifyMod2 plus
+      goalSatisfiedA; INCONSISTENT retires the hash with axis and mismatch
+      counts appended to R132_snap_solve.ndjson. Controls: the exact-49 floor
+      seed solves CONSISTENT and one already-RETIRED census hash re-derives
+      INCONSISTENT. Bounded red, judged only by the colocated test - the task
+      carries no goal success marker; a genuine witness fires through goalCheckA
+      at the normal gate. File-ownership attempts/R132_snap_solve plus .test.ts
+      plus .ndjson only; field F_2; heavy solves under nice -n 19"
+    dependsOn:
+      - R132-census
+  - id: R132-ils
+    problem: src/matmul/attempts/R132_seed_ils17.ts
+    tests: src/matmul/attempts/R132_seed_ils17.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero ILS on fresh ground only: seeds exclude every previously used
+      ILS or walk seed including all R105-R126 lane seeds and the standing 22,
+      66, 7, 77, 107, 207, 307, 407 set; at least 4 new seeds at at least 10s
+      per lane under nice -n 19; each lane first calibrates against the exact-49
+      two-level floor (rank 49 with mismatchF2 0) then runs fixed rank 47; EVERY
+      rank<=47 zero-mismatch candidate is exact-solved on its fixed support
+      in-window via the same gaussSolve machinery (never left unmatched), with
+      hash, axis, consistency and mismatch counts checkpointed to
+      R132_seed_ils17.ndjson; lane-best 47 and floor-best 49 states carry full
+      16-bit factor vectors plus stable fnv hashes; verdict BOUNDED-NO-CLOSURE
+      keyed to a colocated test, not a goal marker - only an independently
+      re-verified exact state counts as a witness; file-ownership
+      attempts/R132_seed_ils17 plus .test.ts plus .ndjson only; no AlphaTensor
+      tensors; field F_2 throughout"

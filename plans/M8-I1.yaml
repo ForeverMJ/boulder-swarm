@@ -1,0 +1,143 @@
+label: M8-I1
+goal: "M8 (AlphaTensor parity). From-zero F_2 4x4x4 exact rank<=47 witness: a
+  scheme file exporting 47 rank-1 triples that checker verify/verifyMod2 accepts
+  with 0 mismatches against the target, plus bun src/matmul/goalCheckA.ts exit 0
+  and the BESTA47 scoreboard marker. This proposal attacks the named near-miss
+  residual instead of generating more of it: R123/R124 censuses (merged on main)
+  show 138 replayable rank-47 vec-sets, every one priced by LSE-mismatch
+  24..405+ and retired or parked without an exact verdict; the R125 drain/snap
+  continuations on main are BOUNDED-NO-CLOSURE with raided seeds shrunk into the
+  same small 3-shift lattice. The remaining candidate-generating ansatzes are
+  saturated, so the fresh mass in this proposal is an independent lower-bound
+  instrument plus the first exact closure pass over the census's
+  LIVE/UNPROCESSED convex list, feeding an aggregation layer in the same round's
+  later layer."
+rationale: "Rounds R105..R126 (all merged, log + git log gate-passed merges)
+  produced seed batches 1..16, drains a..n, snap batches 1..2+census+snapA+B:
+  every one a workable-but-bounded red, and the fresh-seed well is demonstrably
+  dry (R125 raid list length 30+ old hashes; 112 of 142 census candidates
+  already RETIRED). Meanwhile no artifact in src/matmul/ certifies what rank a
+  FIXED support can support — the exact-solve steps that retired hashes retired
+  candidates, not supports, so supports stay recyclable forever. An LP/finite
+  lower bound closes supports permanently (a refuted support hash never
+  re-enters a census), shrinking the near-miss frontier monotonically instead of
+  re-census-ing it. That is the same move that closed the M5 m=2 layers: replace
+  an unbounded enumeration with a finite decision procedure. Cap: 3 parallel
+  frontier files + 1 dependent aggregator; exhausted seeds, drains, and censuses
+  are NOT re-run."
+budget:
+  maxRounds: 2
+stopConditions:
+  - "Witness ships: a rank<=47 exact scheme passes checker verify/verifyMod2 and
+    goalCheckA exits 0"
+  - "All in-scope M8-I1 tests pass but no witness: bounded nulls recorded,
+    supports retired, verdicts honest-red; the goal-level marker never fires on
+    a null"
+  - "Mandatory per-task controls fail after two repair attempts: the task ships
+    CANNOT-VERIFY with the defect named, no verdict row is emitted and the gate
+    sees it as red"
+tasks:
+  - id: M8-I1-support
+    problem: src/matmul/attempts/M8_I1_support_bound.ts
+    tests: src/matmul/attempts/M8_I1_support_bound.test.ts
+    milestone: M8
+    success: ""
+    timeoutMs: 1800000
+    note: "Finiteness in support space. Build attempts/M8_I1_support_bound.ts
+      exporting supportVerdict(normally SUPPORT-CLOSED | SUPPORT-OPEN |
+      WITNESS): inputs the exact 4x4x4 target tensor T over F_2 (sum of the 64
+      unit-mask terms), a support S (exactly 47 mask cells), and a multiset of
+      47 rank-1 masks whose supports are SUMS OF SUBSETS of S's rows-slices —
+      hesitate: the direct construction is: decide over F_2 whether the 56-dim
+      (4x4 plane has 16 entries; 46??) — implement it as the concrete finite
+      program: enumerate NOTHING; instead solve the FIXED-47-SUPPORT exact F_2
+      factorability check coeffSolve-style (rank of the constraint system), and
+      additionally a per-support EXACT-LP certificate: model each of the 47
+      mask-cells as a 0/1-count variable, express the 8 / 64 entry sums as the
+      linear map A over F_2, and report the exact F_2 column-rank of A as the
+      support's COSET DIMENSION header (a reproducible finite number per
+      support). Controls: (a) a planted exact-49 two-level Strassen support
+      stays FEASIBLE; (b) a cropped support (47 cells removed from a 48-cell
+      feasible one) stays WITNESS-capable or OPEN, never falsely CLOSED; (c) a
+      1-cell deficit support (feasible minus one) is SUPPORT-CLOSED with the
+      certificate re-derivable. Tasks own file-ownership
+      attempts/M8_I1_support_bound* only; no AlphaTensor tensor enters anywhere.
+      Verdict taxonomy: SUPPORT-OPEN rows name the support hash; bounded nulls
+      report bounded."
+  - id: M8-I1-census2
+    problem: src/matmul/attempts/M8_I1_census2.ts
+    tests: src/matmul/attempts/M8_I1_census2.test.ts
+    milestone: M8
+    success: ""
+    timeoutMs: 1800000
+    note: "Exact closure pass over the LIVE+UNPROCESSED census candidates. Inputs
+      ONLY already-merged main artifacts: src/matmul/attempts/R124_census.json
+      (the 18 status:LIVE plus 12 status:UNPROCESSED rows, which carry vecs,
+      hash, rank, mismatches) and skipSets from merged snap records
+      R100_snap_spark_data.json,
+      R109/R111/R112/R113/R117/R118_snap_solve*.ndjson — nothing else, no branch
+      archives, no re-download. For each listed candidate: rebuild the fixed
+      support S from its 47 stored vecs, run supportVerdict(...) from
+      attempts/M8_I1_support_bound.ts (import it, never duplicate its logic). On
+      SUPPORT-OPEN with witness potential, run the exact F_2 coefficient solve
+      on the fixed support; CONSISTENT ships attempts/M8_I1_scheme.ts;
+      INCONSISTENT retires the hash. Every lane ends with per-candidate rows
+      written to attempts/M8_I1_census2.ndjson (hash, source, SUPPORT status,
+      exact-solve consistency, mismatches, note). Controls: floor-seed (the
+      exact-49 seed solves consistent), one already-retired hash re-derives
+      retired; every control must pass or the run ships CANNOT-VERIFY with the
+      defect named. Verdict BOUNDED-NO-CLOSURE unless a scheme lands; never
+      attach BESTA47 to this task. File-ownership attempts/M8_I1_census2* only;
+      nice -n 19 for the exact solves (load-spike policy)."
+  - id: M8-I1-gsp
+    problem: src/matmul/attempts/M8_I1_gsp_lower.ts
+    tests: src/matmul/attempts/M8_I1_gsp_lower.test.ts
+    milestone: M8
+    success: ""
+    timeoutMs: 1800000
+    note: "Per-support upper bounds that are EXPLAINABLE without knowing the rank-1
+      masks. For each support S in the R124 census LIVE/UNPROCESSED list, run
+      the support's shortest-path program: iterate a bounded relaxation of the
+      rank-1 mask weights w(t) = OR[j in t] alpha_j[binomial-chain degree] with
+      the Wing/Domination chain lifted from src/matmul/tools/ (mono75.ts or
+      equivalent landed alphabet — import, do not edit other files); after
+      propagation, every cell s with minWeight(s) >= 2 is DELETED (no rank-1
+      mask can support it); if the deletion shrinks S, recompute S's exact F_2
+      factorability on the SHRUNK support: an infeasible shrunk support is the
+      concrete artifact that RETIRES S permanently in
+      attempts/M8_I1_gsp_lower.ndjson (per-file: LIST-SOLVED | SHRUNK |
+      REFUTED-EXHAUSTIVELY, each candidate hash listed with rank, mismatches and
+      the certificate). Controls gate everything: mono75 alphabet re-derivation
+      equals the published count; the exact-49 seed stays UNSHRUNK (soundness =
+      the seed must not become false-refutable); a planted 48-cell feasible
+      support must survive exactly. Honest bounded nulls are named, never
+      upgraded to impossibility; no AlphaTensor tensor is imported;
+      file-ownership attempts/M8_I1_gsp_lower* only. Cap wall clock at 25 min of
+      the 30-min budget; a sweep is resumable, never claim coverage it did not
+      measure."
+  - id: M8-I1-aggregate
+    problem: src/matmul/attempts/M8_I1_aggregate.ts
+    tests: src/matmul/attempts/M8_I1_aggregate.test.ts
+    milestone: M8
+    success: ""
+    evidence: CAMPAIGN:M8-I1
+    timeoutMs: 1800000
+    note: "Aggregation/audit layer (runs in the later layer of THIS round, after its
+      dependsOn tasks land via the gate). Reads ONLY this round's own landed
+      attempts/M8_I1_*.ndjson plus the merges cited in their start rows (the
+      R124_census.json references already on main) — nothing else. Compute: (1)
+      the closed-vs-open partition of the census candidates after this round's
+      exact-solve and support respects (hash, pre-rank, post-verdict, file of
+      origin, control status); (2) CONFLICT check — any candidate hash that
+      M8-I1-gsp retired but M8-I1-census2 marked consistent is re-verified
+      end-to-end from the raw vectors before the aggregate finishes, else
+      CANNOT-VERIFY with the defect named. Emits attempts/M8_I1_aggregate.json
+      (frontier statement: 'best landed rank / census candidates remaining /
+      supports retired by certificate this round'). No closure claim and no rank
+      bound moves without a certificate row; BESTA47 marker stays goal-level and
+      is NOT attached here (a bounded null does not carry the goal success).
+      File-ownership attempts/M8_I1_aggregate* only."
+    dependsOn:
+      - M8-I1-support
+      - M8-I1-census2
+      - M8-I1-gsp

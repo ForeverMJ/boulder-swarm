@@ -1,0 +1,69 @@
+label: R128
+goal: "M8: 4x4 matmul over F2, exact rank <= 47 (AlphaTensor parity)"
+rationale: "R126 ILS merged with no witness. R124 census shows 12 UNPROCESSED
+  rank-47 supports. Continue the proven 4-task pattern: census, drain, ILS,
+  snap."
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 with BESTA47
+  - all replayable rank-47 supports retired as INCONSISTENT
+  - budget exhausted
+tasks:
+  - id: R128-census
+    problem: src/matmul/attempts/R128_census.ts
+    tests: src/matmul/attempts/R128_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census, not closure: enumerate replayable rank-47/48 supports and
+      exact-49 floor states across R124-R126 artifacts; dedupe by stable hash;
+      mark each hash processed, unprocessed, retired-live-unmatched, or
+      vecs-absent; emit R128_census.json with per-candidate hash, rank,
+      mismatches, vecs-present, archive and exact-solve workload pricing;
+      verdict SIZED-NO-CLOSURE; F_2 throughout; no AlphaTensor tensors."
+  - id: R128-drain
+    problem: src/matmul/attempts/R128_drain49m.ts
+    tests: src/matmul/attempts/R128_drain49m.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Deterministic drain and meld from fresh exact-49 anchors: lane-best
+      exact-49 states checkpointed in merged R126_seed_ils16.ndjson that no
+      earlier drain lane used as a start; resume-skip of hashes already
+      checkpointed in any merged R100-R127 drain ndjson; at least 50
+      deterministic iters per start with greedy exact F_2 drain, shear flips,
+      split kicks and meld; checkpoint full factor vectors plus stable fnv
+      hashes to R128_drain49m.ndjson; exact-solve every rank<=47 candidate
+      in-window with verifyMod2 plus goalSatisfiedA; verdict BOUNDED-RED unless
+      a witness lands; file-ownership attempts/R128_drain49m* only; no
+      AlphaTensor tensors; run under nice -n 19."
+  - id: R128-seedils
+    problem: src/matmul/attempts/R128_seed_ils17.ts
+    tests: src/matmul/attempts/R128_seed_ils17.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "From-zero iterated local search on fresh ground only: seeds exclude every
+      seed recorded in any merged R*_seed_ils*.ndjson or R*_walk_ils.json on
+      main (including all R100-R127 lane seeds); at least 6 new seeds with at
+      least 10s per lane; each lane calibrates against the exact-49 floor then
+      runs ILS at fixed rank 47; every rank<=47 zero-mismatch candidate
+      exact-solved on its fixed support in-window, never left unmatched;
+      checkpoint vecs plus hashes for lane-best 47 and floor-best 49 states to
+      R128_seed_ils17.ndjson; verdict BOUNDED-NO-CLOSURE unless an exact state
+      is solved and independently re-verified; file-ownership
+      attempts/R128_seed_ils17* only; no AlphaTensor tensors."
+  - id: R128-snap
+    problem: src/matmul/attempts/R128_snap_solve.ts
+    tests: src/matmul/attempts/R128_snap_solve.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R128
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the replayable rank-47 supports named by
+      R128-census and not retired by prior R100-R127 solve ledgers; recover
+      gaussSolve per-axis machinery without importing AlphaTensor tensors;
+      CONSISTENT ships an exact scheme verified by verifyMod2 plus
+      goalSatisfiedA, INCONSISTENT retires the hash with axis and mismatch
+      counts; checkpoint hash, axis, consistency and mismatch counts to
+      R128_snap_solve.ndjson; controls: floor seed solves CONSISTENT, one
+      retired hash re-derives INCONSISTENT; bounded nulls stay bounded, never
+      impossibility; file-ownership attempts/R128_snap_solve* only; run
+      exact-solve sweeps under nice -n 19."

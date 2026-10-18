@@ -1,0 +1,110 @@
+label: R133
+goal: Decide exactly, over F_2 and in exact arithmetic, whether any exact
+  rank<=47 scheme for 4x4x4 matrix multiplication shares 49-k of the 49 terms of
+  the landed exact-49 two-level Strassen anchor (k = 3, 4, 5), and harvest the
+  witness as a scheme if one exists; otherwise emit the closed-band certificate
+  and land the exact-49 anchor durably on main.
+rationale: "M8 has been stuck at the exact-49 two-level Strassen floor for 13+
+  planner rounds, every one an open-ended ILS/drain/snap/meld walk from that
+  floor and every one a bounded null: a local walk cannot cross the 2-term
+  AlphaTensor gap. The M5 campaign escaped exactly this trap with the
+  drop-k/add-j closure - size a finite repair band around a landed anchor, then
+  decide every row with a cheap PROVEN bound (flatDim / slice-dimension) in
+  exact arithmetic, no budget, no branch-and-bound. R133 ports that proven
+  playbook to M8 and closes its prerequisite: today only naive-64 is on main,
+  the exact-49 floor lives on archive branches and is re-recovered every round.
+  A 47-term scheme sharing 49-k terms with the anchor exists iff some k-subset
+  of the 49 terms sums to a tensor of rank <= k-2; with k=3,4,5 that is 18,424 +
+  211,876 + 1,906,884 rows, finite and exactly decidable. Honest scope, stated
+  up front: a rank-47 scheme sharing fewer than 44 terms with the anchor is
+  untouched by this round."
+budget:
+  maxRounds: 3
+stopConditions:
+  - "a verified exact rank<=47 scheme over F_2 lands on main through the gate:
+    goal reached"
+  - "the k=3,4,5 fusion band is decided exactly (every row refuted or
+    exact-solved) and the per-k merge equation holds with zero unscreened:
+    closed, no witness"
+  - "budget exhausted with rows still unscreened: report coverage honestly and
+    claim no closure"
+tasks:
+  - id: R133-anchor
+    problem: src/matmul/attempts/R133_anchor.ts
+    tests: src/matmul/attempts/R133_anchor.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Durable prerequisite, not a null. Recover the exact two-level Strassen
+      rank-49 F2 scheme from archive branch agent/goal-w0-A1@r45_c8e92f3
+      (A1_sisyphus.ts) and land it on main as attempts/R133_anchor.ts exporting
+      scheme: Scheme, exact over F_2 with 0/1 coefficients. Do NOT import or
+      transcribe any AlphaTensor tensor. The colocated test R133_anchor.test.ts
+      must assert verifyMod2(scheme) is correct with rank exactly 49 and
+      mismatches 0, and that this supersedes the naive(4) stub (naive rank 64 as
+      the control). This stops the per-round re-recovery of the floor. Run
+      scoreboard and goalCheckA to confirm the table lists rank 49 for n=4 and
+      the gate stays honestly red. File-ownership: attempts/R133_anchor.ts and
+      attempts/R133_anchor.test.ts only."
+  - id: R133-size
+    problem: src/matmul/attempts/R133_size.ts
+    tests: src/matmul/attempts/R133_size.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Size before closing. Against the recovered 49-term anchor, emit exact
+      counts only: the number of k-subsets of the 49 terms for k=3,4,5, the
+      exact per-k row count needing a rank<=k-2 decision, and a core-hours
+      projection at a calibrated F_2 rank-test rate measured on this machine.
+      Claim nothing closed. The colocated test R133_size.test.ts asserts the
+      exact binomial counts (C(49,3)=18424, C(49,4)=211876, C(49,5)=1906884),
+      that the anchor carries exactly 49 distinct term supports, and that the
+      projection is finite; it must pass without running the full sweep.
+      File-ownership: attempts/R133_size.ts and attempts/R133_size.test.ts
+      only."
+  - id: R133-close
+    problem: src/matmul/attempts/R133_close.ts
+    tests: src/matmul/attempts/R133_close.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R133
+    timeoutMs: 1800000
+    note: "The closure, run after its siblings have landed on main. Build a sound
+      cheap PROVEN bound for 4x4x4 tensors over F_2 - the dimension of the span
+      of the 16 mode-1 slices (and the mode-2 and mode-3 analogues), so that dim
+      span{slices} > j proves rank(D) > j in exact F_2 arithmetic, with no cover
+      and no budget - and gate it with planted positive and negative controls
+      before reporting any number. Then decide the k=3 band exactly (rank<=1
+      test), the k=4 band exactly (rank<=2 test), and prefilter the k=5 band
+      with the proven bound, deciding survivors exactly; every survivor with
+      rank <= k-2 is handed to coeffSolve over F_2, and every CONSISTENT solve
+      exports the 47-term scheme (from attempts/R133_close.ts exporting scheme,
+      or an optional attempts/R133_scheme.ts) so the gate reads it. Checkpoint
+      every row's verdict (refuted / unresolved / witness), its k-subset set,
+      and the deciding stage to R133_close.ndjson so a round boundary loses
+      nothing. Run heavy sweeps under nice -n 19. Append the substantive
+      CAMPAIGN:R133 row - either the witness scheme or an honest bounded
+      certificate that names the residual. Do NOT attach a goal-level success
+      marker: the normal outcome is a refutation certificate, judged by evidence
+      and by the colocated test asserting the controls, the per-k merge
+      equation, and the checkpoint discipline. File-ownership:
+      attempts/R133_close.ts + attempts/R133_close.test.ts +
+      attempts/R133_close.ndjson + optional attempts/R133_scheme.ts only."
+    dependsOn:
+      - R133-anchor
+      - R133-size
+  - id: R133-check
+    problem: src/matmul/attempts/R133_check.ts
+    tests: src/matmul/attempts/R133_check.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R133
+    timeoutMs: 1800000
+    note: "Independent recount with a grader that shares no code with the scanner
+      (do not import R133_close), running after R133-close has landed. Re-derive
+      the k=3 and k=4 band counts from scratch, re-verify the anchor's rank-49
+      exactness with verifyMod2, and assert the per-k merge equation screened +
+      refused + unresolved === C(49,k) for every k, plus zero disagreements with
+      R133_close.ndjson on every checked row. Emits R133_check.json and updates
+      the CAMPAIGN:R133 evidence row with the independent totals, so the
+      certificate is confirmed by two instruments. File-ownership:
+      attempts/R133_check.ts + attempts/R133_check.test.ts +
+      attempts/R133_check.json only."
+    dependsOn:
+      - R133-close

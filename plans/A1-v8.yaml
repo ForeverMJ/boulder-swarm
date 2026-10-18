@@ -1,0 +1,86 @@
+label: A1-v8
+goal: "M8(A1): 4x4x4 schemes over F_2 — close the 49-to-47 gap by bounded census
+  plus rank-47 exact-snap; honest verdicts stated before any witness exists."
+rationale: "R87-R96 landed an exact-49 two-level Strassen anchor over F_2, and
+  the annotation corpus shows rank-47 candidates exist at 12 mismatches, and
+  R96's plan gate ALREADY REMARKS that mismatch walls at ranks 48-49 require the
+  CHEAP-DECISION test set (R74/R78/R84 pattern from the M5 corpus), not the
+  heuristics. Later rounds have swept beyond the old mismatch-wall stage.
+  Remaining work is witness-adjacent (not exact-49-dependent): enumerate anchor
+  mutants for rank 47 releases, apply the match mechanics to the mismatch-wall
+  release lanes, and census the per-class remainder spaces - and export only a
+  plan for a rank-47 honest, possibly-null, verdict even if a witness exists
+  (closure of null classes matters). Proposals only promote probes. Cleared
+  lines of prior A1-v1..v7 point the strategy. Sweeps that run prior total-lane
+  time caps DO NOT find a fresh rank-47 witness: consensus from R90 rounds - a
+  witness needs the swept band to be judged cheaply, and R96's sizing direction
+  is what this shot applies."
+budget:
+  maxRounds: 4
+stopConditions:
+  - A1-v8 stops when the named candidate classes (anchor mutants, mismatch-wall
+    release corridors, unclosed drains) are each decided exactly or
+    certified-NO-HIT-WITHIN-ANSATZ, or when 4 rounds elapse
+  - "A witness version also stops: any exact rank<=47 over F_2 surfaced by
+    goalCheckA"
+tasks:
+  - id: A1-v8-1
+    problem: src/matmul/attempts/A1_v8_census.ts
+    tests: src/matmul/attempts/A1_v8_census.test.ts
+    milestone: M8
+    success: census-complete
+    evidence: CAMPAIGN:A1-v8
+    timeoutMs: 1800000
+    note: "Bounded census of the remaining unscreened rank-47 candidate bands:
+      enumerate anchor mutants of the exact-49 two-level Strassen base (1-term
+      and 2-term edits, exact F_2 solve per candidate), and report per-class
+      band sizes using exact DP counts (bigint), never estimates.
+      Certify-and-report: classify each band as closed or UNSCREENED with
+      residual counts, naming every UNSCREENED remainder exactly. No rank-47
+      witness expected from this task alone - its verdict is a certified census
+      with 0/0 semantics preserved (never call UNSCREENED refuted)."
+  - id: A1-v8-2
+    problem: src/matmul/attempts/A1_v8_rank47snap.ts
+    tests: src/matmul/attempts/A1_v8_rank47snap.test.ts
+    milestone: M8
+    success: snap-candidates-exact-or-certified
+    evidence: CAMPAIGN:A1-v8
+    timeoutMs: 1800000
+    note: "Rank-47 exact-snap from mismatch-wall corridors: take unsnapped rank-47
+      candidate supports recorded in attempts/A1_*.ndjson checkpoint rows
+      (12-mismatch band and any later drain rows), re-run the exact coefficient
+      solve on the reduced candidate set, and verify against checker.verify...
+      path-verify via the checker discipline. Honest tl:dr: at-j steady state is
+      expected to be a certified null (no witness) — the test tool gates on a
+      bounded, exact, per-candidate verdict, never on a deadline. If a candidate
+      solves exactly, export it and let goalCheckA promote it; the task test
+      does not depend on a witness."
+  - id: A1-v8-3
+    problem: src/matmul/attempts/A1_v8_drainobj.ts
+    tests: src/matmul/attempts/A1_v8_drainobj.test.ts
+    milestone: M8
+    success: drain-closure-certified
+    evidence: CAMPAIGN:A1-v8
+    timeoutMs: 1800000
+    note: "Close one named remaining lane: sweep the band R95's orbit-family and
+      R91's merge-lane did not decide, size it first with the A1-v8-1 DP counts,
+      then decide it EXACTLY (F_2 integer arithmetic, no float, no branch and
+      bound, no budget-dependent verdicts). Use the sweep to extend the
+      mismatch-wall evidence set, never to widen blindly past the 1800s cap per
+      task. PMID certificates: every claim field-free where the instrument is;
+      UNSCREENED remainder stays named, never refuted."
+  - id: A1-v8-4
+    problem: src/matmul/attempts/A1_v8_auditround.ts
+    tests: src/matmul/attempts/A1_v8_auditround.test.ts
+    milestone: M8
+    success: audit-certificate-lane-clean
+    evidence: CAMPAIGN:A1-v8
+    timeoutMs: 1800000
+    note: "Round audit lane: after the three decider lanes land, run a clean audit
+      of this proposal's own certificates - re-derive the decision logic on a
+      planted-positive control and a known-answer control (S3 spec: 0/0
+      semantics verified, none-succeeds estimate needed for gate trust).
+      Aggregating task: runs last, dependsOn [A1-v8-1, A1-v8-2, A1-v8-3]. Report
+      only what the compact audit can certify within its own file (the score row
+      may read BOUNDED, so long as the controls pass). Empty verdict is an
+      honest red, still scoring 1 on the audit test."

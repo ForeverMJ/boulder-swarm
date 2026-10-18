@@ -1,0 +1,96 @@
+label: M8-L1
+goal: M8 AlphaTensor parity - attack the open F_2 4x4x4 exact rank<=47 gap on a
+  genuinely different support space (index-group-invariant rank-47 supports)
+  plus a full-vector meld lane, sizing before solving, with no goal-level
+  success marker attached to any bounded null task.
+rationale: R99-R126 exhausted the neighbourhood of the exact-49 two-level
+  Strassen floor - every replayable rank-47 near-miss support exact-solved
+  INCONSISTENT, every drain/ILS/census lane bounded red, and the R102/R75 meld
+  route never preserved full factor vectors so its candidates were never
+  snapped. This round does three things the campaign has not done, in order.
+  First it sizes a structurally different rank-47 support family (supports
+  invariant under the diagonal cyclic index shift on F_2^4) instead of one more
+  sweep of the Strassen neighbourhood, so the sweep that follows is priced
+  before it runs. Second it exact-solves that new family over F_2 with the
+  recovered gaussSolve per-axis machinery. Third it runs the non-vacuous meld
+  route with FULL {u,v,w} vector checkpoints, fixing the R72/R75 metrics-only
+  defect, and selects same-axis eligibility before any close move. The
+  adjudication merge runs in a later layer over this proposal's own landed
+  outputs and never over unmerged siblings.
+budget:
+  maxRounds: 4
+stopConditions:
+  - bun src/matmul/goalCheckA.ts exits 0 with an exact rank<=47 scheme over F_2
+    on main
+  - maxRounds exhausted with honest bounded-red rows (bounded nulls reported as
+    bounded, never as impossibility)
+tasks:
+  - id: M8-L1-size
+    problem: src/matmul/attempts/M8L1_census.ts
+    tests: src/matmul/attempts/M8L1_census.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Census/sizing, not closure: enumerate the rank-47 support family
+      invariant under the diagonal cyclic index shift (i,j,k)->(i+1,j+1,k+1) mod
+      4 built from the exact-49 Strassen floor's left-ideal orbit, dedupe by
+      stable fnv hash, cross-check every hash against every retired snap/drain
+      set already merged on main, and price the exact-solve workload; emit
+      M8L1_census.json with per-support hash, support size, symmetry class,
+      vecs-present and retired/live/unprocessed status plus the exact support
+      count; verdict SIZED-NO-CLOSURE; the colocated test is an independent
+      enumerator with known-answer controls (the floor support lies in the
+      family, a corrupted support is rejected) and locks the exact counts; no
+      closure claim; no AlphaTensor tensors; field F_2 throughout"
+  - id: M8-L1-solve
+    problem: src/matmul/attempts/M8L1_snap_solve.ts
+    tests: src/matmul/attempts/M8L1_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Exact-solve the UNPROCESSED rank-47 supports named in M8L1_census.json on
+      main; recover the gaussSolve per-axis F_2 machinery from landed
+      R117_snap_solve.ts without importing AlphaTensor tensors; CONSISTENT ships
+      an exact scheme file verified by verifyMod2 plus goalSatisfiedA,
+      INCONSISTENT retires the hash with axis and mismatch counts; checkpoint
+      hash, axis, consistency and mismatch counts to M8L1_snap_solve.ndjson;
+      controls are the floor seed solving CONSISTENT and one R100-retired spark
+      hash re-deriving INCONSISTENT; zero unmatched rank-47 candidates; bounded
+      nulls stay bounded, never impossibility; run exact-solve sweeps under nice
+      -n 19; file-ownership M8L1_snap_solve* plus ndjson only; no AlphaTensor
+      tensors
+    dependsOn:
+      - M8-L1-size
+  - id: M8-L1-meld
+    problem: src/matmul/attempts/M8L1_meld.ts
+    tests: src/matmul/attempts/M8L1_meld.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Non-vacuous meld lane with full-vector checkpoints, fixing the R72/R75
+      defect where split-open states stored metrics only: generate split-open
+      states around ranks 51-54 from the exact-49 floor, checkpoint FULL {u,v,w}
+      factor vectors plus a stable hash for every state to M8L1_meld.ndjson with
+      resume-skip of hashes already processed, interleave merge and flip moves
+      before greedy drain, apply close ONLY to states that first pass the
+      same-axis-factor eligibility check, and exact-solve EVERY rank<=47
+      zero-mismatch candidate on its fixed support in-window so no candidate is
+      left unmatched; verify any witness with verifyMod2 plus goalSatisfiedA;
+      verdict BOUNDED-RED absent a witness; file-ownership M8L1_meld* plus
+      ndjson only; no AlphaTensor tensors"
+  - id: M8-L1-merge
+    problem: src/matmul/attempts/M8L1_merge.ts
+    tests: src/matmul/attempts/M8L1_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-L1
+    timeoutMs: 1800000
+    note: "Adjudication merge over THIS proposal's landed outputs only
+      (M8L1_census.json, M8L1_snap_solve.ndjson and M8L1_meld.ndjson, each
+      merged on main through the gate first): re-verify every candidate with
+      checker.verifyMod2 plus the goalCheckA gate path, snap-check any rank<=47
+      support left unsnapped, drift-check hashes against M8L1_census.json, write
+      M8L1_merge.json with hashes, consistency outcomes, mismatch counts and a
+      zero-drift self-check, then append the substantive CAMPAIGN:M8-L1 row
+      (exact-47 scheme or honest bounded-red naming the residual);
+      file-ownership M8L1_merge.ts plus .test.ts plus .json only"
+    dependsOn:
+      - M8-L1-size
+      - M8-L1-solve
+      - M8-L1-meld

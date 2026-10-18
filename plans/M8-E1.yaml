@@ -1,0 +1,121 @@
+label: M8-E1
+goal: "M8/AlphaTensor parity: exact 4x4x4 rank<=47 over F_2 (BESTA47). This
+  round drains the census backlog, opens one fresh ILS generation, closes a
+  named support band at the exact-49 floor, and refreshes the census with
+  everything that landed."
+rationale: "R124_census.json (SIZED-NO-CLOSURE) names the exact open volume: 18
+  LIVE and 12 UNPROCESSED replayable rank-47 near-miss supports, all with vecs
+  present, never exact-solved despite total-solve pricing around 114 s;
+  meanwhile seed-ILS rounds R121-R126 minted new lane-bests while leaving prior
+  lanes unsolved. Two honest moves instead of re-grinding: (1) exhaustively
+  exact-solve the ENTIRE census backlog - either one CONSISTENT support ships a
+  rank<=47 scheme, or the near-miss space is reduced to only fresh ILS output;
+  (2) close the named class 'no rank<=47 scheme shares 47 terms with the
+  exact-49 two-level Strassen floor' via the drop-k/add-(k-2) band, exactly and
+  cheaply over F_2 (the R74/R79-style proven band, never yet run on the 4x4 F_2
+  base). All tasks judgeable by NEW colocated tests; no goal-level marker on any
+  bounded-null task per the scoring rule. No replicas needed: every task is
+  small, deterministic, or self-checkpointing."
+budget:
+  maxRounds: 2
+stopConditions:
+  - "witness: bun src/matmul/goalCheckA.ts exits 0 with a conserved rank<=47 F_2
+    scheme - round goal reached"
+  - all four tasks verdict-certified (snap/ils/band exhaustions recorded, census
+    refreshed) with no witness - round closes SIZED-NO-CLOSURE and the loop
+    decides
+  - "round budget maxRounds: 2 exhausted"
+tasks:
+  - id: M8-E1-snap
+    problem: src/matmul/attempts/M8E1_snap_retire.ts
+    tests: src/matmul/attempts/M8E1_snap_retire.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Backlog-retire lane: read attempts/R124_census.json, take every candidate
+      with status LIVE or UNPROCESSED 30 supports, 18+12, one census row is
+      rank-48 - include it, rank<=48 admits no eval this round), then
+      exact-solve each one's fixed support with the pinned 4096-coordinate
+      BigInt Gaussian F_2 coefficient solver (machinery precedent
+      M8M1_seed_ils.ts on main; solve over the FULL target tensor, never the
+      deficit-from-triples alias). Stream every solve to
+      attempts/M8E1_snap_retire.ndjson as one row per candidate: hash, census
+      rank, rank from re-verification, mismatchCount, consistency
+      CONSISTENT|INCONSISTENT. CONSISTENT at rank<=47 => emit the exact scheme
+      attempts/M8E1_scheme_f2.ts and record witness. Final verdict over this
+      backlog per task spec in the file header. Machinery-side only: never add
+      new search seeds, never retire candidates that were not exact-solved this
+      task. Own colocated tests gate the negative (known answers: naive(4) rank
+      64 solvable, two-level floor 49 exact, a 47-term truncation of it refused
+      as out-of-span) plus one real backlog control so 0/0 can never count as
+      success. Bounded null is the honest outcome - no BESTA47 here."
+  - id: M8-E1-ils17
+    problem: src/matmul/attempts/M8E1_seed_ils17.ts
+    tests: src/matmul/attempts/M8E1_seed_ils17.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Fresh-seed ILS generation 17 (precedent M8M1_seed_ils.ts / R121-R126
+      lanes on main): construct >= 6 seeds disjoint from ALL prior seed sets -
+      the 16 [200003..200069] used by M8-M1, the R121-R126 lanes, and every
+      excluded seed listed in R124_census.json - never reuse any lane-best hash.
+      Re-derive the two-level exact-49 floor and archived spark anchor 4126ca7f
+      from main's encodings and hash-check both against the canonical fnv.
+      Interleave split-open, drain, and repair; checkpoint every best state as
+      full {u,v,w} vecs plus rank, mismatchF2, independent mismatch, and stable
+      fnv hash into attempts/M8E1_seed_ils17.ndjson. Close the loop: exact-solve
+      every rank<=47 candidate this lane emits via the in-task 4096-coordinate
+      Gaussian solver and immediately write the solve verdict - CONSISTENT at
+      rank<=47 ships attempts/M8E1_scheme_ils17.ts as witness. Bounded null (no
+      support snaps) is the honest outcome from the seed ansatz - score via the
+      new tests, never via BESTA47."
+  - id: M8-E1-49band
+    problem: src/matmul/attempts/M8E1_49band.ts
+    tests: src/matmul/attempts/M8E1_49band.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Band-closure lane, methodology transferred from the M5 campaign (R74/R79
+      pattern, exact-solve not widen): reconstruct the exact-49 two-level
+      Strassen floor (M8M1_seed_ils.ts encodes it) over F_2 and census the
+      drop-k/add-(k-2) support band for k=3,4,5,6 - that is the whole class of
+      rank<=47 schemes sharing 47 terms with the landed floor (k=2, j=0 is
+      exact-only and literally impossible: two distinct nonzero rank-1 summands
+      cannot cancel entirely; k=1 is just below the band since 49-1=48 > 47).
+      For every drop subset compute the deficit D = sum of the dropped rank-1
+      terms exactly over F_2, then decide: rank(D) <= k-2 admits, so solve the
+      fresh-rank-1 terms exactly; rank(D) > k-2 refutes that support's whole
+      family at once, exact and cheap. Enumerate C(49,k) drop sets per k with no
+      float, no budget, no branch-and-bound - sizes 18k/211k/2M/85M are a
+      bounded verified compute; stream per-k checkpoints and a per-k summary
+      into attempts/. Merge-and-larger never fires on 4x4 (a later instrument,
+      not this round). On ANY admission, solve the k-2 fresh terms exactly and
+      record the witness; all rows refuted is the honest band closure: 'no exact
+      rank<=47 scheme shares 47 terms with the two-level Strassen floor', never
+      overstated beyond that class. Own colocated tests: self-check that a
+      planted rank<=2 4-drop sum admits, one real k=3 cross-check vs the ILS,
+      and rank tool known answers. Bounded null here - no BESTA47."
+  - id: M8-E1-census
+    problem: src/matmul/attempts/M8E1_census.ts
+    tests: src/matmul/attempts/M8E1_census.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-E1
+    timeoutMs: 1800000
+    note: "Aggregation pipe-in (later layer; runs only after its three siblings land
+      on main through the gate): ingest M8E1_snap_retire.ndjson,
+      M8E1_seed_ils17.ndjson, and the M8E1_49band per-k summaries into a
+      refreshed census attempts/M8E1_census.json - per-candidate hash/rank/vec
+      presence/freshness status; mark the backlog supports per top-level note
+      resolved (RETIRED for INCONSISTENT, WITNESS for CONSISTENT, FAILED-SOLVE
+      if solve errored - never silently swallowed), record all band rows as
+      BAND-REFUTED, and carry forward every live/unprocessed candidate plus the
+      142 prior census rows (sources R99_snap_census.json through
+      R124_census.json). Anchor convention: field F_2, stable fnv hash - must
+      agree with attempts/M8K1_audit.ts's convention error-free; verify the
+      two-level 49 floor and spark 4126ca7f re-derive exactly. Verdicts: WITNESS
+      (any sibling shipped an exact rank<=47 scheme, referenced verbatim) or
+      CENSUS-REFRESHED with per-source solved/retired counts and exact-solve
+      workload pricing for the next round. Own colocated tests gate all of this.
+      No goal marker here either - a witness is recorded via the row itself, not
+      via BESTA47 attached to a bookkeeping task."
+    dependsOn:
+      - M8-E1-snap
+      - M8-E1-ils17
+      - M8-E1-49band

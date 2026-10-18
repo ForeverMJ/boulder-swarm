@@ -1,0 +1,101 @@
+label: M8-D1
+goal: "Advance M8 (4x4 matmul parity with AlphaTensor: exact rank<=47 over F_2)
+  by closing the finite drop-k/add-j remainder around the repo's exact-49
+  two-level Strassen floor, and by widening the replayable ILS lane with
+  full-vector checkpoints and in-window exact coefficient solve."
+rationale: "Status: goalCheckA exits 1; the best landed F_2 scheme is the exact
+  rank-49 two-level Strassen floor, and seed-ILS from fresh seeds (M8-M1)
+  produced exact ranks 49..54 with no rank<=47 candidate. The A1 prompt names
+  the decisive missing volume as full-vector checkpointing plus exact
+  coefficient solve on rank<=48 supports. Two complementary moves. (1) The M5
+  campaign's proven methodology, buy a cheaper PROVEN decision instead of a
+  wider sweep, transfers to F_2: around the exact-49 floor the whole
+  drop-k/add-j family reduces exactly to asking whether some k-subset K of the
+  49 terms has tensor rank of sum_K at most k-2, a finite band decidable by a
+  proven unfolding-rank lower bound (with honest UNRESOLVED survivors) and
+  constructive when it fires. (2) A replayable ILS with full factor vectors
+  feeds the exact solver so no rank<=48 candidate is left unmatched. Every task
+  is judged by its own NEW colocated test; no goal-level marker is attached to a
+  bounded-null lane, and a landed scheme fires goalCheckA on main by artifact
+  rather than by a success marker. The merge task is an aggregator and declares
+  dependsOn so it runs in a later layer."
+budget:
+  maxRounds: 3
+stopConditions:
+  - Ship a checker-verified exact rank<=47 over F_2 scheme (bun
+    src/matmul/goalCheckA.ts exits 0), or close the drop-k/add-j band k=2..6
+    around the exact-49 floor with the honest UNRESOLVED remainder recorded.
+  - Every task's own new colocated test is green and the branch lands through
+    the merge gate; no goal-level marker is attached to a bounded-null lane.
+  - The round budget (maxRounds) is exhausted or no progress is recorded; the
+    remainder is reported as bounded, never as exhaustion.
+tasks:
+  - id: M8-D1-band
+    problem: src/matmul/attempts/M8D1_band.ts
+    tests: src/matmul/attempts/M8D1_band.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact F_2 drop-k/add-j closure around the two-level exact-49 floor. First
+      reconstruct and verify the floor (recover the exact two-level Strassen
+      encoding via M8M1_seed_ils.ts machinery and confirm rank 49 exact with
+      checker.verifyMod2). For k=2..6 enumerate all C(49,k) drop sets K and
+      decide whether tensor rank(sum_K) is at most k-2; the reduction is exact
+      because a kept-plus-added sum equals the target iff the added rank-1 terms
+      sum to sum_K, and the new rank is 49-k+j with j at most k-2. Refute each
+      row with the proven unfolding-rank lower bound: if any of the three axis
+      unfoldings of sum_K has F_2 matrix rank strictly greater than k-2 then
+      tensor rank(sum_K) exceeds k-2 and the row is refuted. Rows the screen
+      does not decide are reported UNRESOLVED (bounded), never refuted. If some
+      K admits, construct the exact scheme from the floor minus K plus a minimal
+      rank-1 decomposition of sum_K, verify it with checker.verifyMod2 to be
+      exact rank<=47, and embed it as the `scheme` export. Emit
+      attempts/M8D1_band.json with per-k exact counts and a CAMPAIGN row
+      labelled M8-D1. The colocated test re-derives the per-k counts, checks
+      planted controls (a duplicate-pair k=2 set is refuted; a synthetic
+      low-tensor-rank sum admits), and when a scheme is exported asserts
+      verifyMod2 correct with rank<=47. Never claim closure of a band the screen
+      did not decide, and do not modify checker.ts or any other worker's files."
+  - id: M8-D1-ils
+    problem: src/matmul/attempts/M8D1_ils.ts
+    tests: src/matmul/attempts/M8D1_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Replayable widened ILS lane, self-contained and from scratch (no import of
+      AlphaTensor's published tensors). Reconstruct the exact-49 floor and the
+      archived exact rank-53 spark anchor whose stable hash is 4126ca7f from
+      their own encodings (M8M1_seed_ils.ts is the recovery base). From fresh
+      seeds disjoint from every previously swept seed list, split a term on one
+      axis to open ranks 50..54, run interleaved merge/flip moves, then greedy
+      same-axis drain. Checkpoint every lane-best and every split-open state
+      with the full 16-bit u,v,w factor vectors and a stable fnv hash into
+      attempts/M8D1_ils.ndjson. For every state whose rank is at most 48 run an
+      exact F_2 coefficient solve on its fixed support; on a CONSISTENT verdict
+      export the exact rank<=47 scheme by verifying with checker.verifyMod2 and
+      embedding it as the `scheme` export. A bounded run that finds no witness
+      is an honest RED row and must be reported as bounded, never as exhaustion.
+      The colocated test re-derives the anchor hashes and every checkpoint hash,
+      exercises the exact-solve controls (a planted solvable support yields
+      CONSISTENT; a planted linearly dependent support yields INCONSISTENT), and
+      asserts any embedded scheme verifies. Do not re-run the broad lanes
+      unchanged, and do not edit other files.
+  - id: M8-D1-merge
+    problem: src/matmul/attempts/M8D1_merge.ts
+    tests: src/matmul/attempts/M8D1_merge.test.ts
+    milestone: M8
+    timeoutMs: 600000
+    note: Later-layer aggregator; runs only after M8-D1-band and M8-D1-ils have
+      landed on main through the gate. Independently re-derive the M8-D1 band
+      counts from attempts/M8D1_band.json, re-verify every checkpointed
+      candidate in attempts/M8D1_ils.ndjson from its own encoded vectors,
+      drift-check every recorded hash, and run the goal selector goalSatisfiedA
+      over main's attempt files to record whether bun src/matmul/goalCheckA.ts
+      would exit 0. Emit attempts/M8D1_certificate.json plus one CAMPAIGN row
+      labelled M8-D1 stating exact coverage and the honest UNRESOLVED remainder.
+      Raises no bound and claims nothing beyond the artifacts it re-derives; no
+      goal marker is attached. The colocated test drives the aggregator on a
+      synthetic clean layer (bounded result, self-check true) and on a
+      planted-drift layer (hash drift detected, self-check false), and must pass
+      in under 60 s.
+    dependsOn:
+      - M8-D1-band
+      - M8-D1-ils

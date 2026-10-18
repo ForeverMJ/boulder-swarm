@@ -1,0 +1,129 @@
+label: M8-K1
+goal: "Advance milestone M8 (exact 4x4x4 matrix multiplication over F_2 at rank
+  <= 47, AlphaTensor parity) so this round either lands a verified rank<=47
+  scheme or returns a certified negative: exhaustively close the structured
+  2-term Strassen-merge ansatz, exact-solve every remaining replayable rank-47
+  support under the composition rule, and run fresh full-vector ILS/drain ground
+  with the in-window exact-solve invariant held."
+rationale: "The campaign has sat at the exact-49 F_2 floor since R87. The recent
+  census/snap/drain/ils lanes (R119-R122) either timed out near the 1800s cap or
+  retired supports, and according to A1.md the composition's exact-solve step
+  has never snapped a rank-47 candidate to exact. A1.md also names the decisive
+  missing volume: the gap to 47 is exactly the 2 terms beyond the two-level
+  recursion, so the constructive answer is an exhaustive enumeration of
+  rank-1-preserving structured 2-term mergings of the 7 Strassen triples - a
+  bounded, closable named space - paired with the exact F_2 coefficient solve on
+  any rank-47 candidate's fixed support. This plan closes that named space
+  exactly (witness or exhaustive certificate), keeps the
+  never-leave-a-candidate-unmatched rule inside every lane, and writes one
+  adjudication row. Search lanes are judged by their own new test files so
+  honest bounded-null coverage still scores; only the adjudication task cites
+  CAMPAIGN evidence."
+budget:
+  maxRounds: 2
+stopConditions:
+  - "witness: an exact rank<=47 scheme over F_2 is verified by goalCheckA exit 0
+    and lands through the merge gate"
+  - "certified negative: the structured 2-term Strassen-merge ansatz is refuted
+    exhaustively and the residual class is named in the CAMPAIGN:M8-K1 row"
+  - "budget exhausted with no witness: every lane reports coverage as
+    BOUNDED-NO-CLOSURE, never as impossibility"
+tasks:
+  - id: M8-K1-strassenmerge
+    problem: src/matmul/attempts/M8K1_strassenMerge_search.ts
+    tests: src/matmul/attempts/M8K1_strassenMerge.test.ts
+    milestone: M8
+    timeoutMs: 900000
+    note: "Constructive route closed EXHAUSTIVELY over the named ansatz, not sampled
+      (A1.md: the gap to 47 is exactly the 2 terms beyond two-level Strassen).
+      Recover the exact-49 two-level floor and the merge vocabulary from the
+      archive chain (agent/goal-w0-A1@r45_c8e92f3 and the 555-line merge
+      instrument @r61_67e3f9f) without importing any AlphaTensor tensors.
+      Enumerate every structured 2-term merging of the 7 Strassen triples that
+      stays rank-1 over F_2: F_2-linear combinations and sign-bearing integer
+      combinations re-reduced mod 2, left-ideal / octonion-style, exhaustive
+      over the named ansatz, with the exact enumeration count C stated. Every
+      merged 47-term candidate is verified by checker.verifyMod2 plus
+      goalSatisfiedA before any claim. Exactly two admissible outcomes: (a) a
+      rank<=47 exact scheme, in which case export attempts/M8K1_scheme.ts
+      exporting scheme and the BESTA47 gate lands; (b) the full ansatz is
+      refuted, in which case write attempts/M8K1_strassenMerge.json with the
+      exhaustive count, per-candidate verdicts and a zero-drift self-check, and
+      print an honest certificate. The colocated new test gates: the recovered
+      floor reproduces exact rank 49 under verifyMod2, the enumeration count
+      equals the analytic count of the structured ansatz, and every candidate is
+      either verified rank<=47 or refuted with its mismatch count. A bounded
+      null is honest RED, never impossibility. File ownership:
+      attempts/M8K1_strassenMerge* plus optional attempts/M8K1_scheme.ts only;
+      no checker edits, no other workers files, no AlphaTensor tensors; run
+      under nice -n 19."
+  - id: M8-K1-snap
+    problem: src/matmul/attempts/M8K1_snap_solve.ts
+    tests: src/matmul/attempts/M8K1_snap_solve.test.ts
+    milestone: M8
+    timeoutMs: 900000
+    note: "Composition rule (A1.md decisive move): never leave a rank<=47 candidate
+      unmatched. Recover the gaussSolve / coeffSolve per-axis exact F_2
+      machinery (archive agent/goal-w0-A1@r50_fd96654 era) without importing
+      AlphaTensor tensors. Sweep every replayable rank-47 support that carries
+      full vecs and is marked unprocessed / vecs-present by the latest merged
+      census on main (skip every hash retired by merged R100-R122 snap ledgers
+      and every spark hash 4126ca7f). For each support, solve ALL coefficients
+      exactly over F_2 on its FIXED support. CONSISTENT means the solved
+      coefficients are an exact rank<=47 scheme: export attempts/M8K1_scheme.ts
+      exporting scheme and confirm with verifyMod2 plus goalSatisfiedA.
+      INCONSISTENT retires the hash with axis and mismatch counts. Checkpoint
+      hash / axis / consistency / mismatch counts to
+      attempts/M8K1_snap_solve.ndjson. Controls: the exact-49 floor solves
+      CONSISTENT, and one already-retired hash re-derives INCONSISTENT. The
+      colocated new test gates both controls and the unmatched=0 invariant over
+      the swept set. Bounded nulls stay bounded, never impossibility. File
+      ownership: attempts/M8K1_snap_solve* plus optional attempts/M8K1_scheme.ts
+      only; no AlphaTensor tensors; nice -n 19."
+  - id: M8-K1-seedils
+    problem: src/matmul/attempts/M8K1_seed_ils.ts
+    tests: src/matmul/attempts/M8K1_seed_ils.test.ts
+    milestone: M8
+    timeoutMs: 900000
+    note: "Fresh ILS/drain ground only, with the full-vector checkpoint discipline
+      the R72/R75 defect demanded. Seeds exclude every seed recorded in any
+      merged R*_seed_ils*.ndjson, R*_walk*.json or R*_drain*.ndjson on main
+      (including 22, 66, 7, 77, 107, 207, 307, 407 and all R101-R122 lanes). At
+      least 6 new seeds, at least 10s per lane: each lane calibrates against the
+      exact-49 floor, then runs ILS/drain at fixed rank 47 with interleaved
+      merge / flip / shear / split moves. Store FULL u,v,w factor vectors plus a
+      stable fnv hash for every lane-best 47 and floor-best 49 state
+      (metrics-only rows are not replayable and are the campaign's repeated
+      defect). Every rank<=47 zero-mismatch candidate is exact-solved on its
+      fixed support in-window: CONSISTENT exports attempts/M8K1_scheme.ts,
+      INCONSISTENT retires that family. The colocated new test gates: the floor
+      reproduces, at least 6 distinct previously-unused seeds ran, every
+      checkpoint row carries vectors, and unmatched=0. Verdict
+      BOUNDED-NO-CLOSURE absent a verified witness. File ownership:
+      attempts/M8K1_seed_ils* plus optional attempts/M8K1_scheme.ts only; no
+      AlphaTensor tensors; nice -n 19."
+  - id: M8-K1-audit
+    problem: src/matmul/attempts/M8K1_audit.ts
+    tests: src/matmul/attempts/M8K1_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-K1
+    timeoutMs: 600000
+    note: "Adjudication merge, run in a later layer after its three siblings land on
+      main through the gate. Read the siblings' merged artifacts
+      (M8K1_strassenMerge.json, M8K1_snap_solve.ndjson, M8K1_seed_ils.ndjson)
+      only as they exist on main, and never before the siblings have merged.
+      Re-verify every rank<=47 candidate with checker.verifyMod2 plus
+      goalSatisfiedA; if any sibling exported attempts/M8K1_scheme.ts, run bun
+      src/matmul/goalCheckA.ts and record its exit code; exact-solve any support
+      still unprocessed; drift-check every hash against the siblings' records.
+      Write attempts/M8K1_audit.json (candidate hashes, consistency outcomes,
+      mismatch counts, gate exit code, zero-drift self-check) and append the
+      substantive CAMPAIGN:M8-K1 row naming either the exact rank<=47 scheme
+      (and that scoreboard prints BESTA47) or the honest bounded-red residual
+      class. The colocated new test gates the recorded counts and the zero-drift
+      self-check. Bounded verdict only while 47 stands. File ownership:
+      attempts/M8K1_audit* only."
+    dependsOn:
+      - M8-K1-strassenmerge
+      - M8-K1-snap
+      - M8-K1-seedils
