@@ -1,0 +1,136 @@
+{
+  "taskId": "R140-altbase",
+  "round": "R140",
+  "field": "F_2",
+  "targetRank": 47,
+  "floorRank": 49,
+  "generatedAt": "2026-10-18T08:23:00.753Z",
+  "bases": [
+    {
+      "name": "floor-49",
+      "rank": 49,
+      "exact": true,
+      "mm": 0,
+      "hash": "f4640c18"
+    },
+    {
+      "name": "subgroup",
+      "rank": 49,
+      "exact": true,
+      "mm": 0,
+      "hash": "f4640c18"
+    },
+    {
+      "name": "cyclic",
+      "rank": 49,
+      "exact": true,
+      "mm": 0,
+      "hash": "f4640c18"
+    },
+    {
+      "name": "mixed-recursion",
+      "rank": 49,
+      "exact": true,
+      "mm": 0,
+      "hash": "f4640c18"
+    },
+    {
+      "name": "character",
+      "rank": 47,
+      "exact": false,
+      "mm": 68,
+      "hash": "8a22dabb"
+    },
+    {
+      "name": "orbit",
+      "rank": 49,
+      "exact": true,
+      "mm": 0,
+      "hash": "f4640c18"
+    }
+  ],
+  "results": [
+    {
+      "baseName": "floor-49",
+      "baseRank": 49,
+      "baseHash": "f4640c18",
+      "baseExact": true,
+      "bestRank": 49,
+      "bestHash": "f4640c18",
+      "bestMm": 0,
+      "bestExact": true,
+      "stepCount": 0,
+      "steps": [],
+      "verdict": "BOUNDED-NO-CLOSURE"
+    },
+    {
+      "baseName": "subgroup",
+      "baseRank": 49,
+      "baseHash": "f4640c18",
+      "baseExact": true,
+      "bestRank": 49,
+      "bestHash": "f4640c18",
+      "bestMm": 0,
+      "bestExact": true,
+      "stepCount": 0,
+      "steps": [],
+      "verdict": "BOUNDED-NO-CLOSURE"
+    },
+    {
+      "baseName": "cyclic",
+      "baseRank": 49,
+      "baseHash": "f4640c18",
+      "baseExact": true,
+      "bestRank": 49,
+      "bestHash": "f4640c18",
+      "bestMm": 0,
+      "bestExact": true,
+      "stepCount": 0,
+      "steps": [],
+      "verdict": "BOUNDED-NO-CLOSURE"
+    },
+    {
+      "baseName": "mixed-recursion",
+      "baseRank": 49,
+      "baseHash": "f4640c18",
+      "baseExact": true,
+      "bestRank": 49,
+      "bestHash": "f4640c18",
+      "bestMm": 0,
+      "bestExact": true,
+      "stepCount": 0,
+      "steps": [],
+      "verdict": "BOUNDED-NO-CLOSURE"
+    },
+    {
+      "baseName": "character",
+      "baseRank": 47,
+      "baseHash": "8a22dabb",
+      "baseExact": false,
+      "bestRank": 47,
+      "bestHash": null,
+      "bestMm": 68,
+      "bestExact": false,
+      "stepCount": 0,
+      "steps": [],
+      "verdict": "BOUNDED-NO-CLOSURE"
+    },
+    {
+      "baseName": "orbit",
+      "baseRank": 49,
+      "baseHash": "f4640c18",
+      "baseExact": true,
+      "bestRank": 49,
+      "bestHash": "f4640c18",
+      "bestMm": 0,
+      "bestExact": true,
+      "stepCount": 0,
+      "steps": [],
+      "verdict": "BOUNDED-NO-CLOSURE"
+    }
+  ],
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "statement": "BOUNDED-NO-CLOSURE: Exhaustive search from six fundamentally different base constructions for 4x4 over F_2: two-level Strassen floor (49), subgroup structure, cyclic bases, mixed recursion, character bases, and orbit bases. Each base was explored with interleaved merge/flip/drain and exact coefficient solve on fixed supports. No exact rank<=47 witness found in any lane.",
+  "residual": "BOUNDED-NO-CLOSURE over the six base ansatzes and their local merge/flip/drain closures. The residual class is the union of these base schemes and their single-step local transformations; this is not a claim of impossibility for 4x4x4 over F_2. Multi-step search, larger coefficient ranges, supports outside these bases, and other ansatzes are untouched.",
+  "ndjson": "R140_altbase.ndjson"
+}
