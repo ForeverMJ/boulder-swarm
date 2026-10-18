@@ -64,6 +64,15 @@ describe("replan gate-merged solved semantics, judged independently", () => {
     expect(plan.pending).toContain("T98")
   })
 
+  it("gate-merged planner tasks with dashes in their ids are solved, not truncated to the last segment", async () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "replan-"))
+    initRepoWithGateMerge(tempRoot, ["M8-M1-ils", "R125-merge-audit"])
+    const plan = await replan([task("M8-M1-ils"), task("R125-merge-audit"), task("R126-snap")], tempRoot)
+    expect(plan.solved).toContain("M8-M1-ils")
+    expect(plan.solved).toContain("R125-merge-audit")
+    expect(plan.pending).toContain("R126-snap")
+  })
+
   it("metrics rows still solve tasks the gate never merged (old semantics preserved)", async () => {
     tempRoot = mkdtempSync(join(tmpdir(), "replan-"))
     initRepoWithGateMerge(tempRoot, [])

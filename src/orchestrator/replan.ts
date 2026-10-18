@@ -26,7 +26,12 @@ function gateMergedTaskIds(repoRoot: string): string[] {
       if (!line.startsWith(GATE_MERGE_PREFIX)) continue
       if (!line.endsWith(GATE_MERGE_SUFFIX)) continue
       const branch = line.slice(GATE_MERGE_PREFIX.length, line.length - GATE_MERGE_SUFFIX.length).trim()
-      const id = branch.slice(branch.lastIndexOf("-") + 1)
+      // Branch format is agent/goal-w<N>-<taskId>; the id itself may contain dashes
+      // (every planner-minted task does), so split only on the worker prefix, never
+      // on the last dash - lastIndexOf("-") reduced M8-M1-ils to "ils" and every
+      // gate-merged planner task fell out of the solved set.
+      const m = /^w\d+-(.+)$/.exec(branch)
+      const id = m?.[1] ?? ""
       if (id !== "") ids.push(id)
     }
     return ids
