@@ -1,0 +1,7 @@
+{"kind":"round","runId":"planrun_2026-10-17T23:55:36.293Z","round":{"label":"M8-M1","taskIds":["M8-M1-snap","M8-M1-merge","M8-M1-ils","M8-M1-audit"],"solved":[]},"ts":"2026-10-18T00:14:47.501Z"}
+{"kind":"round","runId":"planrun_2026-10-17T23:55:36.293Z","round":{"label":"M8-D1","taskIds":["M8-D1-band","M8-D1-ils","M8-D1-merge"],"solved":[]},"ts":"2026-10-18T00:17:15.059Z"}
+{"kind":"round","runId":"planrun_2026-10-17T23:55:36.293Z","round":{"label":"M8-E1","taskIds":["M8-E1-snap","M8-E1-ils17","M8-E1-49band","M8-E1-census"],"solved":[]},"ts":"2026-10-18T00:22:17.968Z"}
+{"kind":"round","runId":"planrun_2026-10-17T23:55:36.293Z","round":{"label":"R127","taskIds":["R127-strassenMerge","R127-snapSolve","R127-adjudicate","R127-seedils49"],"solved":[]},"ts":"2026-10-18T00:28:11.925Z"}
+{"kind":"start","runId":"planrun_2026-10-18T00:33:48.003Z","maxRounds":8,"ts":"2026-10-18T00:33:48.003Z"}
+{"kind":"round","runId":"planrun_2026-10-18T00:33:48.003Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-18T00:33:53.562Z"}
+{"kind":"round","runId":"planrun_2026-10-18T00:33:48.003Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-18T00:33:58.899Z"}

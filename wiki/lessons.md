@@ -5,6 +5,10 @@
 - [A1-v7-2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [A1-v7-3] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [A1-v7-4] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [A1-v8-1] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [A1-v8-2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [A1-v8-3] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [A1-v8-4] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [D2] Hypothesis: standard solution passes; Evidence: 5/5; Rule: keep pattern and reuse.
 - [E1] Hypothesis: standard solution passes; Evidence: 4/4; Rule: keep pattern and reuse.
 - [E2] Hypothesis: standard solution passes; Evidence: 3/3; Rule: keep pattern and reuse.
@@ -31,6 +35,36 @@
 - [M8-C2-4] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [M8-C3-1] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [M8-C3-2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-D1-task1] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-D1-task2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-E1-audit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-E1-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-E1-screen] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-E1-size] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-F1-closeHi] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-F1-closeLo] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-F1-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-F1-size] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-G1-audit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-G1-baseline] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-G1-merges] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-G1-solve] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-H1-audit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-H1-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-H1-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-H1-solve] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-I1-aggregate] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-I1-census2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-I1-gsp] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-I1-support] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-K1-audit] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [M8-K1-seedils] Hypothesis: stub unimplemented or wrong direction; Evidence: 13/13; Rule: retry with different strategy next round.
+- [M8-K1-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 12/12; Rule: retry with different strategy next round.
+- [M8-K1-strassenmerge] Hypothesis: stub unimplemented or wrong direction; Evidence: 15/15; Rule: retry with different strategy next round.
+- [M8-L1-meld] Hypothesis: stub unimplemented or wrong direction; Evidence: 28/28; Rule: retry with different strategy next round.
+- [M8-L1-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-L1-size] Hypothesis: stub unimplemented or wrong direction; Evidence: 12/12; Rule: retry with different strategy next round.
+- [M8-L1-solve] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R100-drain49] Hypothesis: standard solution passes; Evidence: 11/11; Rule: keep pattern and reuse.
 - [R100-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R100-seedils] Hypothesis: standard solution passes; Evidence: 8/8; Rule: keep pattern and reuse.
@@ -112,6 +146,57 @@
 - [R122-drain49l] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R122-exactsnap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R122-seedils12] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R123-census] Hypothesis: standard solution passes; Evidence: 23/23; Rule: keep pattern and reuse.
+- [R123-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R123-ils] Hypothesis: standard solution passes; Evidence: 11/11; Rule: keep pattern and reuse.
+- [R123-snap] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
+- [R124-census] Hypothesis: standard solution passes; Evidence: 24/24; Rule: keep pattern and reuse.
+- [R124-drain] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [R124-ils] Hypothesis: standard solution passes; Evidence: 11/11; Rule: keep pattern and reuse.
+- [R124-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R125-ils] Hypothesis: standard solution passes; Evidence: 11/11; Rule: keep pattern and reuse.
+- [R125-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R125-snapA] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
+- [R125-snapB] Hypothesis: standard solution passes; Evidence: 14/14; Rule: keep pattern and reuse.
+- [R126-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R126-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R126-ils] Hypothesis: standard solution passes; Evidence: 11/11; Rule: keep pattern and reuse.
+- [R126-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R127-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R127-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R127-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R127-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R128-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R128-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R128-seedils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R128-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R129-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R129-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R129-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R129-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R130-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R130-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R130-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R130-struct] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R131-beam] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R131-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R131-genetic] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R131-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R132-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R132-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R132-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R133-anchor] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R133-check] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R133-close] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R133-size] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R134-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R134-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R134-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R134-snap] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R135-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R135-drain49m] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R135-seedils17] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R135-snapC] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R52] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/6; Rule: retry with different strategy next round.
 - [R90-probe] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R90-size] Hypothesis: standard solution passes; Evidence: 3/3; Rule: keep pattern and reuse.
