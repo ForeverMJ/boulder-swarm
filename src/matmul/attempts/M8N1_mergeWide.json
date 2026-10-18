@@ -1,0 +1,124 @@
+{
+  "taskId": "M8-N1-mergeWide",
+  "round": "M8-N1",
+  "field": "F_2",
+  "targetRank": 47,
+  "floorRank": 49,
+  "floorHash": "f4640c18",
+  "mergingK": [
+    2,
+    3,
+    4
+  ],
+  "perK": [
+    {
+      "k": 2,
+      "subsets": 1176,
+      "dimHistogram": {
+        "2": 1176
+      },
+      "reduced": 0,
+      "certified": 1176,
+      "unresolved": 0,
+      "bestRank": 2,
+      "elapsedMs": 17
+    },
+    {
+      "k": 3,
+      "subsets": 18424,
+      "dimHistogram": {
+        "2": 42,
+        "3": 18382
+      },
+      "reduced": 0,
+      "certified": 18424,
+      "unresolved": 0,
+      "bestRank": 3,
+      "elapsedMs": 189
+    },
+    {
+      "k": 4,
+      "subsets": 211876,
+      "dimHistogram": {
+        "3": 2055,
+        "4": 209821
+      },
+      "reduced": 0,
+      "certified": 211876,
+      "unresolved": 0,
+      "bestRank": 4,
+      "elapsedMs": 7646
+    }
+  ],
+  "controls": {
+    "floorHash": "f4640c18",
+    "floorRank": 49,
+    "floorMm": 0,
+    "floorSolvable": true,
+    "floorSupportRank": 49,
+    "naiveRank": 64,
+    "naiveMm": 0,
+    "naiveSolvable": true,
+    "naiveSupportRank": 64,
+    "trunc47Rank": 47,
+    "trunc47Solvable": false,
+    "detector": [
+      {
+        "name": "single-term-rank1",
+        "terms": 1,
+        "dim": 1,
+        "rank": 1,
+        "reduced": false,
+        "certified": true,
+        "replacementRank": null,
+        "replacementExact": null
+      },
+      {
+        "name": "duplicate-cancels-to-zero",
+        "terms": 2,
+        "dim": 0,
+        "rank": 0,
+        "reduced": true,
+        "certified": true,
+        "replacementRank": 0,
+        "replacementExact": true
+      },
+      {
+        "name": "triple-duplicate-is-rank1",
+        "terms": 3,
+        "dim": 1,
+        "rank": 1,
+        "reduced": true,
+        "certified": true,
+        "replacementRank": 1,
+        "replacementExact": true
+      },
+      {
+        "name": "independent-pair-is-rank2",
+        "terms": 2,
+        "dim": 2,
+        "rank": 2,
+        "reduced": false,
+        "certified": true,
+        "replacementRank": null,
+        "replacementExact": null
+      },
+      {
+        "name": "synthetic-rank2-from-3-terms",
+        "terms": 3,
+        "dim": 2,
+        "rank": 2,
+        "reduced": true,
+        "certified": true,
+        "replacementRank": 2,
+        "replacementExact": true
+      }
+    ]
+  },
+  "witnesses": 0,
+  "verdict": "BOUNDED-RED",
+  "statement": "Exhaustive k-subset F_2 recombination of the 49 exact two-level Strassen terms for k=2,3,4: every subset S has rank(sum S) = |S|, certified from its slice space (dim W = k, or dim W = k-1 with no rank-1 basis, or dim W = 1). The merging dictionary therefore admits no rank reduction and no rank<=47 witness.",
+  "residual": "BOUNDED RED over the merging ansatz only. The residual class is the k-subset recombination dictionary of the exact-49 floor (k<=4); this is NOT a claim of impossibility for 4x4x4 over F_2. Split/flip/ILS lanes, supports outside the floor, coefficient-general recombinations and k>=5 are untouched.",
+  "generatedAt": "2026-10-18T01:20:14.846Z",
+  "ndjson": "M8N1_mergeWide.ndjson"
+}
