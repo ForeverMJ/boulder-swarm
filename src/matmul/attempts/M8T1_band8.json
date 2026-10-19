@@ -1,0 +1,102 @@
+{
+  "verdict": {
+    "kind": "verdict",
+    "taskId": "M8-T1-band8",
+    "round": "M8-T1",
+    "field": "F_2",
+    "floorRank": 49,
+    "targetRank": 47,
+    "kRange": [
+      8
+    ],
+    "totalRows": 450978066,
+    "totalAdmits": 0,
+    "totalRefutes": 447402726,
+    "totalUnresolved": 3575340,
+    "complete": true,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "witness": null
+  },
+  "sizing": {
+    "k": 9,
+    "rows": 2054455634,
+    "rateRowsPerSecond": 805735.2307444927,
+    "estimatedSeconds": 2549.79,
+    "budgetSeconds": 1800,
+    "fitsOneTask": false
+  },
+  "results": [
+    {
+      "k": 8,
+      "total": 450978066,
+      "processed": 450978066,
+      "complete": true,
+      "admits": 0,
+      "refutes": 447402726,
+      "unresolved": 3575340,
+      "elapsedMs": 559710,
+      "admitDetails": []
+    }
+  ],
+  "controls": {
+    "floor": {
+      "ok": true,
+      "terms": 49,
+      "hash": "f4640c18",
+      "mismatchF2": 0,
+      "independentMismatch": 0
+    },
+    "plantedAdmit": {
+      "ok": true,
+      "k": 4,
+      "addBudget": 2,
+      "mode1Rank": 2,
+      "verdict": "ADMIT",
+      "terms": 2,
+      "witnessVerified": true
+    },
+    "knownRefute": [
+      {
+        "dropIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "surrogateRank": 6,
+        "expectedSurrogateRank": 6,
+        "hash": "fa885c4f",
+        "expectedHash": "fa885c4f",
+        "mode1Rank": 5,
+        "verdict": "REFUTE",
+        "ok": true
+      },
+      {
+        "dropIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          9
+        ],
+        "surrogateRank": 5,
+        "expectedSurrogateRank": 5,
+        "hash": "c9a0e9e6",
+        "expectedHash": "c9a0e9e6",
+        "mode1Rank": 5,
+        "verdict": "REFUTE",
+        "ok": true
+      }
+    ],
+    "allOk": true
+  },
+  "coverage": {
+    "complete": true,
+    "processedRows": 450978066,
+    "totalRows": 450978066,
+    "processedFraction": 1
+  }
+}
