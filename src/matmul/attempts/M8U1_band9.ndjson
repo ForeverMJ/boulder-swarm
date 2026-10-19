@@ -1,0 +1,2 @@
+{"kind":"declare","taskId":"M8-U1-band9","round":"M8-U1","field":"F_2","k":9,"declaredTotal":"2054455634","shards":8,"resume":true,"priorTaskId":"R143-band9","rowBudget":50000}
+{"kind":"verdict","taskId":"M8-U1-band9","round":"M8-U1","field":"F_2","floorRank":49,"targetRank":47,"k":9,"declaredTotal":"2054455634","shards":8,"sumPlanned":"2054455634","sumProcessed":"2000000","closed":false,"admits":0,"refutes":345648,"unresolved":54352,"priorTaskId":"R143-band9","resumedShards":8,"verdict":"BOUNDED-NO-CLOSURE","witness":null}

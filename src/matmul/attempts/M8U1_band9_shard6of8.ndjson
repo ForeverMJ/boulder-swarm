@@ -1,0 +1,1 @@
+{"kind":"summary","taskId":"M8-U1-band9","shard":6,"shards":8,"lo":"1540841725","hi":"1797648679","planned":"256806954","startRank":"1541041725","processed":250000,"processedThisRun":50000,"complete":false,"resumed":true,"admits":0,"refutes":49548,"unresolved":452,"unresolvedEmitted":452,"cursor":"1541091725","elapsedMs":83}

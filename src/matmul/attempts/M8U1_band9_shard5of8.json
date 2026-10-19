@@ -1,0 +1,19 @@
+{
+  "shard": 5,
+  "shards": 8,
+  "lo": "1284034771",
+  "hi": "1540841725",
+  "planned": "256806954",
+  "startRank": "1284234771",
+  "startOffset": "200000",
+  "resumed": true,
+  "processed": 250000,
+  "processedThisRun": 50000,
+  "complete": false,
+  "admits": 0,
+  "refutes": 49734,
+  "unresolved": 266,
+  "unresolvedEmitted": 266,
+  "cursor": "1284284771",
+  "elapsedMs": 74
+}
