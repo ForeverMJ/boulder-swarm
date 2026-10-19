@@ -1,0 +1,32 @@
+{
+  "kind": "summary",
+  "task": "M8-S1-altsupRest",
+  "field": "F_2",
+  "n": 4,
+  "targetRank": 47,
+  "census": 1176,
+  "r141Retired": 100,
+  "skippedToR141": 100,
+  "solved": 1076,
+  "unresolved": 0,
+  "consistent": 0,
+  "shipped": null,
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "bySource": {
+    "coset-col": 121,
+    "coset-diag": 120,
+    "coset-adiag": 120,
+    "coset-row": 127,
+    "sym-cyclic": 24,
+    "coset-line-slope2": 143,
+    "coset-line-slope3": 138,
+    "coset-line-slope4": 143,
+    "coset-line-slope5": 140
+  },
+  "controls": {
+    "floorSeedConsistent": true,
+    "retiredHash": "9cd17e65",
+    "retiredInconsistent": true
+  },
+  "note": "exact F_2 solve of every R141_altsup support not already retired by R141; bounded sweep, no exhaustion or impossibility claimed; unresolved rows are UNRESOLVED, never refutations"
+}
