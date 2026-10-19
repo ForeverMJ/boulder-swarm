@@ -1,0 +1,188 @@
+{
+  "taskId": "M8-T1-merge",
+  "round": "M8-T1",
+  "field": "F_2",
+  "floorRank": 49,
+  "targetRank": 47,
+  "generatedAt": "2026-10-19T03:08:47.688Z",
+  "siblings": {
+    "band8": true,
+    "resolve": true,
+    "oracle": true,
+    "allPresent": true
+  },
+  "missingSiblings": [],
+  "floor": {
+    "ok": true,
+    "terms": 49,
+    "hash": "f4640c18",
+    "mismatchF2": 0,
+    "independentMismatch": 0
+  },
+  "band8": {
+    "present": true,
+    "source": "M8T1_band8.ndjson",
+    "total": 450978066,
+    "admits": 0,
+    "refutes": 447402726,
+    "unresolved": 3575340,
+    "complete": true,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "enumerated": 450978066,
+    "c49_8": "450978066",
+    "enumeratedEqualsExact": true,
+    "totalEqualsEnumerated": true
+  },
+  "resolve": {
+    "present": true,
+    "source": "M8T1_resolve.ndjson",
+    "unresolvedBeforeLaneTotal": 3611966,
+    "unresolvedAfterTotal": 1432673,
+    "refuteContradictionsTotal": 172925,
+    "finalDisagreements": 0,
+    "complete": false,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "lanes": [
+      {
+        "lane": "band7",
+        "k": 3,
+        "total": 18424,
+        "processed": 18424,
+        "complete": true,
+        "laneAdmits": 0,
+        "laneRefutes": 18424,
+        "laneUnresolved": 0,
+        "refuteContradictions": 0,
+        "unresolvedAfter": 0,
+        "finalDisagreements": 0
+      },
+      {
+        "lane": "band7",
+        "k": 4,
+        "total": 211876,
+        "processed": 211876,
+        "complete": true,
+        "laneAdmits": 0,
+        "laneRefutes": 211876,
+        "laneUnresolved": 0,
+        "refuteContradictions": 0,
+        "unresolvedAfter": 0,
+        "finalDisagreements": 0
+      },
+      {
+        "lane": "band7",
+        "k": 5,
+        "total": 1906884,
+        "processed": 1906884,
+        "complete": true,
+        "laneAdmits": 0,
+        "laneRefutes": 1906847,
+        "laneUnresolved": 37,
+        "refuteContradictions": 86,
+        "unresolvedAfter": 123,
+        "finalDisagreements": 0
+      },
+      {
+        "lane": "band7",
+        "k": 6,
+        "total": 13983816,
+        "processed": 13983816,
+        "complete": true,
+        "laneAdmits": 0,
+        "laneRefutes": 13982274,
+        "laneUnresolved": 1542,
+        "refuteContradictions": 5702,
+        "unresolvedAfter": 7244,
+        "finalDisagreements": 0
+      },
+      {
+        "lane": "band7",
+        "k": 7,
+        "total": 85900584,
+        "processed": 85900584,
+        "complete": true,
+        "laneAdmits": 0,
+        "laneRefutes": 85865537,
+        "laneUnresolved": 35047,
+        "refuteContradictions": 167137,
+        "unresolvedAfter": 202184,
+        "finalDisagreements": 0
+      },
+      {
+        "lane": "band8",
+        "k": 8,
+        "total": 450978066,
+        "processed": 50000000,
+        "complete": false,
+        "laneAdmits": 0,
+        "laneRefutes": 48776878,
+        "laneUnresolved": 1223122,
+        "refuteContradictions": 0,
+        "unresolvedAfter": 1223122,
+        "finalDisagreements": 0
+      }
+    ]
+  },
+  "oracle": {
+    "present": true,
+    "source": "M8T1_oracle.ndjson",
+    "rows": 65092,
+    "refutes": 62188,
+    "admits": 0,
+    "unresolved": 2904,
+    "contradictions": 0,
+    "disagreements": 0,
+    "strengthened": 8853,
+    "fibreOnly": 2859,
+    "summaryDisagreements": 0
+  },
+  "candidates": {
+    "total": 65322,
+    "withVectors": 1,
+    "withoutVectors": 65321,
+    "driftChecked": 65322,
+    "driftMismatches": 0
+  },
+  "vectored": [
+    {
+      "source": "floor",
+      "id": "f4640c18",
+      "hasVectors": true,
+      "rank": 49,
+      "mod2Correct": true,
+      "mod2Mm": 0,
+      "intCorrect": false,
+      "intMm": 336,
+      "exactLeTarget": false
+    }
+  ],
+  "snaps": {
+    "attempted": 2904,
+    "snapped": 0,
+    "details": []
+  },
+  "closureEqualities": {
+    "floorPinned": true,
+    "band8EnumeratedEqualsExact": true,
+    "band8TotalEqualsEnumerated": true,
+    "resolveBeforeMatchesLanes": true,
+    "resolveDisagreementsZero": true,
+    "oracleDisagreementsZero": true,
+    "oracleContradictionsZero": true,
+    "unresolvedAfterResolveZero": false,
+    "allUnresolvedSnapped": false
+  },
+  "closureClaimed": false,
+  "gate": {
+    "ran": true,
+    "exitCode": 1,
+    "reason": "ran bun src/matmul/goalCheckA.ts and recorded its exit code"
+  },
+  "zeroDriftSelfCheck": true,
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "residual": "no exact rank<=47 F_2 n=4 scheme among the adjudicated M8-T1 corpus. The layer is bounded: band8 enumerated 450978066 of C(49,8); 3575340 band8 supports are unresolved (identity-less counts), the oracle lane left 2904 named supports UNRESOLVED and none is snappable, resolve left 1432673 unresolved. Closure equalities unsatisfied: unresolvedAfterResolveZero, allUnresolvedSnapped. This is an honest BOUNDED-NO-CLOSURE — F_2 rank<=47 (AlphaTensor parity) remains open while 47 stands; the residual class is the M8-T1 sibling candidate corpus this merge adjudicated, not a claim of impossibility",
+  "notes": [
+    "exact-solve obligation: every still-unsnapped oracle support was passed through decomposeExact; a support whose deficit decomposes into <= k-2 fresh terms would close rank<=47 and is re-verified with both checkers here",
+    "identity gap: the band8 lane persisted per-k COUNTS only (no row identities), so its 3,575,340 unresolved supports cannot be individually re-solved from the artifact; the oracle lane is the identity-bearing record and its unresolved rows are the named subset the merge snaps"
+  ]
+}
