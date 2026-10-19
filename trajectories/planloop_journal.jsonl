@@ -7,3 +7,6 @@
 {"kind":"round","runId":"planrun_2026-10-18T00:33:48.003Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-18T00:33:58.899Z"}
 {"kind":"round","runId":"planrun_2026-10-18T00:48:20.682Z","round":{"label":"R137","taskIds":["R137-seedils","R137-snapsolve","R137-49band","R137-merge"],"solved":[]},"ts":"2026-10-18T06:17:47.255Z"}
 {"kind":"round","runId":"planrun_2026-10-18T00:48:20.682Z","round":{"label":"R138","taskIds":["R138-merge","R138-wide","R138-ils","R138-merge-audit"],"solved":[]},"ts":"2026-10-18T06:54:34.329Z"}
+{"kind":"start","runId":"planrun_2026-10-18T07:29:21.425Z","maxRounds":8,"ts":"2026-10-18T07:29:21.425Z"}
+{"kind":"round","runId":"planrun_2026-10-18T07:29:21.425Z","round":{"label":"R139","taskIds":["R139-census","R139-drain-v2","R139-ils","R139-merge2term"],"solved":["R139-ils","R139-merge2term"]},"ts":"2026-10-18T08:13:12.509Z"}
+{"kind":"round","runId":"planrun_2026-10-18T07:29:21.425Z","round":{"label":"R140","taskIds":["R140-wide","R140-altbase","R140-algsupports","R140-audit"],"solved":["R140-wide","R140-altbase","R140-algsupports","R140-audit"]},"ts":"2026-10-18T08:33:50.919Z"}

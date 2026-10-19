@@ -2337,6 +2337,347 @@ L2:
       - R138-wide
       - R138-ils
     planned: true
+  - id: R139-census
+    problem: src/matmul/attempts/R139_census.ts
+    tests: src/matmul/attempts/R139_census.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R139
+    timeoutMs: 1800000
+    note: >
+      Census, not closure (R116/R119/R122 pattern): enumerate every replayable
+      rank-47/48 support across R137_49band.json (k=3..6 drop-sets),
+      M8O1_merge.json (304 candidates), M8N1_audit.json (158 candidates),
+      M8K1_seed_ils.ndjson (60 states), M8P1_seed_ils.ndjson (99 rows),
+      R126_ils.ndjson, R125_snapA.ndjson, R125_snapB.ndjson,
+      R124_seed_ils14.ndjson, R124_drain49l.ndjson, R124_census.json,
+      R123_drain49m.ndjson, R123_seed_ils13.ndjson, R123_snap_solve.ndjson,
+      R122_census.json, R122_drain49l.ndjson, R122_seed_ils12.ndjson,
+      R122_snap_solve.ndjson, R121_seed_ils.ndjson, R121_drain49k.ndjson,
+      R121_snap_solve.ndjson, R121_census.ndjson, plus archive pins
+      agent/goal-w0-A1@muse-r72 (27 v2 exact-49 states), @r65_7a03c63 (orbit-fam
+      49s), @r67_c58dfd0, and spark 4126ca7f at 17970a9. Mark each hash RETIRED
+      versus LIVE versus UNPROCESSED with vecs-present and archive pin. Emit
+      R139_census.json with per-candidate hash, rank, mismatches, vecs-present,
+      archive, and exact-solve workload pricing. Verdict SIZED-NO-CLOSURE.
+      File-ownership: attempts/R139_census.ts + .test.ts + .json only. Field F_2
+      throughout. No AlphaTensor tensors.
+    planned: true
+  - id: R139-drain-v2
+    problem: src/matmul/attempts/R139_drain49_v2.ts
+    tests: src/matmul/attempts/R139_drain49_v2.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Deterministic drain and meld from the R73 v2 exact-49 states on branch
+      agent/goal-w0-A1@muse-r72 (27 states with full vecs+hashes checkpointed in
+      R73 v2). Recover the exact-49 floor (hash f4640c18) and the 27 v2 states
+      from their own encodings (M8M1_seed_ils.ts recovery base). At least 50
+      seeded deterministic iterations per start with greedy exact F_2 drain,
+      shear flips, split kicks, and deterministic meld. Checkpoint full 16-bit
+      factor vectors plus stable fnv hashes to R139_drain49_v2.ndjson with
+      resume-skip of hashes already checkpointed in M8K1/M8P1/M8N1/R121-R126
+      ndjson files. EVERY rank<=47 zero-mismatch candidate exact-solved on its
+      fixed support in-window via gaussSolve per-axis machinery (recovered from
+      M8M1_seed_ils.ts) and verified by verifyMod2 plus goalSatisfiedA. Verdict
+      BOUNDED-RED unless a witness lands. File-ownership:
+      attempts/R139_drain49_v2* only. No AlphaTensor tensors. Run under nice -n
+      19.
+    planned: true
+  - id: R139-ils
+    problem: src/matmul/attempts/R139_seed_ils.ts
+    tests: src/matmul/attempts/R139_seed_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      From-zero iterated local search on fresh ground only. Seeds exclude EVERY
+      previously run ILS seed: the 10 excluded seeds (22, 66, 7, 77, 107, 207,
+      307, 407, plus M8-M1 seeds 200003/17/29/41/53/69, M8-P1 seeds, R126 seeds,
+      R125 seeds, R124 seeds, R123 seeds, R122 seeds, R121 seeds, R119 seeds,
+      R118 seeds, R117 seeds, R116 seeds, R113 seeds, R112 seeds, R111 seeds,
+      R109 seeds, R108 seeds, R107 seeds, R106 seeds, R101 seeds, R100 seeds,
+      R99 seeds). At least 6 new seeds, at least 10s per lane. Calibrate each
+      lane against the exact-49 floor (hash f4640c18, mismatchF2=0) then run ILS
+      at fixed rank 47 with split-open states around ranks 51-54. EVERY rank<=47
+      zero-mismatch candidate exact-solved on its fixed support in-window
+      (composition rule: never leave a candidate unmatched). Checkpoint vecs
+      plus hashes for lane-best 47 and floor-best 49 states to
+      R139_seed_ils.ndjson. Verdict BOUNDED-NO-CLOSURE unless an exact state is
+      solved and independently re-verified. File-ownership:
+      attempts/R139_seed_ils* only. No AlphaTensor tensors. Run under nice -n
+      19. This is the round's blocking task — double-bet with a different pool
+      model per replica; gate merges the better branch.
+    planned: true
+  - id: R139-merge2term
+    problem: src/matmul/attempts/R139_merge2term.ts
+    tests: src/matmul/attempts/R139_merge2term.test.ts
+    milestone: M8
+    success: BESTA47
+    evidence: CAMPAIGN:R139
+    timeoutMs: 1800000
+    note: >
+      Exhaust the structured 2-term merge space of the 7 Strassen triples:
+      enumerate all F_2-linear and sign-bearing integer-linear combinations of
+      pairs of triples that stay rank-1 over F_2 (left-ideal and octonion-style
+      mergings). For each merged pair, reconstruct the 47-term candidate (49 - 2
+      = 47), run the exact F_2 coefficient solve (gaussSolve per-axis) on the
+      fixed support, and verify any CONSISTENT result with checker.verifyMod2 +
+      goalSatisfiedA. The gap to 47 is exactly the 2 terms beyond the two-level
+      recursion; a rank-1-preserving merging of two Strassen triples into one is
+      the constructive answer. If the full enumerated space is refuted, the
+      certificate row closes this ansatz exactly. Reuse the merge vocabulary
+      from M8O1_merge5 (k=2..6 merging dictionary) but restrict to the
+      structured 2-term ansatz and make the enumeration exhaustive. Report the
+      complete count of merges tried, admits, and consistency outcomes. Emit
+      R139_merge2term.json with per-merge trial data and a CAMPAIGN:R139 row
+      (exact-47 scheme or MERGE-EXHAUSTED with 0 admits). File-ownership:
+      attempts/R139_merge2term.ts + .test.ts + .json only. No AlphaTensor
+      tensors. Field F_2 throughout.
+    planned: true
+  - id: R140-wide
+    problem: src/matmul/attempts/R140_wide_anchor.ts
+    tests: src/matmul/attempts/R140_wide_anchor.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Wide-anchor lane for 4x4 (methodology transfer from M5 R79/R84-R86).
+
+      Reconstruct rank1Factor.ts + anchorSplit.ts for n=4 (16-bit factors).
+
+      Enumerate anchor schemes by splitting one factor's support of one term
+
+      in the exact-49 floor (bipartition P+Q=supp, both nonempty) → exact
+
+      rank-50 decomposition F'. For k=3,4,5 drop sets K of F', deficit
+
+      D = sum of dropped terms, screen with F₂ flattening-rank prefilter
+
+      (modpFlatDim at p<2²⁴, integer arithmetic) then exact F₂ rank decision.
+
+      Exact integer arithmetic throughout, no float, no branch-and-bound.
+
+      Stream per-k checkpoints and summaries to ndjson/json.
+
+      Honest verdict: CERTIFIED-NO-HIT-WITHIN-ANSATZ or BOUNDED-NO-CLOSURE
+
+      with named unscreened remainder.
+
+      File-ownership: attempts/R140_wide_anchor.ts + .test.ts + .ndjson/.json
+      only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+    planned: true
+  - id: R140-altbase
+    problem: src/matmul/attempts/R140_altbase.ts
+    tests: src/matmul/attempts/R140_altbase.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Fundamentally different base scheme exploration (R114-altbase concept).
+
+      The two-level Strassen at 49 may be a local minimum. Try different
+
+      recursion structures, non-Strassen bases, or direct algebraic construction
+
+      targeting rank-47 over F₂. Candidate approaches:
+
+      - Direct algebraic construction from F₂^4 × F₂^4 × F₂^4 subgroup structure
+
+      - Non-Strassen bilinear bases (e.g., border-rank inspired, cyclic
+      constructions)
+
+      - Different recursion depths/structures than the 2-level 7×7 pattern
+
+      Each candidate base must be an exact scheme over F₂ (verifyMod2).
+
+      Search from each base with interleaved merge/flip/drain + exact-solve
+
+      on fixed supports (unmatched=0 invariant). Checkpoint full vecs + hashes.
+
+      Honest verdict: BOUNDED-NO-CLOSURE with per-base summary, or WITNESS.
+
+      File-ownership: attempts/R140_altbase.ts + .test.ts + .ndjson only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+    planned: true
+  - id: R140-algsupports
+    problem: src/matmul/attempts/R140_algsupports.ts
+    tests: src/matmul/attempts/R140_algsupports.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Algebraic support enumeration (R115-3 concept).
+
+      Enumerate 47-term supports based on algebraic structure rather than
+
+      near-misses of the 49-term Strassen floor. Constructions:
+
+      - Subgroup cosets of F₂⁴ × F₂⁴ × F₂⁴ (stabilizer subgroups, affine
+      subspaces)
+
+      - Symmetric supports (invariant under coordinate permutations, sign
+      changes)
+
+      - Product-structured supports from rank-1 tensor products of subspaces
+
+      - Supports from F₂-linear subspaces of dimension log₂(47) ≈ 5.5
+
+      Target: at least 100 algebraically-natural 47-term supports enumerated
+
+      and exact-solved over F₂ (BigInt Gaussian coefficient solver).
+
+      CONSISTENT ships an exact scheme file verified by verifyMod2;
+
+      INCONSISTENT retires the hash with axis and mismatch counts.
+
+      Checkpoint candidate hash, axis, consistency, mismatch counts.
+
+      Controls: floor seed solves CONSISTENT; one retired hash re-derives
+
+      INCONSISTENT. Honest verdict: SIZED-or-SWEPT with no closure claim
+
+      unless a witness lands.
+
+      File-ownership: attempts/R140_algsupports.ts + .test.ts + .ndjson only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+    planned: true
+  - id: R140-audit
+    problem: src/matmul/attempts/R140_audit.ts
+    tests: src/matmul/attempts/R140_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R140
+    timeoutMs: 1800000
+    note: >
+      Adjudication merge (later layer, runs AFTER R140-wide, R140-altbase,
+
+      R140-algsupports land on main).
+
+      Re-verify every candidate from the three sibling artifacts
+
+      (R140_wide_anchor.ndjson, R140_altbase.ndjson, R140_algsupports.ndjson)
+
+      with checker.verifyMod2 AND checker.verify AND goalSatisfiedA gate
+      selector.
+
+      Drift-check every recorded hash against the canonical F₂ campaign FNV
+
+      (hashMasks, +0x9e37 fold), preferring canonicalHash when present.
+
+      Exact-solve-snap any unsnapped rank≤47 support.
+
+      Write R140_audit.json with per-source summaries, total candidates,
+
+      witnesses, hash drift (must be 0), consistency agree/disagree, and
+
+      zero-drift self-check.
+
+      Run bun src/matmul/goalCheckA.ts and record its exit code iff a
+
+      R140_scheme.ts exists.
+
+      Verdict: WITNESS (BESTA47) or BOUNDED-NO-WITNESS naming the residual.
+
+      File-ownership: attempts/R140_audit.ts + .test.ts + .json only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+    dependsOn:
+      - R140-wide
+      - R140-altbase
+      - R140-algsupports
+    planned: true
+  - id: R141-band
+    problem: src/matmul/attempts/R141_band.ts
+    tests: src/matmul/attempts/R141_band.test.ts
+    milestone: M8
+    success: CAMPAIGN:R141 row recorded with exact per-k counts; any CONSISTENT
+      scheme triggers BESTA47
+    evidence: CAMPAIGN:R141
+    timeoutMs: 1800000
+    note: "Exact F_2 drop-k/add-j closure around the two-level exact-49 floor.
+      Reconstruct and verify the floor (rank 49 exact via checker.verifyMod2).
+      For k=2..6 enumerate all C(49,k) drop sets K; decide if tensor rank(sum_K)
+      <= k-2 using the proven unfolding-rank lower bound: if any axis unfolding
+      of sum_K has F_2 matrix rank > k-2 then row is REFUTED. Rows the screen
+      does not decide are UNRESOLVED (bounded), never refuted. If some K admits,
+      construct exact scheme from floor minus K plus minimal rank-1
+      decomposition of sum_K, verify with checker.verifyMod2 rank<=47, export as
+      scheme. Emit attempts/R141_band.json with per-k exact counts and CAMPAIGN
+      row labelled R141. Colocated test re-derives per-k counts, checks planted
+      controls (duplicate-pair k=2 refuted; synthetic low-tensor-rank sum
+      admits), and when scheme exported asserts verifyMod2 correct rank<=47.
+      Never claim closure of undecided band. File-ownership:
+      attempts/R141_band.ts, .test.ts, .json only. No AlphaTensor tensors. Run
+      under nice -n 19. This is the round's blocking task; double-bet with
+      replicas:2 (different pool models) because first-of-kind and historically
+      the band ansatz is the most direct structural attack on the 2-term gap."
+    planned: true
+  - id: R141-ils
+    problem: src/matmul/attempts/R141_ils.ts
+    tests: src/matmul/attempts/R141_ils.test.ts
+    milestone: M8
+    success: Any CONSISTENT exact-solve triggers BESTA47; otherwise
+      BOUNDED-NO-CLOSURE with full checkpoint ledger
+    evidence: CAMPAIGN:R141
+    timeoutMs: 1800000
+    note: "Widened ILS lane, self-contained from scratch (no AlphaTensor imports).
+      Reconstruct exact-49 floor and archived exact rank-53 spark anchor (hash
+      4126ca7f) from M8M1_seed_ils.ts encodings. From fresh seeds disjoint from
+      all previously swept seed lists, split a term on one axis to open ranks
+      50..54, run interleaved merge/flip moves, then greedy same-axis drain.
+      Checkpoint every lane-best and split-open state with full 16-bit u,v,w
+      factor vectors and stable fnv hash into attempts/R141_ils.ndjson. For
+      every state with rank <= 48 run exact F_2 coefficient solve on its fixed
+      support; on CONSISTENT verdict export exact rank<=47 scheme via
+      verifyMod2. Bounded run with no witness is honest RED. Colocated test
+      re-derives anchor hashes and every checkpoint hash, exercises exact-solve
+      controls (planted solvable support -> CONSISTENT; planted linearly
+      dependent support -> INCONSISTENT), and asserts zero unmatched rank<=47
+      candidates. File-ownership: attempts/R141_ils.ts, .test.ts, .ndjson only.
+      No AlphaTensor tensors. Run under nice -n 19."
+    planned: true
+  - id: R141-altsup
+    problem: src/matmul/attempts/R141_altsup.ts
+    tests: src/matmul/attempts/R141_altsup.test.ts
+    milestone: M8
+    success: At least 100 algebraic supports exact-solved; any CONSISTENT triggers
+      BESTA47
+    evidence: CAMPAIGN:R141
+    timeoutMs: 1800000
+    note: "Fundamentally different search space: enumerate 47-term supports based on
+      algebraic structure (subgroup cosets of F_2^4 x F_2^4 x F_2^4, symmetric
+      supports, or other algebraically natural constructions) rather than
+      near-misses of the 49-term Strassen. This breaks the pattern of searching
+      only in the neighbourhood of 49. Exact-solve each support over F_2 using
+      the gaussSolve per-axis machinery recovered from landed R109_snap_solve.ts
+      on main (no AlphaTensor imports). At least 100 algebraically-natural
+      47-term supports enumerated and exact-solved. CONSISTENT ships an exact
+      scheme file verified by verifyMod2, INCONSISTENT retires the hash with
+      axis and mismatch counts. Checkpoint candidate hash, axis, consistency,
+      mismatch counts to R141_altsup.ndjson. Controls: floor seed solves
+      CONSISTENT; one retired spark hash re-derives INCONSISTENT. Bounded nulls
+      stay bounded. File-ownership: attempts/R141_altsup.ts, .test.ts, .ndjson
+      only. No AlphaTensor tensors. Field F_2 throughout. Run heavy solves under
+      nice -n 19."
+    planned: true
+  - id: R141-analyze
+    problem: src/matmul/attempts/R141_analyze.ts
+    tests: src/matmul/attempts/R141_analyze.test.ts
+    milestone: M8
+    success: Report identifies structural patterns in INCONSISTENT candidates across
+      all prior exact-solve lanes
+    evidence: CAMPAIGN:R141
+    timeoutMs: 1800000
+    note: "Deep structural analysis of exact-solve inconsistency patterns from all
+      merged R105-R122 and M8-* census/snap/ils/drain artifacts on main. For
+      each INCONSISTENT support, extract axis, mismatch count, factor rank
+      profile, support size. Look for common features distinguishing close
+      supports from far ones. Cluster by mismatch distribution, axis
+      involvement, factor rank profiles. Output R141_analyze.json with pattern
+      clusters, structural insights, and a verdict on whether the near-miss
+      space appears structurally exhausted or just needs a different approach.
+      This is the campaign's most valuable meta-information. File-ownership:
+      attempts/R141_analyze.ts, .test.ts, .json only. No AlphaTensor tensors."
+    planned: true
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)

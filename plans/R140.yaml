@@ -1,0 +1,197 @@
+label: R140
+goal: Advance M8 (4x4x4/F₂ rank≤47) by transferring M5 wide-anchor methodology,
+  exploring non-Strassen base schemes, and enumerating algebraic supports —
+  three independent ansatzes the campaign has not yet closed
+rationale: >
+  R139 exhausted the 2-term merge space of the 7 Strassen triples (0 admits).
+
+  R137 closed the drop-k/add-(k-2) band around the exact-49 floor (k=3..6, all
+  refuted).
+
+  M8-O1/N1/M1/K1 audits all adjudicated prior lanes → BOUNDED-NO-WITNESS.
+
+  The two most direct ansatzes (merge + drop-band) are now closed.
+
+
+  M5's wide-anchor lane (R79/R84-R86) achieved the first m≥2 closure in that
+  campaign:
+
+  m=1 layer CLOSED-EXACTLY (15M rows, 0 survivors), m=2 BOUNDED-INCOMPLETE but
+  with
+
+  a cheap O(1) per-row decision (6.27M rows/s). R138-wide plans this transfer
+  but
+
+  has not yet run. This proposal reinforces that lane with a dedicated round.
+
+
+  Separately, R114-altbase and R115-3 proposed fundamentally different bases
+
+  (non-Strassen recursion, subgroup cosets, symmetric supports) — never
+  explored.
+
+  This round opens those ansatzes in parallel.
+
+
+  Stop conditions: any task produces a verified rank≤47 scheme (goalCheckA exits
+  0);
+
+  all three search lanes report honest bounded completion with named residuals;
+
+  or maxRounds reached.
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 (verified rank≤47 scheme found)
+  - all three search tasks report honest bounded completion (BOUNDED-NO-CLOSURE
+    or CERTIFIED-NO-HIT-WITHIN-ANSATZ with named residuals)
+  - maxRounds (4) reached
+tasks:
+  - id: R140-wide
+    problem: src/matmul/attempts/R140_wide_anchor.ts
+    tests: src/matmul/attempts/R140_wide_anchor.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Wide-anchor lane for 4x4 (methodology transfer from M5 R79/R84-R86).
+
+      Reconstruct rank1Factor.ts + anchorSplit.ts for n=4 (16-bit factors).
+
+      Enumerate anchor schemes by splitting one factor's support of one term
+
+      in the exact-49 floor (bipartition P+Q=supp, both nonempty) → exact
+
+      rank-50 decomposition F'. For k=3,4,5 drop sets K of F', deficit
+
+      D = sum of dropped terms, screen with F₂ flattening-rank prefilter
+
+      (modpFlatDim at p<2²⁴, integer arithmetic) then exact F₂ rank decision.
+
+      Exact integer arithmetic throughout, no float, no branch-and-bound.
+
+      Stream per-k checkpoints and summaries to ndjson/json.
+
+      Honest verdict: CERTIFIED-NO-HIT-WITHIN-ANSATZ or BOUNDED-NO-CLOSURE
+
+      with named unscreened remainder.
+
+      File-ownership: attempts/R140_wide_anchor.ts + .test.ts + .ndjson/.json
+      only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+  - id: R140-altbase
+    problem: src/matmul/attempts/R140_altbase.ts
+    tests: src/matmul/attempts/R140_altbase.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Fundamentally different base scheme exploration (R114-altbase concept).
+
+      The two-level Strassen at 49 may be a local minimum. Try different
+
+      recursion structures, non-Strassen bases, or direct algebraic construction
+
+      targeting rank-47 over F₂. Candidate approaches:
+
+      - Direct algebraic construction from F₂^4 × F₂^4 × F₂^4 subgroup structure
+
+      - Non-Strassen bilinear bases (e.g., border-rank inspired, cyclic
+      constructions)
+
+      - Different recursion depths/structures than the 2-level 7×7 pattern
+
+      Each candidate base must be an exact scheme over F₂ (verifyMod2).
+
+      Search from each base with interleaved merge/flip/drain + exact-solve
+
+      on fixed supports (unmatched=0 invariant). Checkpoint full vecs + hashes.
+
+      Honest verdict: BOUNDED-NO-CLOSURE with per-base summary, or WITNESS.
+
+      File-ownership: attempts/R140_altbase.ts + .test.ts + .ndjson only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+  - id: R140-algsupports
+    problem: src/matmul/attempts/R140_algsupports.ts
+    tests: src/matmul/attempts/R140_algsupports.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Algebraic support enumeration (R115-3 concept).
+
+      Enumerate 47-term supports based on algebraic structure rather than
+
+      near-misses of the 49-term Strassen floor. Constructions:
+
+      - Subgroup cosets of F₂⁴ × F₂⁴ × F₂⁴ (stabilizer subgroups, affine
+      subspaces)
+
+      - Symmetric supports (invariant under coordinate permutations, sign
+      changes)
+
+      - Product-structured supports from rank-1 tensor products of subspaces
+
+      - Supports from F₂-linear subspaces of dimension log₂(47) ≈ 5.5
+
+      Target: at least 100 algebraically-natural 47-term supports enumerated
+
+      and exact-solved over F₂ (BigInt Gaussian coefficient solver).
+
+      CONSISTENT ships an exact scheme file verified by verifyMod2;
+
+      INCONSISTENT retires the hash with axis and mismatch counts.
+
+      Checkpoint candidate hash, axis, consistency, mismatch counts.
+
+      Controls: floor seed solves CONSISTENT; one retired hash re-derives
+
+      INCONSISTENT. Honest verdict: SIZED-or-SWEPT with no closure claim
+
+      unless a witness lands.
+
+      File-ownership: attempts/R140_algsupports.ts + .test.ts + .ndjson only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+  - id: R140-audit
+    problem: src/matmul/attempts/R140_audit.ts
+    tests: src/matmul/attempts/R140_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R140
+    timeoutMs: 1800000
+    note: >
+      Adjudication merge (later layer, runs AFTER R140-wide, R140-altbase,
+
+      R140-algsupports land on main).
+
+      Re-verify every candidate from the three sibling artifacts
+
+      (R140_wide_anchor.ndjson, R140_altbase.ndjson, R140_algsupports.ndjson)
+
+      with checker.verifyMod2 AND checker.verify AND goalSatisfiedA gate
+      selector.
+
+      Drift-check every recorded hash against the canonical F₂ campaign FNV
+
+      (hashMasks, +0x9e37 fold), preferring canonicalHash when present.
+
+      Exact-solve-snap any unsnapped rank≤47 support.
+
+      Write R140_audit.json with per-source summaries, total candidates,
+
+      witnesses, hash drift (must be 0), consistency agree/disagree, and
+
+      zero-drift self-check.
+
+      Run bun src/matmul/goalCheckA.ts and record its exit code iff a
+
+      R140_scheme.ts exists.
+
+      Verdict: WITNESS (BESTA47) or BOUNDED-NO-WITNESS naming the residual.
+
+      File-ownership: attempts/R140_audit.ts + .test.ts + .json only;
+
+      no AlphaTensor tensors; field F₂ throughout.
+    dependsOn:
+      - R140-wide
+      - R140-altbase
+      - R140-algsupports

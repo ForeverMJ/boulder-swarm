@@ -3456,5 +3456,113 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-17T10:57:21.648Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "R139-census",
+    "branch": "agent/goal-w0-R139-census",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 846.78,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:13:08.046Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "R139-drain-v2",
+    "branch": "agent/goal-w1-R139-drain-v2",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 837.53,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:13:08.046Z"
+  },
+  {
+    "worker_id": 2,
+    "task_id": "R139-ils",
+    "branch": "agent/goal-w2-R139-ils",
+    "passed": 20,
+    "total": 20,
+    "pass_rate": 1,
+    "duration_s": 832.47,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:13:08.046Z"
+  },
+  {
+    "worker_id": 3,
+    "task_id": "R139-ils",
+    "branch": "agent/goal-w3-R139-ils",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 1622.53,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:13:08.046Z"
+  },
+  {
+    "worker_id": 4,
+    "task_id": "R139-merge2term",
+    "branch": "agent/goal-w4-R139-merge2term",
+    "passed": 1,
+    "total": 1,
+    "pass_rate": 1,
+    "duration_s": 808.2,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:13:08.046Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "R140-wide",
+    "branch": "agent/goal-w0-R140-wide",
+    "passed": 37,
+    "total": 37,
+    "pass_rate": 1,
+    "duration_s": 718.16,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:28:34.402Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "R140-altbase",
+    "branch": "agent/goal-w1-R140-altbase",
+    "passed": 32,
+    "total": 32,
+    "pass_rate": 1,
+    "duration_s": 451.59,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:28:34.402Z"
+  },
+  {
+    "worker_id": 2,
+    "task_id": "R140-algsupports",
+    "branch": "agent/goal-w2-R140-algsupports",
+    "passed": 36,
+    "total": 36,
+    "pass_rate": 1,
+    "duration_s": 377.34,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:28:34.402Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "R140-audit",
+    "branch": "agent/goal-w0-R140-audit",
+    "passed": 1,
+    "total": 1,
+    "pass_rate": 1,
+    "duration_s": 267.64,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-18T08:33:48.872Z"
   }
 ]

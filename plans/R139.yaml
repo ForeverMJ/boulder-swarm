@@ -1,0 +1,36 @@
+label: R139
+goal: Close the F_2 rank-49 to rank-47 gap via focused coefficient adjustment on
+  the two-level Strassen floor
+rationale: "The M8 frontier stands at exact-49 two-level Strassen floor (R138).
+  Three lanes are active: structured 2-term merge, wide-anchor non-floor
+  enumeration, and fresh-seed ILS with exact-solve interleave. Coefficient
+  adjustment - systematically tweaking F_2 coefficients while preserving the
+  floor's two-level Strassen structure - has not been attempted as a dedicated
+  lane. This task explores whether targeted coefficient changes can reduce rank
+  from 49 to 47."
+budget:
+  maxRounds: 3
+stopConditions:
+  - goalCheckA exits 0 with exact rank<=47 scheme over F_2 on main
+  - maxRounds exhausted with all bounded verdicts honestly reported
+tasks:
+  - id: R139-coeff-adjust
+    problem: src/matmul/attempts/R139_coeff_adjust.ts
+    tests: src/matmul/attempts/R139_coeff_adjust.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Systematically adjust F_2 coefficients in the two-level Strassen floor
+      scheme, targeting rank reduction from 49 to 47. For each candidate, verify
+      with verifyMod2 and goalCheckA. Checkpoint best states with full factor
+      vectors and stable FNV hashes. Bounded nulls reported honestly with
+      mismatch counts and axis breakdown.
+  - id: R139-verify
+    problem: src/matmul/attempts/R139_verify.ts
+    tests: src/matmul/attempts/R139_verify.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Verify every rank<=47 candidate from R139-coeff-adjust with goalCheckA
+      gate path and verifyMod2. Emit scheme file if gate exits 0. Drift-check
+      hashes against canonical F_2 campaign FNV (hashMasks, +0x9e37 fold).
+      Exact-solve-snap any unsnapped rank<=47 support. Report verdict: WITNESS
+      (BESTA47) or BOUNDED-NO-WITNESS naming the residual."

@@ -197,6 +197,14 @@
 - [R135-drain49m] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R135-seedils17] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [R135-snapC] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R139-census] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R139-drain-v2] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R139-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R139-merge2term] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [R140-algsupports] Hypothesis: standard solution passes; Evidence: 36/36; Rule: keep pattern and reuse.
+- [R140-altbase] Hypothesis: standard solution passes; Evidence: 32/32; Rule: keep pattern and reuse.
+- [R140-audit] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [R140-wide] Hypothesis: standard solution passes; Evidence: 37/37; Rule: keep pattern and reuse.
 - [R52] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/6; Rule: retry with different strategy next round.
 - [R90-probe] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R90-size] Hypothesis: standard solution passes; Evidence: 3/3; Rule: keep pattern and reuse.

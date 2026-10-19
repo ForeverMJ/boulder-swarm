@@ -1,0 +1,25 @@
+label: M8-P1
+goal: M8 AlphaTensor parity - drain/meld from exact-49 floor with interleaved
+  exact coefficient solve toward rank<=47 over F_2
+rationale: The current best scheme is rank 49 over F_2 (two-level Strassen floor
+  landed in R87). Previous rounds have explored ILS, algebraic enumeration, and
+  merge approaches without finding a rank-47 witness. This task systematically
+  drains from the exact-49 floor with interleaved F_2 exact coefficient solving
+  on every rank<=47 candidate, checkpointing full factor vectors. Judgeable via
+  colocated test and CAMPAIGN evidence.
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 with exact rank<=47 scheme on main (AlphaTensor parity)
+  - No consistent rank<=47 candidates after 4 rounds of drain + exact solve
+  - Budget exhausted with honest bounded-red rows; no witness claimed
+tasks:
+  - id: M8-P1-001
+    problem: src/matmul/attempts/M8P1_drain_search.ts
+    tests: src/matmul/attempts/M8P1_drain_search.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: Interleaved drain/meld from exact-49 floor with interleaved exact F_2
+      coefficient solve on every rank<=47 candidate. Checkpoint full {u,v,w}
+      factor vectors plus stable hashes. Bounded nulls reported bounded, never
+      impossibility.
