@@ -1,0 +1,347 @@
+{
+  "taskId": "M8-U1-merge",
+  "round": "M8-U1",
+  "field": "F_2",
+  "floorRank": 49,
+  "targetRank": 47,
+  "generatedAt": "2026-10-19T04:29:20.825Z",
+  "parseBound": 2000,
+  "siblings": {
+    "band9": true,
+    "band8c": true,
+    "wide": true,
+    "allPresent": true
+  },
+  "missingSiblings": [],
+  "floor": {
+    "ok": true,
+    "terms": 49,
+    "hash": "f4640c18",
+    "mismatchF2": 0,
+    "independentMismatch": 0
+  },
+  "band9": {
+    "present": true,
+    "source": "M8U1_band9.json",
+    "k": 9,
+    "declaredTotal": "2054455634",
+    "shards": 8,
+    "sumPlanned": "2054455634",
+    "sumProcessed": 2000000,
+    "admits": 0,
+    "refutes": 345648,
+    "unresolved": 54352,
+    "closed": false,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "shardsComplete": 0,
+    "processedEqualsDeclared": false,
+    "coveredFraction": 0.000973493886604903,
+    "shardRows": [
+      {
+        "shard": 0,
+        "planned": "256806954",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 0,
+        "unresolved": 50000,
+        "unresolvedEmitted": 50000
+      },
+      {
+        "shard": 1,
+        "planned": "256806954",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 47918,
+        "unresolved": 2082,
+        "unresolvedEmitted": 2082
+      },
+      {
+        "shard": 2,
+        "planned": "256806954",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 49534,
+        "unresolved": 466,
+        "unresolvedEmitted": 466
+      },
+      {
+        "shard": 3,
+        "planned": "256806955",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 49737,
+        "unresolved": 263,
+        "unresolvedEmitted": 263
+      },
+      {
+        "shard": 4,
+        "planned": "256806954",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 49790,
+        "unresolved": 210,
+        "unresolvedEmitted": 210
+      },
+      {
+        "shard": 5,
+        "planned": "256806954",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 49734,
+        "unresolved": 266,
+        "unresolvedEmitted": 266
+      },
+      {
+        "shard": 6,
+        "planned": "256806954",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 49548,
+        "unresolved": 452,
+        "unresolvedEmitted": 452
+      },
+      {
+        "shard": 7,
+        "planned": "256806955",
+        "processed": 250000,
+        "processedThisRun": 50000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 49387,
+        "unresolved": 613,
+        "unresolvedEmitted": 613
+      }
+    ],
+    "ledgers": [
+      {
+        "shard": 0,
+        "unresolved": 50000,
+        "emitted": 50000,
+        "lines": 50000,
+        "consistent": true
+      },
+      {
+        "shard": 1,
+        "unresolved": 2082,
+        "emitted": 2082,
+        "lines": 2082,
+        "consistent": true
+      },
+      {
+        "shard": 2,
+        "unresolved": 466,
+        "emitted": 466,
+        "lines": 466,
+        "consistent": true
+      },
+      {
+        "shard": 3,
+        "unresolved": 263,
+        "emitted": 263,
+        "lines": 263,
+        "consistent": true
+      },
+      {
+        "shard": 4,
+        "unresolved": 210,
+        "emitted": 210,
+        "lines": 210,
+        "consistent": true
+      },
+      {
+        "shard": 5,
+        "unresolved": 266,
+        "emitted": 266,
+        "lines": 266,
+        "consistent": true
+      },
+      {
+        "shard": 6,
+        "unresolved": 452,
+        "emitted": 452,
+        "lines": 452,
+        "consistent": true
+      },
+      {
+        "shard": 7,
+        "unresolved": 613,
+        "emitted": 613,
+        "lines": 613,
+        "consistent": true
+      }
+    ],
+    "ledgerLinesTotal": 54352,
+    "emittedTotal": 54352,
+    "supports": 6270,
+    "c49_9": "2054455634",
+    "sumPlannedEqualsExact": true,
+    "declaredEqualsExact": true,
+    "boundedOpen": true
+  },
+  "band8c": {
+    "present": true,
+    "source": "M8U1_band8c.json",
+    "k": 8,
+    "declared": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "presolve": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "usedArtifact": true,
+    "complete": true,
+    "postsolve": {
+      "processed": 3575340,
+      "snapped": 0,
+      "refuted": 3487134,
+      "stillUnresolved": 88206
+    },
+    "ledgerRecords": 3575340,
+    "ledgerLines": 3575340,
+    "everyUnresolvedEmitted": true,
+    "reconciliationMatches": true,
+    "c49_8": "450978066",
+    "partitionExact": true,
+    "matchesBand8": true,
+    "partitionSource": "artifact",
+    "snappedPlusStillEqualsCandidates": false,
+    "truePartitionHolds": true,
+    "postSolveGap": 3487134
+  },
+  "wide": {
+    "present": true,
+    "source": "M8U1_wide.json",
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "anchorRank": 50,
+    "totalAnchors": 1170,
+    "processed": 40000000,
+    "carriedProcessed": 150000000,
+    "combinedProcessed": 190000000,
+    "grandTotal": 2771332200,
+    "admits": 0,
+    "unresolved": 0,
+    "closure": false,
+    "anchorsCovered": 80,
+    "anchorsCoveredThisRun": 17,
+    "carriedAnchorsCoveredRecomputed": 63,
+    "anchorsPartial": 1090,
+    "newlyCoveredCount": 17,
+    "perK": [
+      {
+        "k": 3,
+        "budget": 0,
+        "processedThisRun": 333200,
+        "carried": 1254400,
+        "screened": 333200,
+        "refuted": 333200,
+        "admits": 0,
+        "unresolved": 0,
+        "covered": false
+      },
+      {
+        "k": 4,
+        "budget": 1,
+        "processedThisRun": 3915100,
+        "carried": 14739200,
+        "screened": 3915100,
+        "refuted": 3915100,
+        "admits": 0,
+        "unresolved": 0,
+        "covered": false
+      },
+      {
+        "k": 5,
+        "budget": 2,
+        "processedThisRun": 35751700,
+        "carried": 134006400,
+        "screened": 35751700,
+        "refuted": 35751700,
+        "admits": 0,
+        "unresolved": 0,
+        "covered": false
+      }
+    ],
+    "floorHash": "f4640c18",
+    "sumPerKProcessedThisRun": 40000000,
+    "sumPerKCarried": 150000000,
+    "sumPerKAdmits": 0,
+    "sumPerKUnresolved": 0,
+    "coveredMatches": true
+  },
+  "candidates": {
+    "total": 2011,
+    "withVectors": 0,
+    "withoutVectors": 2011,
+    "driftChecked": 7,
+    "driftMismatches": 0
+  },
+  "vectored": [
+    {
+      "source": "floor",
+      "id": "f4640c18",
+      "rank": 49,
+      "mod2Correct": true,
+      "mod2Mm": 0,
+      "intCorrect": false,
+      "intMm": 336,
+      "exactLeTarget": false
+    }
+  ],
+  "laneDisagreements": 0,
+  "laneDisagreementDetails": [],
+  "namedFailures": [
+    "band8c: snapped(0) + stillUnresolved(88206) = 88206 != candidates(3575340); the post-solve refuted count (3487134) is the gap and the true partition snapped+refuted+stillUnresolved == processed holds=true"
+  ],
+  "snaps": {
+    "attempted": 32,
+    "snapped": 0,
+    "totalNamed": 3629692,
+    "cap": 32,
+    "capHit": true,
+    "details": []
+  },
+  "closureEqualities": {
+    "floorPinned": true,
+    "band8cRefutesPlusCandidatesEqualsTotal": true,
+    "band8cSnappedPlusStillEqualsCandidates": false,
+    "band8cPartitionTrueForm": true,
+    "band8cPreSolveMatchesBand8": true,
+    "band9ShardsReconcileToExact": true,
+    "band9DeclaredEqualsExact": true,
+    "band9BoundedOpen": true,
+    "wideCoveredMatchesVerdict": true,
+    "noNamedUnresolvedDropped": true,
+    "resolveLanesDisagreeZero": true
+  },
+  "closureClaimed": false,
+  "gate": {
+    "ran": true,
+    "exitCode": 1,
+    "reason": "ran bun src/matmul/goalCheckA.ts and recorded its exit code"
+  },
+  "zeroDriftSelfCheck": true,
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "residual": "no exact rank<=47 F_2 n=4 scheme among the adjudicated M8-U1 corpus. The layer is bounded: band9 shards plan 2054455634 = C(49,9) but processed 2000000 (band BOUNDED-OPEN at covered fraction 0.000973493886604903), the band8c pre-solve partition is 450978066/447402726/3575340, wide covers 80/1170 anchors of 2771332200, and of 3629692 named unresolved supports 0 snap. Closure equalities unsatisfied: band8cSnappedPlusStillEqualsCandidates. This is an honest BOUNDED-NO-CLOSURE — F_2 rank<=47 (AlphaTensor parity) remains open while 47 stands; bounded nulls are not a claim of impossibility and no bound moves (over F_2 for 3x3: 21 <= R_F2 <= 23 remains untouched); the residual class is the M8-U1 sibling candidate corpus this merge adjudicated",
+  "notes": [
+    "exact-solve obligation: every named support in the sibling identity ledgers was passed through decomposeExact (bounded by the per-run snap cap); a support whose deficit decomposes into <= k-2 fresh terms would close rank<=47 and is re-verified with both checkers here",
+    "parse bound: the band8c identity ledger (3575340 rows) is COUNTED in full but only a 2000-row prefix is parsed for candidate tuples, so the named-support count is never understated by the parse bound"
+  ]
+}
