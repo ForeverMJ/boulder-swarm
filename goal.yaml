@@ -2678,6 +2678,17 @@ L2:
       This is the campaign's most valuable meta-information. File-ownership:
       attempts/R141_analyze.ts, .test.ts, .json only. No AlphaTensor tensors."
     planned: true
+  - id: M8-Q1-task1
+    problem: src/matmul/attempts/A1_3merge_bruteforce.ts
+    tests: src/matmul/attempts/A1_3merge_bruteforce.test.ts
+    milestone: M8
+    success: All C(7,2)=21 pairs of Strassen triples enumerated via F₂-linear
+      sign-bearing linear combos; each compiled scheme verified with
+      checker.verifyMod2; best candidate exact-solved via gaussSolve; if
+      CONSISTENT, BESTA47 fires
+    evidence: CAMPAIGN:M8-Q1
+    timeoutMs: 1800000
+    planned: true
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)

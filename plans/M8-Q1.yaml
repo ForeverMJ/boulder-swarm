@@ -1,0 +1,27 @@
+label: M8-Q1
+goal: Enumerate all structured 2-term mergings of the 7 Strassen triples
+  (F₂-linear and sign-bearing integer linear combos that stay rank-1 over F₂) to
+  find a 47-term decomposition, reducing the 49-term two-level Strassen floor
+rationale: The current best landed scheme over F₂ has exact rank 49
+  (AlphaTensor's Nature 2022 record). The two-level Strassen structure uses 7
+  Strassen triples; merging 2 of them via F₂-preserving linear combinations
+  could reduce the term count to 47. This task systematically enumerates the
+  mergeable-pair space, providing a deterministic negative result or a verified
+  witness.
+budget:
+  maxRounds: 4
+stopConditions:
+  - exact rank<=47 scheme exported with goalCheckA exit 0; BESTA47 fires
+  - mergeable-pair space exhausted with no CONSISTENT verdict; all candidates
+    INCONSISTENT
+tasks:
+  - id: M8-Q1-task1
+    problem: src/matmul/attempts/A1_3merge_bruteforce.ts
+    tests: src/matmul/attempts/A1_3merge_bruteforce.test.ts
+    milestone: M8
+    success: All C(7,2)=21 pairs of Strassen triples enumerated via F₂-linear
+      sign-bearing linear combos; each compiled scheme verified with
+      checker.verifyMod2; best candidate exact-solved via gaussSolve; if
+      CONSISTENT, BESTA47 fires
+    evidence: CAMPAIGN:M8-Q1
+    timeoutMs: 1800000
