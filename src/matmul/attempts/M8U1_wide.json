@@ -1,0 +1,116 @@
+{
+  "kind": "verdict",
+  "taskId": "M8-U1-wide",
+  "round": "M8U1",
+  "field": "F_2",
+  "floorRank": 49,
+  "anchorRank": 50,
+  "targetRank": 47,
+  "kRange": [
+    3,
+    4,
+    5
+  ],
+  "totalAnchors": 1170,
+  "grandTotal": 2771332200,
+  "resume": {
+    "sourceTaskId": "R143-wide",
+    "anchorId": 63,
+    "k": 5,
+    "combo": 524520,
+    "carriedProcessed": 150000000,
+    "carriedAnchorsCovered": 63
+  },
+  "carriedProcessed": 150000000,
+  "processed": 40000000,
+  "combinedProcessed": 190000000,
+  "perK": [
+    {
+      "k": 3,
+      "budget": 0,
+      "totalPerAnchor": 19600,
+      "fullTotal": 22932000,
+      "carried": 1254400,
+      "processedThisRun": 333200,
+      "refuted": 333200,
+      "screened": 333200,
+      "unresolved": 0,
+      "admits": 0,
+      "covered": false
+    },
+    {
+      "k": 4,
+      "budget": 1,
+      "totalPerAnchor": 230300,
+      "fullTotal": 269451000,
+      "carried": 14739200,
+      "processedThisRun": 3915100,
+      "refuted": 3915100,
+      "screened": 3915100,
+      "unresolved": 0,
+      "admits": 0,
+      "covered": false
+    },
+    {
+      "k": 5,
+      "budget": 2,
+      "totalPerAnchor": 2118760,
+      "fullTotal": 2478949200,
+      "carried": 134006400,
+      "processedThisRun": 35751700,
+      "refuted": 35751700,
+      "screened": 35751700,
+      "unresolved": 0,
+      "admits": 0,
+      "covered": false
+    }
+  ],
+  "anchorsCovered": 80,
+  "anchorsCoveredThisRun": 17,
+  "anchorsPartial": 1090,
+  "newlyCoveredAnchors": [
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79
+  ],
+  "admits": 0,
+  "unresolved": 0,
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "closure": false,
+  "unscreenedFrom": {
+    "anchorId": 80,
+    "k": 5,
+    "combo": 257300
+  },
+  "witness": null,
+  "controls": {
+    "floorRank": 49,
+    "floorHash": "f4640c18",
+    "floorMismatch": 0,
+    "floorIndependentMismatch": 0,
+    "plantedAdmit": {
+      "verdict": "admit",
+      "witnessLen": 1,
+      "schemeRank": 47,
+      "exactPreserving": true
+    },
+    "knownRefute": {
+      "verdict": "screened"
+    }
+  },
+  "carriedAnchorsCoveredRecomputed": 63
+}
