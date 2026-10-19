@@ -1,0 +1,82 @@
+{
+  "kind": "verdict",
+  "taskId": "R143-wide",
+  "round": "R143",
+  "field": "F_2",
+  "floorRank": 49,
+  "anchorRank": 50,
+  "targetRank": 47,
+  "kRange": [
+    3,
+    4,
+    5
+  ],
+  "totalAnchors": 1170,
+  "perK": [
+    {
+      "k": 3,
+      "budget": 0,
+      "totalPerAnchor": 19600,
+      "fullTotal": 22932000,
+      "processed": 1254400,
+      "screened": 1254400,
+      "refuted": 0,
+      "admits": 0,
+      "unresolved": 0,
+      "covered": false
+    },
+    {
+      "k": 4,
+      "budget": 1,
+      "totalPerAnchor": 230300,
+      "fullTotal": 269451000,
+      "processed": 14739200,
+      "screened": 14739200,
+      "refuted": 0,
+      "admits": 0,
+      "unresolved": 0,
+      "covered": false
+    },
+    {
+      "k": 5,
+      "budget": 2,
+      "totalPerAnchor": 2118760,
+      "fullTotal": 2478949200,
+      "processed": 134006400,
+      "screened": 134006400,
+      "refuted": 0,
+      "admits": 0,
+      "unresolved": 0,
+      "covered": false
+    }
+  ],
+  "anchorsCovered": 63,
+  "anchorsPartial": 1107,
+  "processed": 150000000,
+  "grandTotal": 2771332200,
+  "admits": 0,
+  "unresolved": 0,
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "closure": false,
+  "unscreenedFrom": {
+    "anchorId": 63,
+    "k": 5,
+    "combo": 524520
+  },
+  "witness": null,
+  "controls": {
+    "floorRank": 49,
+    "floorHash": "f4640c18",
+    "floorMismatch": 0,
+    "floorIndependentMismatch": 0,
+    "plantedAdmit": {
+      "verdict": "admit",
+      "witnessLen": 1,
+      "schemeRank": 47,
+      "exactPreserving": true
+    },
+    "knownRefute": {
+      "verdict": "screened"
+    }
+  }
+}
