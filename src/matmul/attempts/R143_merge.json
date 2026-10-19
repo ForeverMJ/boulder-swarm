@@ -1,0 +1,300 @@
+{
+  "taskId": "R143-merge",
+  "round": "R143",
+  "field": "F_2",
+  "floorRank": 49,
+  "targetRank": 47,
+  "generatedAt": "2026-10-19T03:56:44.280Z",
+  "siblings": {
+    "band9": true,
+    "band8c": false,
+    "wide": true,
+    "allPresent": false
+  },
+  "missingSiblings": [
+    "R143_band8c.json"
+  ],
+  "floor": {
+    "ok": true,
+    "terms": 49,
+    "hash": "f4640c18",
+    "mismatchF2": 0,
+    "independentMismatch": 0
+  },
+  "band9": {
+    "present": true,
+    "source": "R143_band9.json",
+    "k": 9,
+    "declaredTotal": "2054455634",
+    "shards": 8,
+    "sumPlanned": "2054455634",
+    "sumProcessed": 1600000,
+    "admits": 0,
+    "refutes": 1459190,
+    "unresolved": 140810,
+    "closed": false,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "shardsComplete": 0,
+    "processedEqualsDeclared": false,
+    "shardRows": [
+      {
+        "shard": 0,
+        "planned": "256806954",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 93024,
+        "unresolved": 106976
+      },
+      {
+        "shard": 1,
+        "planned": "256806954",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 180553,
+        "unresolved": 19447
+      },
+      {
+        "shard": 2,
+        "planned": "256806954",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 197743,
+        "unresolved": 2257
+      },
+      {
+        "shard": 3,
+        "planned": "256806955",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 197618,
+        "unresolved": 2382
+      },
+      {
+        "shard": 4,
+        "planned": "256806954",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 197851,
+        "unresolved": 2149
+      },
+      {
+        "shard": 5,
+        "planned": "256806954",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 198672,
+        "unresolved": 1328
+      },
+      {
+        "shard": 6,
+        "planned": "256806954",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 194286,
+        "unresolved": 5714
+      },
+      {
+        "shard": 7,
+        "planned": "256806955",
+        "processed": 200000,
+        "complete": false,
+        "admits": 0,
+        "refutes": 199443,
+        "unresolved": 557
+      }
+    ],
+    "ledgers": [
+      {
+        "shard": 0,
+        "unresolved": 106976,
+        "emitted": 106976,
+        "lines": 106976,
+        "consistent": true
+      },
+      {
+        "shard": 1,
+        "unresolved": 19447,
+        "emitted": 19447,
+        "lines": 19447,
+        "consistent": true
+      },
+      {
+        "shard": 2,
+        "unresolved": 2257,
+        "emitted": 2257,
+        "lines": 2257,
+        "consistent": true
+      },
+      {
+        "shard": 3,
+        "unresolved": 2382,
+        "emitted": 2382,
+        "lines": 2382,
+        "consistent": true
+      },
+      {
+        "shard": 4,
+        "unresolved": 2149,
+        "emitted": 2149,
+        "lines": 2149,
+        "consistent": true
+      },
+      {
+        "shard": 5,
+        "unresolved": 1328,
+        "emitted": 1328,
+        "lines": 1328,
+        "consistent": true
+      },
+      {
+        "shard": 6,
+        "unresolved": 5714,
+        "emitted": 5714,
+        "lines": 5714,
+        "consistent": true
+      },
+      {
+        "shard": 7,
+        "unresolved": 557,
+        "emitted": 557,
+        "lines": 557,
+        "consistent": true
+      }
+    ],
+    "ledgerLinesTotal": 140810,
+    "emittedTotal": 140810,
+    "supports": 140810,
+    "c49_9": "2054455634",
+    "sumPlannedEqualsExact": true,
+    "declaredEqualsExact": true
+  },
+  "band8c": {
+    "present": false,
+    "source": "",
+    "k": 8,
+    "declared": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "presolve": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "usedArtifact": false,
+    "complete": false,
+    "c49_8": "450978066",
+    "partitionExact": true,
+    "matchesBand8": true,
+    "partitionSource": "constants"
+  },
+  "wide": {
+    "present": true,
+    "source": "R143_wide_anchor.json",
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "anchorRank": 50,
+    "totalAnchors": 1170,
+    "processed": 150000000,
+    "grandTotal": 2771332200,
+    "admits": 0,
+    "unresolved": 0,
+    "closure": false,
+    "anchorsCovered": 63,
+    "anchorsPartial": 1107,
+    "perK": [
+      {
+        "k": 3,
+        "budget": 0,
+        "processed": 1254400,
+        "screened": 1254400,
+        "refuted": 0,
+        "admits": 0,
+        "unresolved": 0,
+        "covered": false
+      },
+      {
+        "k": 4,
+        "budget": 1,
+        "processed": 14739200,
+        "screened": 14739200,
+        "refuted": 0,
+        "admits": 0,
+        "unresolved": 0,
+        "covered": false
+      },
+      {
+        "k": 5,
+        "budget": 2,
+        "processed": 134006400,
+        "screened": 134006400,
+        "refuted": 0,
+        "admits": 0,
+        "unresolved": 0,
+        "covered": false
+      }
+    ],
+    "floorHash": "f4640c18",
+    "sumPerKProcessed": 150000000,
+    "sumPerKAdmits": 0,
+    "sumPerKUnresolved": 0
+  },
+  "candidates": {
+    "total": 7,
+    "withVectors": 0,
+    "withoutVectors": 7,
+    "driftChecked": 5,
+    "driftMismatches": 0
+  },
+  "vectored": [
+    {
+      "source": "floor",
+      "id": "f4640c18",
+      "rank": 49,
+      "mod2Correct": true,
+      "mod2Mm": 0,
+      "intCorrect": false,
+      "intMm": 336,
+      "exactLeTarget": false
+    }
+  ],
+  "laneDisagreements": 0,
+  "laneDisagreementDetails": [],
+  "snaps": {
+    "attempted": 140810,
+    "snapped": 0,
+    "totalNamed": 140810,
+    "cap": 1000000,
+    "capHit": false,
+    "details": []
+  },
+  "closureEqualities": {
+    "floorPinned": true,
+    "band9ShardsReconcileToExact": true,
+    "band9DeclaredEqualsExact": true,
+    "band8cPreSolveMatchesBand8": true,
+    "noNamedUnresolvedDropped": true,
+    "resolveLanesDisagreeZero": true
+  },
+  "closureClaimed": false,
+  "gate": {
+    "ran": true,
+    "exitCode": 1,
+    "reason": "ran bun src/matmul/goalCheckA.ts and recorded its exit code"
+  },
+  "zeroDriftSelfCheck": true,
+  "verdict": "PENDING-SIBLINGS",
+  "residual": "R143 sibling layer not fully merged on main: the R143_band8c runtime artifact (R143_band8c.json / .ndjson) is absent, so its identity-bearing unresolved ledger (the band8 residual repair) cannot be read. The merge adjudicated every present sibling (band9 shards reconcile to C(49,9) = 2054455634, 140810 named band9 unresolved supports re-solved) and read nothing outside the sibling set. No rank<=47 F_2 witness can exist before the missing sibling lands; 47 stands and BESTA47 remains absent",
+  "notes": [
+    "identity gap: the R143_band8c runtime artifact (R143_band8c.json / .ndjson) is ABSENT, so its identity-bearing unresolved ledger cannot be read; the band8c *declared* pre-solve partition is asserted from its exported constants and the landed M8T1_band8.json",
+    "exact-solve obligation: every named support in the sibling identity ledgers was passed through decomposeExact (bounded by the per-run snap cap); a support whose deficit decomposes into <= k-2 fresh terms would close rank<=47 and is re-verified with both checkers here",
+    "identity gap: the band9 lane emitted an identity-bearing unresolved ledger (140,810 drop-index tuples) and this merge reads and re-solves it; the band8c lane persisted only COUNTS in its landed M8T1_band8.json pre-solve partition (3,575,340 unresolved identities were never written), so that residual cannot be individually re-solved from any present artifact"
+  ]
+}
