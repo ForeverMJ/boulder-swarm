@@ -1,0 +1,78 @@
+{
+  "verdict": {
+    "kind": "verdict",
+    "taskId": "M8-S1-band7",
+    "round": "M8-S1",
+    "field": "F_2",
+    "floorRank": 49,
+    "targetRank": 47,
+    "kRange": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "totalRows": 102021584,
+    "totalAdmits": 0,
+    "totalRefutes": 101984958,
+    "totalUnresolved": 36626,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "witness": null
+  },
+  "sizing": {
+    "k": 8,
+    "rows": 450978066,
+    "rateRowsPerSecond": 861807.0805281253,
+    "estimatedSeconds": 523.2935261144936,
+    "budgetSeconds": 1800,
+    "fitsOneTask": true
+  },
+  "results": [
+    {
+      "k": 3,
+      "total": 18424,
+      "admits": 0,
+      "refutes": 18424,
+      "unresolved": 0,
+      "elapsedMs": 24,
+      "admitDetails": []
+    },
+    {
+      "k": 4,
+      "total": 211876,
+      "admits": 0,
+      "refutes": 211876,
+      "unresolved": 0,
+      "elapsedMs": 187,
+      "admitDetails": []
+    },
+    {
+      "k": 5,
+      "total": 1906884,
+      "admits": 0,
+      "refutes": 1906847,
+      "unresolved": 37,
+      "elapsedMs": 1810,
+      "admitDetails": []
+    },
+    {
+      "k": 6,
+      "total": 13983816,
+      "admits": 0,
+      "refutes": 13982274,
+      "unresolved": 1542,
+      "elapsedMs": 14438,
+      "admitDetails": []
+    },
+    {
+      "k": 7,
+      "total": 85900584,
+      "admits": 0,
+      "refutes": 85865537,
+      "unresolved": 35047,
+      "elapsedMs": 101922,
+      "admitDetails": []
+    }
+  ]
+}
