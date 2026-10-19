@@ -177,7 +177,19 @@ export type MergeVerdict = "merged" | "merged-noop" | "blocked"
 export function mergeGate(repoRoot: string, branch: string, verify: () => boolean): MergeVerdict {
   git(repoRoot, ["checkout", "main"])
   const headBefore = git(repoRoot, ["rev-parse", "HEAD"])
-  const mergeOut = git(repoRoot, ["merge", "--no-ff", "-m", `merge ${branch} (gate passed merge)`, branch])
+  let mergeOut = ""
+  try {
+    mergeOut = git(repoRoot, ["merge", "--no-ff", "-m", `merge ${branch} (gate passed merge)`, branch])
+  } catch (e) {
+    // A merge conflict throws before verify ever runs; leaving MERGE_HEAD behind
+    // wedges every later gate (stash push refuses with "needs merge"), so the
+    // conflict must abort back to a clean main rather than escape half-applied.
+    if (e instanceof GitError) {
+      git(repoRoot, ["merge", "--abort"])
+      return "blocked"
+    }
+    throw e
+  }
   let ok = false
   try {
     ok = verify()

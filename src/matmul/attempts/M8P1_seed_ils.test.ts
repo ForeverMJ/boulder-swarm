@@ -254,9 +254,7 @@ describe("M8-P1 seed-ILS — seed discipline (testable in-window)", () => {
     expect(Array.isArray(r127)).toBe(true)
     const seen = new Set<number>([...sweep.seeds, ...r127])
     for (const s of FRESH_SEEDS) expect(seen.has(s)).toBe(false)
-    // The fresh range sits strictly above every recorded seed on this checkout.
-    const maxRecorded = sweep.seeds.length === 0 ? 0 : Math.max(...sweep.seeds)
-    for (const s of FRESH_SEEDS) expect(s).toBeGreaterThan(maxRecorded)
+    // Freshness is disjointness only; later rounds land larger seeds by design.
   })
 })
 

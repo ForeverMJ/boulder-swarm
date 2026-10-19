@@ -41,7 +41,32 @@ async function main(): Promise<void> {
     assert(v2 === "merged", "gate merges passing branch")
     assert(existsSync(join(REPO, "gate-probe-pass.txt")), "merged file present on main")
     git(REPO, ["reset", "--hard", head0])
-    git(REPO, ["branch", "-D", "test/gate-block", "test/gate-pass"])
+    // Conflict path: divergent edits to the same file must abort to a clean main,
+    // never leave MERGE_HEAD behind (a leftover merge wedges every later stash/gate).
+    // The wedge probe is a second ordinary gate merge afterwards, not stash games.
+    const conflictFile = join(REPO, "gate-probe-conflict.txt")
+    writeFileSync(conflictFile, "base\n", "utf-8")
+    git(REPO, ["add", "gate-probe-conflict.txt"])
+    git(REPO, ["commit", "-m", "test: conflict base"])
+    git(REPO, ["checkout", "-b", "test/gate-conflict"])
+    writeFileSync(conflictFile, "branch version\n", "utf-8")
+    git(REPO, ["commit", "-am", "test: branch diverges"])
+    git(REPO, ["checkout", "main"])
+    writeFileSync(conflictFile, "main diverges\n", "utf-8")
+    git(REPO, ["commit", "-am", "test: main diverges"])
+    const v3 = mergeGate(REPO, "test/gate-conflict", () => true)
+    assert(v3 === "blocked", "gate blocks conflicting branch")
+    assert(!existsSync(join(REPO, ".git", "MERGE_HEAD")), "no MERGE_HEAD left after conflict")
+    git(REPO, ["reset", "--hard", head0])
+    git(REPO, ["checkout", "-b", "test/gate-after-conflict"])
+    writeFileSync(join(REPO, "gate-probe-after.txt"), "after\n", "utf-8")
+    git(REPO, ["add", "gate-probe-after.txt"])
+    git(REPO, ["commit", "-m", "test: post-conflict probe"])
+    git(REPO, ["checkout", "main"])
+    const v4 = mergeGate(REPO, "test/gate-after-conflict", () => true)
+    assert(v4 === "merged", "gate still merges after a conflicted block (no wedge)")
+    git(REPO, ["reset", "--hard", head0])
+    git(REPO, ["branch", "-D", "test/gate-block", "test/gate-pass", "test/gate-conflict", "test/gate-after-conflict"])
     if (dirty) {
       git(REPO, ["stash", "pop"])
     }
