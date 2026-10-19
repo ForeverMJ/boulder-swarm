@@ -1,0 +1,105 @@
+{
+  "taskId": "M8-U1-band8c",
+  "round": "M8-U1",
+  "field": "F_2",
+  "k": 8,
+  "addBudget": 6,
+  "floorRank": 49,
+  "targetRank": 47,
+  "floor": {
+    "ok": true,
+    "terms": 49,
+    "hash": "f4640c18",
+    "mismatchF2": 0,
+    "independentMismatch": 0
+  },
+  "presolve": {
+    "total": 450978066,
+    "processed": 450978066,
+    "refutes": 447402726,
+    "unresolved": 3575340,
+    "complete": true,
+    "elapsedMs": 449210
+  },
+  "postsolve": {
+    "processed": 3575340,
+    "snapped": 0,
+    "refuted": 3487134,
+    "stillUnresolved": 88206,
+    "solveAttempts": 88206,
+    "snapCap": 2000000
+  },
+  "reconciliation": {
+    "source": "M8T1_band8.json",
+    "expected": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "observed": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "matches": true
+  },
+  "controls": {
+    "floor": {
+      "ok": true,
+      "terms": 49,
+      "hash": "f4640c18",
+      "mismatchF2": 0,
+      "independentMismatch": 0
+    },
+    "plantedAdmit": {
+      "ok": true,
+      "k": 4,
+      "budget": 2,
+      "verdict": "SNAPPED",
+      "terms": 2,
+      "witnessVerified": true
+    },
+    "knownRefute": [
+      {
+        "dropIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "mode1Rank": 5,
+        "expectedSurrogateRank": 6,
+        "hash": "fa885c4f",
+        "expectedHash": "fa885c4f",
+        "verdict": "REFUTED",
+        "ok": true
+      },
+      {
+        "dropIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          9
+        ],
+        "mode1Rank": 5,
+        "expectedSurrogateRank": 5,
+        "hash": "c9a0e9e6",
+        "expectedHash": "c9a0e9e6",
+        "verdict": "REFUTED",
+        "ok": true
+      }
+    ],
+    "allOk": true
+  },
+  "ledger": {
+    "file": "M8U1_band8c.ndjson",
+    "records": 3575340,
+    "everyUnresolvedEmitted": true
+  },
+  "verdict": "BOUNDED-NO-CLOSURE",
+  "witness": null
+}
