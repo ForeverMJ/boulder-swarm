@@ -1,0 +1,13 @@
+{
+  "shard": 0,
+  "shards": 8,
+  "lo": "0",
+  "hi": "256806954",
+  "planned": "256806954",
+  "processed": 200000,
+  "complete": false,
+  "admits": 0,
+  "refutes": 93024,
+  "unresolved": 106976,
+  "elapsedMs": 7522
+}

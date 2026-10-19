@@ -1,0 +1,5 @@
+{"kind":"checkpoint","taskId":"R143-band9","shard":7,"shards":8,"cursor":"1797698679","processed":50000,"planned":"256806955","admits":0,"refutes":49914,"unresolved":86,"elapsedMs":93}
+{"kind":"checkpoint","taskId":"R143-band9","shard":7,"shards":8,"cursor":"1797748679","processed":100000,"planned":"256806955","admits":0,"refutes":99854,"unresolved":146,"elapsedMs":159}
+{"kind":"checkpoint","taskId":"R143-band9","shard":7,"shards":8,"cursor":"1797798679","processed":150000,"planned":"256806955","admits":0,"refutes":149783,"unresolved":217,"elapsedMs":237}
+{"kind":"checkpoint","taskId":"R143-band9","shard":7,"shards":8,"cursor":"1797848679","processed":200000,"planned":"256806955","admits":0,"refutes":199443,"unresolved":557,"elapsedMs":336}
+{"kind":"summary","taskId":"R143-band9","shard":7,"shards":8,"lo":"1797648679","planned":"256806955","processed":200000,"complete":false,"admits":0,"refutes":199443,"unresolved":557,"unresolvedEmitted":557,"elapsedMs":336}

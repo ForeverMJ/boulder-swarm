@@ -1,0 +1,2 @@
+{"kind":"declare","taskId":"R143-band9","round":"R143","field":"F_2","k":9,"declaredTotal":"2054455634","shards":8,"rowBudget":200000}
+{"kind":"verdict","taskId":"R143-band9","round":"R143","field":"F_2","floorRank":49,"targetRank":47,"k":9,"declaredTotal":"2054455634","shards":8,"sumPlanned":"2054455634","sumProcessed":"1600000","closed":false,"admits":0,"refutes":1459190,"unresolved":140810,"verdict":"BOUNDED-NO-CLOSURE","witness":null}
