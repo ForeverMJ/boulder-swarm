@@ -1,0 +1,207 @@
+{
+  "verdict": {
+    "kind": "verdict",
+    "taskId": "R143-band9",
+    "round": "R143",
+    "field": "F_2",
+    "floorRank": 49,
+    "targetRank": 47,
+    "k": 9,
+    "declaredTotal": "2054455634",
+    "shards": 8,
+    "sumPlanned": "2054455634",
+    "sumProcessed": "1600000",
+    "closed": false,
+    "admits": 0,
+    "refutes": 1459190,
+    "unresolved": 140810,
+    "verdict": "BOUNDED-NO-CLOSURE",
+    "witness": null
+  },
+  "declaration": {
+    "k": 9,
+    "declaredTotal": "2054455634",
+    "formula": "C(49, 9)",
+    "shards": 8
+  },
+  "shards": [
+    {
+      "shard": 0,
+      "shards": 8,
+      "lo": "0",
+      "hi": "256806954",
+      "planned": "256806954",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 93024,
+      "unresolved": 106976,
+      "elapsedMs": 7522
+    },
+    {
+      "shard": 1,
+      "shards": 8,
+      "lo": "256806954",
+      "hi": "513613908",
+      "planned": "256806954",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 180553,
+      "unresolved": 19447,
+      "elapsedMs": 1654
+    },
+    {
+      "shard": 2,
+      "shards": 8,
+      "lo": "513613908",
+      "hi": "770420862",
+      "planned": "256806954",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 197743,
+      "unresolved": 2257,
+      "elapsedMs": 536
+    },
+    {
+      "shard": 3,
+      "shards": 8,
+      "lo": "770420862",
+      "hi": "1027227817",
+      "planned": "256806955",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 197618,
+      "unresolved": 2382,
+      "elapsedMs": 462
+    },
+    {
+      "shard": 4,
+      "shards": 8,
+      "lo": "1027227817",
+      "hi": "1284034771",
+      "planned": "256806954",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 197851,
+      "unresolved": 2149,
+      "elapsedMs": 477
+    },
+    {
+      "shard": 5,
+      "shards": 8,
+      "lo": "1284034771",
+      "hi": "1540841725",
+      "planned": "256806954",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 198672,
+      "unresolved": 1328,
+      "elapsedMs": 410
+    },
+    {
+      "shard": 6,
+      "shards": 8,
+      "lo": "1540841725",
+      "hi": "1797648679",
+      "planned": "256806954",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 194286,
+      "unresolved": 5714,
+      "elapsedMs": 689
+    },
+    {
+      "shard": 7,
+      "shards": 8,
+      "lo": "1797648679",
+      "hi": "2054455634",
+      "planned": "256806955",
+      "processed": 200000,
+      "complete": false,
+      "admits": 0,
+      "refutes": 199443,
+      "unresolved": 557,
+      "elapsedMs": 336
+    }
+  ],
+  "reconciliation": {
+    "declaredTotal": "2054455634",
+    "sumPlanned": "2054455634",
+    "sumProcessed": "1600000",
+    "plannedEqualsDeclared": true,
+    "processedEqualsDeclared": false,
+    "allComplete": false,
+    "closed": false
+  },
+  "coverage": {
+    "declaredTotal": "2054455634",
+    "processed": "1600000",
+    "coveredFraction": 0.0007787951092839224,
+    "shardsComplete": 0,
+    "shards": 8,
+    "serialRowsPerSecond": 132384.57719675655
+  },
+  "finding": "BOUNDED-NO-CLOSURE: k=9 band NOT closed in this run; coverage and unresolved are recorded, no impossibility and no BESTA47 claimed",
+  "controls": {
+    "floor": {
+      "ok": true,
+      "terms": 49,
+      "hash": "f4640c18",
+      "mismatchF2": 0,
+      "independentMismatch": 0
+    },
+    "plantedAdmit": {
+      "ok": true,
+      "k": 4,
+      "addBudget": 2,
+      "mode1Rank": 2,
+      "verdict": "ADMIT",
+      "terms": 2,
+      "witnessVerified": true
+    },
+    "knownRefute": [
+      {
+        "dropIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "surrogateRank": 6,
+        "expectedSurrogateRank": 6,
+        "hash": "fa885c4f",
+        "expectedHash": "fa885c4f",
+        "mode1Rank": 5,
+        "verdict": "REFUTE",
+        "ok": true
+      },
+      {
+        "dropIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          9
+        ],
+        "surrogateRank": 5,
+        "expectedSurrogateRank": 5,
+        "hash": "c9a0e9e6",
+        "expectedHash": "c9a0e9e6",
+        "mode1Rank": 5,
+        "verdict": "REFUTE",
+        "ok": true
+      }
+    ],
+    "allOk": true,
+    "declaredOk": true
+  }
+}
