@@ -1,0 +1,264 @@
+{
+  "taskId": "R146-merge",
+  "round": "R146",
+  "field": "F_2",
+  "floorRank": 49,
+  "targetRank": 47,
+  "generatedAt": "2026-10-20T05:35:43.491Z",
+  "siblings": {
+    "band8": true,
+    "band8x": false,
+    "sym47": true,
+    "allPresent": false
+  },
+  "missingSiblings": [
+    "R146_band8x.json"
+  ],
+  "floor": {
+    "ok": true,
+    "terms": 49,
+    "hash": "f4640c18",
+    "expectedHash": "f4640c18",
+    "mismatchF2": 0,
+    "independentMismatch": 0
+  },
+  "band8": {
+    "present": true,
+    "source": "R146_band8.ndjson",
+    "lines": 3575340,
+    "decided": 3575340,
+    "unresolved": 0,
+    "admitted": 0,
+    "flatteningRefutes": 3487134,
+    "subspaceDim6Refutes": 87618,
+    "subspaceDim5Refutes": 588,
+    "codes": {
+      "S5": 588,
+      "S6": 87618,
+      "F": 3487134
+    },
+    "digest": "162f1fb0",
+    "vectorRows": 0,
+    "jsonPresent": true,
+    "jsonTotal": 3575340,
+    "jsonUnresolved": 0,
+    "jsonFloorHash": "f4640c18",
+    "ledgerLines": 3575340,
+    "decidedEqualsExpected": true,
+    "unresolvedZero": true,
+    "countsMatchJson": true,
+    "floorHashMatches": true,
+    "complete": true,
+    "elapsedMs": 3794
+  },
+  "band8x": {
+    "present": false,
+    "source": "",
+    "expectedSample": 200000,
+    "expectedDisagreements": 0,
+    "sampleEqualsExpected": false,
+    "zeroDisagreements": false,
+    "status": "ABSENT",
+    "detail": "R146_band8x.ndjson and R146_band8x.json are both absent; the 200,000-row sample equality and the zero-disagreement claim CANNOT be asserted (no count is invented)"
+  },
+  "sym47": {
+    "present": true,
+    "jsonPresent": true,
+    "ndjsonPresent": true,
+    "groups": [
+      {
+        "name": "S4-diagonal",
+        "order": 24,
+        "targetFixed": true,
+        "poolSize": 42026,
+        "enumerated": 128,
+        "exactSolved": 128,
+        "freeConsistent": 0,
+        "orbitConsistent": 0,
+        "classTotal": "215922467043036",
+        "fractionExactSolved": 1,
+        "fractionClassEnumerated": 5.928053794165293e-13,
+        "fractionConsistent": 0,
+        "fractionExactMatches": true,
+        "classBounded": true
+      },
+      {
+        "name": "C4-diagonal",
+        "order": 4,
+        "targetFixed": true,
+        "poolSize": 33226,
+        "enumerated": 128,
+        "exactSolved": 128,
+        "freeConsistent": 0,
+        "orbitConsistent": 0,
+        "classTotal": "3878372912772091929556784635110195920",
+        "fractionExactSolved": 1,
+        "fractionClassEnumerated": 3.300353083079656e-35,
+        "fractionConsistent": 0,
+        "fractionExactMatches": true,
+        "classBounded": true
+      },
+      {
+        "name": "BT-diagonal",
+        "order": 4,
+        "targetFixed": false,
+        "poolSize": 24462,
+        "enumerated": 128,
+        "exactSolved": 128,
+        "freeConsistent": 0,
+        "orbitConsistent": 0,
+        "classTotal": "81493816420572564269804309092241480920576",
+        "fractionExactSolved": 1,
+        "fractionClassEnumerated": 1.57067131743369e-39,
+        "fractionConsistent": 0,
+        "fractionExactMatches": true,
+        "classBounded": true
+      }
+    ],
+    "candidateCount": 384,
+    "ndjsonSupportRows": 384,
+    "enumerated": 384,
+    "exactSolved": 384,
+    "freeConsistent": 0,
+    "orbitConsistent": 0,
+    "allExactSolved": true,
+    "allFractionsExact": true,
+    "allClassesBounded": true,
+    "allConsistencyZero": true,
+    "verdict": "BOUNDED-NULL",
+    "witnessPresent": false,
+    "controls": {
+      "floorRecorded": "f4640c18",
+      "floorRecomputed": "f4640c18",
+      "refutedRecorded": "cabaf299",
+      "refutedRecomputed": "cabaf299",
+      "campaignRecorded": "6098903c",
+      "campaignRecomputed": "6098903c",
+      "floorDrift": false,
+      "refutedDrift": false,
+      "campaignDrift": false
+    },
+    "supportHashesRecorded": 384,
+    "supportHashesRederived": 384,
+    "supportHashDrift": 0,
+    "canonicalDriftChecked": 386,
+    "canonicalDriftMismatches": 0,
+    "laneDisagreements": [],
+    "verdictReconciles": true
+  },
+  "candidates": {
+    "total": 386,
+    "withVectors": 1,
+    "withoutVectors": 385,
+    "driftChecked": 386,
+    "driftMismatches": 0,
+    "driftDetails": [],
+    "laneHashesChecked": 1,
+    "laneHashMismatches": 0
+  },
+  "vectored": [
+    {
+      "source": "floor",
+      "id": "f4640c18",
+      "rank": 49,
+      "mod2Correct": true,
+      "mod2Mm": 0,
+      "intCorrect": false,
+      "intMm": 336,
+      "exactLeTarget": false
+    }
+  ],
+  "laneDisagreements": 0,
+  "laneDisagreementDetails": [],
+  "closureEqualities": {
+    "floorPinned": true,
+    "band8DecidedEqualsExpected": true,
+    "band8UnresolvedZero": true,
+    "band8CountsMatchJson": true,
+    "band8xSampleEqualsExpected": false,
+    "band8xZeroDisagreements": false,
+    "sym47FractionsReconcile": true,
+    "sym47VerdictReconciles": true,
+    "named": [
+      {
+        "name": "floor.hash == f4640c18",
+        "expected": "f4640c18",
+        "observed": "f4640c18",
+        "holds": true,
+        "status": "HOLDS"
+      },
+      {
+        "name": "band8.decided == 3575340",
+        "expected": "3575340",
+        "observed": "3575340",
+        "holds": true,
+        "status": "HOLDS"
+      },
+      {
+        "name": "band8.unresolved == 0",
+        "expected": "0",
+        "observed": "0",
+        "holds": true,
+        "status": "HOLDS"
+      },
+      {
+        "name": "band8.counts == band8.json",
+        "expected": "derived/ledger counts",
+        "observed": "match",
+        "holds": true,
+        "status": "HOLDS"
+      },
+      {
+        "name": "band8x.sample == 200000",
+        "expected": "200000",
+        "observed": "absent",
+        "holds": false,
+        "status": "UNAVAILABLE (sibling absent)"
+      },
+      {
+        "name": "band8x.disagreements == 0",
+        "expected": "0",
+        "observed": "absent",
+        "holds": false,
+        "status": "UNAVAILABLE (sibling absent)"
+      },
+      {
+        "name": "sym47.enumerated == exactSolved",
+        "expected": "384",
+        "observed": "384",
+        "holds": true,
+        "status": "HOLDS"
+      },
+      {
+        "name": "sym47.fractionExactSolved == 1",
+        "expected": "1",
+        "observed": "1",
+        "holds": true,
+        "status": "HOLDS"
+      },
+      {
+        "name": "sym47.verdict == BOUNDED-NULL (no witness)",
+        "expected": "BOUNDED-NULL / witness null",
+        "observed": "BOUNDED-NULL / witness null",
+        "holds": true,
+        "status": "HOLDS"
+      }
+    ]
+  },
+  "closureClaimed": false,
+  "gate": {
+    "ran": true,
+    "exitCode": 1,
+    "reason": "ran bun src/matmul/goalCheckA.ts unconditionally and recorded its exit code",
+    "stdoutTail": "M8 GOAL NOT MET: no exact rank<=47 scheme for n=4 over F_2 among 39 attempts.",
+    "stderrTail": ""
+  },
+  "zeroDriftSelfCheck": true,
+  "verdict": "PENDING-SIBLINGS",
+  "residual": "R146 sibling layer not fully merged on main: R146_band8x absent. Adjudicated every present sibling without inventing a count: band-8 decided 3575340/3575340 with unresolved 0; sym47 enumerated 384 with exactSolved 384 and 384/384 support hashes re-derived (drift 0); band8x is absent so its 200,000-row / zero-disagreement equality is UNAVAILABLE. This is an honest bounded null over the present corpus, NOT a claim of impossibility. Residual class: the R146_band8x cross-check (and any admitted candidate it may carry) plus the unsampled sym47 orbit-subset classes. F_2 rank<=47 remains open while 47 stands and BESTA47 is absent; no bound moves",
+  "notes": [
+    "band8 ledger: every row was streamed and classified by its trailing verdict code; no admitted row carries factor vectors in this artifact, so there is no candidate to re-verify from it",
+    "sym47: the support rows carry supportHash but no factor vectors; every one of the recorded hashes was re-derived by replaying the deterministic seeded probe (seed 146000, sampleLimit 128), which is a hash/set check, not a scheme re-verification",
+    "band8x: an absent sibling is recorded as ABSENT with null measurements; the expected 200,000-row sample and zero disagreements are NOT asserted without the artifact"
+  ]
+}
