@@ -1,0 +1,145 @@
+{
+  "taskId": "R146-band8",
+  "round": "R146",
+  "field": "F_2",
+  "k": 8,
+  "addBudget": 6,
+  "floorRank": 49,
+  "targetRank": 47,
+  "generatedAt": "2026-10-20T05:18:55.834Z",
+  "floor": {
+    "ok": true,
+    "terms": 49,
+    "hash": "f4640c18",
+    "expectedHash": "f4640c18",
+    "mismatchF2": 0,
+    "independentMismatch": 0
+  },
+  "controls": {
+    "floor": {
+      "ok": true,
+      "terms": 49,
+      "hash": "f4640c18",
+      "expectedHash": "f4640c18",
+      "mismatchF2": 0,
+      "independentMismatch": 0
+    },
+    "plantedAdmit": {
+      "ok": true,
+      "k": 8,
+      "budget": 6,
+      "verdict": "ADMITTED",
+      "witnessTerms": 6,
+      "witnessVerified": true
+    },
+    "plantedRefute7": {
+      "ok": true,
+      "budget": 6,
+      "verdict": "REFUTED_FLATTENING",
+      "maxAxisRank": 7
+    },
+    "allOk": true
+  },
+  "ledger": {
+    "file": "M8U1_band8c.ndjson",
+    "lines": 3575340,
+    "complete": true,
+    "elapsedMs": 10523
+  },
+  "derived": {
+    "total": 3575340,
+    "flatteningRefutes": 3487134,
+    "subspaceDim6Refutes": 87618,
+    "subspaceDim5Refutes": 588,
+    "admitted": 0,
+    "unresolved": 0,
+    "refutes": 3575340,
+    "complete": true,
+    "bandLowerBound": 7
+  },
+  "landed": {
+    "source": "M8U1_merge.json",
+    "declared": {
+      "total": 450978066,
+      "refutes": 447402726,
+      "unresolved": 3575340
+    },
+    "postsolve": {
+      "processed": 3575340,
+      "snapped": 0,
+      "refuted": 3487134,
+      "stillUnresolved": 88206
+    },
+    "ledgerLines": 3575340,
+    "reconciliationMatches": true
+  },
+  "reconciliation": {
+    "source": "M8U1_merge.json",
+    "checks": [
+      {
+        "name": "ledgerLines",
+        "expected": 3575340,
+        "observed": 3575340,
+        "ok": true
+      },
+      {
+        "name": "postsolve.processed",
+        "expected": 3575340,
+        "observed": 3575340,
+        "ok": true
+      },
+      {
+        "name": "postsolve.refuted",
+        "expected": 3487134,
+        "observed": 3487134,
+        "ok": true
+      },
+      {
+        "name": "postsolve.stillUnresolved",
+        "expected": 88206,
+        "observed": 88206,
+        "ok": true
+      },
+      {
+        "name": "postsolve.snapped",
+        "expected": 0,
+        "observed": 0,
+        "ok": true
+      },
+      {
+        "name": "declared.unresolved",
+        "expected": 3575340,
+        "observed": 3575340,
+        "ok": true
+      },
+      {
+        "name": "declared.total",
+        "expected": 450978066,
+        "observed": 450978066,
+        "ok": true
+      },
+      {
+        "name": "declared.refutes",
+        "expected": 447402726,
+        "observed": 447402726,
+        "ok": true
+      },
+      {
+        "name": "reconciliationMatches",
+        "expected": 1,
+        "observed": 1,
+        "ok": true
+      }
+    ],
+    "matches": true
+  },
+  "verdict": "CLOSED",
+  "bandVerdict": "CLOSED-RANK-GT-6",
+  "witness": null,
+  "method": {
+    "flattening": "exact F_2 flattening rank of one mode > 6; a sound tensor-rank lower bound",
+    "subspaceDim6": "dim V = 6 and V is not spanned by its pure elements, so W = V for any rank<=6 decomposition",
+    "subspaceDim5": "exhaustive pure-W search: neither V nor any 6-dimensional W = V + span(p) is pure-spanned",
+    "admit": "pure basis of the containing row space; slice coordinates give u_i; full 16x16x16 tensor equality required"
+  }
+}
