@@ -6,6 +6,7 @@ src/matmul/checker.ts (exact integer, 729 entries). `BEST22=none` until proven.
 | Round | Track | What ran | Outcome | Artifact |
 | --- | --- | --- | --- | --- |
 | R139 | merge2term | exhaustive 2-term merge enum of 7 Strassen triples (F_2 + sign-bearing) | exhausted: 0 admits, 0 consistent, 0 verified, 0 goal-met | R139_merge2term.json |
+| R149 | band7-close | exact F_2 drop-7/add-5 closure for two-level Strassen exact-49 floor (C(49,7)=85,900,584), resuming from M8S1 k=7 checkpoint at 40M, mode-1 flattening rank ≤ 5 necessary condition, BigInt Gaussian exact solver for 5 fresh terms | BOUNDED-NO-CLOSURE (0 admits, 85,878,757 refutes, 21,827 unresolved at full enumeration; exact solver verified on planted controls) | R149_band7_close.json |
 | R1 | T11 parity | agent transcribed published rank-23 scheme | rank 23, 0 mm | `T11_solution.ts` |
 | R1 | T12 math | drop-one sweep, hill-climb, SA, targeted enum | stalls at 1 mm | `T12_rank23_variant.ts` |
 | R2 | T12b compute | ALS repair + sparse enum + 253 pairs | 1 mm absorbable only by ADDING a term (rank stays 23) | `R2_dropk_repair.json`, `R2_*_search.ts` |
