@@ -1,0 +1,60 @@
+{
+  "taskId": "R148-size",
+  "round": "R148",
+  "field": "F_2",
+  "k": 9,
+  "floorRank": 49,
+  "targetRank": 47,
+  "floorHash": "f4640c18",
+  "declaredTotal": "2054455634",
+  "shards": 8,
+  "shardPlanned": [
+    "256806954",
+    "256806954",
+    "256806954",
+    "256806955",
+    "256806954",
+    "256806954",
+    "256806954",
+    "256806955"
+  ],
+  "sumPlanned": "2054455634",
+  "coverage": {
+    "r143Processed": 1600000,
+    "r143Refutes": 1459190,
+    "r143Unresolved": 140810,
+    "r143Admits": 0,
+    "m8u1ProcessedThisRun": 400000,
+    "m8u1RefutesThisRun": 345648,
+    "m8u1UnresolvedThisRun": 54352,
+    "m8u1Admits": 0,
+    "cumulativeProcessed": 2000000,
+    "coveredFraction": 0.000973493886604903,
+    "remainder": 2052455634,
+    "shardsComplete": 0
+  },
+  "namedUnresolved": {
+    "r143": 140810,
+    "m8u1": 54352,
+    "cumulative": 195162,
+    "r143LedgerLines": 140810,
+    "m8u1LedgerLines": 54352,
+    "ledgerLinesMatch": true
+  },
+  "r146": {
+    "band8Total": 3575340,
+    "band8Unresolved": 0,
+    "band8Complete": true,
+    "sym47Enumerated": 384,
+    "sym47ExactSolved": 384,
+    "sym47Free": 0
+  },
+  "closability": {
+    "closed": false,
+    "verdict": "BOUNDED-OPEN",
+    "admits": 0,
+    "witness": null,
+    "shardsComplete": 0,
+    "decision": "BOUNDED-OPEN: k=9 band NOT closed — 2000000/2054455634 rows covered, 195162 named unresolved, 0 admits, no witness; counts reported, nothing claimed closed"
+  }
+}
