@@ -42,7 +42,14 @@ describe("evidence is wired from goal.yaml to the score", () => {
     const tasks = await loadTasks(REPO)
     for (const id of ["R08", "R14", "R19"]) {
       const t = tasks.find((x) => x.id === id)
-      const v = scoreAssignment(REPO, t?.tests ?? "", t?.success, t?.evidence)
+      const v = scoreAssignment(
+        REPO,
+        t?.tests ?? "",
+        t?.success,
+        t?.evidence,
+        undefined,
+        t?.problem,
+      )
       expect(`${id}:${v.passRate}`).toBe(`${id}:1`)
     }
   })
@@ -53,7 +60,14 @@ describe("evidence is wired from goal.yaml to the score", () => {
     const { scoreAssignment } = await import("./runLoop")
     const tasks = await loadTasks(REPO)
     const t = tasks.find((x) => x.id === "R08")
-    const v = scoreAssignment(REPO, t?.tests ?? "", t?.success, "CAMPAIGN:R9999")
+    const v = scoreAssignment(
+      REPO,
+      t?.tests ?? "",
+      t?.success,
+      "CAMPAIGN:R9999",
+      undefined,
+      t?.problem,
+    )
     expect(v.passRate).toBe(0)
   })
 })

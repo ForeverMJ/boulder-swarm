@@ -27,6 +27,7 @@ const CAMPAIGN_ROW =
   "30000 candidates in 1.2s, no repair, and the scope string states exactly " +
   "what is not covered so a null is never reported as an impossibility | " +
   "`tools/repair99.ts` |"
+const M5_PROBLEM = "src/matmul/attempts/R99.ts"
 
 async function worktreeWith(files: Record<string, string>): Promise<string> {
   const wt = await mkdtemp(join(tmpdir(), "evidence-"))
@@ -49,7 +50,14 @@ describe("research-task evidence is recognised", () => {
       "src/matmul/CAMPAIGN.md": `# Campaign\n\n${CAMPAIGN_ROW}\n`,
     })
     try {
-      const v = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, "CAMPAIGN:R99")
+      const v = scoreAssignment(
+        wt,
+        "src/matmul/goalCheck.ts",
+        undefined,
+        "CAMPAIGN:R99",
+        undefined,
+        M5_PROBLEM,
+      )
       expect(v.passRate).toBe(1)
     } finally {
       await cleanup(wt)
@@ -62,7 +70,14 @@ describe("research-task evidence is recognised", () => {
       "src/matmul/CAMPAIGN.md": "# Campaign\n\n| R10 | something else |\n",
     })
     try {
-      const v = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, "CAMPAIGN:R99")
+      const v = scoreAssignment(
+        wt,
+        "src/matmul/goalCheck.ts",
+        undefined,
+        "CAMPAIGN:R99",
+        undefined,
+        M5_PROBLEM,
+      )
       expect(v.passRate).toBe(0)
     } finally {
       await cleanup(wt)
@@ -77,7 +92,14 @@ describe("research-task evidence is recognised", () => {
       "src/matmul/CAMPAIGN.md": "# Campaign\n\n| R99 |\n",
     })
     try {
-      const v = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, "CAMPAIGN:R99")
+      const v = scoreAssignment(
+        wt,
+        "src/matmul/goalCheck.ts",
+        undefined,
+        "CAMPAIGN:R99",
+        undefined,
+        M5_PROBLEM,
+      )
       expect(v.passRate).toBe(0)
     } finally {
       await cleanup(wt)
@@ -88,7 +110,14 @@ describe("research-task evidence is recognised", () => {
     const { scoreAssignment } = await import("./runLoop")
     const wt = await worktreeWith({})
     try {
-      const v = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, "CAMPAIGN:R99")
+      const v = scoreAssignment(
+        wt,
+        "src/matmul/goalCheck.ts",
+        undefined,
+        "CAMPAIGN:R99",
+        undefined,
+        M5_PROBLEM,
+      )
       expect(v.passRate).toBe(0)
     } finally {
       await cleanup(wt)
@@ -103,9 +132,11 @@ describe("research-task evidence is recognised", () => {
       "src/matmul/CAMPAIGN.md": `# Campaign\n\n${CAMPAIGN_ROW}\n`,
     })
     try {
-      const without = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined)
-      const withUndefined = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, undefined)
-      const withEmpty = scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, "")
+      const score = (evidence?: string) =>
+        scoreAssignment(wt, "src/matmul/goalCheck.ts", undefined, evidence, undefined, M5_PROBLEM)
+      const without = score()
+      const withUndefined = score(undefined)
+      const withEmpty = score("")
       expect(withUndefined.passRate).toBe(without.passRate)
       expect(withEmpty.passRate).toBe(without.passRate)
     } finally {

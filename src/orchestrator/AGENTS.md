@@ -20,7 +20,7 @@ specifics only.
 | Supervisor journal | `supervisorState.ts` | durable state under `trajectories/supervisor_state.json`; corrupt → fresh state, never throws |
 | Exit-then-score helpers | `scoreAfterExit.ts` | S3 spec: wait exit → settle → commit; verdict provenance + recency |
 | Replan | `replan.ts` | reads `metrics/results.json`; solved iff latest row pass_rate >= 1 |
-| Per-task prompt override | `src/matmul/prompts/<TASK_ID>.md` | if present, beats the built-in prompt builder |
+| Per-task prompt override | `src/<campaign>/prompts/<TASK_ID>.md` | campaign comes from `task.problem`; if present, beats the built-in prompt builder |
 
 ## RUN PIPELINE (runLive)
 
@@ -35,7 +35,7 @@ specifics only.
 
 Priority: (1) `evidence` field — `CAMPAIGN:<label>` must match a substantive CAMPAIGN.md
 row; (2) special markers `PAIRTABLES`/`WIDEABSORB` (artifact file existence); (3) generic
-success marker regex over `bun src/matmul/scoreboard.ts` stdout; (4) harness `runTestFile`.
+success marker regex over `bun src/<campaign>/scoreboard.ts` stdout; (4) harness `runTestFile`.
 Evidence-read problems score 0 rather than making the scoring path throw.
 
 ## CONVENTIONS (LOCAL)

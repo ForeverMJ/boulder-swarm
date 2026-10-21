@@ -65,6 +65,23 @@
 - [M8-L1-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [M8-L1-size] Hypothesis: stub unimplemented or wrong direction; Evidence: 12/12; Rule: retry with different strategy next round.
 - [M8-L1-solve] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [M8-N1-task1] Hypothesis: stub unimplemented or wrong direction; Evidence: 1/1; Rule: retry with different strategy next round.
+- [M8-Q1-task1] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-S1-altsupRest] Hypothesis: standard solution passes; Evidence: 9/9; Rule: keep pattern and reuse.
+- [M8-S1-audit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-S1-band7] Hypothesis: standard solution passes; Evidence: 16/16; Rule: keep pattern and reuse.
+- [M8-T1-band8] Hypothesis: standard solution passes; Evidence: 21/21; Rule: keep pattern and reuse.
+- [M8-T1-merge] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [M8-T1-oracle] Hypothesis: standard solution passes; Evidence: 22/22; Rule: keep pattern and reuse.
+- [M8-T1-resolve] Hypothesis: standard solution passes; Evidence: 23/23; Rule: keep pattern and reuse.
+- [M8-U1-band8c] Hypothesis: standard solution passes; Evidence: 17/17; Rule: keep pattern and reuse.
+- [M8-U1-band9] Hypothesis: standard solution passes; Evidence: 25/25; Rule: keep pattern and reuse.
+- [M8-U1-merge] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [M8-U1-wide] Hypothesis: standard solution passes; Evidence: 14/14; Rule: keep pattern and reuse.
+- [M8-V1-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-V1-nonfloor] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-V1-residual] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [M8-V1-wide] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R100-drain49] Hypothesis: standard solution passes; Evidence: 11/11; Rule: keep pattern and reuse.
 - [R100-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R100-seedils] Hypothesis: standard solution passes; Evidence: 8/8; Rule: keep pattern and reuse.
@@ -114,7 +131,7 @@
 - [R113-size] Hypothesis: standard solution passes; Evidence: 15/15; Rule: keep pattern and reuse.
 - [R113-snap] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
 - [R114-altbase] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
-- [R114-analyze] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R114-analyze] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R114-audit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R114-sweep] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R115-1] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
@@ -205,6 +222,32 @@
 - [R140-altbase] Hypothesis: standard solution passes; Evidence: 32/32; Rule: keep pattern and reuse.
 - [R140-audit] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R140-wide] Hypothesis: standard solution passes; Evidence: 37/37; Rule: keep pattern and reuse.
+- [R141-analyze] Hypothesis: stub unimplemented or wrong direction; Evidence: 1/1; Rule: retry with different strategy next round.
+- [R142-task1] Hypothesis: stub unimplemented or wrong direction; Evidence: 1/1; Rule: retry with different strategy next round.
+- [R143-band8c] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
+- [R143-band9] Hypothesis: standard solution passes; Evidence: 28/28; Rule: keep pattern and reuse.
+- [R143-merge] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [R143-wide] Hypothesis: standard solution passes; Evidence: 12/12; Rule: keep pattern and reuse.
+- [R144-analyze] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R144-border] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R144-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R144-merge3] Hypothesis: stub unimplemented or wrong direction; Evidence: 1/1; Rule: retry with different strategy next round.
+- [R145-fresh-ils] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R145-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R145-orbit-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R145-spark-drain] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R146-band8] Hypothesis: standard solution passes; Evidence: 8/8; Rule: keep pattern and reuse.
+- [R146-band8x] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R146-merge] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [R146-sym47] Hypothesis: standard solution passes; Evidence: 21/21; Rule: keep pattern and reuse.
+- [R147-band8x] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R147-band9-live] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R147-merge] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R147-sym47-orbit] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [R148-check] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [R148-merge] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [R148-scan] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [R148-size] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R52] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/6; Rule: retry with different strategy next round.
 - [R90-probe] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [R90-size] Hypothesis: standard solution passes; Evidence: 3/3; Rule: keep pattern and reuse.

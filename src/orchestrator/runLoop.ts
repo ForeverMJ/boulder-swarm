@@ -111,6 +111,12 @@ function parseArgs(argv: readonly string[]): Args {
 
 const CAMPAIGN_EVIDENCE = "CAMPAIGN:"
 
+export function campaignRoot(problemPath: string): string {
+  const campaign = /^src\/([^/]+)(?:\/|$)/.exec(problemPath)?.[1]
+  // Preserve the legacy matmul default when a task has no recognizable src/<campaign> path.
+  return campaign === undefined ? "src/matmul" : `src/${campaign}`
+}
+
 // A row earns its keep only if it records the label *and* real content. An id alone
 // says a round was numbered, not that anything was found, so a stub like `| R8 |`
 // must not pass as a certificate - otherwise an empty row marks work done.
@@ -137,7 +143,7 @@ function substantiveRow(text: string, label: string): boolean {
 // verifyAll. What replan needs is to stop redoing finished work, and a substantive row
 // is the honest signal for that. Nothing here may throw: an unreadable or absent file
 // is "not yet recorded", which is a legitimate 0, not a crash in the scoring path.
-function evidenceVerdict(wt: string, evidence: string): Verdict {
+function evidenceVerdict(wt: string, evidence: string, problemPath?: string): Verdict {
   const result = (hit: boolean, why: string): Verdict => ({
     testFile: "CAMPAIGN.md",
     passed: hit ? 1 : 0,
@@ -151,7 +157,7 @@ function evidenceVerdict(wt: string, evidence: string): Verdict {
     return result(false, `unrecognised evidence "${evidence}"; only ${CAMPAIGN_EVIDENCE}<label> is implemented`)
   }
   const label = evidence.slice(CAMPAIGN_EVIDENCE.length).trim()
-  const path = join(wt, "src", "matmul", "CAMPAIGN.md")
+  const path = join(wt, campaignRoot(problemPath ?? ""), "CAMPAIGN.md")
   let text = ""
   try {
     text = readFileSync(path, "utf-8")
@@ -175,18 +181,20 @@ export function scoreAssignment(
   success: string | undefined,
   evidence?: string,
   timeoutMs = 60_000,
+  problemPath?: string,
 ): Verdict {
   if (evidence !== undefined && evidence !== "") {
-    return evidenceVerdict(wt, evidence)
+    return evidenceVerdict(wt, evidence, problemPath)
   }
   if (success === "PAIRTABLES" || success === "WIDEABSORB") {
     const file = success === "PAIRTABLES" ? "R5_pair_tables.json" : "R5_wide_absorb.json"
-    const path = join(wt, "src", "matmul", "attempts", file)
+    const path = join(wt, campaignRoot(problemPath ?? ""), "attempts", file)
     const ok = existsSync(path)
     return { testFile: file, passed: ok ? 1 : 0, total: 1, passRate: ok ? 1 : 0, returncode: 0, parsed: true, outputTail: `checked ${path}` }
   }
   if (success !== undefined && success !== "") {
-    const r = spawnSync("bun", ["src/matmul/scoreboard.ts"], { cwd: wt, encoding: "utf-8", timeout: timeoutMs })
+    const scoreboard = `${campaignRoot(problemPath ?? "")}/scoreboard.ts`
+    const r = spawnSync("bun", [scoreboard], { cwd: wt, encoding: "utf-8", timeout: timeoutMs })
     const m = `${r.stdout ?? ""}`.match(new RegExp(`${success}=(\\S+)`))
     const hit = m?.[1] !== undefined && m[1] !== "none"
     return { testFile: "scoreboard", passed: hit ? 1 : 0, total: 1, passRate: hit ? 1 : 0, returncode: 0, parsed: true, outputTail: `looked for ${success} in scoreboard output` }
@@ -194,9 +202,16 @@ export function scoreAssignment(
   return runTestFile(wt, tests, timeoutMs)
 }
 
-async function taskPrompt(repo: string, a: { task: { id: string } }, fallback: string): Promise<string> {
+async function taskPrompt(
+  repo: string,
+  task: { readonly id: string; readonly problem: string },
+  fallback: string,
+): Promise<string> {
   try {
-    return await readFile(join(repo, "src", "matmul", "prompts", `${a.task.id}.md`), "utf-8")
+    return await readFile(
+      join(repo, campaignRoot(task.problem), "prompts", `${task.id}.md`),
+      "utf-8",
+    )
   } catch (e) {
     if (e instanceof Error) {
       return fallback
@@ -303,7 +318,7 @@ export async function runLive(
       const context = a.task.progress ? progressContext(repo, a.task.id, a.task.progress) : undefined
       const basePrompt = await taskPrompt(
         repo,
-        a,
+        a.task,
         a.task.planned === true
           ? buildPlannedTaskPrompt(a.task.id, a.task.problem, a.task.tests, a.task.note, a.task.evidence)
           : deps.buildPrompt(a.task.id, a.task.problem, a.task.tests),
@@ -355,7 +370,15 @@ export async function runLive(
             repo, worktree: wt, context, incumbent: context.last.plan, candidate: plan,
             taskId: a.task.id, deadline: attemptStarted + timeoutMs, prompt: experimentPrompt,
             spawn: deps.spawnAgent,
-            score: (path, limit) => scoreAssignment(path, a.task.tests, a.task.success, a.task.evidence, limit),
+            score: (path, limit) =>
+              scoreAssignment(
+                path,
+                a.task.tests,
+                a.task.success,
+                a.task.evidence,
+                limit,
+                a.task.problem,
+              ),
           })
           comparison = trial.comparison
           plan = trial.plan
@@ -388,7 +411,15 @@ export async function runLive(
       }
       const produced = worktreePaths(wt)
       const safeToScore = execute && (!comparison || trialSelected) && (!context || (settled.stable && agent.straysAfter === 0))
-      const v = safeToScore ? scoreAssignment(wt, a.task.tests, a.task.success, a.task.evidence)
+      const v = safeToScore
+        ? scoreAssignment(
+            wt,
+            a.task.tests,
+            a.task.success,
+            a.task.evidence,
+            undefined,
+            a.task.problem,
+          )
         : { testFile: a.task.tests, passed: 0, total: 0, passRate: 0, parsed: true, returncode: 1, outputTail: "Execution withheld or worker unsettled" }
       if (v.parsed === false) {
         console.log(`HARNESS could not parse a test result for ${a.task.id} (rc=${v.returncode}); tail:`)
@@ -474,7 +505,14 @@ export async function runLive(
       let gateReason = "blocked: merge into main failed before verify completed"
       const verdict = mergeGate(repo, r.branch, () => {
         const t = assigns.find((a) => a.task.id === r.task_id)?.task
-        const onMain = scoreAssignment(repo, t?.tests ?? "", t?.success, t?.evidence)
+        const onMain = scoreAssignment(
+          repo,
+          t?.tests ?? "",
+          t?.success,
+          t?.evidence,
+          undefined,
+          t?.problem,
+        )
         if (!(onMain.passRate >= 1 && onMain.total > 0)) {
           gateReason = "blocked: acceptance failed on main after merge"
           return false
