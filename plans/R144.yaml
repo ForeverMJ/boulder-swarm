@@ -1,0 +1,99 @@
+label: R144
+goal: "M8: 4x4 matmul exact rank <= 47 over F_2 (AlphaTensor parity)"
+rationale: "Campaign is stuck at exact-49 (two-level Strassen floor). The gap is
+  2 terms. R139 exhausted 2-term merges (0 admits). A 3-term merge of Strassen
+  triples would give 49-3=46, closing the gap with margin. This is
+  first-of-kind. Complementary lanes: border-rank inspired search (fundamentally
+  different ansatz), deep structural analysis of near-miss patterns, and fresh
+  ILS with new seeds."
+budget:
+  maxRounds: 4
+stopConditions:
+  - BESTA47 witness found and verified
+  - All lanes return bounded null with no witness
+  - Budget exhausted (4 rounds)
+tasks:
+  - id: R144-merge3
+    problem: src/matmul/attempts/R144_merge3.ts
+    tests: src/matmul/attempts/R144_merge3.test.ts
+    milestone: M8
+    success: "Exhaustive 3-term merge enumeration: all C(7,3)=35 triples of Strassen
+      triples screened; any CONSISTENT exact-solve triggers BESTA47"
+    evidence: CAMPAIGN:R144
+    timeoutMs: 1800000
+    note: "Blocking task, first-of-kind. Enumerate all C(7,3)=35 triples of the 7
+      two-level Strassen triples. For each triple, enumerate F_2-linear and
+      sign-bearing integer-linear combinations that stay rank-1 over F_2
+      (left-ideal and octonion-style mergings, extending the R139 2-term merge
+      vocabulary to 3-term). A successful 3-term merge gives 49-3=46, closing
+      the gap with margin. For each merged triple, reconstruct the 46-term
+      candidate, run exact F_2 coefficient solve (gaussSolve per-axis) on the
+      fixed support, verify CONSISTENT results with checker.verifyMod2 +
+      goalSatisfiedA. Known-answer controls: naive(4) solvable at supportRank
+      64, floor solvable, 47-term truncation refused. Stream every candidate
+      hash, consistency, and mismatch counts to attempts/R144_merge3.ndjson.
+      Bounded null only if full enumerated space refutes. File-ownership:
+      attempts/R144_merge3.ts + .test.ts + .ndjson only. No AlphaTensor tensors.
+      Field F_2 throughout. Run under nice -n 19."
+    replicas: 2
+  - id: R144-border
+    problem: src/matmul/attempts/R144_border.ts
+    tests: src/matmul/attempts/R144_border.test.ts
+    milestone: M8
+    success: "Border-rank inspired search: at least 50 border-rank candidates
+      enumerated and exact-solved; any CONSISTENT triggers BESTA47"
+    evidence: CAMPAIGN:R144
+    timeoutMs: 1800000
+    note: "Fundamentally different ansatz: border-rank techniques. The border rank
+      of 4x4 matrix multiplication over F_2 may be lower than the exact rank.
+      Approaches: (1) approximate schemes via border-rank decomposition, then
+      exact-solve; (2) degeneration families from the exact-49 floor
+      (deformation theory); (3) rank-1 tensor products of subspaces with
+      border-rank structure. Each candidate exact-solved over F_2 using BigInt
+      Gaussian coefficient solver. CONSISTENT ships exact scheme verified by
+      verifyMod2. Checkpoint candidate hash, axis, consistency, mismatch counts
+      to attempts/R144_border.ndjson. Controls: floor seed solves CONSISTENT;
+      one retired hash re-derives INCONSISTENT. Bounded null only, no goal
+      marker. File-ownership: attempts/R144_border.ts + .test.ts + .ndjson only.
+      No AlphaTensor tensors. Field F_2 throughout. Run under nice -n 19."
+  - id: R144-analyze
+    problem: src/matmul/attempts/R144_analyze.ts
+    tests: src/matmul/attempts/R144_analyze.test.ts
+    milestone: M8
+    success: Structural analysis of near-miss patterns across all merged R105-R143
+      artifacts; identifies common features distinguishing close supports from
+      far ones
+    evidence: CAMPAIGN:R144
+    timeoutMs: 1800000
+    note: "Deep structural analysis of exact-solve inconsistency patterns from all
+      merged R105-R143 and M8-* census/snap/ils/drain artifacts on main. For
+      each INCONSISTENT support, extract axis, mismatch count, factor rank
+      profile, support size. Cluster by mismatch distribution, axis involvement,
+      factor rank profiles. Look for common features distinguishing close
+      supports (mm <= 64) from far ones (mm > 64). Output
+      attempts/R144_analyze.json with pattern clusters, structural insights, and
+      a verdict on whether the near-miss space appears structurally exhausted or
+      needs a different approach. This is the campaign's most valuable
+      meta-information for planning future rounds. File-ownership:
+      attempts/R144_analyze.ts + .test.ts + .json only. No AlphaTensor tensors."
+  - id: R144-ils
+    problem: src/matmul/attempts/R144_ils.ts
+    tests: src/matmul/attempts/R144_ils.test.ts
+    milestone: M8
+    success: Fresh ILS from new seeds disjoint from all prior ILS seeds; any
+      CONSISTENT exact-solve triggers BESTA47
+    evidence: CAMPAIGN:R144
+    timeoutMs: 1800000
+    note: "Fresh-seed ILS lane with a different strategy than prior rounds. Seeds
+      exclude EVERY previously run ILS seed (all seeds from R99-R143, M8-M1,
+      M8-P1, R121-R126, plus the 10 excluded seeds 22,66,7,77,107,207,307,407).
+      At least 6 new seeds, at least 10s per lane. Strategy: instead of
+      split-open then drain, use a direct rank-47 target with interleaved
+      merge/flip moves at fixed rank 47, plus occasional split kicks to ranks
+      51-54 to escape local minima. Reconstruct exact-49 floor (hash f4640c18)
+      and archived spark anchor 4126ca7f from M8M1_seed_ils.ts encodings. EVERY
+      rank<=47 zero-mismatch candidate exact-solved on its fixed support
+      in-window (unmatched=0 invariant). Checkpoint vecs plus hashes for
+      lane-best 47 and floor-best 49 states to attempts/R144_ils.ndjson. Bounded
+      null only, no goal marker. File-ownership: attempts/R144_ils.ts + .test.ts
+      + .ndjson only. No AlphaTensor tensors. Run under nice -n 19."

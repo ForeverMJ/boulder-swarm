@@ -1,0 +1,110 @@
+label: M8-V1
+goal: "Close the named remainder spaces around the exact-49 two-level Strassen
+  F_2 floor (hash f4640c18) and open one fresh non-floor constructive lane:
+  either land an exact rank<=47 4x4x4 scheme over F_2 through the merge gate, or
+  report every unscreened remainder as a bounded, exactly-counted null with zero
+  hash drift."
+rationale: "Frontier after the landed M8-T1 / M8-U1 / R143 merges: the best
+  scheme is the exact-49 two-level Strassen floor; the drop-k band ladder of
+  that floor is closed only for k=3..6 (R137) and k=7..8 (M8-S1/M8-T1), with k=9
+  left BOUNDED-OPEN (~2.0M of C(49,9)=2,054,455,634 rows), the band8c post-solve
+  pass leaving 88,206 explicitly NAMED unresolved supports, and the wide-anchor
+  lane at only ~80 of 1170 anchors (190M of 2,771,332,200 rows). Every lane has
+  correctly found NO rank<=47 witness, and decomposeExact snapped 0 of the named
+  supports. Two gaps are unaddressed: (a) the enumerated-band books (the named
+  residual supports) have not been closed with an independent method and a
+  complete identity ledger, and (b) the class the campaign repeatedly names as
+  untouched - rank-<=47 supports sharing no 47 terms with the floor - has had no
+  dedicated lane this era. This round does both, plus a continuation of the wide
+  lane, and adjudicates the three siblings in a later layer. Prefer closing the
+  named, finite residual spaces over yet another open-ended sweep of the same
+  rows."
+budget:
+  maxRounds: 4
+stopConditions:
+  - exact rank<=47 scheme exported and goalCheckA exits 0; the M8 gate fires
+  - all three sibling lanes land on main and the merge audit reports
+    BOUNDED-NO-WITNESS with two-pass zero hash drift and zero lane disagreement
+  - any lane that overruns its timeoutMs is reported as bounded with the
+    unscreened remainder named as exact bigint counts, never rounded, and never
+    called closed
+tasks:
+  - id: M8-V1-nonfloor
+    problem: src/matmul/attempts/M8V1_nonfloor.ts
+    tests: src/matmul/attempts/M8V1_nonfloor.test.ts
+    milestone: M8
+    success: "a from-scratch, non-floor lane: enumerate 47-term supports of the
+      4x4x4 tensor from algebraic constructions that do NOT seed from the
+      two-level Strassen floor (coset/row-col-diag line supports of F_2^4 x
+      F_2^4 x F_2^4, S_3-orbit symmetric supports, hyperplane restrictions),
+      recover the campaign's exact per-axis gaussSolve, and exact-solve each
+      support over F_2; a CONSISTENT verdict ships an exact scheme verified by
+      verifyMod2, an INCONSISTENT verdict retires the support with its canonical
+      hash and axis/term counts. Honest bounded-null is the expected normal
+      outcome; the colocated test must be green on instrument correctness
+      alone."
+    evidence: CAMPAIGN:M8-V1
+    timeoutMs: 1800000
+    note: "Targets the repeatedly-named untouched class: supports sharing no 47
+      terms with the floor. Reuse, do not re-derive, the solver vocabulary from
+      the landed R141_altsup / M8M1_seed_ils machinery; checkpoint every
+      candidate, axis and verdict to attempts/M8V1_nonfloor.ndjson. No
+      goal-level success marker attaches here because a bounded-null is the
+      normal outcome."
+  - id: M8-V1-residual
+    problem: src/matmul/attempts/M8V1_residual.ts
+    tests: src/matmul/attempts/M8V1_residual.test.ts
+    milestone: M8
+    success: "close the enumerated-band books: read the NAMED residual supports
+      handed off by the landed M8U1 / M8T1 merges (the 88,206 band8c
+      stillUnresolved, the 54,352 band9 unresolved, and the 2,904 oracle
+      unresolved), re-solve each independently over F_2 with a second solver
+      path, and emit a complete identity-bearing ledger plus a partition
+      equality asserted against the landed counts (processed == snapped +
+      refuted + stillUnresolved; refutes + candidates == 450,978,066)."
+    evidence: CAMPAIGN:M8-V1
+    timeoutMs: 900000
+    note: Reads only artifacts already merged on main
+      (src/matmul/attempts/M8U1_merge.json, M8T1_merge.json, M8U1_band8c.ndjson,
+      M8U1_band9*.ndjson). Not a sweep; deterministic bookkeeping that must
+      reconcile exactly or fail loudly. Report any support that neither snaps
+      nor refutes as still-open, never as closed.
+  - id: M8-V1-wide
+    problem: src/matmul/attempts/M8V1_wide.ts
+    tests: src/matmul/attempts/M8V1_wide.test.ts
+    milestone: M8
+    success: "continue the wide-anchor lane of the exact-49 floor: sweep the next
+      batch of anchors past the 80 already covered, deciding each row by the
+      exact integer rank test with no budget and no branch-and-bound; per-k
+      totals must reconcile exactly to the verdict, and coverage (anchors
+      covered / anchors total, rows processed / rows planned) is reported
+      honestly as a bounded fraction."
+    evidence: CAMPAIGN:M8-V1
+    timeoutMs: 1800000
+    note: Continuation of the landed R143_wide_anchor / M8U1_wide lane; pick anchors
+      strictly beyond those already covered so no row is double-counted. No
+      goal-level marker; judged by its own test and the CAMPAIGN evidence row.
+  - id: M8-V1-merge
+    problem: src/matmul/attempts/M8V1_merge.ts
+    tests: src/matmul/attempts/M8V1_merge.test.ts
+    milestone: M8
+    success: "later-layer adjudication audit over the three landed siblings:
+      tolerant extraction over M8V1_nonfloor / M8V1_residual / M8V1_wide (ndjson
+      preferred, json fallback), re-verify every vectored candidate with
+      checker.verifyMod2 AND checker.verify and the goalSatisfiedA gate
+      selector, re-derive the floor hash f4640c18 independently, drift-check
+      every recorded hash against the canonical F_2 campaign fnv (hashMasks, the
+      +0x9e37 fold), exact-solve-snap any still-unsnapped rank<=47 support,
+      assert zero lane disagreement, run bun src/matmul/goalCheckA.ts and record
+      its exit code, and emit a two-pass zero-drift self-check over the (source,
+      id, hash) set."
+    evidence: CAMPAIGN:M8-V1
+    timeoutMs: 900000
+    note: Runs only after the three siblings land on main through the gate (they are
+      declared in dependsOn). Reads nothing outside the sibling set; invents no
+      candidate and fabricates no count. A passing audit is BOUNDED-NO-WITNESS
+      when no rank<=47 scheme is found - that is the honest expected outcome.
+    dependsOn:
+      - M8-V1-nonfloor
+      - M8-V1-residual
+      - M8-V1-wide

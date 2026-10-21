@@ -1,0 +1,152 @@
+label: M8-T1
+goal: Push the exact-49 two-level Strassen drop-band closure one more exact step
+  (k=8) over F_2, soundly re-decide the UNRESOLVED residual M8-S1-band7 left
+  behind, cross-check every REFUTE with an independent oracle, and adjudicate
+  the layer into a single CAMPAIGN:M8-T1 row - still hunting the
+  AlphaTensor-parity rank<=47 scheme without importing any published 4x4x4
+  tensor.
+rationale: |
+  Frontier (round r-latest, read from goal.yaml M8, src/matmul/goalCheckA.ts,
+  src/matmul/attempts/M8S1_band7.json, M8S1_altsupRest_summary.json, the
+  CAMPAIGN.md tail, and git log): M8 is still RED - goalCheckA exits 1, BESTA47
+  absent, and the best landed 4x4x4/F_2 object is the exact-49 two-level
+  Strassen floor (hash f4640c18, mismatchF2=0). The drop-band instrument
+  transferred from the M5 methodology (R137_49band then M8-S1-band7) is the only
+  line here that yields exact closure rather than bounded search: for each drop
+  set K of size k, deficit D = XOR of the dropped floor terms; rank(D) <= k-2
+  ADMITs (and would ship an exact scheme), rank(D) > k-2 REFUTEs the entire
+  add-(k-2) family at once. M8-S1-band7 closed k=3..7 exactly (0 admits over
+  102,021,584 rows) but left 36,626 rows UNRESOLVED (its mode-1 flattening-rank
+  surrogate is a fast bit-fold, not the true rank), and it explicitly SIZED the
+  next band: k=8 = C(49,8) = 450,978,066 rows at 861,807 rows/s ~= 523 s, still
+  inside one 1800 s task ("fitsOneTask": true). That is a named remainder space,
+  already sized - exactly what the planner is told to prefer over open-ended
+  exploration. R140/R141 and M8-S1-altsupRest are all BOUNDED-NO-CLOSURE over
+  other ansatz (algebraic support constructions, wide anchors, altbase), so the
+  bag of candidate 47-supports is empty and the floor drop-band is the lane with
+  an executable next step. This proposal takes that one step and cleans up its
+  residue. It claims no impossibility and, because every lane's normal outcome
+  is a bounded null, no task carries a goal-level success marker - the sweep
+  tasks are judged by their own tests and the merge task records CAMPAIGN:M8-T1.
+budget:
+  maxRounds: 2
+stopConditions:
+  - "BESTA47 witness: an exact rank<=47 F_2 4x4x4 scheme lands through the gate
+    and bun src/matmul/goalCheckA.ts prints M8 GOAL MET - stop, the milestone is
+    met"
+  - M8-T1-band8 and M8-T1-resolve both land with verdict BOUNDED-NO-CLOSURE and
+    M8-T1-resolve reports zero residual UNRESOLVED after the sound re-decision -
+    the floor drop-band is then closed k=3..8 and the next round must switch to
+    a different base
+  - M8-T1-merge records its CAMPAIGN:M8-T1 row with the layer totals (rows
+    swept, refutes, admits, unresolved-before/after) whether or not a witness
+    exists, and the round ends
+tasks:
+  - id: M8-T1-band8
+    problem: src/matmul/attempts/M8T1_band8.ts
+    tests: src/matmul/attempts/M8T1_band8.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Extend the exact F_2 drop-band of the two-level Strassen floor
+      (re-derived from M8S1_band7.ts / R137_49band.ts, hash f4640c18, rank 49,
+      mismatchF2=0) to k=8: enumerate all C(49,8)=450,978,066 drop subsets
+      (M8-S1-band7 already sized this at 861,807 rows/s, ~523 s, fitsOneTask).
+      Same three-way rule, unchanged: deficit D = XOR of dropped terms (exact
+      over F_2); mode-1 flattening rank(D) <= k-2 -> ADMIT (then exact-solve k-2
+      fresh rank-1 terms, verify the witness reproduces D, and ONLY then emit
+      attempts/M8T1_band8_scheme.ts); > k-2 -> REFUTE; else UNRESOLVED. Since
+      the fast surrogate is a bit-fold, additionally compute the true F_2
+      flattening rank before calling any row REFUTED when the surrogate is
+      inconclusive, so a REFUTE is never a surrogate artifact. Stream per-k
+      checkpoints and a verdict block to attempts/M8T1_band8.ndjson and
+      attempts/M8T1_band8.json, including the k=9 sizing (rows, measured rows/s,
+      projected seconds, fitsOneTask) exactly as M8S1_band7.json did. Controls
+      that must gate the run: reconstruct the floor independently (49 terms,
+      mismatchF2=0, hash f4640c18); a planted ADMIT fixture (a small exact
+      tensor whose deficit rank is <= k-2) admits and solves; a known REFUTE row
+      from M8S1_band7 re-derives digit-identically. Bounded null must be
+      reported as BOUNDED-NO-CLOSURE, never as impossibility. File-ownership:
+      attempts/M8T1_band8.ts, attempts/M8T1_band8.test.ts,
+      attempts/M8T1_band8.ndjson, attempts/M8T1_band8.json, and (only on a
+      verified admit) attempts/M8T1_band8_scheme.ts. No AlphaTensor tensors, no
+      import or transcription of any published rank-47 factor."
+  - id: M8-T1-resolve
+    problem: src/matmul/attempts/M8T1_resolve.ts
+    tests: src/matmul/attempts/M8T1_resolve.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Sound re-decision of the UNRESOLVED residual of the floor drop-band,
+      which M8-S1-band7 left as 36,626 rows (k=5..7) and M8-T1-band8 extends.
+      Read attempts/M8S1_band7.ndjson + .json and attempts/M8T1_band8.ndjson
+      only; for every row those lanes left UNRESOLVED, recompute the decision
+      with the true mode-1 flattening rank over F_2 (exact GF(2) elimination on
+      the real 64x64 flattening matrix, not the 32-bit-lane bit-fold surrogate),
+      and re-decide: rank(D) <= k-2 -> ADMIT (hand the support to the exact
+      solver and, on a verified candidate, name it for the merge layer), rank(D)
+      > k-2 -> REFUTE (now justified by the exact rank, so it is a real
+      refutation), still open -> UNRESOLVED. Report per-k and total counts of
+      unresolved-before vs unresolved-after and every row that flipped to
+      REFUTE/ADMIT. Controls: on rows M8-S1-band7 already decided, the exact
+      rank must never contradict its REFUTE (0 disagreements); a planted
+      rank-exact ADMIT fixture admits. BOUNDED-NO-CLOSURE unless a witness is
+      actually solved; never call an unresolved row refuted. File-ownership:
+      attempts/M8T1_resolve.ts, attempts/M8T1_resolve.test.ts,
+      attempts/M8T1_resolve.ndjson only. No AlphaTensor tensors."
+    dependsOn:
+      - M8-T1-band8
+  - id: M8-T1-oracle
+    problem: src/matmul/attempts/M8T1_oracle.ts
+    tests: src/matmul/attempts/M8T1_oracle.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Independent-oracle cross-check of the band decision, the R86 pattern (two
+      oracles must agree before a closure is called). Build a SECOND,
+      independently written decision for the same drop-band rows - different
+      instrument than mode-1 flattening rank: use the slice-dimension /
+      forced-fibre bound (dim span of one axis's slices > j refutes the add-j
+      family, sum_s rank(M_s) over the forced basis as the second stage, as
+      R74/R78/R79 established at 3x3) plus an exact GF(2) rank on the mode-2
+      flattening as a third tie-check. Apply it to a deterministic sample of
+      M8-T1-band8 rows (at least every 10,000th row plus all rows band8 or
+      M8-S1-band7 left UNRESOLVED) and to every row band8 flagged REFUTE that
+      the resolve lane disputes. Emit attempts/M8T1_oracle.ndjson with per-row
+      (k, drop-set hash, first-instrument verdict, oracle verdict, agreement)
+      and a summary block; report the disagreement count, which must be ZERO to
+      certify the band, otherwise name every disagreeing row for the next round.
+      Controls: the oracle must reproduce R137/band7's known REFUTE on their
+      published control rows and must ADMIT a planted low-rank fixture; a
+      deliberately corrupted row must be caught as a disagreement (the oracle is
+      non-vacuous). BOUNDED-NO-CLOSURE, no success marker. File-ownership:
+      attempts/M8T1_oracle.ts, attempts/M8T1_oracle.test.ts,
+      attempts/M8T1_oracle.ndjson only. No AlphaTensor tensors."
+    dependsOn:
+      - M8-T1-band8
+  - id: M8-T1-merge
+    problem: src/matmul/attempts/M8T1_merge.ts
+    tests: src/matmul/attempts/M8T1_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-T1
+    timeoutMs: 1800000
+    note: "Layer adjudication (dependsOn the three siblings above; it reads only
+      their artifacts once they have landed through the gate). Tolerant
+      extractor over attempts/M8T1_band8.ndjson, attempts/M8T1_resolve.ndjson
+      and attempts/M8T1_oracle.ndjson (.json fallback); re-derive the floor hash
+      f4640c18, re-verify every vectored candidate with checker.verifyMod2 AND
+      checker.verify and the goalSatisfiedA selector, drift-check every recorded
+      hash against the canonical F_2 campaign fnv (hashMasks, the +0x9e37 fold),
+      and exact-solve-snap any rank<=47 support still unsnapped. Equality that
+      must hold before any closure is claimed: band8 rows enumerated + refuses
+      equals the exact bigint C(49,8) count, and unresolved-after-resolve is
+      zero with the oracle disagreement count zero. Run bun
+      src/matmul/goalCheckA.ts and record its exit code. Write
+      attempts/M8T1_merge.json and append the substantive CAMPAIGN:M8-T1 row
+      (verdict BOUNDED-NO-CLOSURE with the layer totals, or the exact-47 scheme
+      if a witness was solved), plus a two-pass zero-drift self-check over the
+      (source, id, hash) set. No goal-level success marker (BESTA47 fires only
+      if the milestone is actually met). File-ownership: attempts/M8T1_merge.ts,
+      attempts/M8T1_merge.test.ts, attempts/M8T1_merge.json only. No AlphaTensor
+      tensors."
+    dependsOn:
+      - M8-T1-band8
+      - M8-T1-resolve
+      - M8-T1-oracle

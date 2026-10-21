@@ -1,0 +1,90 @@
+label: R151
+goal: Continue M8 campaign by censusing the expanded replayable candidate corpus
+  from R149/R146/M8U1/M8O1/R143 checkpoints, then running parallel deterministic
+  drain, exact-solve snap, and fresh-seed ILS lanes with in-window exact
+  coefficient solve on every rank≤47 candidate
+rationale: The k=9 band closure (R149) progresses slowly (0.1% per round). The
+  sym47 probe (R146) exhausted its 384-orbit ansatz with BOUNDED-NULL. The
+  wide-anchor sweep (M8U1) covers only 80/1170 anchors. A fresh census
+  (R151-census) will size the complete unprocessed inventory across all recent
+  checkpoints, enabling targeted drain/snap/ils lanes that share the same
+  exact-solve obligation (zero unmatched rank≤47 candidates). This follows the
+  proven census→drain/snap/ils→merge pattern
+  (R105/R106/R107/R108/R109/R110/R111/R112) with updated artifact coverage.
+budget:
+  maxRounds: 4
+stopConditions:
+  - goal
+  - budget
+  - no-progress
+tasks:
+  - id: R151-census
+    problem: src/matmul/attempts/R151_census.ts
+    tests: src/matmul/attempts/R151_census.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R151
+    timeoutMs: 1800000
+    note: "Census, not closure (R148 SIZED-NO-CLOSURE pattern): enumerate every
+      replayable rank-47/48 support with full factor vectors across
+      R149_band9_resume.ndjson, R146_sym47.json, M8U1_band8c/band9/wide ndjson,
+      M8O1_merge5/nonfloor/solve ndjson, R143_band9/wide_anchor ndjson,
+      R104_walk/orbitdrain/eligclose ndjson, R105/106/107/108/109/110/111/112
+      census/snap/drain/ils ndjson, M8K1/M8M1/M8N1/M8O1/M8P1 ndjson; dedupe by
+      stable fnv hash (hashMasks convention); mark each hash PROCESSED vs
+      UNPROCESSED; emit R151_census.json with per-candidate (hash, rank,
+      mismatches, vecs-present, archive) plus exact-solve workload pricing;
+      verdict SIZED-NO-CLOSURE; file-ownership attempts/R151_census.ts +
+      .test.ts + .json only; field F_2 throughout"
+  - id: R151-drain
+    problem: src/matmul/attempts/R151_orbit_drain.ts
+    tests: src/matmul/attempts/R151_orbit_drain.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Deterministic orbit-drain from the exact-49 floor anchors NOT yet covered
+      by R104-orbitdrain, R105-orbit_drain3, R106-orbit_drain, R107-drain,
+      R108-drain, R109-drain, R112-drain, M8U1-wide, or R149-band9-resume:
+      reconstruct the two-level Strassen floor (hash f4640c18, mismatchF2=0) and
+      the distinct exact-49 supports from R151-census.json that are UNPROCESSED
+      and carry vecs; at least 50 seeded deterministic iterations per start with
+      greedy exact F_2 drain, shear flips, split kicks, deterministic meld;
+      checkpoint full 16-bit factor vectors plus stable fnv hashes with
+      resume-skip of all previously checkpointed hashes; exact-solve EVERY
+      rank≤47 candidate in-window (zero unmatched invariant); verify via
+      verifyMod2 plus goalSatisfiedA; verdict BOUNDED-RED unless a witness
+      lands; file-ownership attempts/R151_orbit_drain* only; no AlphaTensor
+      tensors"
+  - id: R151-snap
+    problem: src/matmul/attempts/R151_snap_solve.ts
+    tests: src/matmul/attempts/R151_snap_solve.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Exact-solve sweeper over the UNPROCESSED replayable rank-47/48 supports
+      in R151_census.json only (skip every
+      R100/R101/R104/R105/R106/R107/R108/R109/R111/R112-processed and R146-sym47
+      and R149-band9-resume-processed hash); recover the gaussSolve per-axis
+      machinery from R102/R104/R105/R106/R109/R111 archive; solve every
+      replayable support exactly over F_2; CONSISTENT ships an exact scheme
+      file, INCONSISTENT retires the hash with axis and mismatch counts;
+      checkpoint candidate hash, axis, consistency and mismatch counts to
+      R151_snap_solve.ndjson; controls: floor seed solves CONSISTENT and one
+      retired hash re-derives INCONSISTENT; file-ownership
+      attempts/R151_snap_solve* only; no AlphaTensor tensors"
+  - id: R151-ils
+    problem: src/matmul/attempts/R151_seed_ils.ts
+    tests: src/matmul/attempts/R151_seed_ils.test.ts
+    milestone: M8
+    success: BESTA47
+    timeoutMs: 1800000
+    note: "Fresh-seed iterated local search on ground disjoint from all previously
+      run ILS seeds (exclude seeds from R99-sweepB, R100-seedils, R101-ils,
+      R102-meld, R103-4, R104-walk, R105/106/107/108/109/111-ils, M8M1-seed_ils,
+      M8K1-seedils, M8L1-meld, M8P1-seed_ils, M8N1-solve): at least 8 new seeds,
+      at least 12s per lane; each lane calibrates against the exact-49 floor
+      then runs ILS at fixed rank 47 with interleaved exact coefficient solve on
+      EVERY rank≤47 candidate support in-window (composition rule, unmatched=0
+      invariant); checkpoint full factor vectors plus hashes for lane-best 47
+      and floor-best 49 states; verdict BOUNDED-NO-CLOSURE unless an exact state
+      is solved and independently re-verified; file-ownership
+      attempts/R151_seed_ils* only; no AlphaTensor tensors"

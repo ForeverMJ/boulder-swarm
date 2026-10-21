@@ -1,0 +1,141 @@
+label: R143
+goal: Advance M8 (4x4x4 over F_2, target exact rank <= 47) by closing the two
+  remaining named sub-bands of the exact-49 floor's drop-k neighbourhood (k=9 in
+  full, and k=8 with its identity-less unresolved supports re-emitted and
+  exact-solved) and by finally RUNNING the wide-anchor (non-floor) lane that
+  R140_wide_anchor.ts was built for but never emitted, then adjudicating the
+  layer. Honest bounded results unless a witness lands.
+rationale: "Frontier on main: the exact-49 two-level Strassen floor (hash
+  f4640c18, mismatchF2 0) is the best landed F_2 scheme and goalCheckA exits 1.
+  The drop-k add-(k-2) band of the floor is closed exactly for k=3..7
+  (R137_49band k=3..6; M8S1_band7 k=3..7 -> 102,021,584 rows, 101,984,958
+  refuted, 36,626 unresolved) and was swept for k=8 by M8T1_band8 (450,978,066 =
+  C(49,8), 447,402,726 refuted, 3,575,340 unresolved). Two real remainders are
+  named in the merged artifacts and untouched: (1) M8-T1's k=8 lane persisted
+  its 3,575,340 unresolved rows identity-less, so the M8T1 merge could only snap
+  the 2,904 identity-bearing oracle rows (all snapped, 0 admits) and the rest
+  cannot be re-solved from the ledger; (2) M8T1_band8.json itself sizes k=9 at
+  2,054,455,634 rows (~2550 s serial at ~805k rows/s) and records
+  fitsOneTask=false, so k=9 was never run. Separately, R140_wide_anchor.ts is on
+  main but its R140_wide_anchor.ndjson never landed, which is exactly why
+  R140_audit.json reports PENDING-SIBLINGS, leaving the rank-50 split-anchor
+  (non-floor) family un-run. All other lanes are bounded red (R139 merge2term 0
+  admits; R141_altsup 100/100 INCONSISTENT; R140 altbase+algsupports bounded).
+  This proposal closes the k=9 band with sharding (R86 shard discipline so the
+  2.05B rows fit 1800 s), repairs the identity defect in the k=8 band and
+  exact-solves its unresolved supports, and runs the un-run wide-anchor lane,
+  then merges and records one honest CAMPAIGN row. No AlphaTensor tensors are
+  imported; every lane reconstructs the floor from its own encoding."
+budget:
+  maxRounds: 2
+stopConditions:
+  - goalCheckA exits 0 with an exact rank<=47 scheme over F_2 (BESTA47 witness
+    lands)
+  - All three lanes report BOUNDED-NO-CLOSURE with exact per-k counts, the
+    identity-bearing unresolved set named, and the merge records CAMPAIGN:R143
+  - maxRounds exhausted without a witness, all lanes honestly bounded
+tasks:
+  - id: R143-band9
+    problem: src/matmul/attempts/R143_band9.ts
+    tests: src/matmul/attempts/R143_band9.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Close the k=9 drop band of the exact-49 two-level Strassen floor (hash
+      f4640c18). C(49,9)=2,054,455,634 drop sets is sized at ~805k rows/s (~2550
+      s serial, M8T1_band8.json fitsOneTask=false), so SHARD across >=8
+      in-process worker processes using the R86 shard discipline (each shard
+      streams its own NDJSON with a cursor never ahead of counted work; the
+      driver declares the exact bigint C(49,9) up front and refuses to call the
+      band closed unless shards reconcile to it). Same exact instrument as
+      R137/M8-S1: D = sum of the dropped terms over F_2, decide rank(D) <= k-2=7
+      => ADMIT (exact-solve 7 fresh rank-1 terms, verify with
+      checker.verifyMod2, emit attempts/R143_band9_scheme.ts exporting scheme),
+      rank(D) > 7 => REFUTE; any row the screen cannot decide is UNRESOLVED and
+      is emitted WITH its identity (the drop index tuple) so it can be
+      exact-solved, never counted as refuted. Exact integer arithmetic, no
+      float, no branch-and-bound. Controls must gate the run: floor re-derives
+      rank 49 mismatchF2 0 hash f4640c18, a planted low-rank drop-set ADMITs,
+      two known-refute drop sets reproduce their recorded verdicts. A bounded
+      null stays bounded and no BESTA47 is claimed. File-ownership
+      attempts/R143_band9*.ts plus .ndjson/.json and the optional
+      attempts/R143_band9_scheme.ts only; no AlphaTensor tensors; field F_2
+      throughout; run heavy shards under nice -n 19. Colocated test re-derives
+      per-shard counts, the C(49,9) reconciliation, the control outcomes, the
+      identity-bearing unresolved ledger, and (if exported) verifyMod2 rank<=47
+      on the scheme."
+  - id: R143-band8c
+    problem: src/matmul/attempts/R143_band8c.ts
+    tests: src/matmul/attempts/R143_band8c.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Repair M8-T1's named residual and close the k=8 band. M8T1_band8.json
+      recorded 450,978,066 rows with 3,575,340 UNRESOLVED persisted
+      identity-less, so the M8T1 merge could not re-solve them. Re-run k=8
+      emitting EVERY unresolved drop-k support with its identity (drop index
+      tuple) into attempts/R143_band8c.ndjson, then exact-solve each unresolved
+      support over F_2 on its fixed support (decomposeExact / exact coefficient
+      solve) to decide ADMIT or REFUTE; keep a bounded per-run snap cap and
+      report snapped / refuted / still-unresolved counts honestly, never
+      converting an unsnapped row into a refutation. The pre-solve partition
+      must reconcile to M8T1_band8.json exactly (450978066 / 447402726 /
+      3575340). Controls: floor rank 49 mismatchF2 0 hash f4640c18, planted
+      admit, two known refutes. A bounded null stays bounded; no BESTA47 is
+      claimed. File-ownership attempts/R143_band8c*.ts plus .ndjson/.json and
+      the optional attempts/R143_band8c_scheme.ts only; no AlphaTensor tensors;
+      field F_2; run under nice -n 19. Colocated test re-derives the partition,
+      the identity ledger, the control outcomes, zero unmatched admitted rows,
+      and any exported scheme's exact rank."
+  - id: R143-wide
+    problem: src/matmul/attempts/R143_wide_anchor.ts
+    tests: src/matmul/attempts/R143_wide_anchor.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Complete the wide-anchor (non-floor, rank-50 split-anchor) lane that
+      R140_wide_anchor.ts was built for but never emitted: its
+      R140_wide_anchor.ndjson is absent on main, which is why R140_audit.json is
+      PENDING-SIBLINGS. Reuse the landed R140_wide_anchor.ts encoding (split one
+      factor's support of one floor term into a nontrivial bipartition P+Q
+      giving an exact rank-50 anchor; budget j=k-3 for k=3,4,5) and RUN it,
+      streaming per-anchor decisions (screened/refuted/admit) to
+      attempts/R143_wide_anchor.ndjson with the exact anchor count and per-k row
+      totals; any admitting support is exact-solved in-window and emitted as
+      attempts/R143_wide_scheme.ts (verified by checker.verifyMod2 rank<=47). 0
+      admits with every enumerated anchor covered is a band closure of the
+      rank-50 split-anchor family; a bounded partial coverage names the
+      unscreenedFrom cursor and is never called a closure. Controls: floor rank
+      49, planted admit at k=4 j=1, a known refute. File-ownership
+      attempts/R143_wide_anchor*.ts plus .ndjson/.json and the optional
+      attempts/R143_wide_scheme.ts only; no AlphaTensor tensors; field F_2; run
+      under nice -n 19. Colocated test re-derives the anchor count, per-k
+      totals, control outcomes, and any exported scheme's exact rank."
+  - id: R143-merge
+    problem: src/matmul/attempts/R143_merge.ts
+    tests: src/matmul/attempts/R143_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R143
+    timeoutMs: 1800000
+    note: Adjudication merge; runs AFTER its three siblings land on main through the
+      gate (dependsOn within this proposal). Tolerant extractor over the sibling
+      NDJSON/JSON streams (R143_band9, R143_band8c, R143_wide_anchor); re-verify
+      every vectored candidate with checker.verifyMod2 AND checker.verify and
+      the goalSatisfiedA gate selector; independently re-derive the exact-49
+      floor hash f4640c18 (rank 49); drift-check every recorded hash against the
+      canonical F_2 campaign fnv (hashMasks, +0x9e37 fold, preferring
+      canonicalHash when present); exact-solve-snap every still-unsnapped
+      rank<=47 support; assert the closure equalities (band9 shards reconcile to
+      the exact bigint C(49,9); band8c pre-solve partition equals
+      M8T1_band8.json's 450978066/447402726/3575340; no named unresolved support
+      is silently dropped; resolve lanes disagree in zero rows); run bun
+      src/matmul/goalCheckA.ts and record its exit code; emit
+      attempts/R143_merge.json with a two-pass zero-drift self-check; then
+      append the substantive CAMPAIGN.md R143 row (closed k=9 band, band8
+      identity residual outcome, wide-anchor outcome, residual class named).
+      Bounded verdicts only unless a rank<=47 witness lands. File-ownership
+      attempts/R143_merge.ts plus .test.ts plus .json only (may append the
+      CAMPAIGN.md R143 row); no AlphaTensor tensors; field F_2. Colocated test
+      gates the reconciliation, the drift self-check, the gate exit-code
+      recording, and the zero-unmatched invariant.
+    dependsOn:
+      - R143-band9
+      - R143-band8c
+      - R143-wide

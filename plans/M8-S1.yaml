@@ -1,0 +1,113 @@
+label: M8-S1
+goal: Advance the M8 campaign (autonomous exact 4x4x4 matrix multiplication over
+  F_2, rank <= 47 = AlphaTensor parity) by closing two NAMED remainder spaces
+  the current frontier left open - the unsolved remainder of the R141 algebraic
+  support census and the k=7 step of the R137 exact-49 floor drop-band - then
+  adjudicate whatever they produce through the M8 gate. No bound moves unless an
+  exact rank<=47 scheme is actually shipped and goalCheckA exits 0.
+rationale: "The exact-49 two-level Strassen floor is landed and every open lane
+  so far is a bounded red (R137 floor band k=3..6, R139 2-term merges, R140
+  wide/altbase, R141 altsup). Rather than open yet another ansatz, this round
+  closes the two remainders whose sizes are already known, so the round is
+  judgeable and cannot silently over-claim: (1) R141_altsup enumerated 1,176
+  unique algebraic 47-term supports but exact-solved only the first 100 (all
+  INCONSISTENT); the remaining 1,076 are a named, cheap remainder the R141 row
+  itself records. (2) R137_49band decided the floor drop-k family for k=3..6
+  (16.1M rows, 0 admits) using a sound exact integer rule, and stopped; k=7 is
+  the next single exact step and is affordable. Both lanes reuse proven exact
+  machinery (gaussSolve per-axis solve; rank(D)<=k-2 exact decision) instead of
+  inventing a new search, matching the campaign's recorded lesson \"when an
+  enumeration explodes, buy a cheaper PROVEN decision, never a wider sweep of
+  the same rows\". The adjudication merge depends on both sweeps and runs in a
+  later layer of the same round, after they land on main through the gate.
+  Neither sweep carries a goal-level success marker, because their normal
+  outcome is an honest bounded null; they are judged by their own deterministic
+  test controls and, for the merge, by its CAMPAIGN evidence row."
+budget:
+  maxRounds: 3
+stopConditions:
+  - an exact rank<=47 scheme over F_2 is shipped and `bun
+    src/matmul/goalCheckA.ts` exits 0 (AlphaTensor parity reached)
+  - both named remainder spaces are closed exactly with zero survivors and the
+    round records a bounded-no-witness CAMPAIGN row naming the residual class
+  - the per-task time budget is exhausted and every unfinished row is reported
+    UNRESOLVED, never as a refutation
+tasks:
+  - id: M8-S1-altsupRest
+    problem: src/matmul/attempts/M8S1_altsupRest.ts
+    tests: src/matmul/attempts/M8S1_altsupRest.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Close the named remainder R141_altsup left open. That lane enumerated
+      1,176 unique algebraic 47-term supports (coset
+      row/col/diag/adiag/slope-line, symmetric transpose/cyclic S_3 orbits,
+      hyperplane restrictions) but exact-solved only the first 100 (all
+      INCONSISTENT, mm 40-80). Re-derive the SAME enumeration - import or
+      faithfully reproduce the construction in
+      src/matmul/attempts/R141_altsup.ts; do NOT invent new supports - dedupe
+      against the 100 already retired by their recorded fnv hashes, and
+      exact-solve EVERY remaining support over F_2 with the per-axis gaussSolve
+      machinery R141 used. Checkpoint per support {hash, source, axis, mmBefore,
+      mmAfter, intMmAfter, verifyF2, disposition} to
+      attempts/M8S1_altsupRest.ndjson plus a summary json. On any CONSISTENT
+      support, write attempts/M8S1_scheme.ts exporting `scheme` (verified with
+      checker.verifyMod2 AND checker.verify) and report SHIPPED so goalCheckA
+      fires; otherwise the lane file exports NO `scheme` and the verdict is
+      BOUNDED-NO-CLOSURE with the solved/total counts stated. No budget-driven
+      refutation: a row not solved in time is UNRESOLVED. Colocated test gates:
+      floor-seed control solves CONSISTENT, a known R141-retired hash re-derives
+      INCONSISTENT, and solved + skippedToR141 == the R141 census of 1,176
+      unique supports, plus ndjson/json fidelity. F_2 throughout; no AlphaTensor
+      tensors; file-ownership attempts/M8S1_altsupRest* and
+      attempts/M8S1_scheme.ts only."
+  - id: M8-S1-band7
+    problem: src/matmul/attempts/M8S1_band7.ts
+    tests: src/matmul/attempts/M8S1_band7.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Extend the R137_49band floor drop-band closure by one exact step. R137
+      decided every drop-k family of the exact-49 two-level Strassen floor (hash
+      f4640c18) for k=3..6 (~16.1M rows, 0 admits) with the sound exact integer
+      rule: compute D = sum of dropped terms exactly over F_2, then rank(D) <=
+      k-2 => ADMIT (exact-solve fresh k-2 rank-1 terms) else REFUTE. Re-derive
+      the floor and that rule unchanged (same exact integer arithmetic, no
+      float, no branch-and-bound), then run k=7 (C(49,7) = 85,900,584 rows).
+      Also emit an exact sizing of k=8 (C(49,8)) and whether it fits one 1800s
+      task, so a later round decides rather than guesses. A row not decided
+      within budget is UNRESOLVED, never refuted. Stream per-k checkpoints to
+      attempts/M8S1_band7.ndjson. On any ADMIT, exact-solve and write
+      attempts/M8S1_band7_scheme.ts exporting `scheme` (checker.verifyMod2 AND
+      checker.verify); otherwise no scheme export and verdict
+      BOUNDED-NO-CLOSURE. Colocated test gates: floor reconstruction, a planted
+      rank<=2 drop ADMITS, a known k=6 REFUTED row reproduces digit-for-digit,
+      and the k=7 row count equals C(49,7). F_2 throughout; no AlphaTensor
+      tensors; file-ownership attempts/M8S1_band7* and
+      attempts/M8S1_band7_scheme.ts only."
+  - id: M8-S1-audit
+    problem: src/matmul/attempts/M8S1_audit.ts
+    tests: src/matmul/attempts/M8S1_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-S1
+    timeoutMs: 1800000
+    note: "Adjudication merge, run only AFTER both siblings have landed on main
+      through the gate. Tolerant extractor over attempts/M8S1_altsupRest.ndjson
+      (with its json summary as fallback) and attempts/M8S1_band7.ndjson:
+      re-verify every candidate carrying factor vectors with checker.verifyMod2
+      AND checker.verify plus the goalSatisfiedA selector; drift-check every
+      recorded hash against the canonical F_2 campaign fnv (hashMasks, the
+      +0x9e37 fold), pinned to reconstruct the exact-49 floor hash f4640c18 and
+      a known R141-retired hash so the check is non-vacuous; count
+      CONSISTENT/INCONSISTENT/candidates/unmatched and report 0 survivors when
+      none. Run `bun src/matmul/goalCheckA.ts` and record its exit code iff
+      attempts/M8S1_scheme.ts (or a sibling scheme file) exists. Emit a two-pass
+      zero-drift self-check that must reproduce the same (source, id, hash) set.
+      Write attempts/M8S1_audit.json and append the substantive CAMPAIGN.md row
+      CAMPAIGN:M8-S1 (honest bounded-no-witness naming the residual class while
+      47 stands, or the shipped witness). If a sibling artifact is absent,
+      record the absence and adjudicate only what is present - never fabricate a
+      candidate or a count. The colocated test must be green whether or not a
+      witness is present (it gates counts, drift and self-check), and must fail
+      on planted hash drift. File-ownership attempts/M8S1_audit* only."
+    dependsOn:
+      - M8-S1-altsupRest
+      - M8-S1-band7

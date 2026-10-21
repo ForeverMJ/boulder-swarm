@@ -1,0 +1,250 @@
+label: R150
+goal: M8
+rationale: >
+  The M8 campaign (4x4 matrix multiplication over F₂, target exact rank ≤ 47,
+  AlphaTensor parity) has three critical
+
+  unresolved gaps after rounds R139–R149:
+
+
+  1. **R143_band8c artifact ABSENT**: The k=8 band closure (C(49,8)=450,978,066
+  drop sets) was declared fully decided
+     (3,575,340 unresolved, 0 admits) in M8T1_band8.json, but its identity-bearing ledger (R143_band8c.ndjson/.json)
+     never landed on main. The R143 merge audit explicitly named this gap: 3,575,340 unresolved identities cannot be
+     individually re-solved from any present artifact. This is a concrete, bounded gap that must be filled before
+     any full-band adjudication is complete.
+
+  2. **k=9 band BOUNDED-OPEN**: R149-band9-resume processed 5M additional rows
+  from the max cursor (R143 cursor + M8U1
+     cursor), reaching cumulative ~2M/2.05B (0.097%). The band remains open with 2,052,455,634 rows unprocessed.
+     R148-size confirmed exact counts. Continuing from the max cursor is the only honest way to close or honestly
+     bound this band.
+
+  3. **Algebraic support space partially explored**: R141-altsup enumerated
+  1,176 unique algebraic supports but only
+     exact-solved the first 100 (all INCONSISTENT, mm 40–80). The coset-line-slope* construction alone yielded 5,145
+     supports. A targeted lane that exact-solves ALL enumerated algebraic supports (not a budget-limited sample)
+     could either find a witness or close this construction class with a bounded null.
+
+  This proposal addresses all three gaps with three parallel search lanes plus a
+  later-layer adjudication merge
+
+  that depends on all three landing. No goal marker (BESTA47) is attached to the
+  bookkeeping merge task; a witness
+
+  would be recorded via the row itself.
+budget:
+  maxRounds: 4
+stopConditions:
+  - goalCheckA exits 0 (BESTA47 witness lands)
+  - All four tasks complete and merge gate passes (BOUNDED-NO-CLOSURE with named
+    residuals)
+  - Any task hits timeoutMs (1800000) without producing its artifact
+  - R150-band8c-resolve or R150-band9-continue reports CLOSED with 0 admits
+    (band closed)
+tasks:
+  - id: R150-band8c-resolve
+    problem: src/matmul/attempts/R150_band8c_resolve.ts
+    tests: src/matmul/attempts/R150_band8c_resolve.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R150
+    timeoutMs: 1800000
+    note: >
+      Reconstruct the exact-49 two-level Strassen floor (hash f4640c18,
+      mismatchF2=0) from M8M1_seed_ils.ts
+
+      encodings. Enumerate ALL C(49,8)=450,978,066 drop sets K at k=8 (j=6). For
+      each K, compute deficit
+
+      D = sum of dropped terms exactly over F₂. Decide by tensor rank: rank(D)
+      <= 6 -> ADMIT (solve the 6
+
+      fresh rank-1 terms exactly via BigInt Gaussian elimination); rank(D) > 6
+      -> REFUTE (closes the entire
+
+      add-6 family for that support at once). Use the proven flattening-rank
+      lower bound (mode-1 F₂ matrix
+
+      rank > 6 refutes) as the O(1) prefilter, then exact rank decision.
+      CRITICAL: stream a per-row identity
+
+      ledger (hash, dropIndices, verdict, rank) to ndjson so EVERY row is
+      individually re-solvable — this is
+
+      the artifact R143_band8c failed to produce. Exact integer arithmetic
+      throughout, no float, no budget,
+
+      no branch-and-bound. Shard over 28 processes ((t + baseIndex) % 28),
+      checkpoint cursor ONLY after the
+
+      chunk is counted. Colocated test re-derives the exact C(49,8) total, the
+      3,575,340 pre-solve unresolved
+
+      count from landed M8T1_band8.json, planted ADMIT control (synthetic
+      rank<=2 deficit), and that the
+
+      identity ledger line count equals the declared unresolved count. Verdict:
+      CERTIFIED-NO-HIT-WITHIN-ANSATZ
+
+      (all rows refuted) or BOUNDED-OPEN with exact processed count and named
+      unresolved ledger. File-ownership:
+
+      attempts/R150_band8c_resolve.ts + .test.ts + .ndjson/.json only. No
+      AlphaTensor tensors. Field F₂
+
+      throughout. Run under nice -n 19.
+  - id: R150-band9-continue
+    problem: src/matmul/attempts/R150_band9_continue.ts
+    tests: src/matmul/attempts/R150_band9_continue.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R150
+    timeoutMs: 1800000
+    note: >
+      Continue the k=9 band (C(49,9)=2,054,455,634 drop sets, j=7) from the MAX
+      cursor across R143, M8U1,
+
+      and R149. Import the exact bigint DP shard partition from R148_size.json
+      (shards 0–2,4–6: 256,806,954;
+
+      shards 3,7: 256,806,955; sumPlanned = C(49,9)). Per-shard start cursor =
+      max(cursor_R143, cursor_M8U1,
+
+      cursor_R149) where R149 cursor = lo + 250,000 (its 5M row budget). Target:
+      ≥5,000,000 additional rows
+
+      this round (rowBudget 5M). Decision pipeline: mode-1 flattening rank
+      prefilter (exact packed F₂) then
+
+      exact F₂ rank decision via decideIndices; REFUTE = rank > 7 (sound lower
+      bound), UNRESOLVED = rank ≤ 7
+
+      but no ≤7 decomposition found (never counted as refuted). Stream per-shard
+      checkpoints and summaries to
+
+      R150_band9_continue.ndjson/.json with cumulative processed = startOffset +
+      processedThisRun. All gating
+
+      controls pass (floor f4640c18, planted ADMIT, R143 known-REFUTE, C(49,9)
+      declaration, max-cursor merge
+
+      sanity). Verdict derived from reconciliation: CLOSED only if
+      sum(processed) == C(49,9) AND all shards
+
+      complete; otherwise BOUNDED-OPEN with updated coverage fraction and named
+      unresolved ledger. Colocated
+
+      test re-derives the bigint shard partition, max-cursor merge logic,
+      cursor-resume integrity, and
+
+      reconciliation gate. No witness, no BESTA47. File-ownership:
+      attempts/R150_band9_continue* only. No
+
+      AlphaTensor tensors. Field F₂ throughout. Run under nice -n 19.
+  - id: R150-altsup-targeted
+    problem: src/matmul/attempts/R150_altsup_targeted.ts
+    tests: src/matmul/attempts/R150_altsup_targeted.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R150
+    timeoutMs: 1800000
+    note: >
+      Targeted algebraic support enumeration + exact-solve over F₂. R141-altsup
+      enumerated 1,176 unique
+
+      supports (coset-row 168, coset-col 147, coset-diag 147, coset-adiag 126,
+      coset-line-slope* 5,145,
+
+      sym-transpose 21, sym-cyclic 44, subspace-hyperplane 0 after dedup) but
+      only exact-solved the first 100.
+
+      This lane RECOVERS the full 1,176-support inventory from
+      R141_altsup.ndjson on main, then exact-solves
+
+      EVERY remaining support (not a sample) using the gaussSolve per-axis
+      machinery recovered from landed
+
+      R109_snap_solve.ts on main (no AlphaTensor imports). For each support:
+      CONSISTENT ships an exact
+
+      scheme file verified by verifyMod2; INCONSISTENT retires the hash with
+      axis and mismatch counts.
+
+      Checkpoint every candidate hash, axis, consistency, mismatch counts to
+      R150_altsup_targeted.ndjson.
+
+      Controls: floor seed solves CONSISTENT (mm 0→0, F₂-exact); one retired
+      spark hash (037a74ff) re-derives
+
+      INCONSISTENT (mm 24→24). Bounded nulls stay bounded. If any CONSISTENT at
+      rank≤47, BESTA47 fires.
+
+      Colocated test re-derives the full inventory count, exercises floor-seed
+      and retired-hash controls,
+
+      asserts zero unmatched rank≤47 candidates, and validates ndjson fidelity.
+      File-ownership:
+
+      attempts/R150_altsup_targeted* only. No AlphaTensor tensors. Field F₂
+      throughout. Run heavy solves
+
+      under nice -n 19.
+  - id: R150-merge-audit
+    problem: src/matmul/attempts/R150_merge_audit.ts
+    tests: src/matmul/attempts/R150_merge_audit.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R150
+    timeoutMs: 600000
+    note: >
+      Later-layer adjudication merge; runs ONLY after all three siblings land on
+      main through the gate.
+
+      Ingests R150_band8c_resolve.ndjson (full k=8 identity ledger),
+      R150_band9_continue.ndjson (k=9
+
+      resumed cursors and unresolved ledger), and R150_altsup_targeted.ndjson
+      (algebraic support
+
+      exact-solve verdicts). For every vectored or admitted candidate: re-verify
+      with checker.verifyMod2
+
+      AND checker.verify AND goalSatisfiedA gate selector. Re-derive the
+      exact-49 floor hash f4640c18
+
+      independently. Drift-check every recorded hash against the canonical F₂
+      campaign FNV (hashMasks,
+
+      +0x9e37 fold), preferring canonicalHash when present. Exact-solve-snap any
+      still-unsnapped rank≤47
+
+      support with decomposeExact. Assert and NAME every closure equality:
+      band8c processed == C(49,8) AND
+
+      all shards complete (if CLOSED); band9 cumulative processed fraction and
+      named unresolved; altsup
+
+      inventory exhausted with per-support verdicts. Run bun
+      src/matmul/goalCheckA.ts and record exit code.
+
+      Emit R150_merge_audit.json with per-source summaries, total candidates,
+      witnesses, hash drift (must
+
+      be 0), consistency agree/disagree, zero-drift self-check, and gate exit
+      code. Verdict: WITNESS
+
+      (BESTA47 attaches HERE only) or BOUNDED-NO-CLOSURE honestly naming the
+      residual. Colocated test
+
+      re-derives sibling presence, per-candidate verdicts, drift=0, self-check
+      green, gate exit code, and
+
+      verdict string on both a synthetic witness branch and a bounded-null
+      branch. Does not re-implement
+
+      the search lanes; judged by evidence: CAMPAIGN:R150 plus its own test.
+      File-ownership:
+
+      attempts/R150_merge_audit* only. No AlphaTensor tensors. Field F₂
+      throughout.
+    dependsOn:
+      - R150-band8c-resolve
+      - R150-band9-continue
+      - R150-altsup-targeted

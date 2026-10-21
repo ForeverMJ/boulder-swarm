@@ -1,0 +1,26 @@
+label: M8-N1
+goal: Explore algebraic construction of 47-term schemes over F₂ from
+  hyperplane-restricted Strassen triples, exact-solving candidates to determine
+  consistency with the M8 gate.
+rationale: Previous rounds have exhausted two-level Strassen search, ILS, walk,
+  and orbit-family operations without finding a rank-47 witness. Algebraic
+  construction from hyperplane restrictions on the two-level Strassen base has
+  not been systematically enumerated as a dedicated lane. This task provides a
+  deterministic negative result or a verified witness.
+budget:
+  maxRounds: 4
+stopConditions:
+  - exact rank<=47 scheme exported with goalCheckA exit 0; BESTA47 fires
+  - support space exhausted with no CONSISTENT verdict; all candidates
+    INCONSISTENT
+tasks:
+  - id: M8-N1-task1
+    problem: src/matmul/attempts/A1_hyperplane_search.ts
+    tests: src/matmul/attempts/A1_hyperplane_search.test.ts
+    milestone: M8
+    success: All structured hyperplane-restricted Strassen triples enumerated via
+      F₂-linear sign-bearing linear combos; each compiled scheme verified with
+      checker.verifyMod2; best candidate exact-solved via gaussSolve; if
+      CONSISTENT, BESTA47 fires
+    evidence: CAMPAIGN:M8-N1
+    timeoutMs: 1800000

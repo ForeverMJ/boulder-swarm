@@ -1,0 +1,63 @@
+label: R148
+goal: M8
+rationale: |
+  The M8 frontier is the exact-49 two-level Strassen 4x4 floor (canonical hash
+  f4640c18, mismatchF2 0); the goal is an exact rank<=47 scheme over F_2. The
+  drop-k/add-(k-2) framework is closed through k=8 (C(49,8)=450,978,066, 0
+  admits, M8-T1) and the k=9 band (C(49,9)=2,054,455,634) is the named open
+  remainder: R143/M8-U1 covered only ~0.1% and left 140,810/54,352 named
+  unresolved supports. The structured merge vocabularies (2-term R139, 3-term
+  R144) and the ILS/algebraic/wide lanes are bounded nulls. The k=9 remainder is
+  countable, shardable and verifiable, so it closes by enumeration: size it,
+  scan the uncovered shards, merge the certificates, and recount independently.
+  No BESTA47 marker is attached to any task because the normal outcome is a
+  bounded null; each task is judged by its own tests and a CAMPAIGN:R148 row.
+budget:
+  maxRounds: 2
+stopConditions:
+  - "merge equation holds on every shard (screened + refused === planned): the
+    k=9 remainder is closed"
+  - "budget exhausted with no close: report exact coverage and named unresolved,
+    never claim closure"
+tasks:
+  - id: R148-size
+    problem: src/matmul/attempts/R148_size.ts
+    tests: src/matmul/attempts/R148_size.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R148
+    timeoutMs: 1800000
+    note: "size the k=9 drop-band remainder of the exact-49 floor: exact C(49,9)
+      shard count, coverage already on main from R143/M8-U1/R146, named
+      unresolved count, and the closability decision; report counts only, claim
+      nothing closed"
+  - id: R148-scan
+    problem: src/matmul/attempts/R148_scan.ts
+    tests: src/matmul/attempts/R148_scan.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R148
+    timeoutMs: 1800000
+    note: scan the k=9 drop-band remainder in shards beyond the landed coverage; per
+      row D = XOR of the 9 dropped floor terms, decide by mode-1 flattening rank
+      over F_2 (rank(D) <= 7 ADMIT, > 7 REFUTE), exact-solve every admit; stream
+      an identity-bearing per-shard ledger with cursors
+  - id: R148-merge
+    problem: src/matmul/attempts/R148_merge.ts
+    tests: src/matmul/attempts/R148_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R148
+    timeoutMs: 1800000
+    note: merge the scan certificates; the closure equation screened + refused ===
+      planned must hold per shard, else the space is not closed no matter what
+      the scanner says
+    dependsOn:
+      - R148-scan
+  - id: R148-check
+    problem: src/matmul/attempts/R148_check.ts
+    tests: src/matmul/attempts/R148_check.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R148
+    timeoutMs: 1800000
+    note: independent recount with a checker that shares no code with the scanner;
+      re-derive the exact-49 floor hash f4640c18 and the closure equation
+    dependsOn:
+      - R148-merge

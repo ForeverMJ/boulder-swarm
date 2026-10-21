@@ -1,0 +1,28 @@
+label: R142
+goal: Close the remaining k=5 split-band anchors for T12c using the tight fibre bound
+rationale: The k=5 split band has been partially screened (40 of 4230 anchors
+  closed per R78-R83), leaving 1,342 anchors unscreened. The tight fibre bound
+  (R74) proves dim span{slices} >= j+1 => rank(D) > j, an O(1) per-row exact
+  refutation. A focused close on the remaining anchors would either complete the
+  k=5 band closure or provide a definitive bounded-red report, advancing the
+  campaign's structural understanding of the 49-to-47 gap.
+budget:
+  maxRounds: 4
+stopConditions:
+  - "k=5 split band fully closed: all 4230 anchors refuted with tight fibre
+    bound"
+  - 4 rounds completed without full closure, report per-anchor status with exact
+    fibre ranks
+tasks:
+  - id: R142-task1
+    problem: src/matmul/attempts/R142_split_k5_remaining.ts
+    tests: src/matmul/attempts/R142_split_k5_remaining.test.ts
+    milestone: M8
+    success: All 1342 remaining k=5 split-refined anchors for T12c refuted with
+      tight fibre bound; CAMPAIGN:R142 row recorded
+    evidence: CAMPAIGN:R142
+    timeoutMs: 1800000
+    note: Screen remaining 1342 of 4230 T12c k=5 split-refined anchors at j=3 using
+      the tight fibre bound (dim span{slices} >= j+1 => rank(D) > j). Exact
+      integer arithmetic, no budget, no branch-and-bound. Goal is to close the
+      k=5 band entirely.

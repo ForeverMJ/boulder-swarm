@@ -1,0 +1,153 @@
+label: R147
+goal: Finish the k=9 drop band of the exact-49 two-level Strassen floor (4x4x4
+  over F_2, target rank<=47) with a PROVEN pruning rule instead of another full
+  sweep, close the R146 sym47 orbit-subset remainder, cross-check the band-8
+  decision ledger that the pruning consumes, then adjudicate the layer through
+  the gate.
+rationale: "The campaign arithmetic is against wider sweeps: M8-U1 processed
+  2,000,000 of C(49,9)=2,054,455,634 k=9 rows in a full round (about 0.097
+  percent), and R146_band8 needed 450,978,066 k=8 rows to close its band, so a
+  direct k=9 sweep is out of reach and R86/R74 already taught that an exploding
+  enumeration must buy a cheaper PROVEN decision. The landed R146_band8
+  bandLowerBound of 7 gives exactly that decision: every 8-subset has max-axis
+  flattening rank at least 7, so for any 9-set S with 8-subset B and ninth term
+  t, rank(D_S) is at least rank(D_B) - 1; whenever rank(D_B) is at least 9 on
+  any axis, rank(D_S) is at least 8, so the drop-9/add-7 family cannot reach 47
+  and S is refuted without a 9-term test. The only LIVE 9-sets are extensions of
+  the 3,575,340 identity-named dangerous 8-subsets in the merged M8U1_band8c
+  ledger, at most about 146,000,000 candidates and in practice many fewer after
+  dedupe. That turns a 2-billion-row band into a decidable remainder and
+  preserves the campaign's rule that a bounded lane never claims impossibility.
+  The pruning inherits the k=8 decisions, so the missing R146_band8x cross-check
+  becomes load-bearing rather than bookkeeping: an independent rank
+  implementation must reproduce the landed decisions before the k=9 refutations
+  are trusted. R146 also names the unsampled sym47 orbit-subset classes as its
+  residual, and that family is cheap and exact-solvable, so it rides along as
+  the third sibling. The retrospective R141 algebra-support remainder is NOT
+  re-proposed: M8-S1_altsupRest already exact-solved all 1,176 supports with 0
+  CONSISTENT. No task carries BESTA47, because every sibling's normal outcome is
+  a bounded null and the marker must stay honest; the merge is judged by its own
+  test plus CAMPAIGN:R147."
+budget:
+  maxRounds: 3
+stopConditions:
+  - CAMPAIGN:R147 records a rank<=47 F_2 scheme whose support is exact over all
+    three axes and goalCheckA exits 0, in which case the band work stops and the
+    witness is the round output
+  - All three sibling lanes report complete internal accounting (decided plus
+    named-unresolved equals planned, zero silently dropped candidates) and the
+    merge records zero hash drift
+  - A sibling exceeds its per-task timeout without a readable checkpoint, so the
+    merge must name the absent artifact instead of inventing counts
+  - Two lanes disagree on the rank or verdict of the same candidate hash and the
+    disagreement cannot be resolved inside the round
+tasks:
+  - id: R147-band9-live
+    problem: src/matmul/attempts/R147_band9_live.ts
+    tests: src/matmul/attempts/R147_band9_live.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "k=9 drop band by PROVEN pruning, not full sweep. Read the merged
+      M8U1_band8c.ndjson identity ledger (3,575,340 drop-index rows, on main)
+      and rebuild the dangerous 8-subset set D = {B : max-axis mode-1 flattening
+      rank of sum(B) <= 8}; assert against the landed R146_band8.json that no
+      8-subset has max-axis rank <= 6 (the bandLowerBound 7 fact the pruning
+      consumes). Lemma to implement and test: for any 9-set S, D_S = D_B + t
+      with B any 8-subset, so rank(D_S) >= rank(D_B) - 1 per axis; if rank(D_B)
+      >= 9 on any axis then rank(D_S) >= 8 and S cannot be written as 40 floor
+      terms plus 7 fresh rank-1 terms, hence S is REFUTED-PRUNED. Enumerate the
+      LIVE region only, namely the extensions S = B union {t} of every B in D
+      for t not in B (dedupe by canonical 49-bit support), and decide each by
+      exact per-axis rank with early exit plus decomposeExact into 7 fresh terms
+      on the surviving axes. ADMIT only if a 7-term decomposition verifies
+      against the tensor over F_2, and then ship the exact 47-term scheme and
+      mark every affected row. Stream checkpoints to R147_band9_live.ndjson and
+      the summary to R147_band9_live.json with exact bigint counts: total
+      C(49,9)=2054455634, prunedByLemma, liveEnumerated, decidedRefute,
+      admitted, unresolved, complete flag. Run shards as child processes with
+      per-shard checkpoint files and a wall-clock budget so a partial run still
+      yields honest covered counts. Controls: the exact-49 floor hash f4640c18
+      with mismatch 0; a planted 9-set whose 8-subset has rank 9 must come out
+      REFUTED-PRUNED; a planted low-rank 9-set must reach the direct test.
+      File-ownership attempts/R147_band9_live* only; never edit R146_band8.ts,
+      M8U1_band8c.ndjson, goalCheckA.ts or the checker. The colocated test must
+      use small fixtures and the emitted artifact, never re-enumerate the band."
+  - id: R147-sym47-orbit
+    problem: src/matmul/attempts/R147_sym47_orbit.ts
+    tests: src/matmul/attempts/R147_sym47_orbit.test.ts
+    milestone: M8
+    timeoutMs: 1200000
+    note: "Close the residual R146 names: the unsampled sym47 orbit-subset classes.
+      Load the 384 enumerated sym47 supports from the merged R146_sym47.ndjson,
+      take the orbit closure of each under the 4x4x4 tensor symmetry group (the
+      three axis transpositions that preserve the tensor, coordinate
+      permutations within each factor that respect the 16-entry block structure,
+      and the Kronecker swap) together with the S_3 orbit-subset variants the
+      lane skipped, dedupe by canonical support hash, and exact-solve every
+      resulting 47-term support over F_2 with the per-axis Gaussian machinery
+      (three axes, early exit, intMm recorded). CONSISTENT ships the exact
+      scheme and states the witness; INCONSISTENT retires the hash with axis, mm
+      and intMm. Stream R147_sym47_orbit.ndjson, summary R147_sym47_orbit.json
+      with enumerated, distinctAfterOrbit, solved, consistent, inconsistent,
+      unresolved and a complete flag. Controls: the exact-49 floor f4640c18 must
+      solve CONSISTENT with mismatch 0; the retired R100 ILS hash 6098903c must
+      re-derive INCONSISTENT; every one of the 384 landed sym47 hashes must
+      reappear in the enumeration. The colocated test validates the artifact,
+      the controls and the zero-unresolved equality on synthetic fixtures; it
+      must complete in seconds. File-ownership attempts/R147_sym47_orbit* only."
+  - id: R147-band8x
+    problem: src/matmul/attempts/R147_band8x.ts
+    tests: src/matmul/attempts/R147_band8x.test.ts
+    milestone: M8
+    timeoutMs: 1200000
+    note: "Deliver the R146 residual cross-check that the k=9 pruning depends on,
+      with an INDEPENDENT decision implementation. Take a deterministic
+      200,000-row sample of the merged R146_band8.ndjson ledger (seeded,
+      stratified across the F-flattening, subspace-dim-6 and subspace-dim-5
+      verdict classes) and re-decide each row with a second implementation
+      written from scratch in this file (different rank algorithm and different
+      bit layout from R146_band8.ts, which must be read-only), asserting the
+      same verdict class and the same max-axis rank within the sampled
+      tolerance. Additionally re-derive the band totals from the ledger and
+      assert they equal the landed R146_band8.json keys exactly (3,575,340
+      candidates, 3,487,134 flattening refutes, 87,618 subspace-dim-6, 588
+      subspace-dim-5, 0 admits). Report every disagreement with its drop
+      indices, never silently dropping one. Emit R147_band8x.ndjson samples plus
+      R147_band8x.json with sampleSize, disagreements, sampleComplete and the
+      totals reconciliation. Controls: the floor hash f4640c18 and a planted
+      rank-9 8-subset must both re-derive, and a deliberately corrupted row must
+      be reported as one disagreement by a self-test. The colocated test must
+      use a 50-row slice plus synthetic fixtures, not the full ledger.
+      File-ownership attempts/R147_band8x* only."
+  - id: R147-merge
+    problem: src/matmul/attempts/R147_merge.ts
+    tests: src/matmul/attempts/R147_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R147
+    timeoutMs: 1800000
+    note: "Later-layer adjudication over the three landed R147 siblings, run only
+      after all three merge through the gate. Tolerant extractor over
+      R147_band9_live, R147_sym47_orbit and R147_band8x (ndjson rows plus json
+      summary, either may be the absence to be named), re-verifying every
+      admitted or vectored candidate with checker.verifyMod2 AND checker.verify
+      plus the goalSatisfiedA selector, re-deriving the exact-49 floor hash
+      f4640c18 independently, drift-checking every re-derivable recorded hash
+      against the canonical F_2 campaign fnv (hashMasks, the +0x9e37 fold), and
+      exact-solve-snapping any named rank<=47 support that no sibling decided.
+      Assert AND NAME the closure equalities: prunedByLemma + liveEnumerated ==
+      prunedByLemma + decidedRefute + admitted + unresolved, liveEnumerated plus
+      the proof-pruned complement equals C(49,9), sym47 enumerated == solved +
+      unresolved with 0 silently dropped landed hashes, band8x sampleComplete
+      with its disagreement count reported rather than assumed zero, and zero
+      lane disagreements. Run bun src/matmul/goalCheckA.ts unconditionally and
+      record its exit code, plus a two-pass zero-drift self-check over the
+      (source, id, hash) set. Write R147_merge.json and the substantive
+      CAMPAIGN:R147 row naming either the exact-47 scheme or the honest bounded
+      residual with its exact covered fraction. File-ownership
+      attempts/R147_merge.ts + .test.ts + R147_merge.json only; never edit a
+      sibling, the checker, goalCheckA.ts or CAMPAIGN.md by hand beyond the row
+      append the convention allows."
+    dependsOn:
+      - R147-band9-live
+      - R147-sym47-orbit
+      - R147-band8x

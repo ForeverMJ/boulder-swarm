@@ -1,0 +1,142 @@
+label: R146
+goal: Close the band-8 remainder of the exact-49 F_2 floor with zero unresolved
+  supports, cross-check every decision with an independent oracle, and probe one
+  structurally different group-invariant rank-47 ansatz.
+rationale: "Frontier on main after M8-U1/R143: the two-level Strassen floor is
+  exact at rank 49 (hash f4640c18), and the drop-k/add-(k-2) bands k=3..9 have
+  been enumerated. Band 8 (C(49,8)=450,978,066) is the one band already fully
+  enumerated: M8T1_band8.json partitions it 450,978,066 = 447,402,726 refutes +
+  3,575,340 candidates, and M8-U1 adjudicated the identity ledger 3,575,340 =
+  3,487,134 refuted + 88,206 stillUnresolved. Those 88,206 are the only small
+  NAMED remainder in the whole M8 campaign that can still be decided exactly in
+  one 30-minute round: the rank<=6 decision for the XOR-deficit D is cheap once
+  done properly (three mode flattenings bound the rank, and when the bound is
+  <=6 the pure 4x4 factors v(x)w live in the <=6-dimensional row space of the
+  mode-1 flattening, so a complete enumeration over at most 225 pure candidates
+  decides the support exactly). By contrast band 9 covers 2,000,000 of
+  2,054,455,634 supports (0.097%) and wide anchors cover 80 of 1170, so neither
+  can be closed this round. Plan: one lane decides the entire band-8 candidate
+  set exactly (not just the 88,206, so the 3,487,134 refutes are re-derived
+  rather than trusted), one lane re-decides a deterministic sample with a
+  deliberately different algorithm so a false refutation cannot pass silently,
+  one lane opens the untouched diagonal-group-invariant ansatz where a 47-term
+  scheme may exist outside the floor-support class, and a later-layer merge
+  adjudicates with dependsOn. No success marker is attached to the bounded
+  lanes: their normal outcome is an honest null judged by their own tests and
+  the CAMPAIGN:R146 row."
+budget:
+  maxRounds: 3
+stopConditions:
+  - GOAL MET when goalCheckA exits 0 with an exact rank<=47 scheme that
+    verifyMod2 and verify both accept.
+  - STOP the band-8 lane when every one of the 3,575,340 candidate supports
+    carries a final ADMIT or REFUTE verdict, with unresolved == 0.
+  - STOP if a lane cannot re-derive its landed input counts (3,575,340
+    candidates, 3,487,134 refuted, 88,206 unresolved) from the main-branch
+    artifacts; that is a defect to report, not a result to reinterpret.
+  - STOP after two consecutive rounds in which the R146 lanes add no newly
+    refuted or admitted support and no explicit new residual class.
+tasks:
+  - id: R146-band8
+    problem: src/matmul/attempts/R146_band8.ts
+    tests: src/matmul/attempts/R146_band8.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Exact band-8 closure. Stream the landed 3,575,340-row identity ledger
+      attempts/M8U1_band8c.ndjson (bare drop-index arrays) and reconcile its
+      count and the 3,487,134/88,206 partition against attempts/M8U1_merge.json
+      before deciding anything; a count mismatch is a reported defect, never
+      silently re-normalized. For each support, D = XOR of the eight dropped
+      exact-49 floor terms over F_2, and decide rank(D) <= 6 exactly: (1) refute
+      when any of the three mode flattenings has F_2 rank > 6; (2) otherwise
+      enumerate the pure 4x4 factors v(x)w inside the row space of the mode-1
+      flattening (test the 225 nonzero pure matrices for membership, not all
+      4^16), enumerate subsets of size <= 6 that span that row space, solve M =
+      sum u_i (v_i w_i)^T over F_2, and require full-tensor equality before
+      ADMIT. An ADMIT assembles the 41 kept floor terms plus the <=6 solved
+      terms, verifies with verifyMod2 and verify, and is written as
+      attempts/R146_band8_scheme.ts so goalCheckA can see it. Stream per-support
+      verdicts plus a summary to attempts/R146_band8.ndjson and
+      attempts/R146_band8.json. Controls that must gate the test: the exact-49
+      floor re-derives at rank 49 with mismatchF2 0; a planted 6-term
+      decomposition of a dropped-support deficit is ADMITTED with a scheme that
+      verifies; a planted 7-term-only tensor is REFUTED; and the landed
+      3,487,134 refutes are re-derived exactly as a prefix control. File
+      ownership attempts/R146_band8.ts + .test.ts + .ndjson + .json + optional
+      _scheme.ts only; no AlphaTensor tensors."
+  - id: R146-band8x
+    problem: src/matmul/attempts/R146_band8x.ts
+    tests: src/matmul/attempts/R146_band8x.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Independent cross-oracle for the band-8 decision, on a deterministic
+      sample. Read the same main-branch ledger but decide rank(D) <= 6 by a
+      different route from R146-band8: normalize the first term so its u factor
+      has a fixed pivot cell, walk the remaining 5 terms over pure triples
+      consistent with the mode-2 and mode-3 row spaces, and check full-tensor
+      equality cell by cell; no flattening-rank shortcut may be used as the
+      primary decision, it may only be reported alongside. Decide a
+      deterministic pseudorandom sample of 200,000 supports chosen by a fixed
+      seed over the full 3,575,340 set, plus every support that R146-band8 flags
+      ADMIT when that sibling artifact is on main. Emit
+      attempts/R146_band8x.ndjson with per-support verdict and
+      attempts/R146_band8x.json with agreement/disagreement counts against
+      R146-band8 whenever the sibling stream exists. The test must fail on any
+      disagreement, must prove the oracle both ways on fixtures (planted rank-6
+      admit, planted rank-7 refute, floor anchor controlled), and must
+      self-check that the sample ids are distinct and reproducible from the
+      seed. File ownership attempts/R146_band8x.ts + .test.ts + .ndjson + .json
+      only; do not write a scheme file from this lane."
+  - id: R146-sym47
+    problem: src/matmul/attempts/R146_sym47.ts
+    tests: src/matmul/attempts/R146_sym47.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Group-invariant rank-47 probe, a class disjoint from every
+      drop-k/add-(k-2) band. Search 47-term supports that are invariant under a
+      nontrivial subgroup of GL(4,F_2)^3 acting diagonally on the three axes
+      (start with the coordinate-permutation subgroup S_4 acting simultaneously,
+      its subgroup generated by the cyclic 4-cycle, and the 2+2 block-swap
+      combined with the transpose involution); a 47-term scheme invariant under
+      such an action must have its 47 triples partitioned into orbits, and the
+      tensor must be fixed by the same action, which cuts the free variables by
+      the orbit sizes. Reuse the landed exact F_2 per-axis Gauss solver shape
+      rather than reinventing it; exact-solve every orbit-consistent support,
+      verify any CONSISTENT support with verifyMod2 and verify, and write
+      attempts/R146_sym47_scheme.ts only if a rank<=47 exact scheme is produced.
+      Checkpoint every candidate's orbit signature, support hash, axis
+      consistency and mismatch counts to attempts/R146_sym47.ndjson and
+      attempts/R146_sym47.json. Bounded null is an honest verdict: report the
+      exact number of invariant supports enumerated and the fraction
+      exact-solved, and name the untouched classes. Controls that must gate the
+      test: the exact-49 floor re-derives exactly; a known REFUTED support
+      re-derives INCONSISTENT; a planted invariant rank-2 toy tensor is
+      ADMITTED, proving the orbit bookkeeping is non-vacuous. File ownership
+      attempts/R146_sym47.ts + .test.ts + .ndjson + .json + optional _scheme.ts
+      only; no AlphaTensor tensors."
+  - id: R146-merge
+    problem: src/matmul/attempts/R146_merge.ts
+    tests: src/matmul/attempts/R146_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R146
+    timeoutMs: 900000
+    note: "Later-layer adjudication, runs only after the three siblings land on main
+      through the gate. Tolerant extractor over attempts/R146_band8.ndjson,
+      R146_band8x.ndjson and R146_sym47.ndjson (json fallback): re-verify every
+      vectored or admitted candidate with checker.verifyMod2 and checker.verify
+      and the goalSatisfiedA selector; re-derive the exact-49 floor hash
+      f4640c18 independently; drift-check every recorded hash against the
+      canonical campaign fnv; assert and NAME the closure equalities (band-8
+      decided == 3,575,340 with unresolved == 0; band8x sample == 200,000 with 0
+      disagreements against band8; sym47 enumerated plus exact-solved fractions
+      reconcile to its own verdict); run bun src/matmul/goalCheckA.ts
+      unconditionally and record its exit code; emit a two-pass zero-drift
+      self-check over the (source, id, hash) set. Write attempts/R146_merge.json
+      and append the substantive CAMPAIGN:R146 row, stating either the exact
+      47-term scheme or the honest bounded null and the residual class it leaves
+      open. File ownership attempts/R146_merge.ts + .test.ts + .json plus the
+      CAMPAIGN.md row only."
+    dependsOn:
+      - R146-band8
+      - R146-band8x
+      - R146-sym47

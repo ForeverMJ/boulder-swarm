@@ -1,0 +1,138 @@
+label: M8-U1
+goal: >
+  Push the M8 (4x4x4 over F_2) campaign toward AlphaTensor parity by closing the
+  band-8 identity residual the R143 merge named (so the exact-49 floor's k=8
+  drop band becomes decided in full, not identity-less), continuing the k=9 and
+  wide-anchor bands from their landed R143 cursors, and adjudicating the whole
+  layer through the gate. Ship a verified exact rank<=47 scheme if any candidate
+  snaps; otherwise report the bands honestly as bounded/partial.
+rationale: >
+  R143_merge (on main) is PENDING-SIBLINGS and exits red for exactly one reason:
+  the R143_band8c runtime artifact never landed, so the 3,575,340 unresolved
+  rows of the k=8 band (M8T1_band8.json, complete=true, 0 admits) remain
+  IDENTITY-LESS and cannot be individually re-solved. That is a named, bounded
+  remainder with a landed instrument (R143_band8c.ts / M8T1_band8.ts /
+  R137_49band.ts) - closing it is the highest-value on-time move. The k=9 band
+  is the next open band: its driver already declares C(49,9)=2,054,455,634
+  exactly and refuses false closure, but R143 only processed 1.6M rows across 8
+  shards (0/8 complete, 140,810 named unresolved, all passed through
+  decomposeExact -> 0 snapped), so it is a compute continuation, not research.
+  The wide-anchor lane landed BOUNDED-NO-CLOSURE at 63/1170 anchors and is the
+  third named remainder. None of these lanes invent a witness; each exact-solves
+  its candidates, so a snap is a real BESTA47 but the normal outcome is a
+  bounded null - hence no goal-level success marker is attached to the sweeps,
+  and the merge is judged by its own tests plus the CAMPAIGN:M8-U1 row. All
+  three lanes write disjoint files; the merge dependsOn them and therefore runs
+  in a later layer of the same round, after they land.
+budget:
+  maxRounds: 4
+stopConditions:
+  - Ship a verified exact rank<=47 scheme over F_2 (bun src/matmul/goalCheckA.ts
+    exits 0, BESTA47 listed); stop all lanes
+  - "Close the k=8 band in full: identities persisted for every unresolved row
+    and each one individually re-solved (snapped witness or proven refute), with
+    the pre/post partition reconciling to C(49,8)=450,978,066"
+  - Reach 4 rounds with no witness; report band-8 closure status, k=9 covered
+    fraction and wide-anchor covered fraction honestly, with zero false closure
+tasks:
+  - id: M8-U1-band8c
+    problem: src/matmul/attempts/M8U1_band8c.ts
+    tests: src/matmul/attempts/M8U1_band8c.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Close the M8T1/R143 k=8 band identity residual. Re-run the k=8 drop band
+      of the exact-49 two-level Strassen floor (canonical hash f4640c18),
+      classify each C(49,8) drop subset K by the SAME exact rule as M8T1_band8
+      (deficit D = XOR_{i in K} t_i, mode-1 flattening rank(D) > 6 -> REFUTE, <=
+      6 -> CANDIDATE), persist the drop-index IDENTITY of EVERY
+      candidate/unresolved row to attempts/M8U1_band8c.ndjson, then post-solve
+      each on its fixed support: any other mode's exact flattening rank > 6 ->
+      REFUTED (a genuine lower bound), else exact-solve D into <= 6 fresh rank-1
+      terms (a verified witness against D -> SNAPPED); a solver failure or
+      budget hit leaves the row UNRESOLVED and is NEVER reported as REFUTED.
+      Import the landed R137_49band.ts / M8T1_band8.ts / R143_band8c.ts
+      machinery rather than re-deriving it; the colocated test must assert the
+      classification equals mode1RankByIndices(idxs,8) > 6 exactly on a sample.
+      Gating controls in the test: floor hash f4640c18 rank 49 mismatchF2 0; a
+      planted small-k admit; the two M8T1_band8 known-REFUTE k=6 drop sets
+      ([0,1,2,3,4,7] hash fa885c4f, [0,1,2,3,4,9] hash c9a0e9e6). Emit
+      attempts/M8U1_band8c.json with the pre-solve partition (refutes +
+      candidates = 450,978,066) and the post-solve partition (snapped +
+      stillUnresolved). A verified snap writes attempts/M8U1_band8c_scheme.ts
+      and fires the gate. File ownership attempts/M8U1_band8c* only; no
+      AlphaTensor tensor imported/transcribed; no BESTA47 claim absent a
+      verified witness."
+  - id: M8-U1-band9
+    problem: src/matmul/attempts/M8U1_band9.ts
+    tests: src/matmul/attempts/M8U1_band9.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Continue the sharded k=9 drop-band closure from the landed R143_band9
+      cursors. Reuse the R143_band9.ts shard discipline (bigint contiguous
+      slices of the C(49,9)=2,054,455,634 rank space, cursor = lo + processed
+      published only AFTER the row was counted, per-shard ndjson +
+      identity-bearing unresolved ledger). Same exact rule: mode-1 flattening
+      rank(D) > 7 -> REFUTE, <= 7 -> exact <=7 rank-1 decomposition (success ->
+      ADMIT with witness verified against D) else UNRESOLVED emitted WITH its
+      identity; never refute an undecided row. Resume past the R143 per-shard
+      cursors instead of restarting. The driver must declare the exact bigint
+      C(49,9) and refuse to call the band closed unless sum(planned) ==
+      sum(processed) == C(49,9) and every shard is complete. Emit
+      attempts/M8U1_band9.json + per-shard reports and
+      M8U1_band9_unresolved*of8.ndjson. Colocated test gates: floor control
+      f4640c18; the R143 known-REFUTE controls; cursor-resume integrity (a
+      resumed run never re-counts a row). A bounded or partial null is reported
+      as BOUNDED-NO-CLOSURE with the covered fraction; no impossibility claim,
+      no BESTA47 claim. File ownership attempts/M8U1_band9* only."
+  - id: M8-U1-wide
+    problem: src/matmul/attempts/M8U1_wide.ts
+    tests: src/matmul/attempts/M8U1_wide.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: "Continue the wide-anchor closure of the exact-49 floor that
+      R143_wide_anchor left at BOUNDED-NO-CLOSURE (150,000,000 of 2,771,332,200
+      rows, 63/1170 anchors, 0 admits, 0 unresolved). Recover the
+      R143_wide_anchor.ts anchor definition and per-anchor instrument unchanged
+      (do NOT widen the ansatz or the anchor class), resume from its recorded
+      cursors/covered-anchor set, and advance newly indexed anchors. Per-input
+      verdict taxonomy refute/unresolved/admit with identity; every rank<=47
+      candidate exact-solved in-window and any survivor handed to checker.verify
+      before any claim. Emit attempts/M8U1_wide.json +
+      attempts/M8U1_wide.ndjson. Colocated test gates: floor control f4640c18;
+      per-k totals reconcile to the verdict; cursor-resume never re-counts.
+      Bounded null reported as bounded with anchorsCovered/screened; closure
+      only when all 1170 anchors are covered. File ownership attempts/M8U1_wide*
+      only; no AlphaTensor tensor; no BESTA47 claim."
+  - id: M8-U1-merge
+    problem: src/matmul/attempts/M8U1_merge.ts
+    tests: src/matmul/attempts/M8U1_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:M8-U1
+    timeoutMs: 1800000
+    note: "Adjudication over the three landed M8-U1 siblings (runs in a LATER layer
+      of this round, after their artifacts land on main). Tolerant extractor
+      over attempts/M8U1_band8c.* / M8U1_band9*.* / M8U1_wide.* (each .ndjson
+      preferred with .json fallback, reading
+      masks/vec/vectors/support/witness/triples/hash or a dropIndices identity);
+      re-verify every vectored candidate with checker.verifyMod2 AND
+      checker.verify AND the goalSatisfiedA gate selector; re-derive the
+      exact-49 floor hash f4640c18 independently; exact-solve-snap every
+      still-unsnapped rank<=47 support with decomposeExact; drift-check every
+      recorded hash against the canonical F_2 campaign fnv (hashMasks, +0x9e37
+      fold), preferring a recorded canonicalHash. Assert the closure equalities
+      and NAME any that fail: band8c refutes + candidates == 450,978,066 and
+      snapped + stillUnresolved == candidates; band9 shards reconcile to C(49,9)
+      or the merge records band9 as BOUNDED-OPEN with the exact covered
+      fraction; wide-anchor covered count matches its verdict; zero lane
+      disagreement; no named unresolved support silently dropped. Run bun
+      src/matmul/goalCheckA.ts and record its exit code. Emit
+      attempts/M8U1_merge.json plus a two-pass zero-drift self-check over the
+      (source, id, hash) set, and append the substantive CAMPAIGN:M8-U1 row
+      naming the residual class. F_2 rank<=47 (AlphaTensor parity) stays open
+      while 47 stands and BESTA47 is absent; bounded nulls over this layer are
+      not a claim of impossibility; no bound moves (21 <= R_F2 <= 23 for 3x3
+      untouched). File ownership attempts/M8U1_merge* only."
+    dependsOn:
+      - M8-U1-band8c
+      - M8-U1-band9
+      - M8-U1-wide

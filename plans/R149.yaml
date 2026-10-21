@@ -1,0 +1,241 @@
+label: R149
+goal: Close the k=7 drop-band of the exact-49 floor (final exact-closure band),
+  resume k=9 band from landed cursors, and run a fresh-seed ILS lane toward
+  AlphaTensor parity (exact rank<=47 over F_2)
+rationale: >
+  The M8 campaign has exhausted all structured ansatzes except two exact
+  band-closure targets:
+
+  - k=3..6: fully closed by R137 (0 admits, all rows refuted)
+
+  - k=7: partially processed by M8S1 (40M/85.9M rows, 35,047 unresolved) — the
+  last band that can be closed exactly in one round at ~860k rows/s
+
+  - k=8: fully closed by R146/M8-U1/M8-T1 (0 admits, complete)
+
+  - k=9: BOUNDED-OPEN at 0.097% coverage (R148 sizing: 2M/2.05B rows, 195K named
+  unresolved)
+
+  - 2-term merge: exhausted by R139_merge2term (0 admits)
+
+  - Algebraic supports: exhausted by R141_altsup (1,176 supports, all
+  INCONSISTENT)
+
+  - Wide-anchor: ~7% anchor coverage (80/1170)
+
+
+  Closing k=7 exactly is the highest-value exact-closure action (resolves the
+  last fully-decidable band). Resuming k=9 from R143/M8-U1 cursors continues the
+  only remaining large-band closure. The ILS lane provides the stochastic
+  complement. The merge adjudicates all three.
+budget:
+  maxRounds: 4
+stopConditions:
+  - "goalReached: goalCheckA exits 0 (BESTA47)"
+  - "budgetExhausted: 4 rounds or wall-clock limit"
+  - "noProgress: round produces identical fingerprint to previous round"
+  - "k7BandClosed: R149-band7-close emits CERTIFIED-CLOSED with 0 unresolved"
+  - "k9BandAdvanced: R149-band9-resume processes >= 5M additional rows"
+tasks:
+  - id: R149-band7-close
+    problem: src/matmul/attempts/R149_band7_close.ts
+    tests: src/matmul/attempts/R149_band7_close.test.ts
+    milestone: M8
+    success: CERTIFIED-CLOSED or BOUNDED-NO-CLOSURE with unresolved < 1000
+    evidence: CAMPAIGN:R149
+    timeoutMs: 1800000
+    note: >
+      Exact F_2 drop-k/add-(k-2) closure for k=7 around the two-level exact-49
+      floor.
+
+      Reconstruct the exact-49 floor (hash f4640c18, mismatchF2=0) from
+      M8M1_seed_ils.ts encoding.
+
+      Enumerate the remaining C(49,7)=85,900,584 drop sets K, resuming from
+      M8S1_band7.ndjson cursors
+
+      (last checkpoint at processed=40,000,000). For each K: deficit D = sum of
+      dropped terms exactly
+
+      over F_2; decide by mode-1 flattening rank (proven necessary condition):
+      if rank(D) > 5
+
+      refute the entire add-5 family; if rank(D) <= 5, solve the fresh 5 rank-1
+      terms exactly
+
+      via BigInt Gaussian coefficient solver (coeffSolve from M8M1_seed_ils.ts).
+      Stream
+
+      per-2M-row checkpoints and a final summary to
+      R149_band7_close.ndjson/.json.
+
+      Verdict: CERTIFIED-CLOSED (0 unresolved, 0 admits) or BOUNDED-NO-CLOSURE
+      with named
+
+      unresolved count. Colocated test re-derives M8S1 cursors, checks planted
+      admit (rank<=2
+
+      7-drop sum) and planted refute controls, and asserts zero unmatched
+      rank<=47 candidates.
+
+      Run under nice -n 19. File-ownership: attempts/R149_band7_close* only. No
+      AlphaTensor tensors. Field F_2 throughout.
+  - id: R149-band9-resume
+    problem: src/matmul/attempts/R149_band9_resume.ts
+    tests: src/matmul/attempts/R149_band9_resume.test.ts
+    milestone: M8
+    success: Processed >= 5000000 additional rows with valid cursor resume
+    evidence: CAMPAIGN:R149
+    timeoutMs: 1800000
+    note: >
+      Resume the k=9 band closure from the exact cursors left by R143_band9 (8
+      shards) and
+
+      M8-U1_band9 (8 shards with per-shard startOffset=200,000).
+      C(49,9)=2,054,455,634 total
+
+      drop sets. R143 processed 1.6M rows (shards 0-7, 140,810 unresolved);
+      M8-U1 processed
+
+      400K more from offset 200K (54,352 unresolved). This task resumes from the
+      max cursor
+
+      per shard across both lineages, using the exact bigint DP shard partition
+      from
+
+      R148_size.json (shards 0-5: 256,806,954; shards 6-7: 256,806,955). Exact
+      integer
+
+      arithmetic throughout: mode-1 flattening rank prefilter then exact F_2
+      rank decision.
+
+      Stream per-shard checkpoints and summaries to
+      R149_band9_resume.ndjson/.json.
+
+      Target: process >= 5M additional rows this round. Verdict: BOUNDED-OPEN
+      with updated
+
+      coverage fraction and named unresolved. Colocated test validates cursor
+      resume integrity
+
+      (no gaps/overlaps), planted controls, and per-shard planned totals match
+      exact bigint
+
+      C(49,9). Run under nice -n 19. File-ownership: attempts/R149_band9_resume*
+      only.
+  - id: R149-ils
+    problem: src/matmul/attempts/R149_seed_ils.ts
+    tests: src/matmul/attempts/R149_seed_ils.test.ts
+    milestone: M8
+    success: BESTA47 or BOUNDED-NO-CLOSURE with full checkpoint ledger and zero
+      unmatched
+    evidence: CAMPAIGN:R149
+    timeoutMs: 1800000
+    note: >
+      Fresh-seed iterated local search lane (blocking task — double-bet with
+      replicas:2,
+
+      different pool models). Reconstruct the exact-49 floor (hash f4640c18,
+      mismatchF2=0)
+
+      and the archived spark anchor 4126ca7f (rank 53) from M8M1_seed_ils.ts
+      encodings.
+
+      Seeds: 6 new seeds disjoint from ALL prior ILS/walk seeds (the 10
+      excluded:
+
+      22,66,7,77,107,207,307,407; M8-M1 seeds 200003/17/29/41/53/69; R100-R148
+      census
+
+      seed lists recorded in their ndjson files — disjointness is testable
+      in-window via
+
+      explicit seed integer identity in the file). For each seed: split a term
+      on one axis
+
+      to open ranks 50..54, run interleaved merge/flip moves, then greedy
+      same-axis drain.
+
+      Checkpoint every lane-best and split-open state with full 16-bit u,v,w
+      factor vectors
+
+      and stable fnv hash to R149_seed_ils.ndjson. EVERY rank<=47 candidate
+      exact-solved
+
+      on its fixed support in-window via BigInt Gaussian coefficient solver
+      (unmatched=0
+
+      invariant). CONSISTENT at rank<=47 ships attempts/R149_scheme.ts via
+      goalSatisfiedA.
+
+      Verdict: BOUNDED-NO-CLOSURE unless an exact state is solved and
+      independently
+
+      re-verified. Colocated test re-derives anchor hashes, every checkpoint
+      hash, mismatch
+
+      counts, and consistency from the vecs in-window; exercises exact-solve
+      controls
+
+      (planted solvable support -> CONSISTENT; planted linearly dependent ->
+      INCONSISTENT);
+
+      verifies seed-disjointness against the named lists. Run exact-solve sweeps
+      under
+
+      nice -n 19. File-ownership: attempts/R149_seed_ils* only. No AlphaTensor
+      tensors.
+    replicas: 2
+  - id: R149-merge
+    problem: src/matmul/attempts/R149_merge.ts
+    tests: src/matmul/attempts/R149_merge.test.ts
+    milestone: M8
+    timeoutMs: 600000
+    note: >
+      Adjudication merge (later layer, runs ONLY after all three siblings land
+      on main).
+
+      Ingests: R149_band7_close.ndjson/.json (k=7 final verdict),
+      R149_band9_resume.ndjson/.json
+
+      (k=9 progress with per-shard cursors), R149_seed_ils.ndjson (ILS lane-best
+      states).
+
+      Re-verifies every vectored candidate with checker.verifyMod2 AND
+      checker.verify AND
+
+      goalSatisfiedA gate selector. Drift-checks every recorded hash against the
+      canonical
+
+      F_2 campaign fnv (hashMasks, +0x9e37 fold), preferring canonicalHash when
+      present.
+
+      Exact-solve-snaps any unsnapped rank<=47 support from the k=9 unresolved.
+      Asserts
+
+      closure equalities: k=7 refutes+admits+unresolved == C(49,7) with 0
+      unresolved for
+
+      CERTIFIED-CLOSED; k=9 per-shard processed <= planned with cursors
+      monotonic; ILS
+
+      unmatched=0. Runs bun src/matmul/goalCheckA.ts and records exit code iff
+
+      attempts/R149_scheme.ts exists. Emits R149_merge.json with per-source
+      summaries,
+
+      total candidates, witnesses, hash drift (must be 0), consistency
+      agree/disagree,
+
+      and zero-drift self-check. Verdict: WITNESS (BESTA47) or
+      BOUNDED-NO-CLOSURE naming
+
+      the residual. Colocated test drives the aggregator on a synthetic clean
+      layer and a
+
+      planted-drift layer. File-ownership: attempts/R149_merge* only. No
+      AlphaTensor tensors.
+    dependsOn:
+      - R149-band7-close
+      - R149-band9-resume
+      - R149-ils

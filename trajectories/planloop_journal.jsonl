@@ -29,3 +29,6 @@
 {"kind":"round","runId":"planrun_2026-10-20T04:52:56.153Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-20T06:58:59.565Z"}
 {"kind":"round","runId":"planrun_2026-10-20T04:52:56.153Z","round":{"label":"R148","taskIds":["R148-size","R148-scan","R148-merge","R148-check"],"solved":["R148-size","R148-merge","R148-check"]},"ts":"2026-10-20T08:54:23.509Z"}
 {"kind":"round","runId":"planrun_2026-10-20T04:52:56.153Z","round":{"label":"(no-proposal)","taskIds":[],"solved":[]},"ts":"2026-10-20T09:14:23.988Z"}
+{"kind":"round","runId":"planrun_2026-10-20T04:52:56.153Z","round":{"label":"R149","taskIds":["R149-band7-close","R149-band9-resume","R149-ils","R149-merge"],"solved":["R149-band7-close","R149-band9-resume"]},"ts":"2026-10-20T10:10:54.236Z"}
+{"kind":"round","runId":"planrun_2026-10-20T04:52:56.153Z","round":{"label":"R150","taskIds":["R150-band8c-resolve","R150-band9-continue","R150-altsup-targeted","R150-merge-audit"],"solved":[]},"ts":"2026-10-20T10:53:50.712Z"}
+{"kind":"round","runId":"planrun_2026-10-20T04:52:56.153Z","round":{"label":"R151","taskIds":["R151-census","R151-drain","R151-snap","R151-ils"],"solved":[]},"ts":"2026-10-20T11:19:38.463Z"}

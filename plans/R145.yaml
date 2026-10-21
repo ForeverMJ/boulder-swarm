@@ -1,0 +1,144 @@
+label: R145
+goal: "Close the named remainder spaces around the exact-49 two-level Strassen
+  floor: orbit-family drain, spark anchor drain, and fresh ILS with exact-solve
+  interleave. No open-ended exploration — each task targets a specific, named,
+  replayable candidate corpus."
+rationale: >
+  The M8 campaign has established an exact-49 floor (two-level Strassen, hash
+  f4640c18, verified). Recent layers (M8-T1, M8-U1, R143, R139, R141, R137) have
+  produced BOUNDED-NO-CLOSURE results over well-defined ansatzes:
+
+  - k=8 band: C(49,8)=450,978,066 fully enumerated, 0 admits
+
+  - k=9 band: BOUNDED-OPEN (only ~2M/2B rows)
+
+  - 2-term Strassen merge: exhausted, 0 admits
+
+  - Algebraic supports: 1,176 enumerated, all INCONSISTENT
+
+  - Wide-anchor: 80/1170 anchors covered
+
+
+  Three named, replayable candidate corpora remain undrained or partially
+  drained:
+
+  1. Orbit-family exact-49 states (r65_7a03c63, 49 distinct states with full
+  vectors+hashes) — only probed, never systematically drained with merge/flip +
+  exact-solve
+
+  2. Spark rank-53 anchor 4126ca7f (commit 17970a9) + R73 v2 checkpoint (27
+  exact-49 states with full vectors) — R99/R100/R101/R104 touched but not closed
+
+  3. Fresh ILS ground — seeds excluding ALL previously run
+  (22,66,7,77,107,207,307,407 + M8-M1's 6 seeds + R100/R101 seeds) with
+  exact-solve on every rank<=47 candidate
+
+
+  This proposal attacks each corpus with deterministic drain/meld + exact-solve
+  discipline, then merges the three sibling layers in a later-layer
+  adjudication. Every task is judgeable by its colocated test (verifies floor
+  re-derivation, checkpoint discipline, gate firing) or CAMPAIGN evidence.
+  Honest bounded nulls are reported as bounded; no impossibility claims.
+budget:
+  maxRounds: 4
+stopConditions:
+  - "goal: goalCheckA exits 0 (BESTA47 lands)"
+  - "budget: 4 rounds exhausted"
+  - "no-progress: a round produces identical fingerprint to previous round"
+  - "no-progress: all three sweep tasks return BOUNDED-RED with zero witnesses
+    and the merge task confirms zero new witnesses"
+tasks:
+  - id: R145-orbit-drain
+    problem: src/matmul/attempts/R145_orbit_drain.ts
+    tests: src/matmul/attempts/R145_orbit_drain.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Deterministic orbit-drain from the R65 orbit-family exact-49 states
+      (agent/goal-w0-A1@r65_7a03c63, 49 distinct states with full {u,v,w}
+      vectors and canonical hashes). Reconstruct the exact-49 floor (hash
+      f4640c18) and the 49 orbit-family supports from their archived encodings.
+      For each start state: at least 50 seeded deterministic iterations with
+      greedy exact F_2 drain, shear flips, split kicks, and deterministic meld.
+      Checkpoint full 16-bit factor vectors plus stable fnv hashes to
+      R145_orbit_drain.ndjson with resume-skip of already-processed hashes.
+      Exact-solve EVERY rank<=47 candidate support in-window via the recovered
+      gaussSolve per-axis machinery (coeffSolve from r50_fd96654). Verify any
+      exact rank<=47 candidate with checker.verifyMod2 AND goalSatisfiedA gate
+      path. Bounded sweep with no witness is honest RED (verdict BOUNDED-RED).
+      File-ownership: attempts/R145_orbit_drain* only; no AlphaTensor tensors,
+      F_2 throughout. Colocated test asserts: floor re-verification via
+      verifyMod2, vec+hash checkpoint discipline, gate fires on any witness,
+      zero unmatched rank<=47 candidates.
+  - id: R145-spark-drain
+    problem: src/matmul/attempts/R145_spark_drain.ts
+    tests: src/matmul/attempts/R145_spark_drain.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Deterministic drain/meld from the spark rank-53 anchor hash 4126ca7f
+      (commit 17970a9, carries full vec) and the 27 R73 v2 exact-49 states (full
+      vecs+hashes). Load the spark anchor via the existing CLI (bun
+      src/matmul/attempts/A1_spark_search.ts <seconds> <seed> als 4126ca7f) and
+      run bounded ALS plus deterministic drain (merge/flip moves toward 47). For
+      the 27 R73 v2 floor states: at least 50 seeded deterministic iterations
+      per start with greedy exact F_2 drain, shear flips, split kicks,
+      deterministic meld. Checkpoint full factor vectors plus stable hashes to
+      R145_spark_drain.ndjson with resume-skip of R99/R100/R101/R104-processed
+      hashes. Exact-solve every rank<=47 candidate in-window; verify via
+      verifyMod2 + goalSatisfiedA; emit witnesses as attempts/R145_scheme_*.ts.
+      Bounded sweep with no witness is honest RED (verdict BOUNDED-RED).
+      File-ownership: attempts/R145_spark_drain* + optional
+      attempts/R145_scheme_*.ts only; no AlphaTensor tensors, F_2 throughout.
+      Colocated test asserts: floor/spark re-verification, vec+hash checkpoint
+      discipline, gate fires on witness, zero unmatched rank<=47 candidates.
+  - id: R145-fresh-ils
+    problem: src/matmul/attempts/R145_fresh_ils.ts
+    tests: src/matmul/attempts/R145_fresh_ils.test.ts
+    milestone: M8
+    timeoutMs: 1800000
+    note: >
+      Fresh iterated local search on the exact-49 floor only: seeds exclude ALL
+      previously run ILS seeds (22, 66, 7, 77, 107, 207, 307, 407, M8-M1's
+      [200003,200017,200029,200041,200053,200069], R100-seedils seeds,
+      R101-ils/ils2 seeds). At least 8 new seeds, at least 10s per lane. Each
+      lane calibrates against the exact-49 floor (hash f4640c18, rank 49,
+      mismatchF2=0) then runs ILS at fixed rank 47. EVERY rank<=47 zero-mismatch
+      candidate is exact-solved on its fixed support in-window (composition rule
+      — never leave a candidate unmatched). Checkpoint vecs+hashes for lane-best
+      47 and floor-best 49 states to R145_fresh_ils.ndjson. Verdict
+      BOUNDED-NO-CLOSURE unless an exact state is solved and independently
+      re-verified. File-ownership: attempts/R145_fresh_ils* only; no AlphaTensor
+      tensors. Colocated test asserts: floor re-derivation, seed disjointness
+      from excluded set, exact-solve on every rank<=47 candidate, zero unmatched
+      candidates, gate firing on CONSISTENT solve.
+  - id: R145-merge
+    problem: src/matmul/attempts/R145_merge.ts
+    tests: src/matmul/attempts/R145_merge.test.ts
+    milestone: M8
+    evidence: CAMPAIGN:R145
+    timeoutMs: 1800000
+    note: >
+      Adjudication merge — runs AFTER its three siblings land on main
+      (dependsOn). Tolerant extractor over the three sibling NDJSON streams
+      R145_orbit_drain / R145_spark_drain / R145_fresh_ils (each .ndjson
+      preferred with .json fallback). Reads masks, vec/vectors, support,
+      witness, triples, bare hash/canonicalHash. Re-verifies every vectored
+      candidate with checker.verifyMod2 AND checker.verify AND goalSatisfiedA
+      gate selector. Re-derives the exact-49 F_2 floor hash f4640c18
+      independently. Drift-checks every recorded hash against the canonical F_2
+      campaign fnv (hashMasks, +0x9e37 fold). Exact-solve-snaps every
+      still-unsnapped rank<=47 support with decomposeExact. Asserts closure
+      equalities: orbit-drain before-count vs lane totals, spark-drain
+      before-count vs lane totals, fresh-ils zero unmatched invariant. Runs bun
+      src/matmul/goalCheckA.ts and records exit code. Emits R145_merge.json
+      (hashes, consistency outcomes, mismatch counts, 0-drift self-check) and
+      the CAMPAIGN:R145 row (exact-47 scheme or honest bounded-red naming the
+      residual). File-ownership: attempts/R145_merge* only. Colocated test
+      asserts: hash drift 0, zero lane disagreements, zero-drift self-check
+      true, gate exit code recorded, all named unresolved supports snapped or
+      explicitly accounted for.
+    dependsOn:
+      - R145-orbit-drain
+      - R145-spark-drain
+      - R145-fresh-ils
