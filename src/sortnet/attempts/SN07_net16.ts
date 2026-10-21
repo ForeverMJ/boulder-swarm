@@ -1,0 +1,75 @@
+import type { Comparator, Network } from "../types"
+
+// SN07: the published best-known sorting network for n=16 (60 comparators,
+// 10 layers), from the same source as BEST_KNOWN in bounds.ts:
+// https://bertdobbelaere.github.io/sorting_networks.html (retrieved
+// 2026-10-21, network N16L60D10, SorterHunter-generated; its size and depth
+// match the handcrafted 1969 network of M. W. Green, TAOCP v3 §5.3.4).
+// 60 is a best-known upper bound for n=16, not a proven optimum (the proven
+// optimum lies in 57...60). Beats the Batcher odd-even merge baseline
+// (63 comparators); a single-comparator deletion scan finds no redundancy.
+// Verified by the exhaustive 0/1-principle checker (see SN07_net16.test.ts).
+const comparators: readonly Comparator[] = [
+  [0, 13],
+  [1, 12],
+  [2, 15],
+  [3, 14],
+  [4, 8],
+  [5, 6],
+  [7, 11],
+  [9, 10],
+  [0, 5],
+  [1, 7],
+  [2, 9],
+  [3, 4],
+  [6, 13],
+  [8, 14],
+  [10, 15],
+  [11, 12],
+  [0, 1],
+  [2, 3],
+  [4, 5],
+  [6, 8],
+  [7, 9],
+  [10, 11],
+  [12, 13],
+  [14, 15],
+  [0, 2],
+  [1, 3],
+  [4, 10],
+  [5, 11],
+  [6, 7],
+  [8, 9],
+  [12, 14],
+  [13, 15],
+  [1, 2],
+  [3, 12],
+  [4, 6],
+  [5, 7],
+  [8, 10],
+  [9, 11],
+  [13, 14],
+  [1, 4],
+  [2, 6],
+  [5, 8],
+  [7, 10],
+  [9, 13],
+  [11, 14],
+  [2, 4],
+  [3, 6],
+  [9, 12],
+  [11, 13],
+  [3, 5],
+  [6, 8],
+  [7, 9],
+  [10, 12],
+  [3, 4],
+  [5, 6],
+  [7, 8],
+  [9, 10],
+  [11, 12],
+  [6, 7],
+  [8, 9],
+]
+
+export const network: Network = { n: 16, comparators }
