@@ -4160,6 +4160,34 @@ L2:
     success: N12BEATBATCHER
     note: "构造 n=12 正确网络,比较器数严格小于 Batcher 基线 42;由 scoreboard 标记判定"
     planned: true
+  - id: SN04
+    problem: src/sortnet/attempts/SN04_net13.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N13BEATBATCHER
+    note: "构造 n=13 正确网络,比较器数严格小于 Batcher 基线 48;由 scoreboard 标记判定"
+    planned: true
+  - id: SN05
+    problem: src/sortnet/attempts/SN05_net14.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N14BEATBATCHER
+    note: "构造 n=14 正确网络,比较器数严格小于 Batcher 基线 53;由 scoreboard 标记判定"
+    planned: true
+  - id: SN06
+    problem: src/sortnet/attempts/SN06_net15.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N15BEATBATCHER
+    note: "构造 n=15 正确网络,比较器数严格小于 Batcher 基线 59;由 scoreboard 标记判定"
+    planned: true
+  - id: SN07
+    problem: src/sortnet/attempts/SN07_net16.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N16BEATBATCHER
+    note: "构造 n=16 正确网络,比较器数严格小于 Batcher 基线 63;由 scoreboard 标记判定"
+    planned: true
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)
