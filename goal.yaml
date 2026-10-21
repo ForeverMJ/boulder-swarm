@@ -4188,6 +4188,38 @@ L2:
     success: N16BEATBATCHER
     note: "构造 n=16 正确网络,比较器数严格小于 Batcher 基线 63;由 scoreboard 标记判定"
     planned: true
+  - id: SN08
+    problem: src/sortnet/attempts/SN08_net13.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N13BEATBESTKNOWN
+    timeoutMs: 1800000
+    note: "开放挑战:n=13 严格小于 best-known 45(即 ≤44);失败是诚实结果,禁止提交非改进网络"
+    planned: true
+  - id: SN09
+    problem: src/sortnet/attempts/SN09_net14.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N14BEATBESTKNOWN
+    timeoutMs: 1800000
+    note: "开放挑战:n=14 严格小于 best-known 51(即 ≤50);失败是诚实结果,禁止提交非改进网络"
+    planned: true
+  - id: SN10
+    problem: src/sortnet/attempts/SN10_net15.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N15BEATBESTKNOWN
+    timeoutMs: 1800000
+    note: "开放挑战:n=15 严格小于 best-known 56(即 ≤55);失败是诚实结果,禁止提交非改进网络"
+    planned: true
+  - id: SN11
+    problem: src/sortnet/attempts/SN11_net16.ts
+    tests: src/sortnet/scoreboard.ts
+    milestone: M9
+    success: N16BEATBESTKNOWN
+    timeoutMs: 1800000
+    note: "开放挑战:n=16 严格小于 best-known 60(即 ≤59);失败是诚实结果,禁止提交非改进网络"
+    planned: true
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)

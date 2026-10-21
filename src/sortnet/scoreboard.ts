@@ -49,6 +49,8 @@ async function main(): Promise<void> {
       const best = bestVerified(rows, n)
       const matching = best !== undefined && best.size <= size ? best : undefined
       console.log(`N${n}LE${size}=${matching?.file ?? "none"}`)
+      const beating = best !== undefined && best.size < size ? best : undefined
+      console.log(`N${n}BEATBESTKNOWN=${beating?.file ?? "none"}`)
     }
   } catch (error) {
     console.error("unhandled:", error)
