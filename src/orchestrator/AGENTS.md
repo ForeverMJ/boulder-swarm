@@ -14,7 +14,7 @@ specifics only.
 | Task schema / dispatch | `scheduler.ts` | zod `GoalFile{L2[]}`; `workerId = i % n`; branch `agent/goal-w{i}-{taskId}` |
 | Git primitives | `git.ts` | wrapper throws `GitError`; `createWorktree` force-recreates; `mergeGate` = merge → verify → `reset --hard` on fail |
 | Agent process lifetime | `agentLifecycle.ts` | on timeout: salvage (`onSalvage`) while tree still alive, then kill tree; zero strays expected |
-| Live adapters | `opencodeWorker.ts` / `codexWorker.ts` | opencode: env `OPENCODE_BIN`, `OPENCODE_MODEL` (default `opencode-go/space-bunny-free`); codex: env `CODEX_MODEL`, uses `~/.codex/auth.json`, unsets `OPENAI_API_KEY` |
+| Live adapters | `opencodeWorker.ts` / `codexWorker.ts` | opencode: env `OPENCODE_BIN`, `OPENCODE_MODEL` (default = head of `modelPool.ts` `DEFAULT_MODEL_POOL`, probed live at runLoop/planLoop startup); codex: env `CODEX_MODEL`, uses `~/.codex/auth.json`, unsets `OPENAI_API_KEY` |
 | Mock worker | `worker.ts` | no edits; snapshots source into `.branches/worker_X/task`, runs harness |
 | Settle-before-score | `settle.ts` | poll `git status --porcelain` until stable, then score/commit |
 | Supervisor journal | `supervisorState.ts` | durable state under `trajectories/supervisor_state.json`; corrupt → fresh state, never throws |

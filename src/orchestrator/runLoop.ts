@@ -24,6 +24,7 @@ import {
   parsePorcelainPaths,
 } from "./git"
 import { buildPlannedTaskPrompt, dispatch, loadTasks, workerIds } from "./scheduler"
+import { DEFAULT_MODEL_POOL, probeModelEdit, selectHealthyModel } from "./modelPool"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
 import { type AgentPlan, type ProgressIntegration, type StrategyComparison, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
@@ -665,6 +666,21 @@ async function main(): Promise<void> {
     const replicaSet = new Set(args.replicas)
     const filtered = tasks.length === 0 ? all : all.filter((t) => tasks.includes(t.id))
     const selected = filtered.flatMap((t) => (replicaSet.has(String(t.id)) ? [t, t] : [t]))
+    // Free-tier models die server-side without notice; probe the pool once at
+    // startup instead of discovering a dead default mid-round. Explicit
+    // OPENCODE_MODEL or --models still wins over the pool.
+    if (mode === "opencode") {
+      const forced = process.env["OPENCODE_MODEL"]?.trim()
+      if ((forced === undefined || forced === "") && args.models.length === 0) {
+        const picked = await selectHealthyModel(DEFAULT_MODEL_POOL, probeModelEdit)
+        if (picked !== undefined) {
+          process.env["OPENCODE_MODEL"] = picked
+          console.log(`model: ${picked} (pool-probed)`)
+        } else {
+          console.log("model: pool probe found nothing healthy; falling back to DEFAULT_MODEL")
+        }
+      }
+    }
     if (args.supervise) {
       await supervise(args, selected)
       return

@@ -1,8 +1,12 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { countTree, runTree } from "./agentLifecycle"
+import { DEFAULT_MODEL_POOL } from "./modelPool"
 
-export const DEFAULT_MODEL = "opencode/muse-spark-1.3-contributor-free"
+// Pool head, not a frozen name: free-tier models get retired server-side without
+// notice (muse-spark-1.3-contributor-free 500'd mid-campaign), so the default
+// tracks the probed-healthy pool order in modelPool.ts.
+export const DEFAULT_MODEL = DEFAULT_MODEL_POOL[0] ?? "opencode/big-pickle"
 
 export type AgentResult = {
   readonly task_id: string

@@ -4,20 +4,29 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 // The free model tier degrades in waves: sometimes a model hangs (probe times
-// out with zero output), sometimes it fakes work (exit 0, no edit). A single
-// hardcoded model stalls the whole plan loop whenever its wave hits. This pool
-// probes candidates with a REAL edit task and picks the first that actually
-// performs it - the file content, never the exit code, is the verdict, because
-// fake-work exits 0. OPENCODE_MODEL still overrides the pool entirely.
-
+// out with zero output), sometimes it fakes work (exit 0, no edit), sometimes
+// it is silently retired server-side (muse-spark-1.3-contributor-free went 500
+// mid-campaign). A single hardcoded model stalls the whole run whenever its
+// wave hits. This pool probes candidates with a REAL edit task and picks the
+// first that actually performs it - the file content, never the exit code, is
+// the verdict, because fake-work exits 0. OPENCODE_MODEL still overrides the
+// pool entirely.
+//
+// Pool refresh 2026-10-21: all entries below passed a live edit-probe (each
+// performed `x = 1 -> x = 2` within 100s). Verified-dead or too-slow models
+// dropped: muse-spark-1.3-contributor-free (server 500), cat-jam-free (gone),
+// beam-free / flint-40b-free / longcat-2.5-preview-free (probe timeout).
+// Order: strongest code models first, big-pickle as the proven-campaign fallback.
 export const DEFAULT_MODEL_POOL: readonly string[] = [
-  "opencode/muse-spark-1.3-contributor-free",
-  "opencode/cat-jam-free",
-  "opencode/deepseek-v4.1-flash-free",
-  "opencode/glm-5.3-flash-free",
-  "opencode/longcat-2.5-preview-free",
   "opencode/nemotron-3-ultra-free",
+  "opencode/glm-5.3-flash-free",
+  "opencode/deepseek-v4.1-flash-free",
+  "opencode/big-pickle",
+  "opencode/minimax-m3.1-flash-free",
+  "opencode/mimo-v2.6-flash-free",
+  "opencode-go/minimax-m3.1-flash-free",
   "opencode/nemotron-3.5-lightning-free",
+  "opencode/nemotron-3.5-super-vl-free",
 ]
 
 export type ProbeFn = (model: string) => Promise<boolean>

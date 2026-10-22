@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "bun:test"
-import { resolveModel, resolveOpencodeBin, resolveOpencodeBinFor } from "./opencodeWorker"
+import { DEFAULT_MODEL, resolveModel, resolveOpencodeBin, resolveOpencodeBinFor } from "./opencodeWorker"
 
 const ORIGINAL_BIN = process.env["OPENCODE_BIN"]
 const ORIGINAL_MODEL = process.env["OPENCODE_MODEL"]
@@ -49,8 +49,8 @@ describe("opencodeWorker bin resolution, judged independently", () => {
     expect(resolveOpencodeBin()).toBe(resolveOpencodeBinFor(process.platform))
   })
 
-  it("uses the registered Muse Spark free model when no model override is set", () => {
+  it("falls back to the model-pool head when no model override is set", () => {
     delete process.env["OPENCODE_MODEL"]
-    expect(resolveModel()).toBe("opencode/muse-spark-1.3-contributor-free")
+    expect(resolveModel()).toBe(DEFAULT_MODEL)
   })
 })
