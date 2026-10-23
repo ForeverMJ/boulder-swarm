@@ -704,7 +704,10 @@ async function main(): Promise<void> {
           process.env["OPENCODE_MODEL"] = picked
           console.log(`model: ${picked} (pool-probed)`)
         } else {
-          console.log("model: pool probe found nothing healthy; falling back to DEFAULT_MODEL")
+          // planLoop semantics: starting on a model the probe just declared
+          // unhealthy burns whole rounds on planner timeouts. Halt honestly.
+          console.log("no healthy model in the pool right now; halting before round 1")
+          return
         }
       }
     }
