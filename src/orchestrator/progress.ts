@@ -189,6 +189,7 @@ Use switch for the initial method. Explain what the evidence implies, what chang
 After a stalled round, propose a different experiment or stop. A new route name is not progress.
 When replacing an existing method, your proposal is a candidate, not an approved improvement. The runtime compares it with the incumbent from the same snapshot under equal execution limits. Specify an executable experiment; ties keep the incumbent. Read prior comparison failures before proposing another candidate.
 Use the exact fixed scope. Cite supplied verified artifact references, including the latest verified receipt when one exists; otherwise evidence must be [].
+When priorEvidence below is empty this IS the first round: evidence MUST be [] — citing files or commits is fabrication and validatePlan will reject the plan.
 Do not claim a timeout proves exhaustion. Only the original verifier/merge gate establishes completion.${gateNote}
 Planning context:\n${JSON.stringify(
     {

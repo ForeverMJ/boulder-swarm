@@ -4940,5 +4940,101 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-23T13:58:01.403Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "SN08",
+    "branch": "agent/goal-w0-SN08",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 280.51,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:10:29.979Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "SN09",
+    "branch": "agent/goal-w1-SN09",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 303.08,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:10:29.979Z"
+  },
+  {
+    "worker_id": 2,
+    "task_id": "SN10",
+    "branch": "agent/goal-w2-SN10",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 303.12,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:10:29.979Z"
+  },
+  {
+    "worker_id": 3,
+    "task_id": "SN11",
+    "branch": "agent/goal-w3-SN11",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 303.12,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:10:29.979Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "SN08",
+    "branch": "agent/goal-w0-SN08",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 246.24,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:14:39.591Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "SN09",
+    "branch": "agent/goal-w1-SN09",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 168.74,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:14:39.591Z"
+  },
+  {
+    "worker_id": 2,
+    "task_id": "SN10",
+    "branch": "agent/goal-w2-SN10",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 208.34,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:14:39.591Z"
+  },
+  {
+    "worker_id": 3,
+    "task_id": "SN11",
+    "branch": "agent/goal-w3-SN11",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 191.89,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:14:39.591Z"
   }
 ]

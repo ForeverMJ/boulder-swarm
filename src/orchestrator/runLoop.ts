@@ -345,12 +345,12 @@ export async function runLive(
         const before = git(wt, ["rev-parse", "HEAD"])
         const planner = await deps.spawnAgent({
           workdir: wt, prompt: `${basePrompt}${progressPrompt(context)}`,
-          taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(300_000, timeoutMs),
+          taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(420_000, timeoutMs),
         })
         planningSeconds = planner.duration_s
         const stable = await waitForStable(() => gitStatus(wt))
         if (planner.exitCode !== 0 || planner.timedOut || planner.straysAfter !== 0 || !stable.stable) {
-          throw new Error("Planning agent failed, timed out, or did not settle")
+          throw new Error(`Planning agent failed (exit=${planner.exitCode} timedOut=${planner.timedOut} strays=${planner.straysAfter} settled=${stable.stable})`)
         }
         if (git(wt, ["rev-parse", "HEAD"]) !== before || git(wt, ["diff", "HEAD", "--", ".", ":(exclude)agent-last-message.md"]) !== ""
           || worktreePaths(wt).some((p) => p !== "agent-last-message.md")) {
