@@ -54,3 +54,22 @@ describe("opencodeWorker bin resolution, judged independently", () => {
     expect(resolveModel()).toBe(DEFAULT_MODEL)
   })
 })
+
+describe("parseFinal", () => {
+  it("extracts single-line FINAL JSON", async () => {
+    const { parseFinal } = await import("./opencodeWorker")
+    expect(parseFinal('noise\nFINAL: {"a":1}\n')).toBe('{"a":1}')
+  })
+
+  it("extracts pretty-printed multi-line FINAL JSON", async () => {
+    const { parseFinal } = await import("./opencodeWorker")
+    const pretty = 'FINAL: {\n  "action": "switch",\n  "evidence": []\n}\ntrailing'
+    expect(JSON.parse(parseFinal(pretty))).toEqual({ action: "switch", evidence: [] })
+  })
+
+  it("returns empty for missing FINAL or unbalanced braces", async () => {
+    const { parseFinal } = await import("./opencodeWorker")
+    expect(parseFinal("no marker here")).toBe("")
+    expect(parseFinal('FINAL: {"a":1')).toBe("")
+  })
+})

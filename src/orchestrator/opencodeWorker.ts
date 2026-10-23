@@ -49,9 +49,23 @@ export function buildPrompt(taskId: string, problem: string, tests: string): str
   ].join("\n")
 }
 
+// Brace-balanced extraction: models pretty-print the FINAL plan JSON across lines,
+// and a single-line regex truncates it into an unparseable fragment.
 export function parseFinal(out: string): string {
-  const m = out.match(/FINAL:\s*(\{.*\})/)
-  return m?.[1] ?? ""
+  const idx = out.lastIndexOf("FINAL:")
+  if (idx === -1) return ""
+  const start = out.indexOf("{", idx)
+  if (start === -1) return ""
+  let depth = 0
+  for (let i = start; i < out.length; i++) {
+    const ch = out[i]
+    if (ch === "{") depth++
+    else if (ch === "}") {
+      depth--
+      if (depth === 0) return out.slice(start, i + 1)
+    }
+  }
+  return ""
 }
 
 export function spawnAgent(opts: {
