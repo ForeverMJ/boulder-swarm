@@ -184,6 +184,7 @@ export function progressPrompt(context: ReturnType<typeof progressContext>): str
   return `\n\nYou are the planning agent. Do not execute the task or edit project files. Choose your own method; there is no predefined route list.
 The task text above is context, not an instruction to implement during this planning phase.
 Return FINAL: followed by a single-line JSON object, and write the same line to agent-last-message.md for adapter compatibility.
+Emit the FINAL JSON as ONE compact single line with every string field under 200 characters; a truncated plan is a lost round.
 Schema: {action: "continue"|"switch"|"stop", route: string, scope: string, instruction: string, reason: string, experiment: string, evidence: [{commit,path,sha256}]}.
 Use switch for the initial method. Explain what the evidence implies, what changes, and what next experiment could confirm or disprove your hypothesis.
 After a stalled round, propose a different experiment or stop. A new route name is not progress.

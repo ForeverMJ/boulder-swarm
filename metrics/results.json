@@ -5036,5 +5036,53 @@
     "loc": 0,
     "mode": "opencode",
     "ts": "2026-10-23T14:14:39.591Z"
+  },
+  {
+    "worker_id": 0,
+    "task_id": "SN08",
+    "branch": "agent/goal-w0-SN08",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 1812.6,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:45:56.140Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "SN09",
+    "branch": "agent/goal-w1-SN09",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 149.95,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:45:56.140Z"
+  },
+  {
+    "worker_id": 2,
+    "task_id": "SN10",
+    "branch": "agent/goal-w2-SN10",
+    "passed": 0,
+    "total": 1,
+    "pass_rate": 0,
+    "duration_s": 440.1,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:45:56.140Z"
+  },
+  {
+    "worker_id": 3,
+    "task_id": "SN11",
+    "branch": "agent/goal-w3-SN11",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 131.49,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T14:45:56.140Z"
   }
 ]
