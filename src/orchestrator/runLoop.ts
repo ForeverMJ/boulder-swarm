@@ -5,6 +5,7 @@ import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { runTestFile } from "../eval/harness"
 import type { Verdict } from "../eval/harness"
+import { appendAttempt, renderRecent } from "./attemptLedger"
 import { distillFromResults } from "../recording/distill"
 import { saveResults } from "../recording/metrics"
 import { appendEvent } from "../recording/trace"
@@ -23,7 +24,7 @@ import {
   mergeGate,
   parsePorcelainPaths,
 } from "./git"
-import { buildPlannedTaskPrompt, dispatch, loadTasks, workerIds } from "./scheduler"
+import { buildPlannedTaskPrompt, deriveProgress, dispatch, loadTasks, workerIds } from "./scheduler"
 import { DEFAULT_MODEL_POOL, probeModelEdit, selectHealthyModel } from "./modelPool"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
@@ -302,28 +303,35 @@ export async function runLive(
   runId: string,
   repo: string = REPO,
 ): Promise<LiveRun> {
-  if (assigns.some((a) => a.task.progress)
-    && new Set(assigns.map((a) => a.workerId)).size !== assigns.length) {
-    throw new Error("Evidence-guided runs require one worktree per assignment; increase --workers or select fewer tasks.")
+  // Unified pipeline: every assignment runs the progress protocol (loadTasks derives
+  // the default policy), so every assignment owns its worktree and chains off its
+  // previous receipt's commit. Dispatch windowing (min(queue, workers)) upholds this.
+  if (new Set(assigns.map((a) => a.workerId)).size !== assigns.length) {
+    throw new Error("Every assignment needs its own worktree; increase --workers or select fewer tasks.")
   }
   initRepo(repo)
   const worktreesRoot = `${repo}-worktrees`
   const ready: { wt: string; a: (typeof assigns)[number] }[] = []
   for (const a of assigns) {
-    const previous = a.task.progress ? progressContext(repo, a.task.id, a.task.progress).last : undefined
+    const policy = deriveProgress(a.task)
+    const previous = progressContext(repo, a.task.id, policy).last
     const wt = await createWorktree(repo, worktreesRoot, a.workerId, a.branch, previous?.commit ?? "main")
     ready.push({ wt, a })
   }
   const settled = await Promise.all(
     ready.map(async ({ wt, a }) => {
-      const context = a.task.progress ? progressContext(repo, a.task.id, a.task.progress) : undefined
+      const policy = deriveProgress(a.task)
+      const context = progressContext(repo, a.task.id, policy)
       const basePrompt = await taskPrompt(
         repo,
         a.task,
         a.task.planned === true
           ? buildPlannedTaskPrompt(a.task.id, a.task.problem, a.task.tests, a.task.note, a.task.evidence)
           : deps.buildPrompt(a.task.id, a.task.problem, a.task.tests),
-      )
+      ) + (() => {
+        const recent = renderRecent(repo, campaignRoot(a.task.problem), 50)
+        return recent === "" ? "" : `\n\n${recent}`
+      })()
       let plan: AgentPlan | undefined
       let planningFailure: string | undefined
       let planningSeconds = 0
@@ -332,39 +340,37 @@ export async function runLive(
       let trialSelected = false
       const attemptStarted = performance.now()
       const timeoutMs = a.task.timeoutMs ?? 600_000
-      if (context) {
-        try {
-          if (context.last?.decision.action === "stop") throw new Error("Persisted stop; review policy before restarting")
-          const before = git(wt, ["rev-parse", "HEAD"])
-          const planner = await deps.spawnAgent({
-            workdir: wt, prompt: `${basePrompt}${progressPrompt(context)}`,
-            taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(120_000, timeoutMs),
-          })
-          planningSeconds = planner.duration_s
-          const stable = await waitForStable(() => gitStatus(wt))
-          if (planner.exitCode !== 0 || planner.timedOut || planner.straysAfter !== 0 || !stable.stable) {
-            throw new Error("Planning agent failed, timed out, or did not settle")
-          }
-          if (git(wt, ["rev-parse", "HEAD"]) !== before || git(wt, ["diff", "HEAD", "--", ".", ":(exclude)agent-last-message.md"]) !== ""
-            || worktreePaths(wt).some((p) => p !== "agent-last-message.md")) {
-            throw new Error("Planning agent modified project files; execution withheld")
-          }
-          plan = validatePlan(context, JSON.parse(planner.final))
-          // Adapter output is not research state; both trials must start from the same clean commit.
-          if (existsSync(join(wt, "agent-last-message.md"))) {
-            if (git(wt, ["ls-files", "--", "agent-last-message.md"]) !== "") {
-              git(wt, ["restore", "--source=HEAD", "--staged", "--worktree", "--", "agent-last-message.md"])
-            } else unlinkSync(join(wt, "agent-last-message.md"))
-          }
-        } catch (error) {
-          if (!(error instanceof Error)) throw error
-          planningFailure = error.message
+      try {
+        if (context.last?.decision.action === "stop") throw new Error("Persisted stop; review policy before restarting")
+        const before = git(wt, ["rev-parse", "HEAD"])
+        const planner = await deps.spawnAgent({
+          workdir: wt, prompt: `${basePrompt}${progressPrompt(context)}`,
+          taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(120_000, timeoutMs),
+        })
+        planningSeconds = planner.duration_s
+        const stable = await waitForStable(() => gitStatus(wt))
+        if (planner.exitCode !== 0 || planner.timedOut || planner.straysAfter !== 0 || !stable.stable) {
+          throw new Error("Planning agent failed, timed out, or did not settle")
         }
+        if (git(wt, ["rev-parse", "HEAD"]) !== before || git(wt, ["diff", "HEAD", "--", ".", ":(exclude)agent-last-message.md"]) !== ""
+          || worktreePaths(wt).some((p) => p !== "agent-last-message.md")) {
+          throw new Error("Planning agent modified project files; execution withheld")
+        }
+        plan = validatePlan(context, JSON.parse(planner.final))
+        // Adapter output is not research state; both trials must start from the same clean commit.
+        if (existsSync(join(wt, "agent-last-message.md"))) {
+          if (git(wt, ["ls-files", "--", "agent-last-message.md"]) !== "") {
+            git(wt, ["restore", "--source=HEAD", "--staged", "--worktree", "--", "agent-last-message.md"])
+          } else unlinkSync(join(wt, "agent-last-message.md"))
+        }
+      } catch (error) {
+        if (!(error instanceof Error)) throw error
+        planningFailure = error.message
       }
       const remainingMs = Math.max(0, timeoutMs - (performance.now() - attemptStarted))
-      if (context && remainingMs === 0) planningFailure = "Attempt budget exhausted during planning"
-      const experimentPrompt = (method: AgentPlan) => `${basePrompt}\n\nAgent-selected experiment (original task restrictions still apply):\n${JSON.stringify(method)}\nPrior evidence commits:\n${JSON.stringify(context?.history.map((r) => ({commit: r.commit, observation: r.observation, artifacts: r.artifacts})))}`
-      if (context && plan?.action === "switch" && context.last?.plan && !planningFailure) {
+      if (remainingMs === 0) planningFailure = "Attempt budget exhausted during planning"
+      const experimentPrompt = (method: AgentPlan) => `${basePrompt}\n\nAgent-selected experiment (original task restrictions still apply):\n${JSON.stringify(method)}\nPrior evidence commits:\n${JSON.stringify(context.history.map((r) => ({commit: r.commit, observation: r.observation, artifacts: r.artifacts})))}`
+      if (plan?.action === "switch" && context.last?.plan && !planningFailure) {
         const trialStarted = performance.now()
         try {
           const trial = await runStrategyTrial({
@@ -391,7 +397,7 @@ export async function runLive(
           planningFailure = `Comparison failed; no candidate promoted: ${error.message}`
         }
       }
-      const execute = !context || (!planningFailure && plan && plan.action !== "stop")
+      const execute = !planningFailure && plan !== undefined && plan.action !== "stop"
       const prompt = plan ? experimentPrompt(plan) : basePrompt
       let salvaged = false
       const agent = execute && !comparison ? await deps.spawnAgent({
@@ -400,7 +406,7 @@ export async function runLive(
         taskId: a.task.id,
         branch: a.branch,
         ...(a.model === undefined ? {} : { model: a.model }),
-        ...(context ? { timeoutMs: remainingMs } : a.task.timeoutMs === undefined ? {} : { timeoutMs: a.task.timeoutMs }),
+        timeoutMs: remainingMs,
         onSalvage: () => {
           salvaged = true
         },
@@ -408,10 +414,10 @@ export async function runLive(
       const durationSeconds = planningSeconds + trialSeconds + agent.duration_s
       const settled = await waitForStable(() => gitStatus(wt))
       if (!settled.stable) {
-        console.log(`SETTLE ${a.task.id}: worktree still moving after ${settled.polls} polls; ${context ? "withholding scoring and commit" : "committing anyway"}`)
+        console.log(`SETTLE ${a.task.id}: worktree still moving after ${settled.polls} polls; withholding scoring and commit`)
       }
       const produced = worktreePaths(wt)
-      const safeToScore = execute && (!comparison || trialSelected) && (!context || (settled.stable && agent.straysAfter === 0))
+      const safeToScore = execute && (!comparison || trialSelected) && settled.stable && agent.straysAfter === 0
       const v = safeToScore
         ? scoreAssignment(
             wt,
@@ -430,12 +436,12 @@ export async function runLive(
       const revision = git(wt, ["rev-parse", "HEAD"])
       // Progress receipts are recorded after the merge gate below, so the
       // receipt carries the integration verdict and the planner can see it.
-      const progressInput = context && a.task.progress ? {
+      const progressInput = {
         taskId: a.task.id, worktree: wt, commit: git(wt, ["rev-parse", "HEAD"]),
         durationSeconds, settled: settled.stable && agent.straysAfter === 0,
         ...(plan ? { plan } : {}), ...(planningFailure ? { planningFailure } : {}),
         ...(comparison ? { comparison } : {}),
-      } : undefined
+      }
       await appendEvent(repo, runId, {
         type: "live_agent",
         ts: new Date().toISOString(),
@@ -537,13 +543,27 @@ export async function runLive(
     }
   }
   const receipts = settled.flatMap((s) => {
-    const policy = s.assignment.task.progress
+    const policy = deriveProgress(s.assignment.task)
     const integration = integrations.get(s.assignment.task.id)
-    if (policy === undefined || s.progressInput === undefined || integration === undefined) return []
+    if (integration === undefined) return []
     return [recordProgress(progressContext(repo, s.assignment.task.id, policy), policy, {
       ...s.progressInput, integration,
     })]
   })
+  for (const r of receipts) {
+    const task = settled.find((s) => s.assignment.task.id === r.taskId)?.assignment.task
+    if (task === undefined) continue
+    appendAttempt(repo, campaignRoot(task.problem), {
+      ts: r.ts,
+      taskId: r.taskId,
+      route: r.plan?.route ?? "unplanned",
+      covered: r.observation?.covered ?? 0,
+      exhausted: r.observation?.exhausted ?? false,
+      decision: r.decision.action,
+      verdict: r.integration?.verdict ?? "skipped",
+      note: r.decision.reason.slice(0, 300),
+    })
+  }
   return {
     results: results.map((r) => r.pass_rate >= 1 && !accepted.has(r.task_id) ? { ...r, pass_rate: 0 } : r),
     produced: Object.fromEntries(settled.map((s) => [s.assignment.task.id, s.produced])),
@@ -611,11 +631,15 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
     },
     runRound: async (round, requeued) => {
       const queue = selected.filter((t) => (!solved.has(t.id) || requeued.includes(t.id))
-        && (!t.progress || progressContext(REPO, t.id, t.progress).last?.decision.action !== "stop"))
+        && (progressContext(REPO, t.id, deriveProgress(t)).last?.decision.action !== "stop"))
       if (queue.length === 0) return []
       const opened = beginRound(readState(), queue.map((t) => t.id), Date.now())
       writeState(opened.state)
-      const assigns = dispatch(queue, a.workers).map((x) => ({
+      const window = queue.slice(0, a.workers)
+      if (window.length < queue.length) {
+        console.log(`window: dispatching ${window.length}/${queue.length} pending tasks this round; the rest roll over`)
+      }
+      const assigns = dispatch(window, a.workers).map((x) => ({
         ...x,
         ...(a.models[x.workerId] === undefined ? {} : { model: a.models[x.workerId] }),
       }))
@@ -683,6 +707,10 @@ async function main(): Promise<void> {
     }
     if (args.supervise) {
       await supervise(args, selected)
+      return
+    }
+    if (run && selected.length > workers) {
+      console.log(`selected ${selected.length} tasks > ${workers} workers; one worktree per assignment is required. Raise --workers, narrow --tasks, or use --supervise (rolls over).`)
       return
     }
     const assigns = dispatch(selected, workers).map((x) => ({

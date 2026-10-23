@@ -4196,6 +4196,10 @@ L2:
     timeoutMs: 1800000
     note: "开放挑战:n=13 严格小于 best-known 45(即 ≤44);失败是诚实结果,禁止提交非改进网络"
     planned: true
+    progress:
+      checker: src/sortnet/tools/coverage.ts
+      scope: n13le44
+      maxStalledRounds: 5
   - id: SN09
     problem: src/sortnet/attempts/SN09_net14.ts
     tests: src/sortnet/scoreboard.ts
@@ -4204,6 +4208,10 @@ L2:
     timeoutMs: 1800000
     note: "开放挑战:n=14 严格小于 best-known 51(即 ≤50);失败是诚实结果,禁止提交非改进网络"
     planned: true
+    progress:
+      checker: src/sortnet/tools/coverage.ts
+      scope: n14le50
+      maxStalledRounds: 5
   - id: SN10
     problem: src/sortnet/attempts/SN10_net15.ts
     tests: src/sortnet/scoreboard.ts
@@ -4212,6 +4220,10 @@ L2:
     timeoutMs: 1800000
     note: "开放挑战:n=15 严格小于 best-known 56(即 ≤55);失败是诚实结果,禁止提交非改进网络"
     planned: true
+    progress:
+      checker: src/sortnet/tools/coverage.ts
+      scope: n15le55
+      maxStalledRounds: 5
   - id: SN11
     problem: src/sortnet/attempts/SN11_net16.ts
     tests: src/sortnet/scoreboard.ts
@@ -4220,6 +4232,10 @@ L2:
     timeoutMs: 1800000
     note: "开放挑战:n=16 严格小于 best-known 60(即 ≤59);失败是诚实结果,禁止提交非改进网络"
     planned: true
+    progress:
+      checker: src/sortnet/tools/coverage.ts
+      scope: n16le59
+      maxStalledRounds: 5
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)

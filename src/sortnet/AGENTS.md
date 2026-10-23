@@ -43,10 +43,14 @@ Never describe the n=13..16 values as proven optimal.
 
 - `SN00_batcher<n>.ts` is a checked-in Batcher seed network.
 - `SN<NN>_<desc>.ts` is a task attempt; `<NN>` is the worker task number.
+- `SN<NN>_state.json` is a hash-chained long-search checkpoint (progress protocol);
+  it is the trusted coverage checker's artifact, not a scoreboard entry.
 - `R<n>_<desc>.*` is a round artifact recorded in `CAMPAIGN.md`.
 - `*_search.ts` is search machinery and is excluded from scoreboard and gate scans.
-- A scanned attempt exports `export const network: Network`; `.test.ts` and `_search.ts`
-  files are excluded automatically.
+- `ATTEMPTS.ndjson` (campaign root) is the supervisor-appended cross-task attempt
+  ledger; workers read it, never write it.
+- A scanned attempt exports `export const network: Network`; `.test.ts`, `_search.ts`
+  and `*_state.json` files are excluded automatically.
 
 ## EXIT-CODE SEMANTICS (load-bearing)
 

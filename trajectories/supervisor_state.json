@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "round": 69,
+  "round": 86,
   "budget": {
     "maxRounds": 3,
     "maxWallClockMs": 3600000,
-    "agentMsSpent": 106220370
+    "agentMsSpent": 283621860
   },
   "history": [
     {
@@ -677,15 +677,200 @@
     },
     {
       "round": 68,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "A1"
+      ],
+      "note": ""
+    },
+    {
+      "round": 69,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "A1"
+      ],
+      "note": ""
+    },
+    {
+      "round": 70,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "SN01",
+        "SN02",
+        "SN03"
+      ],
+      "note": ""
+    },
+    {
+      "round": 71,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "SN01",
+        "SN02",
+        "SN03"
+      ],
+      "note": ""
+    },
+    {
+      "round": 72,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "landed",
+      "tasks": [
+        "SN01",
+        "SN03"
+      ],
+      "note": ""
+    },
+    {
+      "round": 73,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "landed",
+      "tasks": [],
+      "note": ""
+    },
+    {
+      "round": 74,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "SN04",
+        "SN05",
+        "SN06",
+        "SN07"
+      ],
+      "note": ""
+    },
+    {
+      "round": 75,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "SN04",
+        "SN06",
+        "SN07"
+      ],
+      "note": ""
+    },
+    {
+      "round": 76,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "landed",
+      "tasks": [
+        "SN06"
+      ],
+      "note": ""
+    },
+    {
+      "round": 77,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "landed",
+      "tasks": [],
+      "note": ""
+    },
+    {
+      "round": 78,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "note": ""
+    },
+    {
+      "round": 79,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
       ],
       "status": "failed"
     },
     {
-      "round": 69,
+      "round": 80,
       "tasks": [
-        "A1"
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "status": "failed"
+    },
+    {
+      "round": 81,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "status": "failed"
+    },
+    {
+      "round": 82,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "status": "failed"
+    },
+    {
+      "round": 83,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "status": "failed"
+    },
+    {
+      "round": 84,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "status": "failed"
+    },
+    {
+      "round": 85,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "status": "failed"
+    },
+    {
+      "round": 86,
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
       ],
       "status": "failed"
     }

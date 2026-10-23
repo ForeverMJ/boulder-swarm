@@ -22,14 +22,21 @@ specifics only.
 | Replan | `replan.ts` | reads `metrics/results.json`; solved iff latest row pass_rate >= 1 |
 | Per-task prompt override | `src/<campaign>/prompts/<TASK_ID>.md` | campaign comes from `task.problem`; if present, beats the built-in prompt builder |
 
-## RUN PIPELINE (runLive)
+## RUN PIPELINE (runLive, unified)
 
-1. `initRepo` → sequentially create worktrees under sibling dir `boulder-swarm-worktrees/worker_{id}`
-2. Parallel spawn agents with per-task prompts
-3. Agent exit → `waitForStable` settle → capture produced paths → `scoreAssignment`
+Every assignment runs the progress protocol; there is no protocol-less path.
+`loadTasks` derives the default policy (`harnessCoverage.ts` checker, scope
+`task:<id>`) for tasks without an explicit `progress:` block. Dispatch is windowed:
+at most `--workers` assignments per round, one worktree each, chained off the task's
+previous receipt commit (not main).
+
+1. `initRepo` → sequentially create worktrees under sibling dir `boulder-swarm-worktrees/worker_{id}`, starting from the last receipt commit
+2. Planning phase per assignment: planner agent proposes a method (no file edits allowed, 120s cap) → `validatePlan`
+3. Execution phase with the plan's instruction → agent exit → `waitForStable` settle → `scoreAssignment`
 4. `commitWorktree` ("agent: {task} via {kind}") only when dirty
 5. Merge gate: stash root WIP → gate merges in task-id order (only pass_rate == 1) → pop stash
-6. Events append to `trajectories/{runId}.jsonl`; results to `metrics/`; wiki distill
+6. Trusted checker observation → `recordProgress` receipts append to `trajectories/progress-decisions-v2.jsonl` → attempt summary appends to `src/<campaign>/ATTEMPTS.ndjson`
+7. Events append to `trajectories/{runId}.jsonl`; results to `metrics/`; wiki distill
 
 ## SCORING ORDER (scoreAssignment)
 

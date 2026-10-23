@@ -5,6 +5,16 @@ import { taskId } from "../shared/brands"
 import type { TaskId } from "../shared/brands"
 import { ProgressPolicy } from "./progress"
 
+/** Trusted default checker for tasks without an explicit progress policy. */
+export const DEFAULT_COVERAGE_CHECKER = "src/orchestrator/checkers/harnessCoverage.ts"
+
+// Every task runs under the progress protocol; there is no protocol-less execution
+// path. Tasks that don't declare a policy get this default: the trusted harness
+// adapter reports the existing verdict as the Observation. Idempotent and pure.
+export function deriveProgress(task: { readonly id: string; readonly progress?: ProgressPolicy }): ProgressPolicy {
+  return task.progress ?? ProgressPolicy.parse({ checker: DEFAULT_COVERAGE_CHECKER, scope: `task:${task.id}` })
+}
+
 const L2Entry = z.object({
   id: z.string(),
   problem: z.string(),
@@ -61,7 +71,7 @@ export async function loadTasks(repoRoot: string): Promise<Task[]> {
     ...(t.success === undefined ? {} : { success: t.success }),
     ...(t.evidence === undefined ? {} : { evidence: t.evidence }),
     ...(t.timeoutMs === undefined ? {} : { timeoutMs: t.timeoutMs }),
-    ...(t.progress === undefined ? {} : { progress: t.progress }),
+    progress: t.progress ?? ProgressPolicy.parse({ checker: DEFAULT_COVERAGE_CHECKER, scope: `task:${t.id}` }),
     ...(t.planned === undefined ? {} : { planned: t.planned }),
     ...(t.note === undefined ? {} : { note: t.note }),
     ...(t.dependsOn === undefined ? {} : { dependsOn: t.dependsOn }),

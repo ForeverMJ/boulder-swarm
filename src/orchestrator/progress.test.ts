@@ -298,7 +298,12 @@ describe("checker-backed progress and decisions", () => {
       )
       const tasks = await loadTasks(f.repo)
       expect(tasks[0]?.progress).toEqual(policy)
-      expect(tasks[1]?.progress).toBeUndefined()
+      // Unified protocol: undeclared tasks get the derived default policy, not undefined.
+      expect(tasks[1]?.progress).toEqual({
+        checker: "src/orchestrator/checkers/harnessCoverage.ts",
+        scope: "task:U",
+        maxStalledRounds: 3,
+      })
     } finally {
       f.close()
     }
@@ -315,6 +320,13 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
       git(repo, ["config", "user.name", "progress-test"])
       git(repo, ["config", "user.email", "progress@test.invalid"])
       writeFileSync(join(repo, ".gitignore"), "/trajectories/\n")
+      // The unified pipeline runs the trusted checker every round; the fixture repo
+      // needs a stub at the derived-default path printing a valid Observation.
+      mkdirSync(join(repo, "src/orchestrator/checkers"), { recursive: true })
+      writeFileSync(
+        join(repo, "src/orchestrator/checkers/harnessCoverage.ts"),
+        'console.log(JSON.stringify({route: process.argv[3], scope: process.argv[4], covered: 1, exhausted: true, artifacts: ["output.txt"]}))\n',
+      )
       writeFileSync(
         join(repo, "goal.test.ts"),
         `
@@ -342,7 +354,17 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
         {
           kind: "codex",
           buildPrompt: () => "fixture",
-          spawnAgent: async ({ workdir }) => {
+          spawnAgent: async ({ workdir, prompt }) => {
+            // Planner calls must not touch files; executor calls write the artifact.
+            if (prompt.includes("planning agent")) {
+              return {
+                exitCode: 0,
+                timedOut: false,
+                duration_s: 0,
+                final: '{"action":"switch","route":"default","scope":"task:T","instruction":"write output.txt","reason":"r","experiment":"e","evidence":[]}',
+                straysAfter: 0,
+              }
+            }
             writeFileSync(join(workdir, "output.txt"), "candidate")
             return {
               exitCode: 0,
@@ -364,7 +386,7 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
     }
   }, 15_000)
 
-  it("refuses overlapping worktrees before starting evidence-guided workers", async () => {
+  it("refuses overlapping worktrees; every assignment needs its own worker", async () => {
     const f = fixture()
     try {
       const task = {
@@ -390,7 +412,7 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
           "overlap",
           f.repo,
         ),
-      ).rejects.toThrow("one worktree per assignment")
+      ).rejects.toThrow("own worktree")
     } finally {
       f.close()
     }

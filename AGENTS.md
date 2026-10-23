@@ -50,7 +50,7 @@ boulder-swarm/
 | Symbol | Type | Location | Refs | Role |
 |--------|------|----------|------|------|
 | `main` (runLoop) | fn | `src/orchestrator/runLoop.ts:429` | CLI | parse args → loadTasks → dispatch → runMock/runLive → saveResults/distill/replan; `--supervise` enters `supervise()` loop |
-| `runLive` | fn | `src/orchestrator/runLoop.ts:232` | runLoop | initRepo → sequential worktree create → parallel spawn agents → settle → score → commit → gate merges (task-id order, WIP stash-guarded) |
+| `runLive` | fn | `src/orchestrator/runLoop.ts:232` | runLoop | unified pipeline: every assignment runs the progress protocol (plan → execute → trusted observation → receipt); worktrees chain off previous receipt commits; gate merges task-id order, WIP stash-guarded |
 | `scoreAssignment` | fn | `src/orchestrator/runLoop.ts:147` | runLoop, tests | priority: `evidence` (CAMPAIGN:label) → special markers (PAIRTABLES/WIDEABSORB) → scoreboard regex marker → harness tests |
 | `loadTasks` | fn | `src/orchestrator/scheduler.ts:34` | 6 callers | zod-parses goal.yaml L2 |
 | `dispatch` | fn | `src/orchestrator/scheduler.ts:49` | runLoop, proofs | `workerId = i % n`, branch `agent/goal-w{i}-{taskId}` |

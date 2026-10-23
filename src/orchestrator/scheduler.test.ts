@@ -30,3 +30,27 @@ describe("dispatch with a duplicated replica task", () => {
     expect(assigns[0]?.branch).not.toBe(assigns[1]?.branch)
   })
 })
+
+describe("deriveProgress, the unified-policy default", () => {
+  it("every goal.yaml task carries a policy after loadTasks", async () => {
+    const tasks = await loadTasks(REPO)
+    for (const t of tasks) {
+      expect(t.progress).toBeDefined()
+      expect(t.progress?.checker.length).toBeGreaterThan(0)
+    }
+  })
+
+  it("derives the harness default for undeclared tasks, keyed by task id", async () => {
+    const { deriveProgress, DEFAULT_COVERAGE_CHECKER } = await import("./scheduler")
+    const p = deriveProgress({ id: "T01" })
+    expect(p.checker).toBe(DEFAULT_COVERAGE_CHECKER)
+    expect(p.scope).toBe("task:T01")
+    expect(p.maxStalledRounds).toBe(3)
+  })
+
+  it("keeps an explicit policy untouched", async () => {
+    const { deriveProgress } = await import("./scheduler")
+    const explicit = { checker: "x.ts", scope: "s", maxStalledRounds: 5 }
+    expect(deriveProgress({ id: "SN08", progress: explicit })).toEqual(explicit)
+  })
+})

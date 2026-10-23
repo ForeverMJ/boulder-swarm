@@ -263,6 +263,17 @@
 - [R99-size] Hypothesis: standard solution passes; Evidence: 10/10; Rule: keep pattern and reuse.
 - [R99-sweepA] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [R99-sweepB] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [SN01] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN02] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN03] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN04] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN05] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN06] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN07] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
+- [SN08] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [SN09] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [SN10] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [SN11] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [T02] Hypothesis: standard solution passes; Evidence: 5/5; Rule: keep pattern and reuse.
 - [T12] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [T12c] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
