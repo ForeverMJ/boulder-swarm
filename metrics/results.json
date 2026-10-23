@@ -4738,5 +4738,63 @@
     "pass_rate": 1,
     "duration_s": 0.1,
     "loc": 3
+  },
+  {
+    "worker_id": 0,
+    "task_id": "SN08",
+    "branch": "agent/goal-w0-SN08",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 123.02,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T13:00:21.381Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "SN09",
+    "branch": "agent/goal-w1-SN09",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 123.02,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T13:00:21.381Z"
+  },
+  {
+    "worker_id": 2,
+    "task_id": "SN10",
+    "branch": "agent/goal-w2-SN10",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 123.02,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T13:00:21.381Z"
+  },
+  {
+    "worker_id": 3,
+    "task_id": "SN11",
+    "branch": "agent/goal-w3-SN11",
+    "passed": 0,
+    "total": 0,
+    "pass_rate": 0,
+    "duration_s": 123.02,
+    "loc": 0,
+    "mode": "opencode",
+    "ts": "2026-10-23T13:00:21.381Z"
+  },
+  {
+    "worker_id": 1,
+    "task_id": "T02",
+    "branch": "agent/goal-w1-T02",
+    "passed": 5,
+    "total": 5,
+    "pass_rate": 1,
+    "duration_s": 0.1,
+    "loc": 3
   }
 ]

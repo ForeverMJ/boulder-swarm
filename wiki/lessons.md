@@ -270,10 +270,10 @@
 - [SN05] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [SN06] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
 - [SN07] Hypothesis: standard solution passes; Evidence: 1/1; Rule: keep pattern and reuse.
-- [SN08] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
-- [SN09] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
-- [SN10] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
-- [SN11] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
+- [SN08] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [SN09] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [SN10] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
+- [SN11] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/0; Rule: retry with different strategy next round.
 - [T02] Hypothesis: standard solution passes; Evidence: 5/5; Rule: keep pattern and reuse.
 - [T12] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.
 - [T12c] Hypothesis: stub unimplemented or wrong direction; Evidence: 0/1; Rule: retry with different strategy next round.

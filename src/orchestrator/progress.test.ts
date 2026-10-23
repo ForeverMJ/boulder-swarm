@@ -213,7 +213,9 @@ describe("checker-backed progress and decisions", () => {
         settled: false,
       })
       expect(receipt.observation).toBeNull()
-      expect(receipt.decision.action).toBe("stop")
+      // Transient (unsettled) failure is not route evidence: replan, and the stall
+      // budget — not one bad round — decides when the task stops.
+      expect(receipt.decision.action).toBe("replan")
     } finally {
       f.close()
     }
@@ -523,10 +525,15 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
       }
       const rejected = await runLive([assignment], invalidPlanner, "invalid-plan", repo)
       expect(calls).toBe(1)
-      expect(rejected.progress?.[assignment.task.id]).toBe(false)
+      // Transient planning failure is not route evidence: replan, not stop.
+      expect(rejected.progress?.[assignment.task.id]).toBe(true)
       expect(rejected.results[0]?.total).toBe(0)
+      await runLive([assignment], invalidPlanner, "invalid-plan-2", repo)
+      await runLive([assignment], invalidPlanner, "invalid-plan-3", repo)
+      expect(calls).toBe(3)
+      // Three consecutive stalled rounds exhaust the budget: the stop is terminal.
       await runLive([assignment], invalidPlanner, "persisted-stop", repo)
-      expect(calls).toBe(1)
+      expect(calls).toBe(3)
     } finally {
       f.close()
     }
@@ -675,5 +682,27 @@ describe("integration verdicts reach the planner", () => {
     } finally {
       f.close()
     }
+  })
+})
+
+describe("isTerminalStop", () => {
+  const base = {
+    version: 2 as const,
+    taskId: "T",
+    policy: "k",
+    commit: "c",
+    ts: "t",
+    durationSeconds: 0,
+    artifacts: [],
+  }
+  it("treats deliberate stops and policy stops as terminal", async () => {
+    const { isTerminalStop } = await import("./progress")
+    expect(isTerminalStop({ ...base, plan: { action: "stop", route: "r", scope: "s", instruction: "i", reason: "x", experiment: "e", evidence: [] }, observation: null, decision: { action: "stop", route: "r", reason: "Agent stopped unresolved: x" } })).toBe(true)
+    expect(isTerminalStop({ ...base, plan: null, observation: null, decision: { action: "stop", route: "r", reason: "Consecutive stalled-round budget exhausted; unresolved." } })).toBe(true)
+  })
+  it("does not treat transient-failure stops or non-stops as terminal", async () => {
+    const { isTerminalStop } = await import("./progress")
+    expect(isTerminalStop({ ...base, plan: null, observation: null, decision: { action: "stop", route: "unplanned", reason: "Planning agent failed, timed out, or did not settle" } })).toBe(false)
+    expect(isTerminalStop({ ...base, plan: null, observation: null, decision: { action: "replan", route: "r", reason: "y" } })).toBe(false)
   })
 })

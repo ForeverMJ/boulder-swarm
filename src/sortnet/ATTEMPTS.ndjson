@@ -1,0 +1,4 @@
+{"ts":"2026-10-23T13:00:21.423Z","taskId":"SN08","route":"unplanned","covered":0,"exhausted":false,"decision":"stop","verdict":"skipped","note":"Planning agent failed, timed out, or did not settle"}
+{"ts":"2026-10-23T13:00:21.424Z","taskId":"SN09","route":"unplanned","covered":0,"exhausted":false,"decision":"stop","verdict":"skipped","note":"Planning agent failed, timed out, or did not settle"}
+{"ts":"2026-10-23T13:00:21.424Z","taskId":"SN10","route":"unplanned","covered":0,"exhausted":false,"decision":"stop","verdict":"skipped","note":"Planning agent failed, timed out, or did not settle"}
+{"ts":"2026-10-23T13:00:21.424Z","taskId":"SN11","route":"unplanned","covered":0,"exhausted":false,"decision":"stop","verdict":"skipped","note":"Planning agent failed, timed out, or did not settle"}

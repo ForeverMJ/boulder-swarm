@@ -28,7 +28,7 @@ import { buildPlannedTaskPrompt, deriveProgress, dispatch, loadTasks, workerIds 
 import { DEFAULT_MODEL_POOL, probeModelEdit, selectHealthyModel } from "./modelPool"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
-import { type AgentPlan, type ProgressIntegration, type StrategyComparison, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
+import { type AgentPlan, type ProgressIntegration, type StrategyComparison, isTerminalStop, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
 import { runStrategyTrial } from "./strategyTrial"
 import { superviseBudgetExhausted, runRounds, type Outcome, type RoundDeps } from "./roundLoop"
 import { waitForStable } from "./settle"
@@ -341,11 +341,11 @@ export async function runLive(
       const attemptStarted = performance.now()
       const timeoutMs = a.task.timeoutMs ?? 600_000
       try {
-        if (context.last?.decision.action === "stop") throw new Error("Persisted stop; review policy before restarting")
+        if (context.last !== undefined && isTerminalStop(context.last)) throw new Error("Persisted stop; review policy before restarting")
         const before = git(wt, ["rev-parse", "HEAD"])
         const planner = await deps.spawnAgent({
           workdir: wt, prompt: `${basePrompt}${progressPrompt(context)}`,
-          taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(120_000, timeoutMs),
+          taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(300_000, timeoutMs),
         })
         planningSeconds = planner.duration_s
         const stable = await waitForStable(() => gitStatus(wt))
@@ -630,8 +630,11 @@ async function supervise(a: Args, selected: ReturnType<typeof loadTasks> extends
       writeState(s)
     },
     runRound: async (round, requeued) => {
-      const queue = selected.filter((t) => (!solved.has(t.id) || requeued.includes(t.id))
-        && (progressContext(REPO, t.id, deriveProgress(t)).last?.decision.action !== "stop"))
+      const queue = selected.filter((t) => {
+        const last = progressContext(REPO, t.id, deriveProgress(t)).last
+        const stopped = last !== undefined && isTerminalStop(last)
+        return (!solved.has(t.id) || requeued.includes(t.id)) && !stopped
+      })
       if (queue.length === 0) return []
       const opened = beginRound(readState(), queue.map((t) => t.id), Date.now())
       writeState(opened.state)

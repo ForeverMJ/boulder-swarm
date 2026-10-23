@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "round": 86,
+  "round": 89,
   "budget": {
     "maxRounds": 3,
     "maxWallClockMs": 3600000,
-    "agentMsSpent": 283621860
+    "agentMsSpent": 284113940
   },
   "history": [
     {
@@ -796,76 +796,136 @@
     },
     {
       "round": 79,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 80,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 81,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 82,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 83,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 84,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 85,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
       "tasks": [
         "SN08",
         "SN09",
         "SN10",
         "SN11"
       ],
-      "status": "failed"
+      "note": ""
     },
     {
       "round": 86,
+      "startedAt": 0,
+      "finishedAt": null,
+      "status": "failed",
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "note": ""
+    },
+    {
+      "round": 87,
+      "startedAt": 1792759552716,
+      "finishedAt": 1792760136925,
+      "status": "abandoned",
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "note": "interrupted; requeued"
+    },
+    {
+      "round": 88,
+      "startedAt": 1792760137340,
+      "finishedAt": null,
+      "status": "abandoned",
+      "tasks": [
+        "SN08",
+        "SN09",
+        "SN10",
+        "SN11"
+      ],
+      "note": ""
+    },
+    {
+      "round": 89,
       "tasks": [
         "SN08",
         "SN09",

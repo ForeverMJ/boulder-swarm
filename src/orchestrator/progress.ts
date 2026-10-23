@@ -304,6 +304,19 @@ export function inspectProgress(
   return { observation, artifacts }
 }
 
+/** True only for stops the protocol means to be permanent: deliberate agent stops
+ *  and chooseNext policy stops. Transient-failure stops (pre-fix planning crashes)
+ *  must not bar a task from future rounds. */
+export function isTerminalStop(receipt: ProgressReceipt): boolean {
+  if (receipt.decision.action !== "stop") return false
+  if (receipt.plan?.action === "stop") return true
+  return [
+    "Checker scope/route mismatch",
+    "Checker exhausted the fixed scope",
+    "Consecutive stalled-round budget exhausted",
+  ].some((prefix) => receipt.decision.reason.includes(prefix))
+}
+
 export function recordProgress(
   context: ReturnType<typeof progressContext>,
   policy: ProgressPolicy,
@@ -339,11 +352,15 @@ export function recordProgress(
     observation,
     context.history,
   )
-  if (!input.settled || !input.plan || input.planningFailure || input.plan.action === "stop") {
+  if (input.plan?.action === "stop") {
     decision.action = "stop"
-    decision.reason =
-      input.planningFailure ??
-      (input.plan?.action === "stop" ? `Agent stopped unresolved: ${input.plan.reason}` : failure)
+    decision.reason = `Agent stopped unresolved: ${input.plan.reason}`
+  } else if (!input.settled || !input.plan || input.planningFailure) {
+    // Transient infrastructure failure (planner crash/timeout, unsettled worktree) is
+    // not evidence about the route: keep chooseNext's replan so the stall budget —
+    // not one bad round — decides when to stop.
+    const detail = input.planningFailure ?? failure
+    decision.reason = `${detail} ${decision.reason}`
   } else if (!observation) decision.reason = `${decision.reason} Checker detail: ${failure}`
   if (input.comparison)
     decision.reason = `${decision.reason} Comparison: ${input.comparison.reason}`

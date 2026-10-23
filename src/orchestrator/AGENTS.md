@@ -31,7 +31,7 @@ at most `--workers` assignments per round, one worktree each, chained off the ta
 previous receipt commit (not main).
 
 1. `initRepo` → sequentially create worktrees under sibling dir `boulder-swarm-worktrees/worker_{id}`, starting from the last receipt commit
-2. Planning phase per assignment: planner agent proposes a method (no file edits allowed, 120s cap) → `validatePlan`
+2. Planning phase per assignment: planner agent proposes a method (no file edits allowed, 5min cap) → `validatePlan`
 3. Execution phase with the plan's instruction → agent exit → `waitForStable` settle → `scoreAssignment`
 4. `commitWorktree` ("agent: {task} via {kind}") only when dirty
 5. Merge gate: stash root WIP → gate merges in task-id order (only pass_rate == 1) → pop stash
