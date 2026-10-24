@@ -76,6 +76,15 @@ describe("parseFinal", () => {
     expect(parseFinal('FINAL{"a":1}')).toBe('{"a":1}')
   })
 
+  it("falls back to bare JSON when the model omits the FINAL marker", async () => {
+    const { parseFinal } = await import("./opencodeWorker")
+    // beam-free writes the plan as a bare JSON object with no marker at all
+    // (observed live, round 115). Downstream validatePlan rejects junk, so
+    // accepting a lone object is safe.
+    expect(parseFinal('{"action":"switch","evidence":[]}')).toBe('{"action":"switch","evidence":[]}')
+    expect(parseFinal('no marker here')).toBe("")
+  })
+
   it("returns empty for missing FINAL or unbalanced braces", async () => {
     const { parseFinal } = await import("./opencodeWorker")
     expect(parseFinal("no marker here")).toBe("")
