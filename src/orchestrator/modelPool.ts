@@ -12,19 +12,17 @@ import { join } from "node:path"
 // the verdict, because fake-work exits 0. OPENCODE_MODEL still overrides the
 // pool entirely.
 //
-// Pool refresh 2026-10-21: all entries below passed a live edit-probe (each
-// performed `x = 1 -> x = 2` within 100s). Verified-dead or too-slow models
-// dropped: muse-spark-1.3-contributor-free (server 500), cat-jam-free (gone),
-// beam-free / flint-40b-free / longcat-2.5-preview-free (probe timeout).
-// Order: strongest code models first, big-pickle as the proven-campaign fallback.
+// Pool refresh 2026-10-24: opencode-go/beam-free promoted to head - it was the
+// ONLY survivor of a full-tier degradation wave (8/9 pool models hung 100s+).
+// Dropped, retired from the `opencode models` listing server-side:
+// minimax-m3.1-flash-free (both providers, 4s fast-fail) and big-pickle.
+// Order: proven-healthy head first, then the previous pool as fallback.
 export const DEFAULT_MODEL_POOL: readonly string[] = [
+  "opencode-go/beam-free",
   "opencode/nemotron-3-ultra-free",
   "opencode/glm-5.3-flash-free",
   "opencode/deepseek-v4.1-flash-free",
-  "opencode/big-pickle",
-  "opencode/minimax-m3.1-flash-free",
   "opencode/mimo-v2.6-flash-free",
-  "opencode-go/minimax-m3.1-flash-free",
   "opencode/nemotron-3.5-lightning-free",
   "opencode/nemotron-3.5-super-vl-free",
 ]
