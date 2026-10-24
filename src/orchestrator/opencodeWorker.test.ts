@@ -67,6 +67,15 @@ describe("parseFinal", () => {
     expect(JSON.parse(parseFinal(pretty))).toEqual({ action: "switch", evidence: [] })
   })
 
+  it("extracts FINAL JSON when the model drops the colon", async () => {
+    const { parseFinal } = await import("./opencodeWorker")
+    // nemotron-3-ultra-free reliably emits `FINAL {` without the colon; the
+    // literal "FINAL:" match then returns "" and the planner burns the round
+    // on JSON.parse("") -> Unexpected EOF (observed live in rounds 101-102).
+    expect(parseFinal('noise\nFINAL {"a":1}\n')).toBe('{"a":1}')
+    expect(parseFinal('FINAL{"a":1}')).toBe('{"a":1}')
+  })
+
   it("returns empty for missing FINAL or unbalanced braces", async () => {
     const { parseFinal } = await import("./opencodeWorker")
     expect(parseFinal("no marker here")).toBe("")

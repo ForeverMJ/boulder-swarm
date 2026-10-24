@@ -50,9 +50,11 @@ export function buildPrompt(taskId: string, problem: string, tests: string): str
 }
 
 // Brace-balanced extraction: models pretty-print the FINAL plan JSON across lines,
-// and a single-line regex truncates it into an unparseable fragment.
+// and a single-line regex truncates it into an unparseable fragment. The colon is
+// optional: nemotron-3-ultra-free emits `FINAL {` (observed live, rounds 101-102).
 export function parseFinal(out: string): string {
-  const idx = out.lastIndexOf("FINAL:")
+  let idx = -1
+  for (const m of out.matchAll(/FINAL\s*:?/g)) idx = m.index
   if (idx === -1) return ""
   const start = out.indexOf("{", idx)
   if (start === -1) return ""
