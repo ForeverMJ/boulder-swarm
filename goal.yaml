@@ -4199,7 +4199,7 @@ L2:
     progress:
       checker: src/sortnet/tools/coverage.ts
       scope: n13le44
-      maxStalledRounds: 16
+      maxStalledRounds: 12
   - id: SN09
     problem: src/sortnet/attempts/SN09_net14.ts
     tests: src/sortnet/scoreboard.ts
@@ -4211,7 +4211,7 @@ L2:
     progress:
       checker: src/sortnet/tools/coverage.ts
       scope: n14le50
-      maxStalledRounds: 16
+      maxStalledRounds: 12
   - id: SN10
     problem: src/sortnet/attempts/SN10_net15.ts
     tests: src/sortnet/scoreboard.ts
@@ -4223,7 +4223,7 @@ L2:
     progress:
       checker: src/sortnet/tools/coverage.ts
       scope: n15le55
-      maxStalledRounds: 16
+      maxStalledRounds: 12
   - id: SN11
     problem: src/sortnet/attempts/SN11_net16.ts
     tests: src/sortnet/scoreboard.ts
@@ -4235,7 +4235,7 @@ L2:
     progress:
       checker: src/sortnet/tools/coverage.ts
       scope: n16le59
-      maxStalledRounds: 16
+      maxStalledRounds: 12
 L0:
   id: G0
   title: 算法题组全解与经验沉淀 (TypeScript)

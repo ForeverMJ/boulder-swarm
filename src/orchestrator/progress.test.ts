@@ -177,8 +177,12 @@ describe("checker-backed progress and decisions", () => {
       const invalid = f.record([0, 2, 3])
       expect(invalid.observation).toBeNull()
       expect(invalid.decision.route).toBe("agent-invented-search")
-      expect(invalid.decision.action).toBe("stop")
-      expect(invalid.decision.reason).toContain("unresolved")
+      // An unverifiable claim never executed against the checker: it is not
+      // progress, but it does not consume the stall budget either.
+      expect(invalid.decision.action).toBe("replan")
+      // The next checker-verified flat round still stops: the skipped invalid
+      // round leaves the genuine stall streak (flat + regression) intact.
+      expect(f.record([0, 1]).decision.action).toBe("stop")
     } finally {
       f.close()
     }
@@ -530,10 +534,12 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
       expect(rejected.results[0]?.total).toBe(0)
       await runLive([assignment], invalidPlanner, "invalid-plan-2", repo)
       await runLive([assignment], invalidPlanner, "invalid-plan-3", repo)
-      expect(calls).toBe(3)
-      // Three consecutive stalled rounds exhaust the budget: the stop is terminal.
-      await runLive([assignment], invalidPlanner, "persisted-stop", repo)
-      expect(calls).toBe(3)
+      // Planning infra failures produce no observation: the method was never
+      // tested, so they neither advance nor consume the stall budget. A fourth
+      // invalid round still gets its planner call instead of a persisted stop
+      // (overnight model-weather waves burned whole budgets, r117-r136).
+      await runLive([assignment], invalidPlanner, "invalid-plan-4", repo)
+      expect(calls).toBe(4)
     } finally {
       f.close()
     }

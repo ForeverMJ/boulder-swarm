@@ -123,9 +123,15 @@ export function chooseNext(
       reason: `Verified coverage in ${policy.scope} increased ${highWater} -> ${observation.covered}; agent chooses the next method.`,
     }
   }
-  let stalled = 1
+  // Stall budget is spent only by rounds that actually tested a method:
+  // execution ran and the checker verified no coverage gain (observation
+  // present). Infra/weather rounds - planner timeout, unparseable FINAL,
+  // withheld execution, unverifiable claims - produce no observation: the
+  // method was never tested, so they neither advance nor consume the budget.
+  let stalled = observation === null ? 0 : 1
   for (const receipt of [...history].reverse()) {
     if (receipt.decision.action !== "replan") break
+    if (receipt.observation === null) continue
     stalled++
   }
   if (stalled >= policy.maxStalledRounds)
