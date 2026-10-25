@@ -36,10 +36,15 @@ export function sha256(text: string): string {
   return createHash("sha256").update(text).digest("hex")
 }
 
-/** The previous accepted claim for this scope, straight from the receipts ledger. */
+/** The previous accepted claim for this scope, straight from the receipts ledger.
+ *  When policyKey is given, custody is scoped to that policy era: a supervisor
+ *  policy reset is a declared fresh start (stall history and the watermark
+ *  already reset per key), so the chain must reset too - otherwise the reset
+ *  permanently deadlocks the scope behind a destroyed worktree's sha256. */
 export function priorClaim(
   repo: string,
   scope: string,
+  policyKey?: string,
 ): { readonly covered: number; readonly sha256: string } | undefined {
   const ledger = join(repo, "trajectories", "progress-decisions-v2.jsonl")
   if (!existsSync(ledger)) return undefined
@@ -48,10 +53,12 @@ export function priorClaim(
     if (line.trim() === "") continue
     try {
       const r = JSON.parse(line) as {
+        policy?: string
         observation?: { scope?: string; covered?: number } | null
         artifacts?: { path?: string; sha256?: string }[]
       }
       if (r.observation?.scope !== scope) continue
+      if (policyKey !== undefined && r.policy !== policyKey) continue
       const stateArt = r.artifacts?.find((a) => a.path !== undefined && STATE_RE.test(a.path.split("/").pop() ?? ""))
       if (stateArt?.sha256 !== undefined && r.observation.covered !== undefined) {
         hits.push({ covered: r.observation.covered, sha256: stateArt.sha256 })
@@ -90,9 +97,9 @@ export function evaluateState(
 // no-excuse-ok: catch
 function main(): void {
   try {
-    const [worktree, route, scope] = process.argv.slice(2)
+    const [worktree, route, scope, policyKey] = process.argv.slice(2)
     if (worktree === undefined || route === undefined || scope === undefined) {
-      throw new Error("usage: coverage.ts <worktree> <route> <scope>")
+      throw new Error("usage: coverage.ts <worktree> <route> <scope> [policyKey]")
     }
     const attemptsDir = join(worktree, "src", "sortnet", "attempts")
     const candidates = readdirSync(attemptsDir).filter((f) => STATE_RE.test(f))
@@ -110,7 +117,7 @@ function main(): void {
       }
     }
     if (matched === undefined) throw new Error(`no state file declares scope ${scope}`)
-    const state = evaluateState(matched.raw, scope, priorClaim(REPO, scope))
+    const state = evaluateState(matched.raw, scope, priorClaim(REPO, scope, policyKey))
     process.stdout.write(
       `${JSON.stringify({
         route,

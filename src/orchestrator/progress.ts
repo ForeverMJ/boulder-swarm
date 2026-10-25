@@ -289,7 +289,7 @@ export function inspectProgress(
     }
   }
   assertSnapshot()
-  const result = spawnSync(process.execPath, [context.checker, worktree, route, context.scope], {
+  const result = spawnSync(process.execPath, [context.checker, worktree, route, context.scope, context.key], {
     cwd: dirname(context.checker),
     encoding: "utf8",
     timeout: Math.max(1, timeoutMs),

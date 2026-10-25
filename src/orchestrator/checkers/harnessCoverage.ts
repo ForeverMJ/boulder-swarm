@@ -8,8 +8,10 @@ import { scoreAssignment } from "../runLoop"
 // campaign evidence) into the progress protocol's Observation, reusing
 // scoreAssignment so there is exactly one judging order in the system.
 //
-// Contract (see inspectProgress): argv = <worktree> <route> <scope>, stdout is a
-// single JSON line, non-zero exit means "no observation this round".
+// Contract (see inspectProgress): argv = <worktree> <route> <scope> [policyKey],
+// stdout is a single JSON line, non-zero exit means "no observation this round".
+// The optional policyKey lets chain-of-custody checkers (coverage.ts) scope their
+// ledger lookup to the current policy era; harness checkers ignore it.
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..")
 

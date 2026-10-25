@@ -1,5 +1,8 @@
 import { describe, expect, it } from "bun:test"
-import { evaluateState, sha256 } from "./coverage"
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { evaluateState, priorClaim, sha256 } from "./coverage"
 import { batcherNetwork } from "./batcher"
 
 const SCOPE = "n13le44"
@@ -54,5 +57,44 @@ describe("sortnet coverage chain validation", () => {
 
   it("rejects scope drift between state and policy", () => {
     expect(() => evaluateState(state({}), "n14le50", undefined)).toThrow("scope")
+  })
+
+  it("scopes chain custody to the policy era, so a policy reset allows a fresh genesis", () => {
+    // Policy resets are the supervisor's declared fresh start: stall history and
+    // the coverage watermark already reset per policy key. A scope-global chain
+    // made every reset permanent deadlock instead - new worktrees could never
+    // reproduce a destroyed predecessor's sha256 (observed live, r137-r139:
+    // every comparison trial died on prevHash mismatch).
+    const repo = mkdtempSync(join(tmpdir(), "swarm-coverage-"))
+    mkdirSync(join(repo, "trajectories"), { recursive: true })
+    try {
+      const stateFile = "src/sortnet/attempts/SN13_state.json"
+      const receipt = (policy: string, covered: number, sha: string) =>
+        JSON.stringify({
+          version: 2,
+          taskId: "SN13",
+          policy,
+          commit: "c".repeat(40),
+          ts: "2026-10-25T00:00:00.000Z",
+          durationSeconds: 1,
+          plan: null,
+          observation: { route: "r", scope: SCOPE, covered, exhausted: false },
+          artifacts: [{ path: stateFile, sha256: sha }],
+          decision: { action: "continue", route: "r", reason: "ok" },
+        })
+      writeFileSync(
+        join(repo, "trajectories", "progress-decisions-v2.jsonl"),
+        `${receipt("policy-A", 100, sha256("state-1"))}\n${receipt("policy-B", 250, sha256("state-2"))}\n`,
+      )
+      // Unscoped lookup keeps legacy behavior: latest claim for the scope.
+      expect(priorClaim(repo, SCOPE)).toEqual({ covered: 250, sha256: sha256("state-2") })
+      // Policy-scoped lookup sees only its own era.
+      expect(priorClaim(repo, SCOPE, "policy-B")).toEqual({ covered: 250, sha256: sha256("state-2") })
+      expect(priorClaim(repo, SCOPE, "policy-A")).toEqual({ covered: 100, sha256: sha256("state-1") })
+      // A freshly rotated policy has no prior: genesis is legal again.
+      expect(priorClaim(repo, SCOPE, "policy-C")).toBeUndefined()
+    } finally {
+      rmSync(repo, { recursive: true, force: true })
+    }
   })
 })
