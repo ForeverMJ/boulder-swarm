@@ -544,6 +544,65 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
       f.close()
     }
   }, 60_000)
+
+  it("reselects a pool-managed model after planner timeout rounds", async () => {
+    const f = fixture()
+    const repo = join(f.repo, "reselect")
+    mkdirSync(repo)
+    const savedModel = process.env["OPENCODE_MODEL"]
+    const savedFlag = process.env["OPENCODE_MODEL_POOL_MANAGED"]
+    try {
+      git(repo, ["init", "-b", "main"])
+      git(repo, ["config", "user.name", "progress-test"])
+      git(repo, ["config", "user.email", "progress@test.invalid"])
+      writeFileSync(join(repo, "check.js"), readFileSync(join(f.repo, "check.js")))
+      writeFileSync(join(repo, ".gitignore"), "/trajectories/\n")
+      writeFileSync(
+        join(repo, "goal.test.ts"),
+        'import { test, expect } from "bun:test"\ntest("open", () => expect(false).toBe(true))\n',
+      )
+      git(repo, ["add", "."])
+      git(repo, ["commit", "-m", "baseline"])
+      const assignment = {
+        workerId: 0,
+        branch: "agent/goal-w0-T",
+        task: { id: taskId("T"), problem: "proof.json", tests: "goal.test.ts", milestone: "M", progress: policy },
+      }
+      // The planner hangs at the cap: the hang-wave signature (observed live:
+      // 10+ consecutive all-timeout rounds on glm after it had probed healthy).
+      const hangingPlanner = {
+        kind: "opencode" as const,
+        buildPrompt: () => "",
+        spawnAgent: async () => ({ exitCode: -1, timedOut: true, duration_s: 420, final: "", straysAfter: 0 }),
+      }
+      const reselectCalls: string[] = []
+      const deps = {
+        ...hangingPlanner,
+        reselectModel: async (current: string) => {
+          reselectCalls.push(current)
+          return "opencode/next-model"
+        },
+      }
+      process.env["OPENCODE_MODEL"] = "opencode/hanging-model"
+      process.env["OPENCODE_MODEL_POOL_MANAGED"] = "1"
+      await runLive([assignment], deps, "hang-1", repo)
+      expect(reselectCalls).toEqual(["opencode/hanging-model"])
+      expect(process.env["OPENCODE_MODEL"]).toBe("opencode/next-model")
+
+      // A user-forced model is never reselected out from under the user.
+      process.env["OPENCODE_MODEL"] = "opencode/forced"
+      delete process.env["OPENCODE_MODEL_POOL_MANAGED"]
+      await runLive([assignment], deps, "hang-2", repo)
+      expect(reselectCalls).toHaveLength(1)
+      expect(process.env["OPENCODE_MODEL"]).toBe("opencode/forced")
+    } finally {
+      if (savedModel === undefined) delete process.env["OPENCODE_MODEL"]
+      else process.env["OPENCODE_MODEL"] = savedModel
+      if (savedFlag === undefined) delete process.env["OPENCODE_MODEL_POOL_MANAGED"]
+      else process.env["OPENCODE_MODEL_POOL_MANAGED"] = savedFlag
+      f.close()
+    }
+  }, 60_000)
 })
 
 describe("policy replay (synthetic, not a live-agent performance claim)", () => {

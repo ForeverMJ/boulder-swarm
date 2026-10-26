@@ -25,7 +25,7 @@ import {
   parsePorcelainPaths,
 } from "./git"
 import { buildPlannedTaskPrompt, deriveProgress, dispatch, loadTasks, workerIds } from "./scheduler"
-import { DEFAULT_MODEL_POOL, probeModelEdit, selectHealthyModel } from "./modelPool"
+import { DEFAULT_MODEL_POOL, probeModelEdit, reselectModel, selectHealthyModel } from "./modelPool"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
 import { type AgentPlan, type ProgressIntegration, type StrategyComparison, isTerminalStop, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
@@ -258,6 +258,8 @@ type AgentDeps = {
     readonly final: string
     readonly straysAfter: number
   }>
+  /** Round-level pool reselection; defaults to the live pool probe. Tests inject a stub. */
+  readonly reselectModel?: (current: string) => Promise<string | undefined>
 }
 
 function worktreePaths(wt: string): string[] {
@@ -318,6 +320,7 @@ export async function runLive(
     const wt = await createWorktree(repo, worktreesRoot, a.workerId, a.branch, previous?.commit ?? "main")
     ready.push({ wt, a })
   }
+  let plannerTimeouts = 0
   const settled = await Promise.all(
     ready.map(async ({ wt, a }) => {
       const policy = deriveProgress(a.task)
@@ -348,6 +351,7 @@ export async function runLive(
           taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(420_000, timeoutMs),
         })
         planningSeconds = planner.duration_s
+        if (planner.timedOut) plannerTimeouts++
         const stable = await waitForStable(() => gitStatus(wt))
         if (planner.exitCode !== 0 || planner.timedOut || planner.straysAfter !== 0 || !stable.stable) {
           throw new Error(`Planning agent failed (exit=${planner.exitCode} timedOut=${planner.timedOut} strays=${planner.straysAfter} settled=${stable.stable})`)
@@ -564,6 +568,19 @@ export async function runLive(
       note: r.decision.reason.slice(0, 300),
     })
   }
+  // Planner timeouts at the cap are the hang-wave signature (observed live: 10+
+  // consecutive all-timeout rounds on a model that probed healthy at startup).
+  // Re-probe a pool-managed model once per round and switch if it died; a
+  // user-forced OPENCODE_MODEL is never overridden.
+  if (plannerTimeouts > 0 && process.env["OPENCODE_MODEL_POOL_MANAGED"] === "1") {
+    const current = process.env["OPENCODE_MODEL"] ?? ""
+    const reselect = deps.reselectModel ?? ((m: string) => reselectModel(m, DEFAULT_MODEL_POOL, probeModelEdit))
+    const next = await reselect(current)
+    if (next !== undefined && next !== current) {
+      process.env["OPENCODE_MODEL"] = next
+      console.log(`model reselected: ${current} -> ${next} (planner timeouts: ${plannerTimeouts})`)
+    }
+  }
   return {
     results: results.map((r) => r.pass_rate >= 1 && !accepted.has(r.task_id) ? { ...r, pass_rate: 0 } : r),
     produced: Object.fromEntries(settled.map((s) => [s.assignment.task.id, s.produced])),
@@ -702,6 +719,9 @@ async function main(): Promise<void> {
         const picked = await selectHealthyModel(DEFAULT_MODEL_POOL, probeModelEdit)
         if (picked !== undefined) {
           process.env["OPENCODE_MODEL"] = picked
+          // Pool-managed models get round-level reselection after planner
+          // timeout rounds; a user-forced model stays untouched.
+          process.env["OPENCODE_MODEL_POOL_MANAGED"] = "1"
           console.log(`model: ${picked} (pool-probed)`)
         } else {
           // planLoop semantics: starting on a model the probe just declared
