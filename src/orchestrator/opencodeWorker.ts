@@ -1,7 +1,10 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { countTree, runTree } from "./agentLifecycle"
+import { parseFinal } from "./finalParser"
 import { DEFAULT_MODEL_POOL } from "./modelPool"
+
+export { parseFinal } from "./finalParser"
 
 // Pool head, not a frozen name: free-tier models get retired server-side without
 // notice (muse-spark-1.3-contributor-free 500'd mid-campaign), so the default
@@ -47,28 +50,6 @@ export function buildPrompt(taskId: string, problem: string, tests: string): str
     `Rules: no new dependencies, keep the exported function name and signature, no explanations in code.`,
     `When done, print exactly one final line: FINAL: {"task_id":"${taskId}","verdict":"PASS or FAIL","passed":n,"total":m}`,
   ].join("\n")
-}
-
-// Brace-balanced extraction: models pretty-print the FINAL plan JSON across lines,
-// and a single-line regex truncates it into an unparseable fragment. The colon is
-// optional: nemotron-3-ultra-free emits `FINAL {` (observed live, rounds 101-102).
-// beam-free omits the marker entirely and writes bare JSON (round 115): fall back
-// to the first brace-balanced object. Downstream schema validation rejects junk.
-export function parseFinal(out: string): string {
-  let idx = -1
-  for (const m of out.matchAll(/FINAL\s*:?/g)) idx = m.index
-  const start = out.indexOf("{", idx === -1 ? 0 : idx)
-  if (start === -1) return ""
-  let depth = 0
-  for (let i = start; i < out.length; i++) {
-    const ch = out[i]
-    if (ch === "{") depth++
-    else if (ch === "}") {
-      depth--
-      if (depth === 0) return out.slice(start, i + 1)
-    }
-  }
-  return ""
 }
 
 export function spawnAgent(opts: {

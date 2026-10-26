@@ -2,15 +2,16 @@ import { spawnSync } from "node:child_process"
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import { parseFinal } from "./finalParser"
 
 // The free model tier degrades in waves: sometimes a model hangs (probe times
 // out with zero output), sometimes it fakes work (exit 0, no edit), sometimes
 // it is silently retired server-side (muse-spark-1.3-contributor-free went 500
 // mid-campaign). A single hardcoded model stalls the whole run whenever its
-// wave hits. This pool probes candidates with a REAL edit task and picks the
-// first that actually performs it - the file content, never the exit code, is
-// the verdict, because fake-work exits 0. OPENCODE_MODEL still overrides the
-// pool entirely.
+// wave hits. The pool probes candidates with a planning-grade task and picks
+// the first that actually performs it - the produced artifacts, never the exit
+// code, are the verdict, because fake-work exits 0. OPENCODE_MODEL still
+// overrides the pool entirely.
 //
 // Pool refresh 2026-10-24: opencode-go/beam-free promoted to head - it was the
 // ONLY survivor of a full-tier degradation wave (8/9 pool models hung 100s+).
@@ -39,15 +40,39 @@ export async function selectHealthyModel(
   return undefined
 }
 
+// The probe must predict PLANNING capability, not just edit capability: a
+// trivial edit probe stayed green while every real planner prompt hung at the
+// 420s cap (observed live, 247 timeouts across r147-r218). So the probe mirrors
+// the planner's workload - long-context read, an edit, and structured FINAL
+// output through the same agent-last-message.md contract the pipeline parses.
+export function probeVerdict(input: {
+  readonly fileAfter: string
+  readonly lastMessage: string
+}): boolean {
+  if (!input.fileAfter.includes("x = 2")) return false
+  const final = parseFinal(input.lastMessage)
+  if (final === "") return false
+  try {
+    return (JSON.parse(final) as { ok?: unknown }).ok === true
+  } catch {
+    return false
+  }
+}
+
 export async function probeModelEdit(model: string, timeoutMs = 150_000): Promise<boolean> {
   const dir = await mkdtemp(join(tmpdir(), "modelprobe-"))
   try {
     const file = join(dir, "probe.ts")
     await writeFile(file, "export const x = 1\n", "utf-8")
+    const ledger = Array.from({ length: 150 }, (_, i) =>
+      JSON.stringify({ round: i + 1, taskId: `SN0${(i % 4) + 8}`, decision: "replan", covered: (i + 1) * 1000 }),
+    ).join("\n")
+    await writeFile(join(dir, "context.md"), `# receipts ledger excerpt\n${ledger}\n`, "utf-8")
     spawnSync("opencode", ["run", "--dir", dir, "-m", model, "--auto",
-      "Edit probe.ts: change x = 1 to x = 2."], { cwd: dir, timeout: timeoutMs, stdio: "ignore" })
+      "Read context.md, then do BOTH of these: 1) edit probe.ts changing x = 1 to x = 2; 2) write exactly one line to agent-last-message.md: FINAL: {\"ok\":true,\"route\":\"probe\"}"], { cwd: dir, timeout: timeoutMs, stdio: "ignore" })
     const after = await readFile(file, "utf-8").catch(() => "")
-    return after.includes("x = 2")
+    const lastMessage = await readFile(join(dir, "agent-last-message.md"), "utf-8").catch(() => "")
+    return probeVerdict({ fileAfter: after, lastMessage })
   } catch {
     return false
   } finally {

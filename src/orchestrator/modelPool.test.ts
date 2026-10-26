@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { reselectModel, selectHealthyModel } from "./modelPool"
+import { probeVerdict, reselectModel, selectHealthyModel } from "./modelPool"
 
 describe("model pool selection", () => {
   it("picks the first healthy model in pool order", async () => {
@@ -28,5 +28,30 @@ describe("model pool selection", () => {
 
   it("reselect yields undefined when nothing is healthy", async () => {
     expect(await reselectModel("dead", ["a", "b"], async () => false)).toBeUndefined()
+  })
+})
+
+describe("probeVerdict", () => {
+  // The probe must demand BOTH the edit and the structured FINAL output: a
+  // model that passes a trivial edit can still hang on planning-grade prompts.
+  it("requires the edit AND a parseable FINAL ok:true", () => {
+    const good = { fileAfter: "export const x = 2\n", lastMessage: 'FINAL: {"ok":true,"route":"probe"}' }
+    expect(probeVerdict(good)).toBe(true)
+  })
+
+  it("rejects edit-only success (the old probe's blind spot)", () => {
+    expect(probeVerdict({ fileAfter: "export const x = 2\n", lastMessage: "" })).toBe(false)
+    expect(probeVerdict({ fileAfter: "export const x = 2\n", lastMessage: "done, no final line" })).toBe(false)
+  })
+
+  it("rejects FINAL-only success", () => {
+    expect(probeVerdict({ fileAfter: "export const x = 1\n", lastMessage: 'FINAL: {"ok":true}' })).toBe(false)
+  })
+
+  it("tolerates the known FINAL dialects and rejects malformed JSON", () => {
+    expect(probeVerdict({ fileAfter: "x = 2", lastMessage: 'FINAL {"ok":true}' })).toBe(true)
+    expect(probeVerdict({ fileAfter: "x = 2", lastMessage: '{"ok":true}' })).toBe(true)
+    expect(probeVerdict({ fileAfter: "x = 2", lastMessage: 'FINAL: {"ok":false}' })).toBe(false)
+    expect(probeVerdict({ fileAfter: "x = 2", lastMessage: 'FINAL: {"ok":' })).toBe(false)
   })
 })
