@@ -1,4 +1,5 @@
-import { readFileSync, writeFileSync } from "node:fs"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { countTree, runTree } from "./agentLifecycle"
 import { parseFinal } from "./finalParser"
@@ -61,6 +62,22 @@ export function buildPrompt(taskId: string, problem: string, tests: string): str
   ].join("\n")
 }
 
+// Linux caps a single argv entry at MAX_ARG_STRLEN (128 KiB); ledger-heavy
+// campaign prompts crossed it and every spawn died with E2BIG (r460-r552).
+// Long prompts are staged to a temp file the agent reads instead.
+export function stagePrompt(
+  prompt: string,
+  dir: string,
+): { readonly arg: string; readonly file?: string } {
+  if (prompt.length <= 60_000) return { arg: prompt }
+  const file = join(dir, "prompt.md")
+  writeFileSync(file, prompt, "utf-8")
+  return {
+    arg: `Read ${file} and follow it exactly. Its FINAL output contract applies unchanged.`,
+    file,
+  }
+}
+
 export function spawnAgent(opts: {
   workdir: string
   prompt: string
@@ -75,9 +92,11 @@ export function spawnAgent(opts: {
   const model = opts.model ?? resolveModel()
   const outFile = join(opts.workdir, "agent-last-message.md")
   const started = performance.now()
+  const stageDir = mkdtempSync(join(tmpdir(), "agent-prompt-"))
+  const staged = stagePrompt(opts.prompt, stageDir)
   return runTree({
     command: bin,
-    args: ["run", "--dir", opts.workdir, "-m", model, "--auto", opts.prompt],
+    args: ["run", "--dir", opts.workdir, "-m", model, "--auto", staged.arg],
     cwd: opts.workdir,
     timeoutMs,
     onSalvage: () => {
@@ -111,6 +130,8 @@ export function spawnAgent(opts: {
       lastMessagePath: outFile,
       straysAfter: outcome.straysAfter,
     }
+  }).finally(() => {
+    rmSync(stageDir, { recursive: true, force: true })
   })
 }
 

@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it } from "bun:test"
-import { DEFAULT_MODEL, resolveModel, resolveOpencodeBin, resolveOpencodeBinFor } from "./opencodeWorker"
+import { mkdtempSync, readFileSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { DEFAULT_MODEL, resolveModel, resolveOpencodeBin, resolveOpencodeBinFor, stagePrompt } from "./opencodeWorker"
 
 const ORIGINAL_BIN = process.env["OPENCODE_BIN"]
 const ORIGINAL_MODEL = process.env["OPENCODE_MODEL"]
@@ -52,6 +55,35 @@ describe("opencodeWorker bin resolution, judged independently", () => {
   it("falls back to the model-pool head when no model override is set", () => {
     delete process.env["OPENCODE_MODEL"]
     expect(resolveModel()).toBe(DEFAULT_MODEL)
+  })
+})
+
+describe("stagePrompt", () => {
+  // Linux caps a single argv entry at MAX_ARG_STRLEN (128 KiB); ledger-heavy
+  // campaign prompts crossed it and every spawn died with E2BIG (r460-r552).
+  it("passes short prompts inline", () => {
+    const dir = mkdtempSync(join(tmpdir(), "stage-test-"))
+    try {
+      const staged = stagePrompt("short prompt", dir)
+      expect(staged.arg).toBe("short prompt")
+      expect(staged.file).toBeUndefined()
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("stages long prompts to a file and points the agent at it", () => {
+    const dir = mkdtempSync(join(tmpdir(), "stage-test-"))
+    try {
+      const long = "x".repeat(200_000)
+      const staged = stagePrompt(long, dir)
+      expect(staged.arg.length).toBeLessThan(1000)
+      expect(staged.file).toBeDefined()
+      expect(staged.arg).toContain(staged.file ?? "missing")
+      expect(readFileSync(staged.file ?? "", "utf-8")).toBe(long)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
   })
 })
 
