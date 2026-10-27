@@ -545,6 +545,57 @@ describe("live-run wiring with deterministic workers (no model calls)", () => {
     }
   }, 60_000)
 
+  it("routes the planner to OPENCODE_PLANNER_MODEL while execution stays on the pool model", async () => {
+    const f = fixture()
+    const repo = join(f.repo, "planner-model")
+    mkdirSync(repo)
+    const savedPlanner = process.env["OPENCODE_PLANNER_MODEL"]
+    try {
+      git(repo, ["init", "-b", "main"])
+      git(repo, ["config", "user.name", "progress-test"])
+      git(repo, ["config", "user.email", "progress@test.invalid"])
+      writeFileSync(join(repo, "check.js"), readFileSync(join(f.repo, "check.js")))
+      writeFileSync(join(repo, ".gitignore"), "/trajectories/\n")
+      writeFileSync(
+        join(repo, "goal.test.ts"),
+        'import { test, expect } from "bun:test"\ntest("open", () => expect(false).toBe(true))\n',
+      )
+      git(repo, ["add", "."])
+      git(repo, ["commit", "-m", "baseline"])
+      const assignment = {
+        workerId: 0,
+        branch: "agent/goal-w0-T",
+        task: { id: taskId("T"), problem: "proof.json", tests: "goal.test.ts", milestone: "M", progress: policy },
+      }
+      const calls: { planning: boolean; model: string | undefined }[] = []
+      const agent = {
+        kind: "opencode" as const,
+        buildPrompt: () => "",
+        spawnAgent: async (opts: { workdir: string; prompt: string; model?: string }) => {
+          const planning = opts.prompt.includes("You are the planning agent")
+          calls.push({ planning, model: opts.model })
+          if (planning) {
+            const context = progressContext(repo, "T", policy)
+            return { exitCode: 0, timedOut: false, duration_s: 1, final: JSON.stringify(proposedPlan(context)), straysAfter: 0 }
+          }
+          writeFileSync(join(opts.workdir, "proof.json"), "[0]")
+          return { exitCode: 0, timedOut: false, duration_s: 1, final: "done", straysAfter: 0 }
+        },
+      }
+      process.env["OPENCODE_PLANNER_MODEL"] = "opencode-go/kimi-k2.7-code"
+      await runLive([assignment], agent, "planner-model", repo)
+      expect(calls).toHaveLength(2)
+      expect(calls[0]).toEqual({ planning: true, model: "opencode-go/kimi-k2.7-code" })
+      // Execution stays pool-managed: no explicit model means resolveModel()
+      // reads OPENCODE_MODEL, which round-level reselection is free to rotate.
+      expect(calls[1]).toEqual({ planning: false, model: undefined })
+    } finally {
+      if (savedPlanner === undefined) delete process.env["OPENCODE_PLANNER_MODEL"]
+      else process.env["OPENCODE_PLANNER_MODEL"] = savedPlanner
+      f.close()
+    }
+  }, 60_000)
+
   it("reselects a pool-managed model after planner timeout rounds", async () => {
     const f = fixture()
     const repo = join(f.repo, "reselect")

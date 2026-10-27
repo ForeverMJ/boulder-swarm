@@ -41,6 +41,15 @@ export function resolveModel(): string {
   return m === undefined || m === "" ? DEFAULT_MODEL : m
 }
 
+// Planning is the intelligence bottleneck and execution the commodity: a
+// dedicated planner model (e.g. a strong subscription tier) lifts method
+// quality while execution keeps riding the free pool. Unset means the
+// planner uses the same pool-managed model as execution.
+export function resolvePlannerModel(): string | undefined {
+  const m = process.env["OPENCODE_PLANNER_MODEL"]?.trim()
+  return m === undefined || m === "" ? undefined : m
+}
+
 export function buildPrompt(taskId: string, problem: string, tests: string): string {
   return [
     `You are worker for task ${taskId} in a goal-driven multi-agent run.`,

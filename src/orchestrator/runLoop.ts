@@ -11,7 +11,7 @@ import { saveResults } from "../recording/metrics"
 import { appendEvent } from "../recording/trace"
 import type { WorkerResult } from "../recording/schemas"
 import { buildPrompt as buildCodexPrompt, spawnAgent as spawnCodexAgent } from "./codexWorker"
-import { buildPrompt as buildOpencodePrompt, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
+import { buildPrompt as buildOpencodePrompt, resolvePlannerModel, spawnAgent as spawnOpencodeAgent } from "./opencodeWorker"
 import {
   commitWorktree,
   createWorktree,
@@ -346,9 +346,11 @@ export async function runLive(
       try {
         if (context.last !== undefined && isTerminalStop(context.last)) throw new Error("Persisted stop; review policy before restarting")
         const before = git(wt, ["rev-parse", "HEAD"])
+        const plannerModel = deps.kind === "opencode" ? resolvePlannerModel() : undefined
         const planner = await deps.spawnAgent({
           workdir: wt, prompt: `${basePrompt}${progressPrompt(context)}`,
           taskId: a.task.id, branch: a.branch, timeoutMs: Math.min(420_000, timeoutMs),
+          ...(plannerModel === undefined ? {} : { model: plannerModel }),
         })
         planningSeconds = planner.duration_s
         if (planner.timedOut) plannerTimeouts++
