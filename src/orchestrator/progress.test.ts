@@ -10,6 +10,7 @@ import {
   chainCustodyLine,
   chainHead,
   chooseNext,
+  latestVerified,
   progressContext,
   progressPrompt,
   recordProgress,
@@ -131,6 +132,14 @@ describe("chainHead and chainCustodyLine", () => {
     const head = { path: "src/sortnet/attempts/SN11_state.json", sha256: "a".repeat(64) }
     expect(chainCustodyLine({ history: [receipt(100, [head])] })).toContain("a".repeat(64))
     expect(chainCustodyLine({ history: [] })).toContain("null")
+  })
+
+  it("latestVerified returns the newest receipt with observation and artifacts", () => {
+    const head = { path: "src/sortnet/attempts/SN11_state.json", sha256: "a".repeat(64) }
+    const verified = receipt(100, [head])
+    expect(latestVerified({ history: [verified, receipt(null)] })).toBe(verified)
+    expect(latestVerified({ history: [receipt(null)] })).toBeUndefined()
+    expect(latestVerified({ history: [] })).toBeUndefined()
   })
 })
 

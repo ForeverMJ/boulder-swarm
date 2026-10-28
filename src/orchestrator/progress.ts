@@ -189,6 +189,14 @@ export function progressContext(repo: string, taskId: string, policy: ProgressPo
 // rejected on fabricated prevHash values - so prompts must hand it over verbatim.
 const STATE_ARTIFACT_RE = /^SN\d+_state\.json$/
 
+export function latestVerified(context: {
+  readonly history: readonly ProgressReceipt[]
+}): ProgressReceipt | undefined {
+  return [...context.history]
+    .reverse()
+    .find((r) => r.observation !== null && r.artifacts.length > 0)
+}
+
 export function chainHead(context: {
   readonly history: readonly ProgressReceipt[]
 }): { readonly path: string; readonly sha256: string } | undefined {

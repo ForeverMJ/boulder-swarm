@@ -8,6 +8,7 @@ import {
   type StrategyComparison,
   type StrategyTrial,
   inspectProgress,
+  latestVerified,
   type progressContext,
 } from "./progress"
 import { waitForStable } from "./settle"
@@ -84,14 +85,14 @@ export async function runStrategyTrial(input: {
   const { repo, worktree, context } = input
   const baseCommit = git(worktree, ["rev-parse", "HEAD"])
   const remaining = () => Math.max(0, Math.floor(input.deadline - performance.now()))
-  const base = inspectProgress(
-    context,
-    worktree,
-    baseCommit,
-    input.incumbent.route,
-    Math.min(60_000, Math.max(1, remaining())),
-  )
-  if (!base.observation) throw new Error("Missing baseline observation")
+  // The baseline is already receipt-verified evidence; re-running the custody
+  // checker against it compares the head state with its own receipt (the head's
+  // prevHash chains to the *previous* head, never to itself), so it always
+  // fails - every 2026-10-28 SN08-11 switch comparison died exactly here.
+  // Read the trusted baseline straight from the newest verified receipt.
+  const baselineReceipt = latestVerified(context)
+  if (!baselineReceipt?.observation) throw new Error("Missing baseline observation")
+  const base = { observation: baselineReceipt.observation, artifacts: baselineReceipt.artifacts }
   // Two equal sequential execution grants; reserve 30% for settlement and evaluation.
   const perArmBudgetMs = Math.floor(remaining() * 0.35)
   const id = randomUUID()
