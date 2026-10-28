@@ -6,6 +6,9 @@ import { taskId } from "../shared/brands"
 import { git } from "./git"
 import {
   ProgressPolicy,
+  type ProgressReceipt,
+  chainCustodyLine,
+  chainHead,
   chooseNext,
   progressContext,
   progressPrompt,
@@ -79,6 +82,57 @@ function fixture() {
     close: () => rmSync(repo, { recursive: true, force: true }),
   }
 }
+
+describe("chainHead and chainCustodyLine", () => {
+  // Live evidence (SN08-11, 2026-10-28): executors hand-wrote prevHash digests
+  // matching nothing in git history or either ledger (e.g. 72bd28a2...), so the
+  // coverage checker correctly rejected every chain extension all night.
+  const receipt = (
+    covered: number | null,
+    artifacts: { path: string; sha256: string }[] = [],
+  ): ProgressReceipt => ({
+    version: 2,
+    taskId: "SN11",
+    policy: "era-key",
+    commit: "c".repeat(40),
+    ts: "2026-10-28T00:00:00.000Z",
+    durationSeconds: 1,
+    plan: null,
+    observation:
+      covered === null
+        ? null
+        : {
+            route: "r",
+            scope: "n16le59",
+            covered,
+            exhausted: false,
+            artifacts: artifacts.map((a) => a.path),
+          },
+    artifacts,
+    decision: { action: "replan", route: "r", reason: "x" },
+  })
+
+  it("anchors on the newest verified state artifact, skipping weather rounds", () => {
+    const head = { path: "src/sortnet/attempts/SN11_state.json", sha256: "a".repeat(64) }
+    const context = { history: [receipt(100, [head]), receipt(null), receipt(null)] }
+    expect(chainHead(context)).toEqual(head)
+  })
+
+  it("ignores artifacts that are not search-state files", () => {
+    const context = { history: [receipt(100, [{ path: "proof.json", sha256: "b".repeat(64) }])] }
+    expect(chainHead(context)).toBeUndefined()
+  })
+
+  it("returns undefined before the first verified round (genesis)", () => {
+    expect(chainHead({ history: [receipt(null)] })).toBeUndefined()
+  })
+
+  it("custody line hands the executor the verbatim digest, or null for genesis", () => {
+    const head = { path: "src/sortnet/attempts/SN11_state.json", sha256: "a".repeat(64) }
+    expect(chainCustodyLine({ history: [receipt(100, [head])] })).toContain("a".repeat(64))
+    expect(chainCustodyLine({ history: [] })).toContain("null")
+  })
+})
 
 describe("checker-backed progress and decisions", () => {
   it("lets agents invent methods but rejects fabricated citations and changed scopes", () => {

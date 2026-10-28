@@ -182,6 +182,34 @@ export function progressContext(repo: string, taskId: string, policy: ProgressPo
   return { checker, key, ledger, history, last, scope: policy.scope }
 }
 
+// The custody anchor the coverage checker enforces (STATE_RE in
+// src/sortnet/tools/coverage.ts): the chain head is the newest verified receipt
+// carrying a search-state artifact. Executors provably cannot compute this digest
+// reliably by hand - the 2026-10-28 SN08-11 night had every chain extension
+// rejected on fabricated prevHash values - so prompts must hand it over verbatim.
+const STATE_ARTIFACT_RE = /^SN\d+_state\.json$/
+
+export function chainHead(context: {
+  readonly history: readonly ProgressReceipt[]
+}): { readonly path: string; readonly sha256: string } | undefined {
+  for (const r of [...context.history].reverse()) {
+    if (r.observation === null) continue
+    const artifact = r.artifacts.find((a) => STATE_ARTIFACT_RE.test(a.path.split("/").pop() ?? ""))
+    if (artifact) return artifact
+  }
+  return undefined
+}
+
+export function chainCustodyLine(context: {
+  readonly history: readonly ProgressReceipt[]
+}): string {
+  const head = chainHead(context)
+  if (head === undefined) {
+    return 'Chain custody: no verified head exists in this policy era; your state file\'s "prevHash" MUST be null (genesis).'
+  }
+  return `Chain custody: the verified chain head is ${head.path} with sha256 ${head.sha256} - your updated state file's "prevHash" MUST be this exact digest. Copy it verbatim; do not compute or invent it.`
+}
+
 export function progressPrompt(context: ReturnType<typeof progressContext>): string {
   const blocked = context.last?.integration?.verdict === "blocked" ? context.last.integration : null
   const gateNote = blocked
@@ -198,6 +226,7 @@ When replacing an existing method, your proposal is a candidate, not an approved
 Use the exact fixed scope. Cite supplied verified artifact references, including the latest verified receipt when one exists; otherwise evidence must be [].
 When priorEvidence below is empty this IS the first round: evidence MUST be [] — citing files or commits is fabrication and validatePlan will reject the plan.
 Do not claim a timeout proves exhaustion. Only the original verifier/merge gate establishes completion.${gateNote}
+${chainCustodyLine(context)}
 Planning context:\n${JSON.stringify(
     {
       scope: context.scope,

@@ -28,7 +28,7 @@ import { buildPlannedTaskPrompt, deriveProgress, dispatch, loadTasks, workerIds 
 import { DEFAULT_MODEL_POOL, probeModelEdit, reselectModel, selectHealthyModel } from "./modelPool"
 import { repoContractPasses } from "./contract"
 import { replan } from "./replan"
-import { type AgentPlan, type ProgressIntegration, type StrategyComparison, isTerminalStop, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
+import { type AgentPlan, type ProgressIntegration, type StrategyComparison, chainCustodyLine, isTerminalStop, progressContext, progressPrompt, recordProgress, validatePlan } from "./progress"
 import { runStrategyTrial } from "./strategyTrial"
 import { superviseBudgetExhausted, runRounds, type Outcome, type RoundDeps } from "./roundLoop"
 import { waitForStable } from "./settle"
@@ -375,7 +375,7 @@ export async function runLive(
       }
       const remainingMs = Math.max(0, timeoutMs - (performance.now() - attemptStarted))
       if (remainingMs === 0) planningFailure = "Attempt budget exhausted during planning"
-      const experimentPrompt = (method: AgentPlan) => `${basePrompt}\n\nAgent-selected experiment (original task restrictions still apply):\n${JSON.stringify(method)}\nPrior evidence commits:\n${JSON.stringify(context.history.map((r) => ({commit: r.commit, observation: r.observation, artifacts: r.artifacts})))}`
+      const experimentPrompt = (method: AgentPlan) => `${basePrompt}\n\n${chainCustodyLine(context)}\n\nAgent-selected experiment (original task restrictions still apply):\n${JSON.stringify(method)}\nPrior evidence commits:\n${JSON.stringify(context.history.map((r) => ({commit: r.commit, observation: r.observation, artifacts: r.artifacts})))}`
       if (plan?.action === "switch" && context.last?.plan && !planningFailure) {
         const trialStarted = performance.now()
         try {
